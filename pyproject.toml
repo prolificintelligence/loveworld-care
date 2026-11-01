@@ -1,0 +1,56 @@
+[project]
+name = "loveworld-care-workspace"
+version = "1.0.0"
+description = "LoveWorld Care Backend Services Workspace (API, Worker, Protocol Runtime, Model Gateway)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.2",
+    "pydantic-settings>=2.6.0",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30.0",
+    "aiosqlite>=0.20.0",
+    "alembic>=1.14.0",
+    "cryptography>=43.0.3",
+    "PyJWT>=2.9.0",
+    "pyotp>=2.9.0",
+    "httpx>=0.27.2",
+    "redis>=5.2.0",
+    "boto3>=1.35.0",
+    "opentelemetry-api>=1.28.0",
+    "opentelemetry-sdk>=1.28.0",
+    "structlog>=24.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.24.0",
+    "hypothesis>=6.115.0",
+    "ruff>=0.7.2",
+]
+
+[tool.uv.workspace]
+members = [
+    "services/protocol-runtime",
+    "services/model-gateway",
+    "services/api",
+    "services/worker",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests", "services"]
+pythonpath = [
+    "services/protocol-runtime/src",
+    "services/model-gateway/src",
+    "services/api/src",
+    "services/worker/src",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

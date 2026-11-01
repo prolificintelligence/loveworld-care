@@ -1,0 +1,32 @@
+# Dependencies & Virtual Environments
+node_modules/
+.pnpm/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Build & Cache Artifacts
+.next/
+out/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+
+# Secrets & Local Environment
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json

@@ -1,0 +1,16 @@
+[project]
+name = "lw-model-gateway"
+version = "1.0.0"
+description = "LoveWorld Care — Policy-Limited AI Model Router, Bounded Agents & AI-Off Kill Switch (§15)"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.9.2",
+    "httpx>=0.27.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lw_model_gateway"]

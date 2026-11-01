@@ -1,0 +1,41 @@
+"""LoveWorld Care — Health Navigator Deterministic Protocol Runtime (§7)."""
+
+from .engine import (
+    FIXED_FALLBACK_EMERGENCY_CONTACTS,
+    CaseEvaluationInput,
+    ClinicalSignOffRecord,
+    EmergencyContactEntry,
+    InputFieldSpec,
+    OutcomeTemplate,
+    ProtocolBundle,
+    ProtocolBundleStatus,
+    ProtocolEvaluationResult,
+    ProtocolOutcomeType,
+    ProtocolRegistry,
+    ProtocolRule,
+    RuleExpr,
+    TriBool,
+    compute_bundle_sha256,
+    evaluate_expr_tri,
+    execute_protocol,
+)
+
+__all__ = [
+    "FIXED_FALLBACK_EMERGENCY_CONTACTS",
+    "CaseEvaluationInput",
+    "ClinicalSignOffRecord",
+    "EmergencyContactEntry",
+    "InputFieldSpec",
+    "OutcomeTemplate",
+    "ProtocolBundle",
+    "ProtocolBundleStatus",
+    "ProtocolEvaluationResult",
+    "ProtocolOutcomeType",
+    "ProtocolRegistry",
+    "ProtocolRule",
+    "RuleExpr",
+    "TriBool",
+    "compute_bundle_sha256",
+    "evaluate_expr_tri",
+    "execute_protocol",
+]

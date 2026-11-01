@@ -1,0 +1,25 @@
+{
+  "name": "loveworld-care",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LoveWorld Care — Clinically Governed, AI-Assisted Remote Healthcare Network",
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:patient": "pnpm --filter @loveworld-care/patient-web dev",
+    "dev:clinician": "pnpm --filter @loveworld-care/clinician-web dev",
+    "dev:command": "pnpm --filter @loveworld-care/command-web dev",
+    "dev:sponsor": "pnpm --filter @loveworld-care/sponsor-web dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "turbo": "^2.2.3",
+    "typescript": "^5.6.3"
+  }
+}

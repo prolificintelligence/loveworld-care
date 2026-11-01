@@ -1,0 +1,28 @@
+[project]
+name = "lw-care-api"
+version = "1.0.0"
+description = "LoveWorld Care — Production /v1 API Service (DoctorNow, Navigator, SponsorCare, Care Command)"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "pydantic>=2.9.2",
+    "pydantic-settings>=2.6.0",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "cryptography>=43.0.3",
+    "PyJWT>=2.9.0",
+    "pyotp>=2.9.0",
+    "httpx>=0.27.2",
+    "lw-protocol-runtime",
+    "lw-model-gateway",
+]
+
+[tool.uv.sources]
+lw-protocol-runtime = { workspace = true }
+lw-model-gateway = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lw_care_api"]
