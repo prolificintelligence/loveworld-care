@@ -32,6 +32,7 @@ scripts/setup_vercel_projects.py
 scripts/sync_secrets_to_env.py
 scripts/trigger_all_deployments.py
 scripts/update_vercel_api_env.py
+scripts/set_frontend_env.py
 
 # OS & Editor
 .DS_Store
