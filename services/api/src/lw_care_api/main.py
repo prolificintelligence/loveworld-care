@@ -4,12 +4,16 @@ LoveWorld Care — Production /v1 FastAPI Application (§12, §14, §15, §16, �
 
 from __future__ import annotations
 
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
+import hashlib
+import secrets
 from typing import Any, Literal
 from uuid import uuid4
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from lw_model_gateway import ModelGatewayConfig, ModelGatewayRouter
 from lw_protocol_runtime import (
     FIXED_FALLBACK_EMERGENCY_CONTACTS,
@@ -21,8 +25,10 @@ from .config import Settings, get_settings
 from .crypto.signing import ClinicalDocumentSigner
 from .db.neon_migrator import NeonDatabaseManager
 from .domain.clinical_service import (
+    CareEpisodeRecord,
     CaseClaimConflictError,
     ClinicalOperationsService,
+    EncounterRecord,
     ImmutableClinicalRecordError,
     StaffedRosterSlot,
     StaleOrUnstaffedSlotError,
@@ -42,6 +48,42 @@ from .security.auth import (
     IdentityAndSessionManager,
     TamperEvidentAuditLogger,
 )
+from .security.tokens import (
+    AUD_CLINICIAN,
+    AUD_COMMAND,
+    AUD_PATIENT,
+    AUD_SPONSOR,
+    STAFF_AUDIENCES,
+    TokenClaims,
+    TokenError,
+    TokenService,
+)
+
+CLINICIAN_ROLES = frozenset({"CLINICIAN_GP", "CLINICIAN_SPECIALIST"})
+KILL_SWITCH_ROLES = frozenset({"CLINICAL_GOVERNANCE_LEAD", "EXECUTIVE_DIRECTOR", "PLATFORM_SRE"})
+EXECUTIVE_METRICS_ROLES = frozenset(
+    {"EXECUTIVE_DIRECTOR", "FINANCE_CONTROLLER", "CLINICAL_GOVERNANCE_LEAD"}
+)
+
+
+class DevTokenPayload(BaseModel):
+    """Development/test only. Production tokens are issued by the real login flows."""
+
+    sub: str
+    audience: Literal["lwc:patient", "lwc:clinician", "lwc:command", "lwc:sponsor"]
+    roles: list[str]
+    mfa: bool = False
+    org: str | None = None
+    ttl_minutes: int = Field(default=30, ge=1, le=480)
+
+
+class MagicLinkRequestPayload(BaseModel):
+    email: str
+    redirect_url: str | None = None
+
+
+class MagicLinkVerifyPayload(BaseModel):
+    token: str
 
 
 class CreateEpisodePayload(BaseModel):
@@ -123,10 +165,13 @@ class ToggleKillSwitchPayload(BaseModel):
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     cfg = settings or get_settings()
+    # ADR-0003: fail closed. Production refuses default/placeholder secrets, SQLite, or
+    # non-HTTPS / localhost CORS origins.
+    cfg.assert_safe_for_runtime()
     app = FastAPI(
         title="LoveWorld Care — Clinical & Financial Operating Network API",
         version="1.0.0",
-        docs_url="/v1/docs",
+        docs_url=None if cfg.is_production else "/v1/docs",
         openapi_url="/v1/openapi.json",
     )
 
@@ -134,8 +179,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         CORSMiddleware,
         allow_origins=[o.strip() for o in cfg.cors_origins.split(",") if o.strip()],
         allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type", "Idempotency-Key", "X-Request-ID"],
+        expose_headers=["X-Request-ID"],
+    )
+
+    token_service = TokenService(
+        signing_seed_hex=cfg.token_signing_seed_hex or TokenService.generate_seed_hex(),
+        issuer=cfg.token_issuer,
+        default_ttl=timedelta(minutes=cfg.access_token_ttl_minutes),
     )
 
     # Core runtime singletons
@@ -190,48 +242,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         audit_logger=audit_logger,
     )
 
-    # Seed verified active roster clinician & SponsorCare pool for immediate operational readiness
+    # Synthetic roster clinician & SponsorCare pool for development/test ONLY. In production,
+    # clinicians enter the roster exclusively through verified credentialing (§8.1), and
+    # sponsor pools are funded through finance-approved agreements (§10.2).
     now = datetime.now(timezone.utc)
-    default_clinician = AuthenticatedActor(
-        actor_id="dr-adebayo-okonkwo",
-        full_name="Dr. Adebayo Okonkwo",
-        roles=["CLINICIAN_GP"],
-        mfa_verified=True,
-        clinician_status="APPROVED_ACTIVE",
-        clinician_mdcn_licence="MDCN/R/44210",
-        credential_expires_at=now + timedelta(days=365),
-    )
-    auth_manager.register_session(default_clinician)
-    clinical_service.register_clinician_roster_slot(
-        default_clinician,
-        StaffedRosterSlot(
-            slot_id="slot-ng-gp-001",
-            clinician_id=default_clinician.actor_id,
-            clinician_display_name=default_clinician.full_name,
-            clinician_mdcn_licence="MDCN/R/44210",
-            specialty="GP",
-            jurisdiction="NG",
-            starts_at=now + timedelta(minutes=15),
-            ends_at=now + timedelta(hours=4),
-            supported_modalities=["VIDEO", "AUDIO_FALLBACK", "ASYNC_CLINICAL_MESSAGING"],
-            fee_minor=cfg.default_gp_fee_ngn_minor,
-            currency="NGN",
-        ),
-    )
-
-    ledger.create_or_fund_sponsor_pool(
-        agreement_id="AGR-LW-MEDICAID-NG-2026",
-        sponsor_id="sponsor-loveworld-medicaid",
-        sponsor_name="LoveWorld Medicaid Humanitarian Care Pool",
-        funding_type="SPONSOR_DEFINED_SERVICES",
-        currency="NGN",
-        committed_unfunded_minor=500_000_000,  # 5,000,000 NGN pledged
-        funded_cash_minor=1_200_000_000,  # 12,000,000 NGN cash received
-        eligible_beneficiary_ids=[f"beneficiary-{i}" for i in range(1, 25)],
-        actor_id="finance-controller-01",
-    )
+    if not cfg.is_production:
+        _seed_non_production_fixtures(cfg, auth_manager, clinical_service, ledger, now)
 
     # Expose state on app.state for direct inspection/integration tests
+    app.state.token_service = token_service
+    app.state.settings = cfg
     app.state.neon_db = neon_db
     app.state.upstash_redis = upstash_redis
     app.state.audit_logger = audit_logger
@@ -260,27 +280,207 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         response.headers["X-Request-ID"] = req_id
         return response
 
-    def resolve_actor(
-        x_actor_id: str = Header(default="patient-default-01"),
-        x_actor_roles: str = Header(default="PATIENT"),
-        x_actor_mfa: str = Header(default="true"),
-        x_clinician_licence: str | None = Header(default=None),
-        x_clinician_status: str | None = Header(default=None),
-    ) -> AuthenticatedActor:
-        roles = [r.strip() for r in x_actor_roles.split(",") if r.strip()]
-        if x_actor_id in clinical_service._clinician_actors:
-            return clinical_service._clinician_actors[x_actor_id]
-        return AuthenticatedActor(
-            actor_id=x_actor_id,
-            full_name=x_actor_id,
-            roles=roles,
-            mfa_verified=(x_actor_mfa.lower() == "true"),
-            clinician_status=x_clinician_status,
-            clinician_mdcn_licence=x_clinician_licence,
-            credential_expires_at=datetime.now(timezone.utc) + timedelta(days=90)
-            if x_clinician_status == "APPROVED_ACTIVE"
-            else None,
+    # =========================================================================
+    # ADR-0002/0003: Verified bearer-token identity. Client identity headers are ignored.
+    # =========================================================================
+    bearer_scheme = HTTPBearer(auto_error=False)
+
+    def _unauthorized(code: str) -> HTTPException:
+        return HTTPException(
+            status_code=401, detail=code, headers={"WWW-Authenticate": 'Bearer error="invalid_token"'}
         )
+
+    def _actor_from_claims(claims: TokenClaims) -> AuthenticatedActor:
+        if CLINICIAN_ROLES & set(claims.roles):
+            # §8.1 / AT-07: licence, status and expiry come from the server-side roster only.
+            registered = clinical_service._clinician_actors.get(claims.sub)
+            if registered is not None:
+                return replace(
+                    registered, mfa_verified=claims.mfa, session_id=claims.sid
+                )
+        return AuthenticatedActor(
+            actor_id=claims.sub,
+            full_name=claims.sub,
+            roles=list(claims.roles),
+            mfa_verified=claims.mfa,
+            session_id=claims.sid,
+        )
+
+    def authenticated(
+        *audiences: str,
+        roles: frozenset[str] | None = None,
+        require_mfa: bool = False,
+    ) -> Any:
+        allowed_audiences = frozenset(audiences)
+
+        async def dependency(
+            request: Request,
+            credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+        ) -> AuthenticatedActor:
+            if credentials is None or credentials.scheme.lower() != "bearer":
+                raise _unauthorized("TOKEN_MISSING")
+            try:
+                claims = token_service.verify(credentials.credentials, allowed_audiences)
+            except TokenError as exc:
+                if exc.code == "TOKEN_AUDIENCE_NOT_PERMITTED":
+                    # AT-06: out-of-scope access attempts are denied AND audited.
+                    identity = token_service.identify_for_audit(credentials.credentials)
+                    if identity is not None:
+                        audit_logger.record(
+                            request_id=request.state.request_id,
+                            actor=AuthenticatedActor(
+                                actor_id=identity[0],
+                                full_name=identity[0],
+                                roles=list(identity[1]),
+                                mfa_verified=False,
+                            ),
+                            purpose="ACCESS_CONTROL",
+                            action=f"{request.method} {request.url.path}",
+                            resource_type="API_ROUTE",
+                            resource_opaque_id=request.url.path,
+                            data_tier="T4_RESTRICTED_CONTROLS",
+                            outcome="DENIED",
+                            reason_code="DENIED_AUDIENCE_NOT_PERMITTED",
+                        )
+                raise _unauthorized(exc.code) from exc
+            if roles is not None and not (roles & set(claims.roles)):
+                raise HTTPException(status_code=403, detail="INSUFFICIENT_ROLE")
+            staff_mutation = claims.aud in STAFF_AUDIENCES and request.method != "GET"
+            if (require_mfa or staff_mutation) and not claims.mfa:
+                raise HTTPException(status_code=403, detail="DENIED_MFA_REQUIRED")
+            request.state.token_claims = claims
+            return _actor_from_claims(claims)
+
+        return dependency
+
+    def _assert_patient_owns_episode(
+        actor: AuthenticatedActor, episode_id: str, request_id: str
+    ) -> None:
+        ep = clinical_service._episodes.get(episode_id)
+        if ep is None:
+            raise HTTPException(status_code=403, detail="ACCESS_DENIED_OR_NOT_FOUND")
+        try:
+            auth_manager.authorize_clinical_t3_access(
+                request_id=request_id,
+                actor=actor,
+                action="WRITE",
+                purpose="PATIENT_SELF_SERVICE",
+                patient_id=ep.patient_id,
+                assigned_clinician_id=ep.assigned_clinician_id,
+            )
+        except PermissionError as exc:
+            raise HTTPException(status_code=403, detail="ACCESS_DENIED_OR_NOT_FOUND") from exc
+
+    patient_actor = authenticated(AUD_PATIENT)
+    clinician_actor = authenticated(AUD_CLINICIAN, roles=CLINICIAN_ROLES, require_mfa=True)
+    care_reader_actor = authenticated(AUD_PATIENT, AUD_CLINICIAN)
+    sponsor_report_actor = authenticated(AUD_SPONSOR, AUD_COMMAND)
+    kill_switch_actor = authenticated(AUD_COMMAND, roles=KILL_SWITCH_ROLES, require_mfa=True)
+    executive_metrics_actor = authenticated(
+        AUD_COMMAND, roles=EXECUTIVE_METRICS_ROLES, require_mfa=True
+    )
+
+    # =========================================================================
+    # Auth: token introspection, logout, public key, and dev-only token minting
+    # =========================================================================
+    @app.get("/v1/auth/jwks")
+    async def get_token_jwks() -> dict[str, Any]:
+        return {"keys": [token_service.public_jwk()]}
+
+    @app.get("/v1/auth/me")
+    async def get_current_identity(
+        request: Request,
+        actor: AuthenticatedActor = Depends(
+            authenticated(AUD_PATIENT, AUD_CLINICIAN, AUD_COMMAND, AUD_SPONSOR)
+        ),
+    ) -> dict[str, Any]:
+        claims: TokenClaims = request.state.token_claims
+        return {
+            "sub": claims.sub,
+            "audience": claims.aud,
+            "roles": list(claims.roles),
+            "mfa": claims.mfa,
+            "org": claims.org,
+            "expires_at": claims.expires_at.isoformat(),
+            "clinician_credential_active": actor.is_clinician_credential_active()
+            if CLINICIAN_ROLES & set(claims.roles)
+            else None,
+        }
+
+    @app.post("/v1/auth/logout", status_code=204)
+    async def logout(
+        request: Request,
+        _actor: AuthenticatedActor = Depends(
+            authenticated(AUD_PATIENT, AUD_CLINICIAN, AUD_COMMAND, AUD_SPONSOR)
+        ),
+    ) -> Response:
+        token_service.revoke_session(request.state.token_claims.sid)
+        return Response(status_code=204)
+
+    # In-memory magic link repository (single-use tokens with 15-minute TTL)
+    pending_magic_links: dict[str, dict[str, Any]] = {}
+
+    @app.post("/v1/auth/magic-link/request")
+    async def request_magic_link(
+        payload: MagicLinkRequestPayload,
+        request: Request,
+    ) -> dict[str, Any]:
+        email = payload.email.strip().lower()
+        if "@" not in email or "." not in email:
+            raise HTTPException(status_code=400, detail="INVALID_EMAIL_FORMAT")
+        raw_token = secrets.token_urlsafe(32)
+        now = datetime.now(timezone.utc)
+        pending_magic_links[raw_token] = {
+            "email": email,
+            "expires_at": now + timedelta(minutes=15),
+            "used": False,
+        }
+        return {
+            "status": "SENT",
+            "email": email,
+            "expires_in_minutes": 15,
+            "verification_token": raw_token if cfg.environment != "production" else None,
+        }
+
+    @app.post("/v1/auth/magic-link/verify")
+    async def verify_magic_link(payload: MagicLinkVerifyPayload) -> dict[str, Any]:
+        record = pending_magic_links.get(payload.token)
+        now = datetime.now(timezone.utc)
+        if not record or record["used"] or record["expires_at"] < now:
+            raise HTTPException(status_code=401, detail="INVALID_OR_EXPIRED_MAGIC_LINK")
+        record["used"] = True
+        email = record["email"]
+        patient_id = f"pat-{hashlib.sha256(email.encode()).hexdigest()[:12]}"
+        access_token = token_service.issue(
+            sub=patient_id,
+            audience=AUD_PATIENT,
+            roles=["PATIENT"],
+            mfa=False,
+            ttl=timedelta(hours=24),
+        )
+        return {
+            "access_token": access_token,
+            "token_type": "Bearer",
+            "patient_id": patient_id,
+            "email": email,
+        }
+
+    if cfg.dev_token_endpoint_enabled:
+
+        @app.post("/v1/auth/dev-token", include_in_schema=False)
+        async def mint_dev_token(payload: DevTokenPayload) -> dict[str, Any]:
+            try:
+                token = token_service.issue(
+                    sub=payload.sub,
+                    audience=payload.audience,
+                    roles=payload.roles,
+                    mfa=payload.mfa,
+                    org=payload.org,
+                    ttl=timedelta(minutes=payload.ttl_minutes),
+                )
+            except ValueError as exc:
+                raise HTTPException(status_code=400, detail=str(exc)) from exc
+            return {"access_token": token, "token_type": "Bearer"}
 
     # =========================================================================
     # Cloud Health, Neon PostgreSQL Schema Status & Upstash Redis Readiness
@@ -350,7 +550,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def create_care_episode(
         payload: CreateEpisodePayload,
         request: Request,
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(patient_actor),
     ) -> dict[str, Any]:
         try:
             ep = clinical_service.create_episode(
@@ -370,6 +570,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 "state": ep.state,
                 "care_service": ep.care_service,
                 "jurisdiction": ep.jurisdiction,
+                "chief_complaint_summary": ep.chief_complaint_summary,
                 "assigned_clinician_id": ep.assigned_clinician_id,
                 "active_protocol_outcome": ep.active_protocol_outcome,
                 "created_at": ep.created_at_iso,
@@ -384,10 +585,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         episode_id: str,
         payload: SubmitIntakePayload,
         request: Request,
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(patient_actor),
     ) -> dict[str, Any]:
-        if episode_id not in clinical_service._episodes:
-            raise HTTPException(status_code=404, detail="EPISODE_NOT_FOUND")
+        _assert_patient_owns_episode(actor, episode_id, request.state.request_id)
         try:
             proto_res, ai_draft = await clinical_service.submit_intake_and_evaluate_protocol(
                 actor=actor,
@@ -421,7 +621,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def get_care_episode(
         episode_id: str,
         request: Request,
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(care_reader_actor),
     ) -> dict[str, Any]:
         # §14.1: Never reveal whether a patient's record exists to an unauthorised caller
         ep = clinical_service._episodes.get(episode_id)
@@ -443,6 +643,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 "patient_id": ep.patient_id,
                 "state": ep.state,
                 "care_service": ep.care_service,
+                "jurisdiction": ep.jurisdiction,
+                "chief_complaint_summary": ep.chief_complaint_summary,
                 "assigned_clinician_id": ep.assigned_clinician_id,
                 "active_protocol_outcome": ep.active_protocol_outcome,
                 "intakes": ep.intakes,
@@ -479,8 +681,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         payload: BookAppointmentPayload,
         request: Request,
         idempotency_key: str = Header(alias="Idempotency-Key"),
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(patient_actor),
     ) -> dict[str, Any]:
+        _assert_patient_owns_episode(actor, payload.episode_id, request.state.request_id)
         try:
             appt_id, enc, res_id = await clinical_service.book_staffed_appointment_atomic(
                 actor=actor,
@@ -548,12 +751,75 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     # =========================================================================
     # §6.4, §8.2 & §13.4: Clinician Atomic Claim, Signing & Immutable Addenda
     # =========================================================================
+    @app.get("/v1/encounters")
+    async def list_clinician_encounters(
+        state: str | None = None,
+        actor: AuthenticatedActor = Depends(clinician_actor),
+    ) -> list[dict[str, Any]]:
+        results = []
+        for enc in clinical_service._encounters.values():
+            if state and enc.state != state:
+                continue
+            if enc.primary_clinician_id is None or enc.primary_clinician_id == actor.actor_id:
+                ep = clinical_service._episodes.get(enc.episode_id)
+                results.append(
+                    {
+                        "encounter_id": enc.encounter_id,
+                        "episode_id": enc.episode_id,
+                        "patient_id": enc.patient_id,
+                        "state": enc.state,
+                        "modality": enc.modality,
+                        "funding_route": enc.funding_route,
+                        "primary_clinician_id": enc.primary_clinician_id,
+                        "version": enc.version,
+                        "claimed_at": enc.claimed_at_iso,
+                        "signed_at": enc.signed_at_iso,
+                        "signed_document_hash": enc.signed_envelope.document_sha256
+                        if enc.signed_envelope
+                        else None,
+                        "chief_complaint": ep.chief_complaint_summary if ep else None,
+                        "addenda_count": len(enc.addenda),
+                    }
+                )
+        return results
+
+    @app.get("/v1/encounters/{encounter_id}")
+    async def get_encounter_details(
+        encounter_id: str,
+        actor: AuthenticatedActor = Depends(clinician_actor),
+    ) -> dict[str, Any]:
+        if encounter_id not in clinical_service._encounters:
+            raise HTTPException(status_code=404, detail="ENCOUNTER_NOT_FOUND")
+        enc = clinical_service._encounters[encounter_id]
+        ep = clinical_service._episodes.get(enc.episode_id)
+        return {
+            "encounter_id": enc.encounter_id,
+            "episode_id": enc.episode_id,
+            "patient_id": enc.patient_id,
+            "state": enc.state,
+            "modality": enc.modality,
+            "funding_route": enc.funding_route,
+            "primary_clinician_id": enc.primary_clinician_id,
+            "version": enc.version,
+            "claimed_at": enc.claimed_at_iso,
+            "signed_at": enc.signed_at_iso,
+            "signed_document_hash": enc.signed_envelope.document_sha256
+            if enc.signed_envelope
+            else None,
+            "signed_clinical_note": enc.signed_clinical_note,
+            "chief_complaint": ep.chief_complaint_summary if ep else None,
+            "intakes": ep.intakes if ep else [],
+            "addenda": enc.addenda,
+        }
+
     @app.post("/v1/encounters/{encounter_id}/claim")
     async def claim_encounter(
         encounter_id: str,
         request: Request,
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(clinician_actor),
     ) -> dict[str, Any]:
+        if encounter_id not in clinical_service._encounters:
+            raise HTTPException(status_code=404, detail="ENCOUNTER_NOT_FOUND")
         try:
             enc, rtc_token = await clinical_service.claim_encounter_atomic(
                 clinician=actor,
@@ -580,8 +846,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         encounter_id: str,
         payload: SignEncounterPayload,
         request: Request,
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(clinician_actor),
     ) -> dict[str, Any]:
+        if encounter_id not in clinical_service._encounters:
+            raise HTTPException(status_code=404, detail="ENCOUNTER_NOT_FOUND")
         try:
             enc = await clinical_service.sign_encounter_record(
                 clinician=actor,
@@ -638,8 +906,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         encounter_id: str,
         payload: CreateAddendumPayload,
         request: Request,
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(clinician_actor),
     ) -> dict[str, Any]:
+        if encounter_id not in clinical_service._encounters:
+            raise HTTPException(status_code=404, detail="ENCOUNTER_NOT_FOUND")
         try:
             return clinical_service.create_signed_addendum(
                 clinician=actor,
@@ -661,10 +931,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/v1/sponsor/pools/{agreement_id}/report")
     async def get_sponsor_pool_report(
         agreement_id: str,
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        request: Request,
+        actor: AuthenticatedActor = Depends(sponsor_report_actor),
     ) -> dict[str, Any]:
-        if agreement_id not in ledger._pools:
-            raise HTTPException(status_code=404, detail="AGREEMENT_NOT_FOUND")
+        claims: TokenClaims = request.state.token_claims
+        pool = ledger._pools.get(agreement_id)
+        if claims.aud == AUD_SPONSOR:
+            # ADR-0005: a sponsor sees only its own agreements; existence is not revealed.
+            if pool is None or not claims.org or pool.sponsor_id != claims.org:
+                raise HTTPException(status_code=403, detail="ACCESS_DENIED_OR_NOT_FOUND")
+        else:
+            if "FINANCE_CONTROLLER" not in claims.roles:
+                raise HTTPException(status_code=403, detail="INSUFFICIENT_ROLE")
+            if pool is None:
+                raise HTTPException(status_code=404, detail="AGREEMENT_NOT_FOUND")
         report = ledger.build_sponsor_utilisation_report(agreement_id)
         return {
             "agreement_id": report.agreement_id,
@@ -690,8 +970,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         episode_id: str,
         payload: CrossProductHandoffPayload,
         request: Request,
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(patient_actor),
     ) -> dict[str, Any]:
+        _assert_patient_owns_episode(actor, episode_id, request.state.request_id)
         try:
             return clinical_service.transfer_product_intelligence_scan_to_episode(
                 actor=actor,
@@ -713,13 +994,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def toggle_ai_kill_switch(
         payload: ToggleKillSwitchPayload,
         request: Request,
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(kill_switch_actor),
     ) -> dict[str, Any]:
-        if not any(
-            r in {"CLINICAL_GOVERNANCE_LEAD", "EXECUTIVE_DIRECTOR", "PLATFORM_SRE"}
-            for r in actor.roles
-        ):
-            raise HTTPException(status_code=403, detail="INSUFFICIENT_ROLE_FOR_KILL_SWITCH")
         model_gateway.set_kill_switch(payload.enabled)
         await upstash_redis.set_ai_kill_switch_state(
             enabled=payload.enabled,
@@ -744,7 +1020,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/v1/executive/metrics")
     async def get_executive_metrics(
-        actor: AuthenticatedActor = Depends(resolve_actor),
+        actor: AuthenticatedActor = Depends(executive_metrics_actor),
     ) -> dict[str, Any]:
         baseline_unit = ledger.compute_encounter_unit_economics(
             encounter_id="baseline-ng-gp",
@@ -767,9 +1043,116 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             },
             "base_scenario_break_even_encounters_per_month": break_even_base,
             "free_text_phi_included": False,
+            "operational_overview": {
+                "staffed_roster_slots_count": len(clinical_service._slots),
+                "encounters_queued_or_active_count": sum(
+                    1
+                    for e in clinical_service._encounters.values()
+                    if e.state in ("TRIAGED", "IN_CONSULTATION", "BOOKED")
+                ),
+                "sponsor_active_pools_count": len(ledger._pools),
+                "sponsor_unredeemed_liability_minor": sum(
+                    p.available_to_reserve_minor + p.active_reserved_minor
+                    for p in ledger._pools.values()
+                ),
+                "clinician_pending_payables_minor": sum(
+                    p.clinician_payable_minor
+                    for p in ledger._payables_by_encounter.values()
+                    if p.status != "PAID"
+                ),
+            },
         }
 
     return app
 
 
-app = create_app()
+def _seed_non_production_fixtures(
+    cfg: Settings,
+    auth_manager: IdentityAndSessionManager,
+    clinical_service: ClinicalOperationsService,
+    ledger: FinancialLedgerEngine,
+    now: datetime,
+) -> None:
+    """Synthetic roster clinician and sponsor pool. Never runs when environment is production."""
+    default_clinician = AuthenticatedActor(
+        actor_id="dr-adebayo-okonkwo",
+        full_name="Dr. Adebayo Okonkwo (synthetic)",
+        roles=["CLINICIAN_GP"],
+        mfa_verified=True,
+        clinician_status="APPROVED_ACTIVE",
+        clinician_mdcn_licence="MDCN/R/44210",
+        credential_expires_at=now + timedelta(days=365),
+    )
+    auth_manager.register_session(default_clinician)
+    clinical_service.register_clinician_roster_slot(
+        default_clinician,
+        StaffedRosterSlot(
+            slot_id="slot-ng-gp-001",
+            clinician_id=default_clinician.actor_id,
+            clinician_display_name=default_clinician.full_name,
+            clinician_mdcn_licence="MDCN/R/44210",
+            specialty="GP",
+            jurisdiction="NG",
+            starts_at=now + timedelta(minutes=15),
+            ends_at=now + timedelta(hours=4),
+            supported_modalities=["VIDEO", "AUDIO_FALLBACK", "ASYNC_CLINICAL_MESSAGING"],
+            fee_minor=cfg.default_gp_fee_ngn_minor,
+            currency="NGN",
+        ),
+    )
+    ledger.create_or_fund_sponsor_pool(
+        agreement_id="AGR-LW-MEDICAID-NG-2026",
+        sponsor_id="sponsor-loveworld-medicaid",
+        sponsor_name="LoveWorld Medicaid Humanitarian Care Pool",
+        funding_type="SPONSOR_DEFINED_SERVICES",
+        currency="NGN",
+        committed_unfunded_minor=500_000_000,  # 5,000,000 NGN pledged
+        funded_cash_minor=1_200_000_000,  # 12,000,000 NGN cash received
+        eligible_beneficiary_ids=[f"beneficiary-{i}" for i in range(1, 25)],
+        actor_id="finance-controller-01",
+    )
+
+    sample_ep = CareEpisodeRecord(
+        episode_id="EP-NG-88412",
+        patient_id="patient-001",
+        acting_proxy_grant_id=None,
+        care_service="GP_REMOTE",
+        jurisdiction="NG",
+        consent_grant_id="consent-sample-01",
+        state="BOOKED",
+        chief_complaint_summary="Intermittent fever and mild headache for 2 days. No breathing difficulty.",
+        created_at_iso=now.isoformat(),
+        intakes=[
+            {
+                "intake_id": "intake-ng-01",
+                "revision": 1,
+                "submitted_at_iso": now.isoformat(),
+                "raw_statement": "Intermittent fever and mild headache for 2 days. No breathing difficulty.",
+                "structured_answers": {
+                    "symptom_category": "FEVER_OR_MALARIA_LIKE",
+                    "duration_days": 2,
+                    "patient_age_years": 34,
+                    "has_chest_pain": False,
+                    "has_breathing_difficulty": False,
+                    "has_uncontrolled_bleeding": False,
+                },
+                "fired_rule_ids": ["RT-STANDARD-GP-02"],
+                "outcome_type": "CLINICIAN_REVIEW",
+            }
+        ],
+    )
+    clinical_service._episodes[sample_ep.episode_id] = sample_ep
+
+    sample_enc = EncounterRecord(
+        encounter_id="ENC-NG-88412",
+        episode_id=sample_ep.episode_id,
+        patient_id=sample_ep.patient_id,
+        appointment_id="APPT-NG-88412",
+        state="OPEN",
+        modality="VIDEO",
+        funding_route="SPONSOR_DEFINED_SERVICES",
+        entitlement_reservation_id="RES-SAMPLE-01",
+        primary_clinician_id=None,
+        version=1,
+    )
+    clinical_service._encounters[sample_enc.encounter_id] = sample_enc

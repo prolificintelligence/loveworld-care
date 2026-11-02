@@ -50,6 +50,7 @@ export interface CareEpisodeResponse {
   readonly state: CareEpisodeState;
   readonly care_service: string;
   readonly jurisdiction: string;
+  readonly chief_complaint_summary?: string;
   readonly assigned_clinician_id: string | null;
   readonly active_protocol_outcome: ProtocolOutcomeType | null;
   readonly created_at: string;
@@ -139,6 +140,46 @@ export interface AppointmentBookingResponse {
 // =============================================================================
 // 3. Clinician Atomic Claim, RTC Session, Signing & Addenda (§6.4, §8.2, §13.4)
 // =============================================================================
+
+export interface EncounterSummaryDTO {
+  readonly encounter_id: string;
+  readonly episode_id: string;
+  readonly patient_id: string;
+  readonly state: EncounterState;
+  readonly modality: ConsultationModality;
+  readonly funding_route: FundingRouteType;
+  readonly primary_clinician_id: string | null;
+  readonly version: number;
+  readonly claimed_at: string | null;
+  readonly signed_at: string | null;
+  readonly signed_document_hash: string | null;
+  readonly chief_complaint: string | null;
+  readonly addenda_count: number;
+}
+
+export interface EncounterDetailDTO {
+  readonly encounter_id: string;
+  readonly episode_id: string;
+  readonly patient_id: string;
+  readonly state: EncounterState;
+  readonly modality: ConsultationModality;
+  readonly funding_route: FundingRouteType;
+  readonly primary_clinician_id: string | null;
+  readonly version: number;
+  readonly claimed_at: string | null;
+  readonly signed_at: string | null;
+  readonly signed_document_hash: string | null;
+  readonly signed_clinical_note: Record<string, unknown> | null;
+  readonly chief_complaint: string | null;
+  readonly intakes: readonly Record<string, unknown>[];
+  readonly addenda: readonly {
+    readonly addendum_id: string;
+    readonly amendment_reason: string;
+    readonly addendum_text: string;
+    readonly document_sha256: string;
+    readonly signed_at_iso: string;
+  }[];
+}
 
 export interface ClaimEncounterResponse {
   readonly encounter_id: string;
@@ -243,6 +284,63 @@ export interface HealthIntelligenceHandoffRequest {
   readonly consent_timestamp_iso: string;
 }
 
+export interface EmergencyGuidanceResponse {
+  readonly jurisdiction: string;
+  readonly requires_payment: boolean;
+  readonly requires_ai_inference: boolean;
+  readonly ambulance_dispatch_claimed: boolean;
+  readonly emergency_notice: string;
+  readonly emergency_contacts: readonly {
+    readonly region: string;
+    readonly label: string;
+    readonly phone: string;
+  }[];
+}
+
+export interface AuthMeResponse {
+  readonly sub: string;
+  readonly audience: string;
+  readonly roles: readonly string[];
+  readonly mfa: boolean;
+  readonly org?: string | null;
+  readonly expires_at: string;
+  readonly clinician_credential_active?: boolean | null;
+}
+
+export interface DevTokenRequest {
+  readonly sub: string;
+  readonly audience: "lwc:patient" | "lwc:clinician" | "lwc:command" | "lwc:sponsor";
+  readonly roles: readonly string[];
+  readonly mfa?: boolean;
+  readonly org?: string;
+  readonly ttl_minutes?: number;
+}
+
+export interface DevTokenResponse {
+  readonly access_token: string;
+  readonly token_type: string;
+}
+
+export interface ExecutiveMetricsResponse {
+  readonly north_star_signed_encounters_count: number;
+  readonly ai_kill_switch_enabled: boolean;
+  readonly unit_economics_baseline_ngn_minor: {
+    readonly settled_price_minor: number;
+    readonly clinician_compensation_minor: number;
+    readonly contribution_margin_minor: number;
+    readonly contribution_margin_pct: number;
+  };
+  readonly base_scenario_break_even_encounters_per_month: number;
+  readonly free_text_phi_included: false;
+  readonly operational_overview?: {
+    readonly staffed_roster_slots_count: number;
+    readonly encounters_queued_or_active_count: number;
+    readonly sponsor_active_pools_count: number;
+    readonly sponsor_unredeemed_liability_minor: number;
+    readonly clinician_pending_payables_minor: number;
+  };
+}
+
 // =============================================================================
 // Typed /v1 Client Wrapper
 // =============================================================================
@@ -250,7 +348,7 @@ export interface HealthIntelligenceHandoffRequest {
 export class LoveWorldCareApiClient {
   constructor(
     private readonly baseUrl: string,
-    private readonly getHeaders: () => Record<string, string>
+    private readonly getHeaders: () => Record<string, string> = () => ({})
   ) {}
 
   private async request<T>(
@@ -280,13 +378,50 @@ export class LoveWorldCareApiClient {
         message: res.statusText,
         request_id: "unknown",
       }))) as ApiErrorEnvelope;
-      throw new Error(`[${errBody.error_code}] ${errBody.message}`);
+      throw new Error(`[${errBody.error_code || res.status}] ${errBody.message || res.statusText}`);
     }
 
     return (await res.json()) as T;
   }
 
-  createEpisode(payload: CreateCareEpisodeRequest, idempotencyKey: string) {
+  getEmergencyGuidance(jurisdiction = "NG") {
+    return this.request<EmergencyGuidanceResponse>(
+      "GET",
+      `/v1/emergency/guidance?jurisdiction=${encodeURIComponent(jurisdiction)}`
+    );
+  }
+
+  getAuthMe() {
+    return this.request<AuthMeResponse>("GET", "/v1/auth/me");
+  }
+
+  requestMagicLink(email: string, redirectUrl?: string) {
+    return this.request<{
+      status: string;
+      email: string;
+      expires_in_minutes: number;
+      verification_token?: string;
+    }>("POST", "/v1/auth/magic-link/request", { email, redirect_url: redirectUrl });
+  }
+
+  verifyMagicLink(token: string) {
+    return this.request<{
+      access_token: string;
+      token_type: string;
+      patient_id: string;
+      email: string;
+    }>("POST", "/v1/auth/magic-link/verify", { token });
+  }
+
+  mintDevToken(payload: DevTokenRequest) {
+    return this.request<DevTokenResponse>("POST", "/v1/auth/dev-token", payload);
+  }
+
+  logout() {
+    return this.request<void>("POST", "/v1/auth/logout");
+  }
+
+  createEpisode(payload: CreateCareEpisodeRequest, idempotencyKey?: string) {
     return this.request<CareEpisodeResponse>(
       "POST",
       "/v1/care/episodes",
@@ -295,10 +430,17 @@ export class LoveWorldCareApiClient {
     );
   }
 
+  getCareEpisode(episodeId: string) {
+    return this.request<CareEpisodeResponse>(
+      "GET",
+      `/v1/care/episodes/${encodeURIComponent(episodeId)}`
+    );
+  }
+
   submitIntake(
     episodeId: string,
     payload: SubmitIntakeAnswersRequest,
-    idempotencyKey: string
+    idempotencyKey?: string
   ) {
     return this.request<IntakeEvaluationResponse>(
       "POST",
@@ -326,7 +468,22 @@ export class LoveWorldCareApiClient {
     );
   }
 
-  claimEncounter(encounterId: string, idempotencyKey: string) {
+  listEncounters(state?: string) {
+    const q = state ? `?state=${encodeURIComponent(state)}` : "";
+    return this.request<readonly EncounterSummaryDTO[]>(
+      "GET",
+      `/v1/encounters${q}`
+    );
+  }
+
+  getEncounter(encounterId: string) {
+    return this.request<EncounterDetailDTO>(
+      "GET",
+      `/v1/encounters/${encodeURIComponent(encounterId)}`
+    );
+  }
+
+  claimEncounter(encounterId: string, idempotencyKey?: string) {
     return this.request<ClaimEncounterResponse>(
       "POST",
       `/v1/encounters/${encodeURIComponent(encounterId)}/claim`,
@@ -338,13 +495,56 @@ export class LoveWorldCareApiClient {
   signEncounter(
     encounterId: string,
     payload: SignEncounterRequest,
-    idempotencyKey: string
+    idempotencyKey?: string
   ) {
     return this.request<SignedEncounterResponse>(
       "POST",
       `/v1/encounters/${encodeURIComponent(encounterId)}/sign`,
       payload,
       idempotencyKey
+    );
+  }
+
+  createAddendum(
+    encounterId: string,
+    payload: CreateClinicalAddendumRequest,
+    idempotencyKey?: string
+  ) {
+    return this.request<Record<string, unknown>>(
+      "POST",
+      `/v1/encounters/${encodeURIComponent(encounterId)}/addenda`,
+      payload,
+      idempotencyKey
+    );
+  }
+
+  getSponsorPoolReport(agreementId: string) {
+    return this.request<SponsorPoolSummaryDTO>(
+      "GET",
+      `/v1/sponsor/pools/${encodeURIComponent(agreementId)}/report`
+    );
+  }
+
+  toggleAiKillSwitch(enabled: boolean, reason: string) {
+    return this.request<{ ai_kill_switch_enabled: boolean; deterministic_care_pathway_operational: boolean }>(
+      "POST",
+      "/v1/governance/ai-kill-switch",
+      { enabled, reason }
+    );
+  }
+
+  getExecutiveMetrics() {
+    return this.request<ExecutiveMetricsResponse>("GET", "/v1/executive/metrics");
+  }
+
+  transferIntelligenceHandoff(
+    episodeId: string,
+    payload: HealthIntelligenceHandoffRequest
+  ) {
+    return this.request<Record<string, unknown>>(
+      "POST",
+      `/v1/care/episodes/${encodeURIComponent(episodeId)}/intelligence-handoff`,
+      payload
     );
   }
 }

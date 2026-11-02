@@ -1,9 +1,23 @@
 import React from "react";
+import type { Metadata, Viewport } from "next";
 
-export const metadata = {
-  title: "LoveWorld Care — SponsorCare & Institutional Access Workspace",
+export const metadata: Metadata = {
+  title: "LoveWorld Care — SponsorCare & Institutional Workspace",
   description:
-    "Aggregate programme funding, Espees/Paystack/Flutterwave pool replenishment, and k>=5 privacy-safe utilisation reporting.",
+    "Institutional entitlement contracts, restricted care pool settlement, and k-anonymity aggregate reporting (§10.5).",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "SponsorCare",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1E3A8A",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -12,9 +26,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         style={{
           margin: 0,
-          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          fontFamily:
+            "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
           backgroundColor: "#F8FAFC",
           color: "#0F172A",
+          minHeight: "100vh",
+          WebkitFontSmoothing: "antialiased",
         }}
       >
         {children}

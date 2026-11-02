@@ -1,0 +1,22 @@
+{
+  "short_name": "LW Care",
+  "name": "LoveWorld Care — Remote Healthcare Network",
+  "description": "Clinically Governed Remote Healthcare Network. DoctorNow on-demand and scheduled consultations with verified licensed physicians.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F8FAFC",
+  "theme_color": "#0B1F3A",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

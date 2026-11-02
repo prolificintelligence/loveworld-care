@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
+const apiBase =
+  process.env.LW_API_INTERNAL_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://127.0.0.1:8000";
+
 const nextConfig = {
   transpilePackages: [
     "@loveworld-care/design-system",
@@ -6,6 +11,14 @@ const nextConfig = {
     "@loveworld-care/api-contracts",
     "@loveworld-care/fhir-adapters",
   ],
+  async rewrites() {
+    return [
+      {
+        source: "/v1/:path*",
+        destination: `${apiBase}/v1/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

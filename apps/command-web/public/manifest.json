@@ -1,0 +1,16 @@
+{
+  "name": "LoveWorld Care — Care Command",
+  "short_name": "Care Command",
+  "description": "Executive, Clinical Governance, Finance Maker/Checker & Operations Command Console",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#0B1F3A",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

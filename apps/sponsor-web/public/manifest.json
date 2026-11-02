@@ -1,0 +1,22 @@
+{
+  "short_name": "SponsorCare",
+  "name": "LoveWorld Care — SponsorCare & Institutional Workspace",
+  "description": "Institutional entitlement contracts, restricted care pool settlement, and k-anonymity aggregate reporting.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F8FAFC",
+  "theme_color": "#1E3A8A",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

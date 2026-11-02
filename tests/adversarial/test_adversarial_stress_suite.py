@@ -344,14 +344,22 @@ async def test_at05_false_reassuring_ai_draft_rejected_and_protocol_independent(
 # =============================================================================
 # AT-06: Sponsor Admin Attempts to Read Clinical Record -> Denied & Audited
 # =============================================================================
-def test_at06_sponsor_admin_denied_clinical_record_access() -> None:
-    app = create_app()
+def test_at06_sponsor_admin_denied_clinical_record_access(test_settings, bearer) -> None:
+    app = create_app(test_settings)
     client = TestClient(app)
+    patient_headers = bearer(app, sub="pat-at06", audience="lwc:patient", roles=["PATIENT"])
+    sponsor_headers = bearer(
+        app,
+        sub="sponsor-admin-01",
+        audience="lwc:sponsor",
+        roles=["SPONSOR_ADMIN"],
+        org="sponsor-loveworld-medicaid",
+    )
 
     # Create an episode as patient first
     create_res = client.post(
         "/v1/care/episodes",
-        headers={"X-Actor-Id": "pat-at06", "X-Actor-Roles": "PATIENT"},
+        headers=patient_headers,
         json={
             "patient_id": "pat-at06",
             "jurisdiction": "NG",
@@ -364,13 +372,26 @@ def test_at06_sponsor_admin_denied_clinical_record_access() -> None:
     assert create_res.status_code == 200
     episode_id = create_res.json()["episode_id"]
 
-    # Sponsor Admin attempts to read the clinical episode URL
-    sponsor_res = client.get(
+    # Sponsor Admin attempts to read the clinical episode URL: rejected at the audience layer.
+    sponsor_res = client.get(f"/v1/care/episodes/{episode_id}", headers=sponsor_headers)
+    assert sponsor_res.status_code == 401
+    assert "TOKEN_AUDIENCE_NOT_PERMITTED" in sponsor_res.text
+    assert "Private symptom narrative" not in sponsor_res.text
+
+    # Legacy header impersonation must no longer grant anything.
+    spoof_res = client.get(
         f"/v1/care/episodes/{episode_id}",
-        headers={"X-Actor-Id": "sponsor-admin-01", "X-Actor-Roles": "SPONSOR_ADMIN"},
+        headers={"X-Actor-Id": "pat-at06", "X-Actor-Roles": "PATIENT"},
     )
-    assert sponsor_res.status_code == 403
-    assert "DENIED_ROLE_FORBIDDEN_FROM_T3_CLINICAL" in sponsor_res.text
+    assert spoof_res.status_code == 401
+
+    # The denied attempt is attributed and audited, and the chain remains intact.
+    denials = [
+        e
+        for e in app.state.audit_logger.entries
+        if e.actor_id == "sponsor-admin-01" and e.outcome == "DENIED"
+    ]
+    assert denials and denials[-1].reason_code == "DENIED_AUDIENCE_NOT_PERMITTED"
     assert app.state.audit_logger.verify_chain_integrity() is True
 
 
@@ -651,8 +672,8 @@ async def test_at10_unstaffed_or_stale_slot_rejected() -> None:
 # =============================================================================
 # AT-11: Emergency Guidance Available Without Charge / While Checkout Down
 # =============================================================================
-def test_at11_emergency_guidance_works_without_auth_payment_or_ai() -> None:
-    app = create_app()
+def test_at11_emergency_guidance_works_without_auth_payment_or_ai(test_settings) -> None:
+    app = create_app(test_settings)
     client = TestClient(app)
 
     res = client.get("/v1/emergency/guidance?jurisdiction=NG")

@@ -10,12 +10,8 @@
   },
   "dependencies": {
     "@loveworld-care/api-contracts": "workspace:*",
-    "@loveworld-care/audit": "workspace:*",
-    "@loveworld-care/authorization": "workspace:*",
     "@loveworld-care/design-system": "workspace:*",
     "@loveworld-care/domain-types": "workspace:*",
-    "@loveworld-care/fhir-adapters": "workspace:*",
-    "@neondatabase/serverless": "^0.10.4",
     "next": "^15.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

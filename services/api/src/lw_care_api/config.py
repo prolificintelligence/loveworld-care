@@ -51,6 +51,12 @@ class Settings(BaseSettings):
     audit_hmac_chain_key: str = "lw-care-tamper-evident-audit-hmac-chain-key-256bit"
     break_glass_max_duration_minutes: int = 30
 
+    # Bearer-token identity (ADR-0003). 32-byte Ed25519 seed as 64 hex chars.
+    # Required in production; generated ephemerally per process in development/test.
+    token_signing_seed_hex: str = ""
+    token_issuer: str = "https://api.care.loveworld.org"
+    access_token_ttl_minutes: int = 30
+
     # LiveKit WebRTC
     livekit_url: str = "wss://loveworld-care.livekit.cloud"
     livekit_api_key: str = "APILoveWorldCareKey"
@@ -100,6 +106,78 @@ class Settings(BaseSettings):
     default_gp_fee_ngn_minor: int = 600000  # 6,000.00 NGN in kobo
     default_gp_clinician_payable_ngn_minor: int = 330000  # 3,300.00 NGN in kobo
     default_institutional_access_fee_ngn_minor: int = 35000  # 350.00 NGN in kobo
+
+
+    # ------------------------------------------------------------------
+    # Fail-closed runtime validation (ADR-0003)
+    # ------------------------------------------------------------------
+    @property
+    def is_production(self) -> bool:
+        return self.environment.strip().lower() not in NON_PRODUCTION_ENVIRONMENTS
+
+    @property
+    def dev_token_endpoint_enabled(self) -> bool:
+        return not self.is_production
+
+    def insecure_configuration_findings(self) -> list[str]:
+        """Return every reason this configuration is unsafe to run as production."""
+        findings: list[str] = []
+        fields = type(self).model_fields
+        for name in PRODUCTION_SECRET_FIELDS:
+            value = str(getattr(self, name) or "")
+            default = str(fields[name].default or "")
+            if not value:
+                findings.append(f"{name} is empty")
+            elif value == default:
+                findings.append(f"{name} still uses the shipped default")
+            elif any(marker in value.upper() for marker in PLACEHOLDER_MARKERS):
+                findings.append(f"{name} contains a placeholder value")
+
+        try:
+            if len(bytes.fromhex(self.token_signing_seed_hex)) != 32:
+                findings.append("token_signing_seed_hex must be 32 bytes (64 hex chars)")
+        except ValueError:
+            findings.append("token_signing_seed_hex is not valid hex")
+
+        if self.database_url.startswith("sqlite"):
+            findings.append("database_url points at SQLite")
+
+        for origin in (o.strip() for o in self.cors_origins.split(",") if o.strip()):
+            if origin == "*" or "localhost" in origin or "127.0.0.1" in origin:
+                findings.append(f"cors_origins contains non-production origin '{origin}'")
+            elif not origin.startswith("https://"):
+                findings.append(f"cors_origins contains non-HTTPS origin '{origin}'")
+        return findings
+
+    def assert_safe_for_runtime(self) -> None:
+        if not self.is_production:
+            return
+        findings = self.insecure_configuration_findings()
+        if findings:
+            raise InsecureConfigurationError(
+                "Refusing to start LoveWorld Care API in production:\n  - "
+                + "\n  - ".join(findings)
+            )
+
+
+NON_PRODUCTION_ENVIRONMENTS = frozenset({"development", "dev", "local", "test"})
+PLACEHOLDER_MARKERS = ("REPLACE", "CONFIGURE_IN", "CHANGEME", "CHANGE_ME")
+PRODUCTION_SECRET_FIELDS = (
+    "jwt_signing_key",
+    "session_cookie_secret",
+    "clinical_signing_seed_hex",
+    "audit_hmac_chain_key",
+    "token_signing_seed_hex",
+    "livekit_api_key",
+    "livekit_api_secret",
+    "livekit_webhook_secret",
+    "paystack_secret_key",
+    "paystack_webhook_secret",
+)
+
+
+class InsecureConfigurationError(RuntimeError):
+    """Raised when production starts with default, placeholder or missing secrets."""
 
 
 @lru_cache
