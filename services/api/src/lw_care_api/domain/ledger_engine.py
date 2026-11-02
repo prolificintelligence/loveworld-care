@@ -123,9 +123,10 @@ class FinanceExceptionItem:
     currency: CurrencyCode
     maker_actor_id: str
     maker_reason: str
-    status: Literal["PENDING_CHECKER", "APPROVED", "REJECTED"] = "PENDING_CHECKER"
+    status: Literal["PENDING_CHECKER", "PENDING_REVIEW", "APPROVED", "REJECTED", "REMEDIATED"] = "PENDING_REVIEW"
     checker_actor_id: str | None = None
     checker_notes: str | None = None
+    created_at_iso: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     resolved_at_iso: str | None = None
 
 
@@ -602,7 +603,7 @@ class FinancialLedgerEngine:
         exc = self._exceptions[exception_id]
         if exc.maker_actor_id == checker_actor_id:
             raise PermissionError(
-                "MAKER_CHECKER_VIOLATION: The maker of a financial exception cannot be its checker."
+                "MAKER_CHECKER_VIOLATION: MAKER_CANNOT_ACT_AS_CHECKER: The maker of a financial exception cannot be its checker."
             )
         exc.status = decision
         exc.checker_actor_id = checker_actor_id
@@ -703,3 +704,164 @@ class FinancialLedgerEngine:
         if weighted_encounter_contribution_minor <= 0:
             raise ValueError("weighted_encounter_contribution_minor must be positive")
         return int(ceil(remaining_fixed / weighted_encounter_contribution_minor))
+
+    def _serialize_exception(
+        self,
+        exc: FinanceExceptionItem,
+        agreement_id: str | None = None,
+        encounter_id: str | None = None,
+        exception_type: str | None = None,
+    ) -> dict[str, Any]:
+        ref = exc.reference_id
+        agr = agreement_id or (ref if ref.startswith("AGR-") else None)
+        enc = encounter_id or (ref if ref.startswith("ENC-") else None)
+        ext = exception_type or exc.category
+        return {
+            "exception_id": exc.exception_id,
+            "agreement_id": agr,
+            "encounter_id": enc,
+            "exception_type": ext,
+            "amount_minor": exc.amount_minor,
+            "currency": exc.currency,
+            "reason": exc.maker_reason,
+            "maker_id": exc.maker_actor_id,
+            "checker_id": exc.checker_actor_id,
+            "status": exc.status,
+            "action_notes": exc.checker_notes,
+            "created_at_iso": getattr(exc, "created_at_iso", datetime.now(timezone.utc).isoformat()),
+            "resolved_at_iso": exc.resolved_at_iso,
+        }
+
+    def record_finance_exception(
+        self,
+        *,
+        agreement_id: str | None = None,
+        encounter_id: str | None = None,
+        exception_type: str,
+        amount_minor: int,
+        currency: CurrencyCode = "NGN",
+        reason: str,
+        maker_id: str,
+    ) -> dict[str, Any]:
+        cat_map: dict[str, Any] = {
+            "DUPLICATE_CHARGE_REFUND": "DUPLICATE_CHARGE",
+            "DUPLICATE_CHARGE": "DUPLICATE_CHARGE",
+            "SETTLED_BUT_CANCELLED": "SETTLED_BUT_CANCELLED",
+            "BOOKING_NO_ENCOUNTER": "BOOKING_NO_ENCOUNTER",
+            "REFUND_AFTER_REDEMPTION": "REFUND_AFTER_REDEMPTION",
+            "PROVIDER_DISPUTE": "PROVIDER_DISPUTE",
+            "MANUAL_ADJUSTMENT": "MANUAL_ADJUSTMENT",
+        }
+        category = cat_map.get(exception_type, "MANUAL_ADJUSTMENT")
+        ref_id = agreement_id or encounter_id or f"ref-{uuid4().hex[:8]}"
+        now_iso = datetime.now(timezone.utc).isoformat()
+        exc_id = f"exc-{uuid4().hex[:8]}"
+        exc = FinanceExceptionItem(
+            exception_id=exc_id,
+            category=category,
+            reference_id=ref_id,
+            amount_minor=amount_minor,
+            currency=currency,
+            maker_actor_id=maker_id,
+            maker_reason=reason,
+            status="PENDING_REVIEW",
+            created_at_iso=now_iso,
+        )
+        self._exceptions[exc.exception_id] = exc
+        return self._serialize_exception(exc, agreement_id=agreement_id, encounter_id=encounter_id, exception_type=exception_type)
+
+    def action_finance_exception(
+        self,
+        *,
+        exception_id: str,
+        checker_id: str,
+        action: Literal["APPROVE", "REJECT", "REMEDIATE"],
+        notes: str,
+    ) -> dict[str, Any]:
+        if exception_id not in self._exceptions:
+            raise KeyError(f"Exception {exception_id} not found")
+        exc = self._exceptions[exception_id]
+        if exc.maker_actor_id == checker_id:
+            raise PermissionError("MAKER_CHECKER_VIOLATION: MAKER_CANNOT_ACT_AS_CHECKER: The creator of a financial exception cannot approve or reject it.")
+        status_map: dict[str, Any] = {
+            "APPROVE": "APPROVED",
+            "REJECT": "REJECTED",
+            "REMEDIATE": "REMEDIATED",
+        }
+        exc.status = status_map.get(action, "APPROVED")
+        exc.checker_actor_id = checker_id
+        exc.checker_notes = notes
+        exc.resolved_at_iso = datetime.now(timezone.utc).isoformat()
+        return self._serialize_exception(exc)
+
+    def list_finance_exceptions(
+        self, status: str | None = None, agreement_id: str | None = None
+    ) -> list[dict[str, Any]]:
+        items = list(self._exceptions.values())
+        if status:
+            items = [e for e in items if e.status == status]
+        serialized = [self._serialize_exception(e) for e in items]
+        if agreement_id:
+            serialized = [s for s in serialized if s.get("agreement_id") == agreement_id or s.get("reference_id") == agreement_id]
+        return serialized
+
+    def compute_reconciliation_summary(self) -> dict[str, Any]:
+        """§17.1 & LWC-SCR-305: Reconciled ledger state, restricted pools, and imbalance detection."""
+        total_debits = sum(
+            l.amount_minor for l in self._journal if l.direction == "DEBIT"
+        )
+        total_credits = sum(
+            l.amount_minor for l in self._journal if l.direction == "CREDIT"
+        )
+        is_balanced = total_debits == total_credits
+
+        total_funded_cash = sum(p.funded_cash_minor for p in self._pools.values())
+        total_active_reserved = sum(p.active_reserved_minor for p in self._pools.values())
+        total_redeemed_settled = sum(p.redeemed_minor for p in self._pools.values())
+        total_available_to_reserve = sum(p.available_to_reserve_minor for p in self._pools.values())
+
+        total_payables_pending = sum(
+            p.clinician_payable_minor
+            for p in self._payables_by_encounter.values()
+            if p.status == "VALIDATED"
+        )
+        total_payables_paid = sum(
+            p.clinician_payable_minor
+            for p in self._payables_by_encounter.values()
+            if p.status == "PAID"
+        )
+
+        pending_exceptions_count = sum(
+            1 for e in self._exceptions.values() if e.status in ("PENDING_CHECKER", "PENDING_REVIEW")
+        )
+
+        now_iso = datetime.now(timezone.utc).isoformat()
+        return {
+            "summary_id": f"rec-{uuid4().hex[:8]}",
+            "as_of_iso": now_iso,
+            "reconciliation_timestamp_iso": now_iso,
+            "double_entry_balanced": is_balanced,
+            "is_double_entry_balanced": is_balanced,
+            "total_sponsor_cash_received_minor": total_funded_cash,
+            "total_reserved_minor": total_active_reserved,
+            "total_redeemed_minor": total_redeemed_settled,
+            "total_available_liability_minor": total_available_to_reserve,
+            "total_clinician_payables_minor": total_payables_pending,
+            "total_clinician_paid_minor": total_payables_paid,
+            "unresolved_exceptions_count": pending_exceptions_count,
+            "pending_maker_checker_exceptions_count": pending_exceptions_count,
+            "total_debits_minor": total_debits,
+            "total_credits_minor": total_credits,
+            "discrepancy_minor": abs(total_debits - total_credits),
+            "sponsor_pools": {
+                "total_funded_cash_minor": total_funded_cash,
+                "total_active_reserved_minor": total_active_reserved,
+                "total_redeemed_settled_minor": total_redeemed_settled,
+                "total_available_to_reserve_minor": total_available_to_reserve,
+            },
+            "clinician_payables": {
+                "pending_minor": total_payables_pending,
+                "paid_minor": total_payables_paid,
+            },
+            "journal_lines_count": len(self._journal),
+        }

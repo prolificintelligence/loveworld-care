@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -28,12 +29,21 @@ class Settings(BaseSettings):
     )
 
     # Cloud Database, Upstash Serverless Redis & S3/R2
-    database_url: str = "sqlite+aiosqlite:///D:/.toolchains/tmp/lw_care_production.db"
+    database_url: str = Field(
+        default="sqlite+aiosqlite:///D:/.toolchains/tmp/lw_care_production.db",
+        validation_alias=AliasChoices("LW_DATABASE_URL", "DATABASE_URL"),
+    )
     database_pool_size: int = 20
     database_max_overflow: int = 10
     redis_url: str = "redis://localhost:6379/0"
-    upstash_redis_rest_url: str = ""
-    upstash_redis_rest_token: str = ""
+    upstash_redis_rest_url: str = Field(
+        default="",
+        validation_alias=AliasChoices("LW_UPSTASH_REDIS_REST_URL", "UPSTASH_REDIS_REST_URL"),
+    )
+    upstash_redis_rest_token: str = Field(
+        default="",
+        validation_alias=AliasChoices("LW_UPSTASH_REDIS_REST_TOKEN", "UPSTASH_REDIS_REST_TOKEN"),
+    )
     s3_endpoint_url: str = "https://r2.cloudflarestorage.com"
     s3_region: str = "auto"
     s3_bucket_clinical: str = "loveworld-care-clinical-t3"
@@ -92,7 +102,10 @@ class Settings(BaseSettings):
 
     # AI Model Gateway & Kill Switch (OpenRouter Free Tier + MedGemma + Gemini + Anthropic)
     ai_global_kill_switch: bool = False
-    openrouter_api_key: str = ""
+    openrouter_api_key: str = Field(
+        default="",
+        validation_alias=AliasChoices("LW_OPENROUTER_API_KEY", "OPENROUTER_API_KEY"),
+    )
     gemini_api_key: str = ""
     gemini_model_admin: str = "gemini-2.5-flash"
     medgemma_endpoint_url: str = ""

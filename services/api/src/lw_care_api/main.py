@@ -4,7 +4,7 @@ LoveWorld Care — Production /v1 FastAPI Application (§12, §14, §15, §16, �
 
 from __future__ import annotations
 
-from dataclasses import replace
+from dataclasses import asdict, replace
 from datetime import datetime, timedelta, timezone
 import hashlib
 import secrets
@@ -25,11 +25,20 @@ from .config import Settings, get_settings
 from .crypto.signing import ClinicalDocumentSigner
 from .db.neon_migrator import NeonDatabaseManager
 from .domain.clinical_service import (
+    CareContinuityPlanRecord,
     CareEpisodeRecord,
+    CareRelationshipRecord,
+    CareTaskRecord,
     CaseClaimConflictError,
+    ClinicalObservationRecord,
     ClinicalOperationsService,
+    CoordinationTaskRecord,
+    DirectorateActionRecord,
     EncounterRecord,
+    FacilityRecord,
     ImmutableClinicalRecordError,
+    MedicationInstructionRecord,
+    PatientSubjectRecord,
     StaffedRosterSlot,
     StaleOrUnstaffedSlotError,
     build_default_verified_ng_protocol_bundle,
@@ -161,6 +170,150 @@ class CrossProductHandoffPayload(BaseModel):
 class ToggleKillSwitchPayload(BaseModel):
     enabled: bool
     reason: str
+
+
+class CreateSubjectPayload(BaseModel):
+    full_name: str
+    dob_iso: str
+    gender: str = "UNSPECIFIED"
+    relationship: str = "SELF"
+    jurisdiction: str = "NG"
+
+
+class CreateCareRelationshipPayload(BaseModel):
+    patient_id: str
+    relationship_type: str = "ADULT_PROXY"
+    allowed_scopes: list[str] = Field(
+        default_factory=lambda: [
+            "INTAKE",
+            "BOOKING",
+            "VIEW_RECORDS",
+            "CARE_PLAN",
+            "REMINDERS",
+            "PAYMENTS",
+        ]
+    )
+
+
+class CreateCarePlanPayload(BaseModel):
+    episode_id: str
+    encounter_id: str
+    programme_name: str
+    monitoring_instructions: str
+    due_at_iso: str
+    goals: list[str] = Field(default_factory=list)
+    actions: list[str] = Field(default_factory=list)
+
+
+class PrescribeMedicationPayload(BaseModel):
+    encounter_id: str
+    medication_name: str
+    dosage_instructions: str
+    frequency_per_day: int = 1
+    duration_days: int = 7
+    clinical_indication: str = ""
+
+
+class RecordAdherencePayload(BaseModel):
+    status: Literal["TAKEN", "SKIPPED", "ISSUE"] = "TAKEN"
+    notes: str | None = None
+
+
+class CreateCareTaskPayload(BaseModel):
+    episode_id: str | None = None
+    encounter_id: str | None = None
+    assigned_to: Literal["PATIENT", "CLINICIAN", "COORDINATOR"] = "PATIENT"
+    task_type: Literal[
+        "MEDICATION_REMINDER",
+        "CHECK_IN",
+        "RESULT_REVIEW",
+        "FOLLOW_UP",
+        "REFERRAL_FOLLOW_UP",
+        "CLINICAL_REVIEW",
+    ] = "FOLLOW_UP"
+    title: str
+    description: str = ""
+    due_at_iso: str
+
+
+class ResolveCareTaskPayload(BaseModel):
+    self_reported: bool = True
+    notes: str | None = None
+
+
+class RecordObservationPayload(BaseModel):
+    kind: Literal["SYMPTOM", "VITAL", "LAB_RESULT", "DOCUMENT"] = "VITAL"
+    name: str
+    value: str
+    unit: str | None = None
+    notes: str | None = None
+    source: Literal["PATIENT_REPORTED", "CLINICIAN_ENTERED", "LAB_UPLOAD"] = "PATIENT_REPORTED"
+
+
+class CompanionChatPayload(BaseModel):
+    patient_id: str | None = None
+    message: str
+    jurisdiction: str = "NG"
+
+
+class ResolveCoordinationTaskPayload(BaseModel):
+    disposition: str
+
+
+class AcceptReferralPayload(BaseModel):
+    receiving_facility_code: str
+
+
+class DeclineReferralPayload(BaseModel):
+    decline_reason: str
+
+
+class FacilityRegistrationPayload(BaseModel):
+    facility_id: str
+    facility_name: str
+    facility_code: str
+    address: str
+    jurisdiction: str = "NG"
+    geocoordinates: dict[str, float] = Field(default_factory=dict)
+    services: list[str] = Field(default_factory=list)
+    hours: str = "24/7"
+    contact_phone: str = ""
+    is_verified: bool = True
+    readiness_state: Literal["CONFIRMED_AVAILABLE", "STALE", "UNAVAILABLE"] = "CONFIRMED_AVAILABLE"
+    validity_minutes: int = 60
+
+
+class FacilityReadinessPayload(BaseModel):
+    readiness_state: Literal["CONFIRMED_AVAILABLE", "STALE", "UNAVAILABLE"] = "CONFIRMED_AVAILABLE"
+    validity_minutes: int = 30
+
+
+class CreateFinanceExceptionPayload(BaseModel):
+    agreement_id: str | None = None
+    encounter_id: str | None = None
+    exception_type: str
+    amount_minor: int
+    currency: str = "NGN"
+    reason: str
+
+
+class ActionFinanceExceptionPayload(BaseModel):
+    action: Literal["APPROVE", "REJECT", "REMEDIATE"]
+    notes: str
+
+
+class CreateDirectorateActionPayload(BaseModel):
+    metric_id: str
+    title: str
+    description: str
+    owner_team: str
+    assigned_to: str
+    due_date_iso: str
+
+
+class UpdateDirectorateActionPayload(BaseModel):
+    status: Literal["OPEN", "IN_PROGRESS", "RESOLVED"]
+    evidence_notes: str = ""
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -379,6 +532,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     executive_metrics_actor = authenticated(
         AUD_COMMAND, roles=EXECUTIVE_METRICS_ROLES, require_mfa=True
     )
+    command_actor = authenticated(AUD_COMMAND)
+    finance_actor = authenticated(
+        AUD_COMMAND, roles=frozenset({"FINANCE_CONTROLLER", "EXECUTIVE_DIRECTOR"})
+    )
+    coordination_actor = authenticated(AUD_COMMAND, AUD_CLINICIAN)
+    patient_or_clinician_actor = authenticated(AUD_PATIENT, AUD_CLINICIAN)
+    any_authenticated_actor = authenticated(AUD_PATIENT, AUD_CLINICIAN, AUD_COMMAND, AUD_SPONSOR)
 
     # =========================================================================
     # Auth: token introspection, logout, public key, and dev-only token minting
@@ -1063,6 +1223,428 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             },
         }
 
+    # =========================================================================
+    # §4 & LWC-ACC-001 - 005: Subject & Relationship Identity
+    # =========================================================================
+    @app.get("/v1/identity/subjects")
+    async def list_patient_subjects(
+        actor: AuthenticatedActor = Depends(any_authenticated_actor),
+    ) -> list[dict[str, Any]]:
+        subjects = clinical_service.list_subjects_for_actor(actor)
+        return [asdict(s) for s in subjects]
+
+    @app.post("/v1/identity/subjects")
+    async def create_patient_subject(
+        payload: CreateSubjectPayload,
+        actor: AuthenticatedActor = Depends(patient_actor),
+    ) -> dict[str, Any]:
+        subj = clinical_service.create_patient_subject(
+            actor=actor,
+            full_name=payload.full_name,
+            dob_iso=payload.dob_iso,
+            gender=payload.gender,
+            relationship=payload.relationship,
+            jurisdiction=payload.jurisdiction,
+        )
+        return asdict(subj)
+
+    @app.post("/v1/identity/relationships")
+    async def create_care_relationship(
+        payload: CreateCareRelationshipPayload,
+        actor: AuthenticatedActor = Depends(patient_actor),
+    ) -> dict[str, Any]:
+        rel = clinical_service.create_care_relationship(
+            actor=actor,
+            patient_id=payload.patient_id,
+            relationship_type=payload.relationship_type,
+            allowed_scopes=payload.allowed_scopes,
+        )
+        return asdict(rel)
+
+    @app.post("/v1/identity/relationships/{relationship_id}/revoke")
+    async def revoke_care_relationship(
+        relationship_id: str,
+        actor: AuthenticatedActor = Depends(patient_actor),
+    ) -> dict[str, Any]:
+        try:
+            clinical_service.revoke_care_relationship(actor=actor, relationship_id=relationship_id)
+            return {"revoked": True, "relationship_id": relationship_id}
+        except PermissionError as exc:
+            raise HTTPException(status_code=403, detail=str(exc)) from exc
+
+    # =========================================================================
+    # §5 & LWC-SCR-101 - 108: Patient Longitudinal Care & Dashboard
+    # =========================================================================
+    @app.get("/v1/care/patients/{patient_id}/dashboard")
+    async def get_patient_dashboard(
+        patient_id: str,
+        actor: AuthenticatedActor = Depends(patient_or_clinician_actor),
+    ) -> dict[str, Any]:
+        return clinical_service.get_patient_dashboard(actor=actor, patient_id=patient_id)
+
+    @app.get("/v1/care/patients/{patient_id}/care-plans")
+    async def list_patient_care_plans(
+        patient_id: str,
+        actor: AuthenticatedActor = Depends(patient_or_clinician_actor),
+    ) -> list[dict[str, Any]]:
+        plans = clinical_service.list_care_plans(patient_id=patient_id)
+        return [asdict(p) for p in plans]
+
+    @app.post("/v1/care/patients/{patient_id}/care-plans")
+    async def create_patient_care_plan(
+        patient_id: str,
+        payload: CreateCarePlanPayload,
+        actor: AuthenticatedActor = Depends(clinician_actor),
+    ) -> dict[str, Any]:
+        plan = clinical_service.create_or_update_care_plan(
+            clinician=actor,
+            patient_id=patient_id,
+            episode_id=payload.episode_id,
+            encounter_id=payload.encounter_id,
+            programme_name=payload.programme_name,
+            monitoring_instructions=payload.monitoring_instructions,
+            due_at_iso=payload.due_at_iso,
+            goals=payload.goals,
+            actions=payload.actions,
+        )
+        return asdict(plan)
+
+    @app.get("/v1/care/patients/{patient_id}/medications")
+    async def list_patient_medications(
+        patient_id: str,
+        actor: AuthenticatedActor = Depends(patient_or_clinician_actor),
+    ) -> list[dict[str, Any]]:
+        meds = clinical_service.list_medications(patient_id=patient_id)
+        return [asdict(m) for m in meds]
+
+    @app.post("/v1/care/patients/{patient_id}/medications")
+    async def prescribe_medication(
+        patient_id: str,
+        payload: PrescribeMedicationPayload,
+        actor: AuthenticatedActor = Depends(clinician_actor),
+    ) -> dict[str, Any]:
+        med = clinical_service.prescribe_medication(
+            clinician=actor,
+            patient_id=patient_id,
+            encounter_id=payload.encounter_id,
+            medication_name=payload.medication_name,
+            dosage_instructions=payload.dosage_instructions,
+            frequency_per_day=payload.frequency_per_day,
+            duration_days=payload.duration_days,
+            clinical_indication=payload.clinical_indication,
+        )
+        return asdict(med)
+
+    @app.post("/v1/care/patients/{patient_id}/medications/{medication_id}/adherence")
+    async def report_medication_adherence(
+        patient_id: str,
+        medication_id: str,
+        payload: RecordAdherencePayload,
+        actor: AuthenticatedActor = Depends(patient_or_clinician_actor),
+    ) -> dict[str, Any]:
+        try:
+            return clinical_service.report_medication_adherence(
+                actor=actor,
+                medication_id=medication_id,
+                status=payload.status,
+                notes=payload.notes,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.get("/v1/care/patients/{patient_id}/tasks")
+    async def list_patient_tasks(
+        patient_id: str,
+        actor: AuthenticatedActor = Depends(patient_or_clinician_actor),
+    ) -> list[dict[str, Any]]:
+        tasks = clinical_service.list_patient_tasks(patient_id=patient_id)
+        return [asdict(t) for t in tasks]
+
+    @app.post("/v1/care/patients/{patient_id}/tasks/{task_id}/resolve")
+    async def resolve_care_task(
+        patient_id: str,
+        task_id: str,
+        payload: ResolveCareTaskPayload,
+        actor: AuthenticatedActor = Depends(patient_or_clinician_actor),
+    ) -> dict[str, Any]:
+        try:
+            task = clinical_service.resolve_care_task(
+                actor=actor,
+                task_id=task_id,
+                self_reported=payload.self_reported,
+                notes=payload.notes,
+            )
+            return asdict(task)
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.get("/v1/care/patients/{patient_id}/records")
+    async def list_patient_records(
+        patient_id: str,
+        actor: AuthenticatedActor = Depends(patient_or_clinician_actor),
+    ) -> list[dict[str, Any]]:
+        return clinical_service.list_patient_records(actor=actor, patient_id=patient_id)
+
+    @app.post("/v1/care/patients/{patient_id}/observations")
+    async def add_patient_observation(
+        patient_id: str,
+        payload: RecordObservationPayload,
+        actor: AuthenticatedActor = Depends(patient_or_clinician_actor),
+    ) -> dict[str, Any]:
+        obs = clinical_service.add_patient_observation(
+            actor=actor,
+            patient_id=patient_id,
+            kind=payload.kind,
+            name=payload.name,
+            value=payload.value,
+            unit=payload.unit,
+            notes=payload.notes,
+            source=payload.source,
+        )
+        return asdict(obs)
+
+    # =========================================================================
+    # §5 & LWC-SCR-102, LWC-INT-001: Health Intelligence Companion Chat
+    # =========================================================================
+    @app.post("/v1/companion/chat")
+    async def companion_chat(
+        payload: CompanionChatPayload,
+        actor: AuthenticatedActor = Depends(any_authenticated_actor),
+    ) -> dict[str, Any]:
+        return clinical_service.evaluate_companion_message(
+            actor=actor,
+            patient_id=payload.patient_id,
+            message=payload.message,
+            jurisdiction=payload.jurisdiction,
+        )
+
+    # =========================================================================
+    # §7 & LWC-SCR-303: Network Facilities & Readiness
+    # =========================================================================
+    @app.get("/v1/network/facilities")
+    async def list_network_facilities(
+        jurisdiction: str = "NG",
+        service: str | None = None,
+        actor: AuthenticatedActor = Depends(any_authenticated_actor),
+    ) -> list[dict[str, Any]]:
+        facs = clinical_service.list_facilities(jurisdiction=jurisdiction, service=service)
+        return [asdict(f) for f in facs]
+
+    @app.post("/v1/network/facilities")
+    async def register_network_facility(
+        payload: FacilityRegistrationPayload,
+        actor: AuthenticatedActor = Depends(command_actor),
+    ) -> dict[str, Any]:
+        now_iso = datetime.now(timezone.utc).isoformat()
+        expires_iso = (
+            datetime.now(timezone.utc) + timedelta(minutes=payload.validity_minutes)
+        ).isoformat()
+        fac = FacilityRecord(
+            facility_id=payload.facility_id,
+            facility_name=payload.facility_name,
+            facility_code=payload.facility_code,
+            address=payload.address,
+            jurisdiction=payload.jurisdiction,
+            geocoordinates=payload.geocoordinates,
+            services=payload.services,
+            hours=payload.hours,
+            contact_phone=payload.contact_phone,
+            is_verified=payload.is_verified,
+            readiness_state=payload.readiness_state,
+            readiness_updated_at_iso=now_iso,
+            readiness_expires_at_iso=expires_iso,
+        )
+        registered = clinical_service.register_facility(fac)
+        return asdict(registered)
+
+    @app.post("/v1/network/facilities/{facility_id}/readiness")
+    async def update_facility_readiness(
+        facility_id: str,
+        payload: FacilityReadinessPayload,
+        actor: AuthenticatedActor = Depends(command_actor),
+    ) -> dict[str, Any]:
+        try:
+            fac = clinical_service.update_facility_readiness(
+                facility_id=facility_id,
+                state=payload.readiness_state,
+                validity_minutes=payload.validity_minutes,
+            )
+            return asdict(fac)
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    # =========================================================================
+    # §7 & LWC-SCR-302: Care Coordination Board & Referrals
+    # =========================================================================
+    @app.get("/v1/coordination/board")
+    async def list_coordination_board(
+        actor: AuthenticatedActor = Depends(coordination_actor),
+    ) -> list[dict[str, Any]]:
+        tasks = clinical_service.list_coordination_board()
+        return [asdict(t) for t in tasks]
+
+    @app.post("/v1/coordination/board/{task_id}/claim")
+    async def claim_coordination_task(
+        task_id: str,
+        actor: AuthenticatedActor = Depends(coordination_actor),
+    ) -> dict[str, Any]:
+        try:
+            task = clinical_service.claim_coordination_task(actor=actor, task_id=task_id)
+            return asdict(task)
+        except CaseClaimConflictError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.post("/v1/coordination/board/{task_id}/resolve")
+    async def resolve_coordination_task(
+        task_id: str,
+        payload: ResolveCoordinationTaskPayload,
+        actor: AuthenticatedActor = Depends(coordination_actor),
+    ) -> dict[str, Any]:
+        try:
+            task = clinical_service.resolve_coordination_task(
+                actor=actor,
+                task_id=task_id,
+                disposition=payload.disposition,
+            )
+            return asdict(task)
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.get("/v1/referrals")
+    async def list_referrals(
+        actor: AuthenticatedActor = Depends(coordination_actor),
+    ) -> list[dict[str, Any]]:
+        return [asdict(r) for r in clinical_service._referrals.values()]
+
+    @app.post("/v1/referrals/{referral_id}/accept")
+    async def accept_referral(
+        referral_id: str,
+        payload: AcceptReferralPayload,
+        actor: AuthenticatedActor = Depends(coordination_actor),
+    ) -> dict[str, Any]:
+        try:
+            ref = clinical_service.accept_referral(
+                referral_id=referral_id,
+                receiving_facility_code=payload.receiving_facility_code,
+            )
+            return asdict(ref)
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.post("/v1/referrals/{referral_id}/decline")
+    async def decline_referral(
+        referral_id: str,
+        payload: DeclineReferralPayload,
+        actor: AuthenticatedActor = Depends(coordination_actor),
+    ) -> dict[str, Any]:
+        try:
+            ref = clinical_service.decline_referral(
+                referral_id=referral_id,
+                decline_reason=payload.decline_reason,
+            )
+            return asdict(ref)
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    # =========================================================================
+    # §7, §10 & LWC-SCR-305: Finance Operations & Maker/Checker Reconciliation
+    # =========================================================================
+    @app.get("/v1/finance/exceptions")
+    async def list_finance_exceptions(
+        status: str | None = None,
+        agreement_id: str | None = None,
+        actor: AuthenticatedActor = Depends(finance_actor),
+    ) -> list[dict[str, Any]]:
+        return ledger.list_finance_exceptions(status=status, agreement_id=agreement_id)
+
+    @app.post("/v1/finance/exceptions")
+    async def create_finance_exception(
+        payload: CreateFinanceExceptionPayload,
+        actor: AuthenticatedActor = Depends(finance_actor),
+    ) -> dict[str, Any]:
+        return ledger.record_finance_exception(
+            agreement_id=payload.agreement_id,
+            encounter_id=payload.encounter_id,
+            exception_type=payload.exception_type,
+            amount_minor=payload.amount_minor,
+            currency=payload.currency,
+            reason=payload.reason,
+            maker_id=actor.actor_id,
+        )
+
+    @app.post("/v1/finance/exceptions/{exception_id}/action")
+    async def action_finance_exception(
+        exception_id: str,
+        payload: ActionFinanceExceptionPayload,
+        actor: AuthenticatedActor = Depends(finance_actor),
+    ) -> dict[str, Any]:
+        try:
+            return ledger.action_finance_exception(
+                exception_id=exception_id,
+                checker_id=actor.actor_id,
+                action=payload.action,
+                notes=payload.notes,
+            )
+        except PermissionError as exc:
+            raise HTTPException(status_code=403, detail=str(exc)) from exc
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    @app.get("/v1/finance/reconciliation")
+    async def get_finance_reconciliation(
+        actor: AuthenticatedActor = Depends(finance_actor),
+    ) -> dict[str, Any]:
+        return ledger.compute_reconciliation_summary()
+
+    # =========================================================================
+    # §7 & LWC-SCR-301, LWC-MET-001 - 016: Directorate Metrics & Actions
+    # =========================================================================
+    @app.get("/v1/directorate/metrics")
+    async def get_directorate_metrics(
+        actor: AuthenticatedActor = Depends(command_actor),
+    ) -> dict[str, Any]:
+        return clinical_service.get_directorate_metrics()
+
+    @app.get("/v1/directorate/actions")
+    async def list_directorate_actions(
+        actor: AuthenticatedActor = Depends(command_actor),
+    ) -> list[dict[str, Any]]:
+        actions = clinical_service.list_directorate_actions()
+        return [asdict(a) for a in actions]
+
+    @app.post("/v1/directorate/actions")
+    async def create_directorate_action(
+        payload: CreateDirectorateActionPayload,
+        actor: AuthenticatedActor = Depends(command_actor),
+    ) -> dict[str, Any]:
+        action = clinical_service.create_directorate_action(
+            metric_id=payload.metric_id,
+            title=payload.title,
+            description=payload.description,
+            owner_team=payload.owner_team,
+            assigned_to=payload.assigned_to,
+            due_date_iso=payload.due_date_iso,
+        )
+        return asdict(action)
+
+    @app.patch("/v1/directorate/actions/{action_id}")
+    async def update_directorate_action(
+        action_id: str,
+        payload: UpdateDirectorateActionPayload,
+        actor: AuthenticatedActor = Depends(command_actor),
+    ) -> dict[str, Any]:
+        try:
+            action = clinical_service.update_directorate_action(
+                action_id=action_id,
+                status=payload.status,
+                evidence_notes=payload.evidence_notes,
+            )
+            return asdict(action)
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
     return app
 
 
@@ -1111,6 +1693,17 @@ def _seed_non_production_fixtures(
         eligible_beneficiary_ids=[f"beneficiary-{i}" for i in range(1, 25)],
         actor_id="finance-controller-01",
     )
+
+    sample_subj = PatientSubjectRecord(
+        patient_id="patient-001",
+        account_id="patient-001",
+        full_name="Sister Grace Adeleke (Demo Subject)",
+        date_of_birth_iso="1988-06-15T00:00:00Z",
+        gender="FEMALE",
+        relationship_to_account="SELF",
+        jurisdiction="NG",
+    )
+    clinical_service._subjects[sample_subj.patient_id] = sample_subj
 
     sample_ep = CareEpisodeRecord(
         episode_id="EP-NG-88412",

@@ -1,1403 +1,1234 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { SharedDeviceSessionLockBar } from "@loveworld-care/design-system";
+import React, { useCallback, useEffect, useState } from "react";
+import { SharedDeviceSessionLockBar, LW_DESIGN_TOKENS } from "@loveworld-care/design-system";
 import {
+  CoordinationTask,
+  DirectorateAction,
+  DirectorateMetricsResponse,
+  EmergencyGuidanceResponse,
+  FinanceException,
   LoveWorldCareApiClient,
+  NetworkFacility,
+  ReconciliationSummary,
   type ExecutiveMetricsResponse,
-  type EmergencyGuidanceResponse,
 } from "@loveworld-care/api-contracts";
-import {
-  computeEncounterUnitEconomics,
-  formatMoneyMinor,
-  type CurrencyCode,
-} from "@loveworld-care/domain-types";
+import { formatMoneyMinor, type CurrencyCode } from "@loveworld-care/domain-types";
 
-type CommandTab = "EXECUTIVE" | "CLINICAL_GOVERNANCE" | "OPERATIONS_SUPPORT" | "FINANCE_LEDGER";
-
-interface MakerCheckerItem {
-  id: string;
-  category: "SETTLED_BUT_CANCELLED" | "DUPLICATE_CHARGE" | "OVERPAYMENT_REFUND";
-  description: string;
-  amountMinor: number;
-  currency: CurrencyCode;
-  makerId: string;
-  makerTimestamp: string;
-  status: "PENDING_CHECKER" | "APPROVED_BY_CHECKER" | "REJECTED";
-  checkerId?: string;
-  approvalAuditHash?: string;
-}
+type CommandTab = "EXECUTIVE" | "COORDINATION" | "NETWORK" | "GOVERNANCE" | "FINANCE";
 
 export default function CareCommandConsolePage() {
   const [activeTab, setActiveTab] = useState<CommandTab>("EXECUTIVE");
   const [sessionLocked, setSessionLocked] = useState(false);
 
   // Auth & Client
-  const [token, setToken] = useState<string | null>(null);
+  const [currentActorId] = useState("exec-director-01");
   const [apiClient, setApiClient] = useState<LoveWorldCareApiClient | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Executive Metrics
-  const [metrics, setMetrics] = useState<ExecutiveMetricsResponse | null>(null);
+  // 1. Executive Overview & Directorate Metrics (LWC-SCR-301, LWC-MET-001..016)
+  const [execMetrics, setExecMetrics] = useState<ExecutiveMetricsResponse | null>(null);
+  const [directorateMetrics, setDirectorateMetrics] = useState<DirectorateMetricsResponse | null>(null);
+  const [directorateActions, setDirectorateActions] = useState<readonly DirectorateAction[]>([]);
+  const [isCreatingAction, setIsCreatingAction] = useState(false);
+  const [newActionTitle, setNewActionTitle] = useState("");
+  const [newActionDesc, setNewActionDesc] = useState("");
+  const [newActionMetricId, setNewActionMetricId] = useState("LWC-MET-002");
 
-  // Clinical Governance & AI Kill-Switch
+  // 2. Care Coordination Board (LWC-SCR-302)
+  const [coordinationTasks, setCoordinationTasks] = useState<readonly CoordinationTask[]>([]);
+  const [coordinationFilter, setCoordinationFilter] = useState<string>("ALL");
+  const [isClaimingCoordTask, setIsClaimingCoordTask] = useState<string | null>(null);
+
+  // 3. Network Facilities & Coverage (LWC-SCR-303)
+  const [networkFacilities, setNetworkFacilities] = useState<readonly NetworkFacility[]>([]);
+  const [facilitySearch, setFacilitySearch] = useState<string>("");
+
+  // 4. Clinical Governance & AI Kill-Switch (LWC-SCR-304)
   const [aiKillSwitchEnabled, setAiKillSwitchEnabled] = useState(false);
   const [killSwitchReason, setKillSwitchReason] = useState("REASON_CLINICAL_DISCREPANCY");
   const [isTogglingKillSwitch, setIsTogglingKillSwitch] = useState(false);
-  const [killSwitchFeedback, setKillSwitchFeedback] = useState<string | null>(null);
 
-  // Emergency Guidance Live Check
+  // 5. Finance Operations & Maker/Checker Reconciliation (LWC-SCR-305)
+  const [financeExceptions, setFinanceExceptions] = useState<readonly FinanceException[]>([]);
+  const [reconciliation, setReconciliation] = useState<ReconciliationSummary | null>(null);
+  const [actioningExceptionId, setActioningExceptionId] = useState<string | null>(null);
+
+  // Emergency Guidance
   const [emergencyGuidance, setEmergencyGuidance] = useState<EmergencyGuidanceResponse | null>(null);
 
-  // Finance Maker/Checker Queue
-  const [exceptions, setExceptions] = useState<MakerCheckerItem[]>([
-    {
-      id: "EXC-FIN-0041",
-      category: "SETTLED_BUT_CANCELLED",
-      description: "Encounter cancelled by patient before clinician claiming; refund approved by triage protocol.",
-      amountMinor: 600000, // ₦6,000.00
-      currency: "NGN",
-      makerId: "finance-maker-01",
-      makerTimestamp: "2026-11-01T14:22:00Z",
-      status: "PENDING_CHECKER",
-    },
-    {
-      id: "EXC-FIN-0042",
-      category: "DUPLICATE_CHARGE",
-      description: "Network timeout led to dual settlement webhook on mobile money gateway.",
-      amountMinor: 350000, // ₦3,500.00
-      currency: "NGN",
-      makerId: "finance-maker-02",
-      makerTimestamp: "2026-11-01T15:05:00Z",
-      status: "PENDING_CHECKER",
-    },
-  ]);
+  // ---------------------------------------------------------------------------
+  // Refresh Active Tab Data
+  // ---------------------------------------------------------------------------
+  const refreshCurrentView = useCallback(async (clientInstance?: LoveWorldCareApiClient) => {
+    const client = clientInstance || apiClient;
+    if (!client) return;
+    setIsLoading(true);
+    setErrorMessage(null);
 
-  // Baseline unit economics model
-  const unitEconomics = computeEncounterUnitEconomics({
-    encounterId: "ENC-BASELINE-NG",
-    payerCohort: "SPONSOR_DEFINED_SERVICES",
-    currency: "NGN",
-    settledRevenueMinor: metrics?.unit_economics_baseline_ngn_minor.settled_price_minor ?? 600000,
-    clinicianDirectCostMinor:
-      metrics?.unit_economics_baseline_ngn_minor.clinician_compensation_minor ?? 330000,
-    paymentProcessingFeeMinor: 15000, // ₦150.00 (2.5%)
-    communicationsRtcModelCostMinor: 20000, // ₦200.00
-    variableSupportCostMinor: 40000, // ₦400.00
-    refundQualityReserveMinor: 20000, // ₦200.00
-  });
+    try {
+      const [em, dm, da, cb, facs, excep, recon, emerg] = await Promise.all([
+        client.getExecutiveMetrics().catch(() => null),
+        client.getDirectorateMetrics().catch(() => null),
+        client.listDirectorateActions().catch(() => []),
+        client.listCoordinationBoard().catch(() => []),
+        client.listFacilities("NG").catch(() => []),
+        client.listFinanceExceptions().catch(() => []),
+        client.getFinanceReconciliation().catch(() => null),
+        client.getEmergencyGuidance("NG").catch(() => null),
+      ]);
 
-  // Initialize Auth & API Client
+      if (em) {
+        setExecMetrics(em);
+        setAiKillSwitchEnabled(em.ai_kill_switch_enabled);
+      }
+      if (dm) setDirectorateMetrics(dm);
+      setDirectorateActions(da);
+      setCoordinationTasks(cb);
+      setNetworkFacilities(facs);
+      setFinanceExceptions(excep);
+      if (recon) setReconciliation(recon);
+      if (emerg) setEmergencyGuidance(emerg);
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : "Failed to load command data");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [apiClient]);
+
+  // ---------------------------------------------------------------------------
+  // Initialize Command Session
+  // ---------------------------------------------------------------------------
   useEffect(() => {
     async function initCommandSession() {
       setIsLoading(true);
-      setErrorMessage(null);
       try {
-        let currentToken = localStorage.getItem("lw_command_token");
+        let currentToken = typeof window !== "undefined" ? localStorage.getItem("lw_command_token") : null;
         if (!currentToken) {
           const devRes = await fetch("/v1/auth/dev-token", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              sub: "exec-director-01",
+              sub: currentActorId,
               audience: "lwc:command",
               roles: ["EXECUTIVE_DIRECTOR", "FINANCE_CONTROLLER", "CLINICAL_GOVERNANCE_LEAD"],
               mfa: true,
-              ttl_minutes: 180,
+              ttl_minutes: 240,
             }),
           });
           if (devRes.ok) {
             const data = await devRes.json();
             currentToken = data.access_token;
-            if (currentToken) localStorage.setItem("lw_command_token", currentToken);
+            if (currentToken && typeof window !== "undefined") {
+              localStorage.setItem("lw_command_token", currentToken);
+            }
           }
         }
-        setToken(currentToken);
 
         const client = new LoveWorldCareApiClient("", () => ({
           ...(currentToken ? { Authorization: `Bearer ${currentToken}` } : {}),
         }));
         setApiClient(client);
-
-        // Fetch Executive Metrics
-        const execMetrics = await client.getExecutiveMetrics().catch(() => null);
-        if (execMetrics) {
-          setMetrics(execMetrics);
-          setAiKillSwitchEnabled(execMetrics.ai_kill_switch_enabled);
-        }
-
-        // Fetch Emergency Guidance
-        const emergencyRes = await client.getEmergencyGuidance("NG").catch(() => null);
-        if (emergencyRes) {
-          setEmergencyGuidance(emergencyRes);
-        }
+        await refreshCurrentView(client);
       } catch (err: unknown) {
-        setErrorMessage(err instanceof Error ? err.message : "Failed to load command session");
-      } finally {
+        setErrorMessage(err instanceof Error ? err.message : "Failed to initialize command session");
         setIsLoading(false);
       }
     }
 
     void initCommandSession();
-  }, []);
+  }, [currentActorId, refreshCurrentView]);
 
-  // Refresh metrics on demand
-  const refreshMetrics = async () => {
-    if (!apiClient) return;
-    setIsLoading(true);
-    try {
-      const execMetrics = await apiClient.getExecutiveMetrics();
-      setMetrics(execMetrics);
-      setAiKillSwitchEnabled(execMetrics.ai_kill_switch_enabled);
-      setErrorMessage(null);
-    } catch (err: unknown) {
-      setErrorMessage(err instanceof Error ? err.message : "Failed to refresh metrics");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Toggle AI Kill-Switch
-  const handleToggleAiKillSwitch = async () => {
+  // ---------------------------------------------------------------------------
+  // AI Kill-Switch Handler (LWC-SCR-304, §15.6)
+  // ---------------------------------------------------------------------------
+  const handleToggleAiKillSwitch = async (targetState: boolean) => {
     if (!apiClient) return;
     setIsTogglingKillSwitch(true);
-    setKillSwitchFeedback(null);
-    const targetState = !aiKillSwitchEnabled;
+    setErrorMessage(null);
+    setSuccessMessage(null);
     try {
       const res = await apiClient.toggleAiKillSwitch(targetState, killSwitchReason);
       setAiKillSwitchEnabled(res.ai_kill_switch_enabled);
-      setKillSwitchFeedback(
+      setSuccessMessage(
         res.ai_kill_switch_enabled
-          ? "AI-OFF Kill Switch ACTIVATED. All generative AI calls fail-closed immediately. Deterministic protocols and human consultations remain 100% operational."
-          : "Policy-Limited AI Assistance RESTORED. Standard deterministic clinical safety limits apply."
+          ? "🚨 AI Global Kill-Switch ACTIVATED. All inference blocked. Deterministic pathways active."
+          : "✓ AI Gateway restored to normal operational mode."
       );
-      void refreshMetrics();
     } catch (err: unknown) {
-      setKillSwitchFeedback(
-        err instanceof Error ? `Action failed: ${err.message}` : "Failed to toggle kill switch"
-      );
+      setErrorMessage(err instanceof Error ? err.message : "Failed to toggle AI kill switch");
     } finally {
       setIsTogglingKillSwitch(false);
     }
   };
 
-  // Approve Maker/Checker Item
-  const handleApproveException = (item: MakerCheckerItem) => {
-    const checkerId = "finance-checker-02"; // Distinct from makerId
-    if (checkerId === item.makerId) {
-      alert("Maker/Checker Violation (§17.7): The checker must be distinct from the maker.");
-      return;
+  // ---------------------------------------------------------------------------
+  // Coordination Board Claim / Resolve (LWC-SCR-302)
+  // ---------------------------------------------------------------------------
+  const handleClaimCoordTask = async (taskId: string) => {
+    if (!apiClient) return;
+    setIsClaimingCoordTask(taskId);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    try {
+      await apiClient.claimCoordinationTask(taskId);
+      setSuccessMessage(`Coordination task ${taskId} claimed.`);
+      await refreshCurrentView();
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : "Failed to claim coordination task");
+    } finally {
+      setIsClaimingCoordTask(null);
     }
-    const pseudoAuditHash = `hmac-sha256:0x${Math.random().toString(16).slice(2, 10)}${Date.now().toString(16)}`;
-    setExceptions((prev) =>
-      prev.map((e) =>
-        e.id === item.id
-          ? {
-              ...e,
-              status: "APPROVED_BY_CHECKER",
-              checkerId,
-              approvalAuditHash: pseudoAuditHash,
-            }
-          : e
-      )
-    );
   };
 
+  const handleResolveCoordTask = async (taskId: string) => {
+    if (!apiClient) return;
+    try {
+      await apiClient.resolveCoordinationTask(taskId, { disposition: "Resolved via command escalation" });
+      setSuccessMessage(`Task ${taskId} resolved.`);
+      await refreshCurrentView();
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : "Failed to resolve coordination task");
+    }
+  };
+
+  // ---------------------------------------------------------------------------
+  // Maker/Checker Exception Action (LWC-SCR-305, maker != checker)
+  // ---------------------------------------------------------------------------
+  const handleActionException = async (exceptionId: string, action: "APPROVE" | "REJECT" | "REMEDIATE") => {
+    if (!apiClient) return;
+    setActioningExceptionId(exceptionId);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    try {
+      await apiClient.actionFinanceException(exceptionId, {
+        action,
+        notes: `Actioned as ${action} by Checker ${currentActorId}`,
+      });
+      setSuccessMessage(`Finance exception ${exceptionId} actioned (${action}).`);
+      await refreshCurrentView();
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : "Checker action failed");
+    } finally {
+      setActioningExceptionId(null);
+    }
+  };
+
+  // ---------------------------------------------------------------------------
+  // Create Directorate Action Item (LWC-SCR-301)
+  // ---------------------------------------------------------------------------
+  const handleCreateActionItem = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!apiClient || !newActionTitle.trim() || !newActionDesc.trim()) return;
+    try {
+      await apiClient.createDirectorateAction({
+        metric_id: newActionMetricId,
+        title: newActionTitle.trim(),
+        description: newActionDesc.trim(),
+        owner_team: "CLINICAL_GOVERNANCE",
+        assigned_to: currentActorId,
+        due_date_iso: new Date(Date.now() + 7 * 86400000).toISOString(),
+      });
+      setIsCreatingAction(false);
+      setNewActionTitle("");
+      setNewActionDesc("");
+      setSuccessMessage("Directorate action item created.");
+      await refreshCurrentView();
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : "Failed to create action item");
+    }
+  };
+
+  // ===========================================================================
+  // Session Locked State View
+  // ===========================================================================
   if (sessionLocked) {
     return (
-      <SharedDeviceSessionLockBar
-        workspaceName="Care Command"
-        actorDisplayName="Locked Session"
-        isLocked={true}
-        onToggleLock={() => setSessionLocked(false)}
-      />
+      <div
+        style={{
+          minHeight: "100vh",
+          backgroundColor: LW_DESIGN_TOKENS.colors.royalNavy,
+          color: "#FFFFFF",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "24px",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ fontSize: "56px", marginBottom: "16px" }}>🔒</div>
+        <h1 style={{ fontSize: "24px", fontWeight: 800, marginBottom: "8px" }}>
+          Command Console Locked
+        </h1>
+        <p style={{ color: "#94A3B8", maxWidth: "420px", marginBottom: "24px", fontSize: "14px" }}>
+          Executive directorate console locked against unauthorized viewing of network unit economics and governance controls.
+        </p>
+        <button
+          type="button"
+          onClick={() => setSessionLocked(false)}
+          style={{
+            minHeight: `${LW_DESIGN_TOKENS.touchTarget.minHeightPx}px`,
+            padding: "12px 28px",
+            backgroundColor: LW_DESIGN_TOKENS.colors.warmGold,
+            color: LW_DESIGN_TOKENS.colors.royalNavy,
+            border: "none",
+            borderRadius: LW_DESIGN_TOKENS.radius.md,
+            fontWeight: 800,
+            fontSize: "15px",
+            cursor: "pointer",
+          }}
+        >
+          Unlock Command Console
+        </button>
+      </div>
     );
   }
 
+  const filteredCoordTasks = coordinationTasks.filter((t) => {
+    if (coordinationFilter === "ALL") return true;
+    return t.work_state === coordinationFilter;
+  });
+
+  const filteredFacilities = networkFacilities.filter((f) => {
+    if (!facilitySearch.trim()) return true;
+    const q = facilitySearch.toLowerCase();
+    return f.facility_name.toLowerCase().includes(q) || f.facility_code.toLowerCase().includes(q);
+  });
+
   return (
-    <div style={{ backgroundColor: "#0F172A", minHeight: "100vh", color: "#F8FAFC" }}>
-      {/* Session Lock & Status Bar */}
+    <div style={{ minHeight: "100vh", backgroundColor: "#F8FAFC", display: "flex", flexDirection: "column" }}>
+      {/* 1. Header Bar */}
       <SharedDeviceSessionLockBar
-        workspaceName="Care Command Console"
-        actorDisplayName="Executive Directorate & Clinical Governance Lead · T4 Restricted Clearance"
-        isLocked={false}
-        onToggleLock={() => setSessionLocked(true)}
+        workspaceName="Care Command Console · Directorate & Operations"
+        actorDisplayName={`${currentActorId} (EXECUTIVE / FINANCE / GOVERNANCE)`}
+        isLocked={sessionLocked}
+        onToggleLock={() => setSessionLocked((prev) => !prev)}
+        onSignOut={() => {
+          if (typeof window !== "undefined") localStorage.removeItem("lw_command_token");
+          window.location.reload();
+        }}
       />
 
-      {/* Top Console Navigation Bar */}
-      <header
-        style={{
-          backgroundColor: "#0B1F3A",
-          borderBottom: "1px solid #1E293B",
-          padding: "12px 24px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "12px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <div
-            style={{
-              width: "36px",
-              height: "36px",
-              borderRadius: "8px",
-              backgroundColor: "#C89D3C",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 900,
-              color: "#0B1F3A",
-              fontSize: "18px",
-            }}
-          >
-            LC
-          </div>
-          <div>
-            <h1 style={{ margin: 0, fontSize: "18px", fontWeight: 800, letterSpacing: "-0.01em" }}>
-              LoveWorld Care · Care Command Console
-            </h1>
-            <div style={{ fontSize: "11px", color: "#94A3B8" }}>
-              Authoritative Gateway: FastAPI /v1 · Audience: <code>lwc:command</code> · Zero Free-Text PHI View
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <div
-            style={{
-              padding: "4px 10px",
-              borderRadius: "16px",
-              fontSize: "12px",
-              fontWeight: 700,
-              backgroundColor: aiKillSwitchEnabled ? "#450A0A" : "#064E3B",
-              color: aiKillSwitchEnabled ? "#FCA5A5" : "#6EE7B7",
-              border: `1px solid ${aiKillSwitchEnabled ? "#991B1B" : "#047857"}`,
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-          >
-            <span
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                backgroundColor: aiKillSwitchEnabled ? "#EF4444" : "#10B981",
-              }}
-            />
-            {aiKillSwitchEnabled ? "AI-OFF KILL SWITCH ENGAGED" : "AI GATEWAY POLICY OPERATIONAL"}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => void refreshMetrics()}
-            disabled={isLoading}
-            style={{
-              backgroundColor: "#1E293B",
-              color: "#F8FAFC",
-              border: "1px solid #334155",
-              borderRadius: "6px",
-              padding: "6px 12px",
-              fontSize: "12px",
-              fontWeight: 600,
-              cursor: isLoading ? "wait" : "pointer",
-            }}
-          >
-            {isLoading ? "Refreshing..." : "↻ Refresh Metrics"}
-          </button>
-        </div>
-      </header>
-
-      {/* Navigation Tabs */}
+      {/* 2. Directorate Tabs Navigation */}
       <nav
+        aria-label="Command Console Modules"
         style={{
-          backgroundColor: "#111E35",
-          borderBottom: "1px solid #1E293B",
-          padding: "8px 24px",
+          backgroundColor: "#FFFFFF",
+          borderBottom: "1px solid #CBD5E1",
+          padding: "0 24px",
+          display: "flex",
+          gap: "24px",
+          overflowX: "auto",
         }}
       >
-        <div
+        <button
+          type="button"
+          onClick={() => setActiveTab("EXECUTIVE")}
           style={{
-            maxWidth: "1400px",
-            margin: "0 auto",
-            display: "flex",
-            gap: "8px",
-            flexWrap: "wrap",
+            padding: "14px 4px",
+            background: "none",
+            border: "none",
+            borderBottom: activeTab === "EXECUTIVE" ? `3px solid ${LW_DESIGN_TOKENS.colors.royalNavy}` : "3px solid transparent",
+            color: activeTab === "EXECUTIVE" ? LW_DESIGN_TOKENS.colors.royalNavy : "#64748B",
+            fontWeight: 700,
+            fontSize: "14px",
+            cursor: "pointer",
+            whiteSpace: "nowrap",
           }}
         >
-          {(
-            [
-              ["EXECUTIVE", "Executive & Unit Economics (§17)"],
-              ["CLINICAL_GOVERNANCE", "Clinical Governance & AI Kill-Switch (§7 & §15)"],
-              ["OPERATIONS_SUPPORT", "Queue Ops & Masked Support (§19.3 & §21.4)"],
-              ["FINANCE_LEDGER", "Two-Book Ledger & Maker/Checker (§17.1 & §17.7)"],
-            ] as const
-          ).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => setActiveTab(id)}
-              style={{
-                minHeight: "40px",
-                padding: "8px 16px",
-                backgroundColor: activeTab === id ? "#C89D3C" : "transparent",
-                color: activeTab === id ? "#0B1F3A" : "#94A3B8",
-                fontWeight: 700,
-                fontSize: "13px",
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+          📊 Executive Metrics ({directorateMetrics?.metrics.length || 0})
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("COORDINATION")}
+          style={{
+            padding: "14px 4px",
+            background: "none",
+            border: "none",
+            borderBottom: activeTab === "COORDINATION" ? `3px solid ${LW_DESIGN_TOKENS.colors.royalNavy}` : "3px solid transparent",
+            color: activeTab === "COORDINATION" ? LW_DESIGN_TOKENS.colors.royalNavy : "#64748B",
+            fontWeight: 700,
+            fontSize: "14px",
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+          }}
+        >
+          🧭 Care Coordination Board ({coordinationTasks.length})
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("NETWORK")}
+          style={{
+            padding: "14px 4px",
+            background: "none",
+            border: "none",
+            borderBottom: activeTab === "NETWORK" ? `3px solid ${LW_DESIGN_TOKENS.colors.royalNavy}` : "3px solid transparent",
+            color: activeTab === "NETWORK" ? LW_DESIGN_TOKENS.colors.royalNavy : "#64748B",
+            fontWeight: 700,
+            fontSize: "14px",
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+          }}
+        >
+          🏥 Network & Coverage ({networkFacilities.length})
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("GOVERNANCE")}
+          style={{
+            padding: "14px 4px",
+            background: "none",
+            border: "none",
+            borderBottom: activeTab === "GOVERNANCE" ? `3px solid ${LW_DESIGN_TOKENS.colors.royalNavy}` : "3px solid transparent",
+            color: activeTab === "GOVERNANCE" ? LW_DESIGN_TOKENS.colors.royalNavy : "#64748B",
+            fontWeight: 700,
+            fontSize: "14px",
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+          }}
+        >
+          ⚖️ Clinical Governance & Kill-Switch
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("FINANCE")}
+          style={{
+            padding: "14px 4px",
+            background: "none",
+            border: "none",
+            borderBottom: activeTab === "FINANCE" ? `3px solid ${LW_DESIGN_TOKENS.colors.royalNavy}` : "3px solid transparent",
+            color: activeTab === "FINANCE" ? LW_DESIGN_TOKENS.colors.royalNavy : "#64748B",
+            fontWeight: 700,
+            fontSize: "14px",
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+          }}
+        >
+          💰 Finance Ops & Maker/Checker ({financeExceptions.length})
+        </button>
       </nav>
 
-      {/* Error notification banner */}
+      {/* Notifications Bar */}
       {errorMessage && (
         <div
+          role="alert"
           style={{
-            maxWidth: "1400px",
-            margin: "16px auto 0",
-            padding: "12px 16px",
-            backgroundColor: "#7F1D1D",
-            color: "#FEE2E2",
-            borderRadius: "6px",
+            backgroundColor: "#FEE2E2",
+            borderBottom: "1px solid #FCA5A5",
+            padding: "10px 24px",
+            color: "#991B1B",
             fontSize: "13px",
+            fontWeight: 600,
+            display: "flex",
+            justifyContent: "space-between",
           }}
         >
-          <strong>Gateway Error:</strong> {errorMessage}
+          <span>⚠️ {errorMessage}</span>
+          <button type="button" onClick={() => setErrorMessage(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "#991B1B" }}>
+            ✕
+          </button>
         </div>
       )}
 
-      {/* Main Console Workspace */}
-      <main style={{ maxWidth: "1400px", margin: "24px auto", padding: "0 24px 64px" }}>
+      {successMessage && (
+        <div
+          role="status"
+          style={{
+            backgroundColor: "#DCFCE7",
+            borderBottom: "1px solid #86EFAC",
+            padding: "10px 24px",
+            color: "#166534",
+            fontSize: "13px",
+            fontWeight: 700,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <span>✓ {successMessage}</span>
+          <button type="button" onClick={() => setSuccessMessage(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "#166534" }}>
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Main Container */}
+      <main style={{ padding: "24px", flex: 1, maxWidth: "1320px", margin: "0 auto", width: "100%" }}>
         {/* ================================================================= */}
-        {/* TAB 1: EXECUTIVE & UNIT ECONOMICS (§17)                          */}
+        {/* TAB 1: EXECUTIVE OVERVIEW (LWC-SCR-301, LWC-MET-001..016)          */}
         {/* ================================================================= */}
         {activeTab === "EXECUTIVE" && (
-          <div style={{ display: "grid", gap: "24px" }}>
-            {/* North-Star Card */}
-            <section
-              style={{
-                backgroundColor: "#13233F",
-                border: "1px solid #1E3A8A",
-                borderRadius: "12px",
-                padding: "24px",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              <div
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <h2 style={{ fontSize: "22px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+                  Authoritative Directorate Metrics
+                </h2>
+                <div style={{ fontSize: "13px", color: "#64748B", marginTop: "2px" }}>
+                  Live operational invariants per LWC-MET-001 to 016 (Africa/Lagos time, zero synthetic fixtures)
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => refreshCurrentView()}
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  flexWrap: "wrap",
-                  gap: "16px",
+                  padding: "8px 16px",
+                  backgroundColor: "#FFFFFF",
+                  border: "1px solid #CBD5E1",
+                  borderRadius: LW_DESIGN_TOKENS.radius.md,
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  cursor: "pointer",
                 }}
               >
-                <div>
-                  <div
-                    style={{
-                      fontSize: "11px",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.08em",
-                      color: "#C89D3C",
-                      fontWeight: 800,
-                    }}
-                  >
-                    Primary North-Star Metric (§3.1 & §17.2)
+                🔄 Refresh Metrics
+              </button>
+            </div>
+
+            {/* Metrics Grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+              {directorateMetrics?.metrics.map((m) => (
+                <div
+                  key={m.id}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                    border: "1px solid #E2E8F0",
+                    padding: "16px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: "11px", fontWeight: 800, color: "#64748B" }}>{m.id}</span>
+                    <span style={{ fontSize: "10px", fontWeight: 700, backgroundColor: "#F1F5F9", color: "#475569", padding: "2px 6px", borderRadius: "4px" }}>
+                      {m.completeness} Completeness
+                    </span>
                   </div>
-                  <h2
-                    style={{
-                      margin: "6px 0 8px",
-                      fontSize: "24px",
-                      fontWeight: 800,
-                      color: "#FFFFFF",
-                    }}
-                  >
-                    Safe, Completed, Clinically Signed Care Episodes
-                  </h2>
-                  <p style={{ margin: 0, fontSize: "14px", color: "#94A3B8", maxWidth: "800px" }}>
-                    Signed encounters represent the sole clinical milestone triggering revenue recognition
-                    and provider payable entitlement. Unredeemed sponsor cash is held as a restricted liability
-                    and is NEVER recognized as operating revenue.
+                  <h3 style={{ fontSize: "15px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: "6px 0 8px" }}>
+                    {m.name}
+                  </h3>
+                  <div style={{ fontSize: "28px", fontWeight: 900, color: "#0F172A", margin: "4px 0" }}>
+                    {m.value} <span style={{ fontSize: "14px", fontWeight: 600, color: "#64748B" }}>{m.unit}</span>
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#64748B", margin: "6px 0" }}>
+                    <strong>Denominator:</strong> {m.denominator}
+                  </div>
+                  <p style={{ fontSize: "11px", color: "#94A3B8", margin: "4px 0 0", lineHeight: 1.3 }}>
+                    {m.definition}
                   </p>
                 </div>
+              ))}
+            </div>
 
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #C89D3C",
-                    borderRadius: "10px",
-                    padding: "16px 24px",
-                    textAlign: "center",
-                    minWidth: "180px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#C89D3C", fontWeight: 700 }}>
-                    ACTIVE SIGNED TOTAL
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "36px",
-                      fontWeight: 900,
-                      color: "#FFFFFF",
-                      fontVariantNumeric: "tabular-nums",
-                    }}
-                  >
-                    {metrics ? metrics.north_star_signed_encounters_count : "—"}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B" }}>Cryptographically Sealed</div>
-                </div>
-              </div>
-            </section>
-
-            {/* Operational Overview Statistics */}
-            {metrics?.operational_overview && (
-              <section
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                  gap: "16px",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "#13233F",
-                    border: "1px solid #1E293B",
-                    borderRadius: "8px",
-                    padding: "16px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8", fontWeight: 600 }}>
-                    Staffed Roster Slots
-                  </div>
-                  <div style={{ fontSize: "24px", fontWeight: 800, color: "#F8FAFC", marginTop: "4px" }}>
-                    {metrics.operational_overview.staffed_roster_slots_count}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B", marginTop: "4px" }}>
-                    Verified MDCN Licences Active
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#13233F",
-                    border: "1px solid #1E293B",
-                    borderRadius: "8px",
-                    padding: "16px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8", fontWeight: 600 }}>
-                    Queued / Active Encounters
-                  </div>
-                  <div style={{ fontSize: "24px", fontWeight: 800, color: "#60A5FA", marginTop: "4px" }}>
-                    {metrics.operational_overview.encounters_queued_or_active_count}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B", marginTop: "4px" }}>
-                    Triaged & Scheduled
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#13233F",
-                    border: "1px solid #1E293B",
-                    borderRadius: "8px",
-                    padding: "16px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8", fontWeight: 600 }}>
-                    Active Sponsor Pools
-                  </div>
-                  <div style={{ fontSize: "24px", fontWeight: 800, color: "#F8FAFC", marginTop: "4px" }}>
-                    {metrics.operational_overview.sponsor_active_pools_count}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B", marginTop: "4px" }}>
-                    Restricted Pool Agreements
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#13233F",
-                    border: "1px solid #1E293B",
-                    borderRadius: "8px",
-                    padding: "16px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8", fontWeight: 600 }}>
-                    Restricted Sponsor Liability
-                  </div>
-                  <div style={{ fontSize: "24px", fontWeight: 800, color: "#C89D3C", marginTop: "4px" }}>
-                    {formatMoneyMinor({
-                      amountMinor: metrics.operational_overview.sponsor_unredeemed_liability_minor,
-                      currency: "NGN",
-                    })}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#94A3B8", marginTop: "4px" }}>
-                    Unearned Reserve Liability (§10.4)
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#13233F",
-                    border: "1px solid #1E293B",
-                    borderRadius: "8px",
-                    padding: "16px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8", fontWeight: 600 }}>
-                    Clinician Pending Payables
-                  </div>
-                  <div style={{ fontSize: "24px", fontWeight: 800, color: "#34D399", marginTop: "4px" }}>
-                    {formatMoneyMinor({
-                      amountMinor: metrics.operational_overview.clinician_pending_payables_minor,
-                      currency: "NGN",
-                    })}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B", marginTop: "4px" }}>
-                    Accrued on Signed Encounters
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {/* Unit Economics Waterfall Attribution */}
-            <section
+            {/* Action Items Tracker */}
+            <div
               style={{
-                backgroundColor: "#13233F",
-                border: "1px solid #1E293B",
-                borderRadius: "12px",
-                padding: "24px",
+                backgroundColor: "#FFFFFF",
+                borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                border: "1px solid #CBD5E1",
+                padding: "20px",
               }}
             >
-              <h3 style={{ margin: "0 0 16px", fontSize: "18px", color: "#F8FAFC" }}>
-                GP Encounter Unit Economics Attribution Waterfall (§17.2)
-              </h3>
-              <p style={{ margin: "0 0 20px", fontSize: "13px", color: "#94A3B8" }}>
-                Strict bottom-up contribution margin calculation for standard remote GP encounter
-                (₦6,000.00 settled price baseline). Fixed platform and overhead costs are excluded from
-                direct encounter margin.
-              </p>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                  gap: "14px",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #334155",
-                    borderRadius: "8px",
-                    padding: "14px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8" }}>Settled Price (Gross)</div>
-                  <div style={{ fontSize: "20px", fontWeight: 800, color: "#F8FAFC", marginTop: "4px" }}>
-                    {formatMoneyMinor({
-                      amountMinor: unitEconomics.settledRevenueMinor,
-                      currency: "NGN",
-                    })}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B", marginTop: "2px" }}>100.00%</div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #334155",
-                    borderRadius: "8px",
-                    padding: "14px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8" }}>(-) Clinician Direct Fee</div>
-                  <div style={{ fontSize: "20px", fontWeight: 800, color: "#F87171", marginTop: "4px" }}>
-                    -{formatMoneyMinor({
-                      amountMinor: unitEconomics.clinicianDirectCostMinor,
-                      currency: "NGN",
-                    })}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B", marginTop: "2px" }}>
-                    {(
-                      (unitEconomics.clinicianDirectCostMinor / unitEconomics.settledRevenueMinor) *
-                      100
-                    ).toFixed(2)}
-                    %
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #334155",
-                    borderRadius: "8px",
-                    padding: "14px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8" }}>(-) Payment Gateway (2.5%)</div>
-                  <div style={{ fontSize: "20px", fontWeight: 800, color: "#F87171", marginTop: "4px" }}>
-                    -{formatMoneyMinor({
-                      amountMinor: unitEconomics.paymentProcessingFeeMinor,
-                      currency: "NGN",
-                    })}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B", marginTop: "2px" }}>2.50%</div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #334155",
-                    borderRadius: "8px",
-                    padding: "14px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8" }}>(-) RTC & AI Model Costs</div>
-                  <div style={{ fontSize: "20px", fontWeight: 800, color: "#F87171", marginTop: "4px" }}>
-                    -{formatMoneyMinor({
-                      amountMinor: unitEconomics.communicationsRtcModelCostMinor,
-                      currency: "NGN",
-                    })}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B", marginTop: "2px" }}>3.33%</div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #334155",
-                    borderRadius: "8px",
-                    padding: "14px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8" }}>(-) Ops Support & Reserve</div>
-                  <div style={{ fontSize: "20px", fontWeight: 800, color: "#F87171", marginTop: "4px" }}>
-                    -{formatMoneyMinor({
-                      amountMinor:
-                        unitEconomics.variableSupportCostMinor +
-                        unitEconomics.refundQualityReserveMinor,
-                      currency: "NGN",
-                    })}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B", marginTop: "2px" }}>10.00%</div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#064E3B",
-                    border: "1px solid #059669",
-                    borderRadius: "8px",
-                    padding: "14px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#A7F3D0", fontWeight: 700 }}>
-                    (=) Net Contribution Margin
-                  </div>
-                  <div style={{ fontSize: "20px", fontWeight: 900, color: "#34D399", marginTop: "4px" }}>
-                    {formatMoneyMinor({
-                      amountMinor: unitEconomics.contributionMarginMinor,
-                      currency: "NGN",
-                    })}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#A7F3D0", marginTop: "2px" }}>
-                    {(unitEconomics.contributionMarginRatioBps / 100).toFixed(2)}% margin
-                  </div>
-                </div>
-              </div>
-
-              {/* Breakeven analysis card */}
-              <div
-                style={{
-                  marginTop: "20px",
-                  backgroundColor: "#0B1F3A",
-                  border: "1px solid #1E293B",
-                  borderRadius: "8px",
-                  padding: "16px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: "12px",
-                }}
-              >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
                 <div>
-                  <div style={{ fontSize: "12px", color: "#C89D3C", fontWeight: 700 }}>
-                    BASE SCENARIO BREAK-EVEN VOLUME (§17.5)
-                  </div>
-                  <div style={{ fontSize: "13px", color: "#94A3B8", marginTop: "2px" }}>
-                    At ₦5,000,000.00/mo fixed operations & compliance cost (contracted 12,000 covered lives)
-                  </div>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: "22px", fontWeight: 800, color: "#F8FAFC" }}>
-                    {metrics ? metrics.base_scenario_break_even_encounters_per_month : 1143} Encounters / Mo
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B" }}>
-                    ~38 signed encounters/day run rate
+                  <h3 style={{ fontSize: "16px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+                    Directorate Action Items Tracker ({directorateActions.length})
+                  </h3>
+                  <div style={{ fontSize: "12px", color: "#64748B" }}>
+                    Governance decisions tied to metrics with audit accountability
                   </div>
                 </div>
-              </div>
-            </section>
-          </div>
-        )}
-
-        {/* ================================================================= */}
-        {/* TAB 2: CLINICAL GOVERNANCE & AI KILL-SWITCH (§7 & §15)            */}
-        {/* ================================================================= */}
-        {activeTab === "CLINICAL_GOVERNANCE" && (
-          <div style={{ display: "grid", gap: "24px" }}>
-            {/* Global AI Kill Switch Control */}
-            <section
-              style={{
-                backgroundColor: "#13233F",
-                border: `2px solid ${aiKillSwitchEnabled ? "#EF4444" : "#1E293B"}`,
-                borderRadius: "12px",
-                padding: "24px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  flexWrap: "wrap",
-                  gap: "16px",
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      fontSize: "11px",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.08em",
-                      color: aiKillSwitchEnabled ? "#F87171" : "#34D399",
-                      fontWeight: 800,
-                    }}
-                  >
-                    Global AI-Off Kill Switch (§15.6, FR-SEC-02, AT-16)
-                  </div>
-                  <h2 style={{ margin: "6px 0", fontSize: "22px", color: "#FFFFFF" }}>
-                    Model Gateway Operational Safety Valve
-                  </h2>
-                  <p style={{ margin: 0, fontSize: "13px", color: "#94A3B8", maxWidth: "800px" }}>
-                    Immediately cuts off all LLM and generative AI endpoints in the model gateway.
-                    Deterministic clinical protocol bundles (triage scoring, emergency routing) and
-                    human-to-human WebRTC consultations continue without interruption.
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: aiKillSwitchEnabled ? "#7F1D1D" : "#064E3B",
-                    border: `1px solid ${aiKillSwitchEnabled ? "#EF4444" : "#059669"}`,
-                    padding: "10px 18px",
-                    borderRadius: "8px",
-                    fontWeight: 800,
-                    fontSize: "13px",
-                    color: aiKillSwitchEnabled ? "#FEE2E2" : "#D1FAE5",
-                    textAlign: "center",
-                  }}
-                >
-                  {aiKillSwitchEnabled ? "AI-OFF ACTIVATED" : "AI ASSISTANCE ACTIVE"}
-                </div>
-              </div>
-
-              {killSwitchFeedback && (
-                <div
-                  style={{
-                    margin: "16px 0",
-                    padding: "12px 16px",
-                    borderRadius: "6px",
-                    backgroundColor: aiKillSwitchEnabled ? "#450A0A" : "#064E3B",
-                    color: aiKillSwitchEnabled ? "#FECACA" : "#A7F3D0",
-                    fontSize: "13px",
-                  }}
-                >
-                  {killSwitchFeedback}
-                </div>
-              )}
-
-              <div
-                style={{
-                  marginTop: "20px",
-                  backgroundColor: "#0B1F3A",
-                  borderRadius: "8px",
-                  padding: "16px",
-                  display: "flex",
-                  gap: "16px",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                }}
-              >
-                <div style={{ flex: 1, minWidth: "260px" }}>
-                  <label
-                    htmlFor="killSwitchReasonSelect"
-                    style={{ display: "block", fontSize: "11px", color: "#94A3B8", marginBottom: "4px" }}
-                  >
-                    Mandatory Audit Reason Code (§15.6)
-                  </label>
-                  <select
-                    id="killSwitchReasonSelect"
-                    value={killSwitchReason}
-                    onChange={(e) => setKillSwitchReason(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "8px 12px",
-                      backgroundColor: "#1E293B",
-                      color: "#F8FAFC",
-                      border: "1px solid #475569",
-                      borderRadius: "6px",
-                      fontSize: "13px",
-                    }}
-                  >
-                    <option value="REASON_CLINICAL_DISCREPANCY">
-                      REASON_CLINICAL_DISCREPANCY (Audit detected AI draft divergence)
-                    </option>
-                    <option value="REASON_SUSPECTED_HALLUCINATION">
-                      REASON_SUSPECTED_HALLUCINATION (Clinician flagged erroneous suggestion)
-                    </option>
-                    <option value="REASON_REGULATORY_INQUIRY">
-                      REASON_REGULATORY_INQUIRY (Temporary hold for compliance inspection)
-                    </option>
-                    <option value="REASON_SCHEDULED_DRILL">
-                      REASON_SCHEDULED_DRILL (Governance disaster recovery drill)
-                    </option>
-                  </select>
-                </div>
-
                 <button
                   type="button"
-                  onClick={() => void handleToggleAiKillSwitch()}
-                  disabled={isTogglingKillSwitch}
+                  onClick={() => setIsCreatingAction(true)}
                   style={{
-                    minHeight: "44px",
-                    padding: "10px 24px",
-                    backgroundColor: aiKillSwitchEnabled ? "#059669" : "#DC2626",
+                    padding: "6px 14px",
+                    backgroundColor: LW_DESIGN_TOKENS.colors.royalNavy,
                     color: "#FFFFFF",
-                    fontWeight: 800,
-                    fontSize: "14px",
                     border: "none",
-                    borderRadius: "6px",
-                    cursor: isTogglingKillSwitch ? "wait" : "pointer",
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                    borderRadius: LW_DESIGN_TOKENS.radius.md,
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    cursor: "pointer",
                   }}
                 >
-                  {isTogglingKillSwitch
-                    ? "Updating Gateway State..."
-                    : aiKillSwitchEnabled
-                    ? "Restore Policy-Limited AI Assistance"
-                    : "Activate Global AI-Off Kill Switch (Fail-Closed)"}
+                  + New Action Item
                 </button>
               </div>
-            </section>
 
-            {/* Active Deterministic Protocol Bundle Registry */}
-            <section
-              style={{
-                backgroundColor: "#13233F",
-                border: "1px solid #1E293B",
-                borderRadius: "12px",
-                padding: "24px",
-              }}
-            >
-              <h3 style={{ margin: "0 0 16px", fontSize: "18px", color: "#F8FAFC" }}>
-                Active Deterministic Protocol Bundle Registry (§7.2)
-              </h3>
-              <div
-                style={{
-                  backgroundColor: "#0B1F3A",
-                  border: "1px solid #334155",
-                  borderRadius: "8px",
-                  padding: "16px",
-                  display: "grid",
-                  gap: "10px",
-                  fontSize: "13px",
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
-                  <div>
-                    <strong>Bundle ID:</strong> <code>LW-NG-GP-ADULT-V1</code> · Version: <code>1.0.0</code>
-                  </div>
-                  <span
-                    style={{
-                      padding: "2px 8px",
-                      borderRadius: "12px",
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      backgroundColor: "#064E3B",
-                      color: "#6EE7B7",
-                    }}
-                  >
-                    STATUS: ACTIVE
-                  </span>
+              {directorateActions.length === 0 ? (
+                <div style={{ padding: "24px", textAlign: "center", color: "#64748B", fontSize: "13px" }}>
+                  No open directorate action items. Create one to assign clinical review accountability.
                 </div>
-                <div>
-                  <strong>Jurisdiction:</strong> Nigeria (MDCN Regulated) · Category: General Practice (Adult)
-                </div>
-                <div>
-                  <strong>Dual Clinical Authorization:</strong> Owner: <code>Dr. Adebayo Okonkwo (MDCN/R/44210)</code> ·
-                  Reviewer: <code>Dr. Chidinma Eze (MDCN/R/38901)</code>
-                </div>
-                <div style={{ color: "#94A3B8" }}>
-                  <strong>Deterministic Red Flags:</strong> Chest pain with radiation, acute dyspnea, focal neurological deficit,
-                  sudden severe headache, anaphylaxis symptoms, uncontrolled hemorrhage.
-                </div>
-              </div>
-            </section>
-
-            {/* Zero-Auth Emergency Guidance Endpoint Status */}
-            <section
-              style={{
-                backgroundColor: "#13233F",
-                border: "1px solid #1E293B",
-                borderRadius: "12px",
-                padding: "24px",
-              }}
-            >
-              <h3 style={{ margin: "0 0 16px", fontSize: "18px", color: "#F8FAFC" }}>
-                Zero-Auth, Zero-Payment, Zero-AI Emergency Guidance Status (§1.4 & AT-11)
-              </h3>
-              <p style={{ margin: "0 0 16px", fontSize: "13px", color: "#94A3B8" }}>
-                Endpoint <code>GET /v1/emergency/guidance</code> verified accessible without authentication headers,
-                payment tokens, or model inference. Fallback contacts cached permanently client-side.
-              </p>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                  gap: "12px",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #334155",
-                    borderRadius: "6px",
-                    padding: "12px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8" }}>National Emergency Line</div>
-                  <div style={{ fontSize: "18px", fontWeight: 800, color: "#F8FAFC", marginTop: "2px" }}>
-                    112 / 767
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B" }}>Toll-Free Nationwide (Nigeria)</div>
-                </div>
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #334155",
-                    borderRadius: "6px",
-                    padding: "12px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#94A3B8" }}>LoveWorld Emergency Support</div>
-                  <div style={{ fontSize: "18px", fontWeight: 800, color: "#C89D3C", marginTop: "2px" }}>
-                    +234 800 5683 96753
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#64748B" }}>Direct In-Person Referral Desk</div>
-                </div>
-              </div>
-            </section>
-          </div>
-        )}
-
-        {/* ================================================================= */}
-        {/* TAB 3: OPERATIONS & QUEUE HEALTH (§19.3 & §21.4)                 */}
-        {/* ================================================================= */}
-        {activeTab === "OPERATIONS_SUPPORT" && (
-          <div style={{ display: "grid", gap: "24px" }}>
-            {/* Non-Clinical Support Guardrail */}
-            <section
-              style={{
-                backgroundColor: "#13233F",
-                border: "1px solid #1E293B",
-                borderRadius: "12px",
-                padding: "24px",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px" }}>
-                <div>
-                  <h2 style={{ margin: "0 0 6px", fontSize: "20px", color: "#FFFFFF" }}>
-                    Non-Clinical Support Desk & Triage Health (§16.2 & §21.4)
-                  </h2>
-                  <p style={{ margin: 0, fontSize: "13px", color: "#94A3B8" }}>
-                    Support operators see appointment metadata, transaction references, and connection status.
-                    Clinical free-text narratives and diagnoses are stripped at the server boundary (<code>[REDACTED_PHI_T3]</code>).
-                  </p>
-                </div>
-                <span
-                  style={{
-                    padding: "4px 10px",
-                    borderRadius: "12px",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    backgroundColor: "#064E3B",
-                    color: "#6EE7B7",
-                  }}
-                >
-                  ZERO PHI LEAK GUARANTEE
-                </span>
-              </div>
-
-              {/* Support Boundary Script */}
-              <div
-                style={{
-                  marginTop: "20px",
-                  backgroundColor: "#0B1F3A",
-                  border: "1px solid #334155",
-                  borderRadius: "8px",
-                  padding: "16px",
-                }}
-              >
-                <div style={{ fontSize: "12px", fontWeight: 700, color: "#C89D3C" }}>
-                  MANDATORY SUPPORT AGENT SCRIPT (CLINICAL BOUNDARY ENFORCEMENT — §21.4)
-                </div>
-                <blockquote
-                  style={{
-                    margin: "8px 0 0",
-                    paddingLeft: "12px",
-                    borderLeft: "3px solid #C89D3C",
-                    fontSize: "13px",
-                    color: "#E2E8F0",
-                    fontStyle: "italic",
-                  }}
-                >
-                  &ldquo;I can assist with your appointment, payment, and account settings. A licensed medical professional
-                  must assess questions about your symptoms, medication, or medical treatment. I can help route your request
-                  through the DoctorNow clinical queue when an MDCN doctor is on duty.&rdquo;
-                </blockquote>
-              </div>
-            </section>
-
-            {/* Clinician Roster & Queue Backlog Overview */}
-            <section
-              style={{
-                backgroundColor: "#13233F",
-                border: "1px solid #1E293B",
-                borderRadius: "12px",
-                padding: "24px",
-              }}
-            >
-              <h3 style={{ margin: "0 0 16px", fontSize: "18px", color: "#F8FAFC" }}>
-                Live Staffed Clinician Roster & Queue Health
-              </h3>
-              <div style={{ display: "grid", gap: "12px" }}>
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #334155",
-                    borderRadius: "8px",
-                    padding: "16px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "12px",
-                  }}
-                >
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: "14px", color: "#FFFFFF" }}>
-                      Dr. Adebayo Okonkwo (MDCN/R/44210)
-                    </div>
-                    <div style={{ fontSize: "12px", color: "#94A3B8" }}>
-                      Slot: <code>slot-ng-gp-001</code> · Specialty: GP Adult · Modalities: Video, Audio Fallback, Async Messaging
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span
-                      style={{
-                        padding: "3px 8px",
-                        borderRadius: "12px",
-                        fontSize: "11px",
-                        fontWeight: 700,
-                        backgroundColor: "#064E3B",
-                        color: "#6EE7B7",
-                      }}
-                    >
-                      MDCN VERIFIED ACTIVE
-                    </span>
-                    <span
-                      style={{
-                        padding: "3px 8px",
-                        borderRadius: "12px",
-                        fontSize: "11px",
-                        fontWeight: 700,
-                        backgroundColor: "#1E293B",
-                        color: "#94A3B8",
-                      }}
-                    >
-                      Fee: ₦6,000.00
-                    </span>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #334155",
-                    borderRadius: "8px",
-                    padding: "16px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "12px",
-                  }}
-                >
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: "14px", color: "#FFFFFF" }}>
-                      Encounter Queue Status: ENC-NG-88412
-                    </div>
-                    <div style={{ fontSize: "12px", color: "#94A3B8" }}>
-                      Episode: <code>EP-NG-88412</code> · Care Service: GP_REMOTE · Jurisdiction: NG · State: BOOKED
-                    </div>
-                  </div>
-                  <span
-                    style={{
-                      padding: "3px 8px",
-                      borderRadius: "12px",
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      backgroundColor: "#1E3A8A",
-                      color: "#93C5FD",
-                    }}
-                  >
-                    READY FOR CLINICIAN CLAIM
-                  </span>
-                </div>
-              </div>
-            </section>
-          </div>
-        )}
-
-        {/* ================================================================= */}
-        {/* TAB 4: FINANCE LEDGER & MAKER/CHECKER (§17.1 & §17.7)             */}
-        {/* ================================================================= */}
-        {activeTab === "FINANCE_LEDGER" && (
-          <div style={{ display: "grid", gap: "24px" }}>
-            {/* Two-Entity Separate Books Explanation */}
-            <section
-              style={{
-                backgroundColor: "#13233F",
-                border: "1px solid #1E293B",
-                borderRadius: "12px",
-                padding: "24px",
-              }}
-            >
-              <h2 style={{ margin: "0 0 8px", fontSize: "20px", color: "#FFFFFF" }}>
-                Two-Entity Double-Entry Financial Architecture (§17.1)
-              </h2>
-              <p style={{ margin: 0, fontSize: "13px", color: "#94A3B8" }}>
-                Strict boundary enforcement between Operating Entity collections and Managed Platform SLA charges.
-                No commingling of patient/sponsor escrow with technology vendor accounts.
-              </p>
-
-              <div
-                style={{
-                  marginTop: "20px",
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                  gap: "16px",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #1E3A8A",
-                    borderRadius: "8px",
-                    padding: "16px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#60A5FA", fontWeight: 700 }}>
-                    ENTITY 1: LOVEWORLD_CARE_OPERATOR
-                  </div>
-                  <h4 style={{ margin: "4px 0 8px", fontSize: "16px", color: "#FFFFFF" }}>
-                    Clinical Operations & Escrow
-                  </h4>
-                  <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: "#94A3B8" }}>
-                    <li>Patient consult payments collection</li>
-                    <li>SponsorCare restricted cash pools (unearned liability)</li>
-                    <li>Licensed clinician payables disbursement</li>
-                    <li>Refund and quality reserves</li>
-                  </ul>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: "#0B1F3A",
-                    border: "1px solid #78350F",
-                    borderRadius: "8px",
-                    padding: "16px",
-                  }}
-                >
-                  <div style={{ fontSize: "11px", color: "#FBBF24", fontWeight: 700 }}>
-                    ENTITY 2: PROLIFIC_INTELLIGENCE
-                  </div>
-                  <h4 style={{ margin: "4px 0 8px", fontSize: "16px", color: "#FFFFFF" }}>
-                    Managed Technology & AI SLA
-                  </h4>
-                  <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: "#94A3B8" }}>
-                    <li>Software-as-a-Service managed hosting fees</li>
-                    <li>Model gateway inference consumption fees</li>
-                    <li>Communications WebRTC egress charges</li>
-                    <li>Enterprise SLA performance billing</li>
-                  </ul>
-                </div>
-              </div>
-            </section>
-
-            {/* Maker/Checker Exception Queue */}
-            <section
-              style={{
-                backgroundColor: "#13233F",
-                border: "1px solid #1E293B",
-                borderRadius: "12px",
-                padding: "24px",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px" }}>
-                <div>
-                  <h3 style={{ margin: "0 0 6px", fontSize: "18px", color: "#F8FAFC" }}>
-                    Maker/Checker Financial Exception Queue (§17.7 & AT-01)
-                  </h3>
-                  <p style={{ margin: 0, fontSize: "13px", color: "#94A3B8" }}>
-                    Dual-control authorization: Maker prepares the adjustment, distinct Checker approves.
-                    Enforces <code>maker_id != checker_id</code> and records a tamper-evident audit hash.
-                  </p>
-                </div>
-                <span
-                  style={{
-                    padding: "4px 10px",
-                    borderRadius: "12px",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    backgroundColor: "#0B1F3A",
-                    color: "#C89D3C",
-                    border: "1px solid #C89D3C",
-                  }}
-                >
-                  DUAL CONTROL ACTIVE
-                </span>
-              </div>
-
-              <div style={{ marginTop: "20px", display: "grid", gap: "14px" }}>
-                {exceptions.map((exc) => {
-                  const isApproved = exc.status === "APPROVED_BY_CHECKER";
-                  return (
+              ) : (
+                <div style={{ display: "grid", gap: "10px" }}>
+                  {directorateActions.map((act) => (
                     <div
-                      key={exc.id}
+                      key={act.action_id}
                       style={{
-                        backgroundColor: "#0B1F3A",
-                        border: `1px solid ${isApproved ? "#059669" : "#334155"}`,
-                        borderRadius: "8px",
-                        padding: "16px",
+                        padding: "12px 14px",
+                        backgroundColor: "#F8FAFC",
+                        borderRadius: LW_DESIGN_TOKENS.radius.md,
+                        border: "1px solid #E2E8F0",
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        flexWrap: "wrap",
-                        gap: "16px",
                       }}
                     >
-                      <div style={{ maxWidth: "600px" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ fontWeight: 800, fontSize: "14px", color: "#FFFFFF" }}>
-                            {exc.id}
-                          </span>
-                          <span
-                            style={{
-                              fontSize: "11px",
-                              padding: "2px 6px",
-                              borderRadius: "4px",
-                              backgroundColor: "#1E293B",
-                              color: "#C89D3C",
-                              fontWeight: 700,
-                            }}
-                          >
-                            {exc.category}
-                          </span>
-                          <span style={{ fontSize: "14px", fontWeight: 800, color: "#34D399" }}>
-                            {formatMoneyMinor({
-                              amountMinor: exc.amountMinor,
-                              currency: exc.currency,
-                            })}
-                          </span>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: "14px", color: "#0F172A" }}>
+                          {act.title} · <span style={{ fontSize: "11px", color: "#64748B" }}>Tied to {act.metric_id}</span>
                         </div>
-                        <div style={{ fontSize: "13px", color: "#CBD5E1", margin: "4px 0" }}>
-                          {exc.description}
-                        </div>
-                        <div style={{ fontSize: "11px", color: "#64748B" }}>
-                          Maker: <code>{exc.makerId}</code> · Submitted: {exc.makerTimestamp}
-                          {exc.checkerId && (
-                            <>
-                              {" "}
-                              · Checker: <code>{exc.checkerId}</code>
-                            </>
-                          )}
-                          {exc.approvalAuditHash && (
-                            <div style={{ color: "#34D399", marginTop: "2px" }}>
-                              Audit Seal: <code>{exc.approvalAuditHash}</code>
-                            </div>
-                          )}
+                        <div style={{ fontSize: "12px", color: "#475569", marginTop: "2px" }}>{act.description}</div>
+                        <div style={{ fontSize: "11px", color: "#94A3B8", marginTop: "4px" }}>
+                          Assigned to {act.assigned_to} ({act.owner_team}) · Due: {new Date(act.due_date_iso).toLocaleDateString()}
                         </div>
                       </div>
+                      <span
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: 700,
+                          backgroundColor: act.status === "OPEN" ? "#FEF3C7" : "#DCFCE7",
+                          color: act.status === "OPEN" ? "#92400E" : "#166534",
+                          padding: "2px 8px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {act.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
-                      <div>
-                        {isApproved ? (
-                          <div
-                            style={{
-                              padding: "8px 16px",
-                              borderRadius: "6px",
-                              backgroundColor: "#064E3B",
-                              color: "#6EE7B7",
-                              fontWeight: 700,
-                              fontSize: "13px",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "6px",
-                            }}
-                          >
-                            ✓ Approved by Checker
+        {/* ================================================================= */}
+        {/* TAB 2: CARE COORDINATION BOARD (LWC-SCR-302)                       */}
+        {/* ================================================================= */}
+        {activeTab === "COORDINATION" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+              <div>
+                <h2 style={{ fontSize: "22px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+                  Care Coordination Board
+                </h2>
+                <div style={{ fontSize: "13px", color: "#64748B" }}>
+                  Active patient flow states with atomic claim concurrency
+                </div>
+              </div>
+
+              {/* Filter Tabs */}
+              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                {["ALL", "AWAITING_ASSIGNMENT", "AWAITING_PATIENT", "CALLBACK_DUE", "REFERRAL_PENDING", "RESULT_OVERDUE", "SERVICE_EXCEPTION"].map(
+                  (st) => (
+                    <button
+                      key={st}
+                      type="button"
+                      onClick={() => setCoordinationFilter(st)}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: "14px",
+                        backgroundColor: coordinationFilter === st ? LW_DESIGN_TOKENS.colors.royalNavy : "#FFFFFF",
+                        color: coordinationFilter === st ? "#FFFFFF" : "#64748B",
+                        border: "1px solid #CBD5E1",
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                      }}
+                    >
+                      {st.replace(/_/g, " ")}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+
+            {filteredCoordTasks.length === 0 ? (
+              <div
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                  border: "1px dashed #CBD5E1",
+                  padding: "48px 20px",
+                  textAlign: "center",
+                  color: "#64748B",
+                }}
+              >
+                No active tasks match filter '{coordinationFilter}'.
+              </div>
+            ) : (
+              <div style={{ display: "grid", gap: "12px" }}>
+                {filteredCoordTasks.map((t) => (
+                  <div
+                    key={t.task_id}
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      borderRadius: LW_DESIGN_TOKENS.radius.md,
+                      border: "1px solid #CBD5E1",
+                      padding: "16px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: "12px",
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <span
+                          style={{
+                            fontSize: "11px",
+                            fontWeight: 800,
+                            backgroundColor: t.urgency === "EMERGENCY" ? "#FEE2E2" : t.urgency === "URGENT" ? "#FEF3C7" : "#E2E8F0",
+                            color: t.urgency === "EMERGENCY" ? "#991B1B" : t.urgency === "URGENT" ? "#92400E" : "#475569",
+                            padding: "2px 8px",
+                            borderRadius: "4px",
+                          }}
+                        >
+                          {t.urgency}
+                        </span>
+                        <span style={{ fontWeight: 800, fontSize: "15px", color: LW_DESIGN_TOKENS.colors.royalNavy }}>
+                          {t.work_state}
+                        </span>
+                        <span style={{ fontSize: "12px", color: "#64748B" }}>
+                          Patient: {t.patient_id} · Team: {t.owner_team}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: "13px", color: "#334155", marginTop: "6px" }}>
+                        <strong>Action Needed:</strong> {t.next_action}
+                      </div>
+                      {t.claimed_by && (
+                        <div style={{ fontSize: "11px", color: "#0369A1", marginTop: "4px", fontWeight: 600 }}>
+                          Claimed by: {t.claimed_by}
+                        </div>
+                      )}
+                    </div>
+
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      {!t.claimed_by ? (
+                        <button
+                          type="button"
+                          onClick={() => handleClaimCoordTask(t.task_id)}
+                          disabled={isClaimingCoordTask === t.task_id}
+                          style={{
+                            padding: "8px 16px",
+                            backgroundColor: LW_DESIGN_TOKENS.colors.royalNavy,
+                            color: "#FFFFFF",
+                            border: "none",
+                            borderRadius: LW_DESIGN_TOKENS.radius.md,
+                            fontWeight: 700,
+                            fontSize: "12px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Claim Task
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleResolveCoordTask(t.task_id)}
+                          style={{
+                            padding: "8px 16px",
+                            backgroundColor: LW_DESIGN_TOKENS.colors.clinicalEmerald,
+                            color: "#FFFFFF",
+                            border: "none",
+                            borderRadius: LW_DESIGN_TOKENS.radius.md,
+                            fontWeight: 700,
+                            fontSize: "12px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Mark Resolved
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 3: NETWORK FACILITIES & READINESS (LWC-SCR-303)                */}
+        {/* ================================================================= */}
+        {activeTab === "NETWORK" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+              <div>
+                <h2 style={{ fontSize: "22px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+                  Network Facilities & Readiness Tracker
+                </h2>
+                <div style={{ fontSize: "13px", color: "#64748B" }}>
+                  Verified partner health centres with unexpired operational readiness signals
+                </div>
+              </div>
+              <input
+                type="text"
+                placeholder="Search facility name or code..."
+                value={facilitySearch}
+                onChange={(e) => setFacilitySearch(e.target.value)}
+                style={{
+                  padding: "8px 14px",
+                  borderRadius: LW_DESIGN_TOKENS.radius.md,
+                  border: "1px solid #CBD5E1",
+                  fontSize: "13px",
+                  width: "280px",
+                }}
+              />
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px" }}>
+              {filteredFacilities.map((fac) => (
+                <div
+                  key={fac.facility_id}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                    border: "1px solid #CBD5E1",
+                    padding: "16px",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                    <span style={{ fontSize: "11px", fontWeight: 800, color: "#64748B" }}>{fac.facility_code}</span>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        backgroundColor: fac.readiness_state === "CONFIRMED_AVAILABLE" ? "#DCFCE7" : "#FEE2E2",
+                        color: fac.readiness_state === "CONFIRMED_AVAILABLE" ? "#166534" : "#991B1B",
+                        padding: "2px 8px",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      {fac.readiness_state}
+                    </span>
+                  </div>
+
+                  <h3 style={{ fontSize: "16px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: "0 0 6px" }}>
+                    {fac.facility_name}
+                  </h3>
+                  <div style={{ fontSize: "12px", color: "#475569", margin: "2px 0" }}>{fac.address}</div>
+                  <div style={{ fontSize: "12px", color: "#64748B" }}>
+                    Phone: <strong>{fac.contact_phone}</strong> · Hours: {fac.hours}
+                  </div>
+
+                  <div style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                    {fac.services.map((s: string, si: number) => (
+                      <span
+                        key={si}
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: 700,
+                          backgroundColor: "#F1F5F9",
+                          color: "#334155",
+                          padding: "2px 6px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div style={{ marginTop: "12px", paddingTop: "8px", borderTop: "1px solid #F1F5F9", fontSize: "11px", color: "#94A3B8" }}>
+                    Readiness Expires: {new Date(fac.readiness_expires_at_iso).toLocaleTimeString()}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 4: CLINICAL GOVERNANCE & KILL-SWITCH (LWC-SCR-304)             */}
+        {/* ================================================================= */}
+        {activeTab === "GOVERNANCE" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <h2 style={{ fontSize: "22px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+              Clinical Governance & AI Kill-Switch
+            </h2>
+
+            {/* AI Global Kill-Switch Control Panel */}
+            <div
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                border: aiKillSwitchEnabled ? "3px solid #DC2626" : "2px solid #CBD5E1",
+                padding: "24px",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ fontSize: "24px" }}>{aiKillSwitchEnabled ? "🚨" : "🛡️"}</span>
+                    <h3 style={{ fontSize: "18px", fontWeight: 800, color: aiKillSwitchEnabled ? "#DC2626" : LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+                      Global AI Inference Kill-Switch
+                    </h3>
+                  </div>
+                  <p style={{ fontSize: "13px", color: "#475569", margin: "6px 0 0", maxWidth: "560px" }}>
+                    Immediately terminates all generative AI and LLM draft extraction across the platform. Deterministic 3-valued protocol evaluation remains 100% operational.
+                  </p>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <select
+                    value={killSwitchReason}
+                    onChange={(e) => setKillSwitchReason(e.target.value)}
+                    style={{
+                      padding: "8px 12px",
+                      borderRadius: LW_DESIGN_TOKENS.radius.md,
+                      border: "1px solid #CBD5E1",
+                      fontSize: "13px",
+                    }}
+                  >
+                    <option value="REASON_CLINICAL_DISCREPANCY">Clinical Discrepancy Observed</option>
+                    <option value="REASON_HALLUCINATION_DETECTED">Suspected Model Hallucination</option>
+                    <option value="REASON_PROTOCOL_MAINTENANCE">Scheduled Protocol Maintenance</option>
+                    <option value="REASON_EMERGENCY_OVERRIDE">Executive Emergency Override</option>
+                  </select>
+
+                  <button
+                    type="button"
+                    onClick={() => handleToggleAiKillSwitch(!aiKillSwitchEnabled)}
+                    disabled={isTogglingKillSwitch}
+                    style={{
+                      minHeight: "44px",
+                      padding: "0 24px",
+                      backgroundColor: aiKillSwitchEnabled ? LW_DESIGN_TOKENS.colors.clinicalEmerald : "#DC2626",
+                      color: "#FFFFFF",
+                      border: "none",
+                      borderRadius: LW_DESIGN_TOKENS.radius.md,
+                      fontWeight: 800,
+                      fontSize: "14px",
+                      cursor: isTogglingKillSwitch ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {isTogglingKillSwitch
+                      ? "Executing..."
+                      : aiKillSwitchEnabled
+                      ? "Deactivate Kill-Switch (Restore AI)"
+                      : "Engage AI Kill-Switch"}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Protocol Bundle Details */}
+            <div
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                border: "1px solid #CBD5E1",
+                padding: "20px",
+              }}
+            >
+              <h3 style={{ fontSize: "16px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: "0 0 12px" }}>
+                Active Clinical Protocol Bundle: LW-NG-GP-ADULT-V1
+              </h3>
+              <div style={{ fontSize: "13px", color: "#475569", lineHeight: 1.6 }}>
+                <div>• Version: <strong>1.0.0</strong> · Dual Clinician Signatures Verified (Ed25519)</div>
+                <div>• Jurisdiction: <strong>Nigeria (NG)</strong> · Target: Uncomplicated Fever, Malaria & General Adult Primary Care</div>
+                <div>• Evaluation Engine: AST 3-valued deterministic runtime (zero ungrounded LLM decisions)</div>
+                <div>• Emergency Fallback: Active and verified (LASAMBUS 767, National 112, LMC Ikeja)</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 5: FINANCE OPERATIONS & MAKER/CHECKER (LWC-SCR-305)            */}
+        {/* ================================================================= */}
+        {activeTab === "FINANCE" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <h2 style={{ fontSize: "22px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+              Finance Operations & Maker/Checker Queue
+            </h2>
+
+            {/* Double-Entry Ledger Summary Card */}
+            {reconciliation && (
+              <div
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                  border: "1px solid #CBD5E1",
+                  padding: "20px",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+                    Double-Entry Ledger Balance Summary
+                  </h3>
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      fontWeight: 800,
+                      backgroundColor: reconciliation.double_entry_balanced ? "#DCFCE7" : "#FEE2E2",
+                      color: reconciliation.double_entry_balanced ? "#166534" : "#991B1B",
+                      padding: "4px 10px",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    {reconciliation.double_entry_balanced ? "✓ Balanced Invariant Verified" : "⚠️ Discrepancy Flagged"}
+                  </span>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
+                  <div style={{ backgroundColor: "#F8FAFC", padding: "10px", borderRadius: "6px" }}>
+                    <div style={{ fontSize: "11px", color: "#64748B" }}>Total Sponsor Cash Received</div>
+                    <div style={{ fontSize: "16px", fontWeight: 800, color: "#0F172A" }}>
+                      {formatMoneyMinor({ amountMinor: reconciliation.total_sponsor_cash_received_minor, currency: "NGN" })}
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: "#F8FAFC", padding: "10px", borderRadius: "6px" }}>
+                    <div style={{ fontSize: "11px", color: "#64748B" }}>Total Active Reserved</div>
+                    <div style={{ fontSize: "16px", fontWeight: 800, color: "#0F172A" }}>
+                      {formatMoneyMinor({ amountMinor: reconciliation.total_reserved_minor, currency: "NGN" })}
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: "#F8FAFC", padding: "10px", borderRadius: "6px" }}>
+                    <div style={{ fontSize: "11px", color: "#64748B" }}>Total Redeemed & Settled</div>
+                    <div style={{ fontSize: "16px", fontWeight: 800, color: "#0F172A" }}>
+                      {formatMoneyMinor({ amountMinor: reconciliation.total_redeemed_minor, currency: "NGN" })}
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: "#F8FAFC", padding: "10px", borderRadius: "6px" }}>
+                    <div style={{ fontSize: "11px", color: "#64748B" }}>Clinician Payables Outstanding</div>
+                    <div style={{ fontSize: "16px", fontWeight: 800, color: "#0F172A" }}>
+                      {formatMoneyMinor({ amountMinor: reconciliation.total_clinician_payables_minor, currency: "NGN" })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Maker/Checker Exception Queue */}
+            <div
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                border: "1px solid #CBD5E1",
+                padding: "20px",
+              }}
+            >
+              <h3 style={{ fontSize: "16px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: "0 0 14px" }}>
+                Pending Exception Queue (Maker != Checker Enforced)
+              </h3>
+
+              {financeExceptions.length === 0 ? (
+                <div style={{ textAlign: "center", padding: "30px", color: "#64748B", fontSize: "13px" }}>
+                  No pending finance exceptions in queue.
+                </div>
+              ) : (
+                <div style={{ display: "grid", gap: "12px" }}>
+                  {financeExceptions.map((ex) => {
+                    const isMaker = ex.maker_id === currentActorId;
+                    return (
+                      <div
+                        key={ex.exception_id}
+                        style={{
+                          border: "1px solid #CBD5E1",
+                          borderRadius: LW_DESIGN_TOKENS.radius.md,
+                          padding: "16px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: "12px",
+                        }}
+                      >
+                        <div>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <span style={{ fontWeight: 800, fontSize: "14px", color: LW_DESIGN_TOKENS.colors.royalNavy }}>
+                              {ex.exception_type}
+                            </span>
+                            <span
+                              style={{
+                                fontSize: "11px",
+                                fontWeight: 700,
+                                backgroundColor: ex.status === "PENDING_REVIEW" ? "#FEF3C7" : "#DCFCE7",
+                                color: ex.status === "PENDING_REVIEW" ? "#92400E" : "#166534",
+                                padding: "2px 8px",
+                                borderRadius: "4px",
+                              }}
+                            >
+                              {ex.status}
+                            </span>
+                            <span style={{ fontSize: "13px", fontWeight: 800, color: "#0F172A" }}>
+                              {formatMoneyMinor({ amountMinor: ex.amount_minor, currency: ex.currency as CurrencyCode })}
+                            </span>
                           </div>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => handleApproveException(exc)}
-                            style={{
-                              padding: "8px 16px",
-                              backgroundColor: "#C89D3C",
-                              color: "#0B1F3A",
-                              fontWeight: 800,
-                              fontSize: "13px",
-                              border: "none",
-                              borderRadius: "6px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Approve as Checker (finance-checker-02)
-                          </button>
+                          <div style={{ fontSize: "13px", color: "#475569", marginTop: "4px" }}>{ex.reason}</div>
+                          <div style={{ fontSize: "11px", color: "#94A3B8", marginTop: "4px" }}>
+                            Maker: <strong>{ex.maker_id}</strong> {isMaker && "(You)"} · Created: {new Date(ex.created_at_iso).toLocaleString()}
+                          </div>
+                        </div>
+
+                        {ex.status === "PENDING_REVIEW" && (
+                          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                            {isMaker ? (
+                              <span style={{ fontSize: "12px", color: "#DC2626", fontWeight: 700 }}>
+                                🔒 Maker Cannot Act as Checker (§10.4)
+                              </span>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleActionException(ex.exception_id, "APPROVE")}
+                                  disabled={actioningExceptionId === ex.exception_id}
+                                  style={{
+                                    padding: "6px 14px",
+                                    backgroundColor: LW_DESIGN_TOKENS.colors.clinicalEmerald,
+                                    color: "#FFFFFF",
+                                    border: "none",
+                                    borderRadius: LW_DESIGN_TOKENS.radius.md,
+                                    fontSize: "12px",
+                                    fontWeight: 700,
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Approve
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleActionException(ex.exception_id, "REJECT")}
+                                  disabled={actioningExceptionId === ex.exception_id}
+                                  style={{
+                                    padding: "6px 14px",
+                                    backgroundColor: "#DC2626",
+                                    color: "#FFFFFF",
+                                    border: "none",
+                                    borderRadius: LW_DESIGN_TOKENS.radius.md,
+                                    fontSize: "12px",
+                                    fontWeight: 700,
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Reject
+                                </button>
+                              </>
+                            )}
+                          </div>
                         )}
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </main>
+
+      {/* Modal: New Action Item */}
+      {isCreatingAction && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(15, 23, 42, 0.75)",
+            zIndex: 100,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "16px",
+          }}
+        >
+          <form
+            onSubmit={handleCreateActionItem}
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderRadius: LW_DESIGN_TOKENS.radius.lg,
+              width: "100%",
+              maxWidth: "480px",
+              padding: "24px",
+            }}
+          >
+            <h3 style={{ fontSize: "18px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: "0 0 14px" }}>
+              Create Directorate Action Item
+            </h3>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: 700, marginBottom: "4px" }}>Tied Metric:</label>
+                <select
+                  value={newActionMetricId}
+                  onChange={(e) => setNewActionMetricId(e.target.value)}
+                  style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #CBD5E1" }}
+                >
+                  <option value="LWC-MET-002">LWC-MET-002: Access Fulfilment Rate</option>
+                  <option value="LWC-MET-004">LWC-MET-004: Unmet Demand / Capacity Gap</option>
+                  <option value="LWC-MET-005">LWC-MET-005: Continuity Completion Rate</option>
+                  <option value="LWC-MET-008">LWC-MET-008: Workforce Staffing Load</option>
+                  <option value="LWC-MET-009">LWC-MET-009: Facility Readiness Rate</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: 700, marginBottom: "4px" }}>Action Title:</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Expand evening GP roster slots"
+                  value={newActionTitle}
+                  onChange={(e) => setNewActionTitle(e.target.value)}
+                  style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #CBD5E1" }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: 700, marginBottom: "4px" }}>Action Description:</label>
+                <textarea
+                  rows={3}
+                  required
+                  placeholder="Specific remediation steps..."
+                  value={newActionDesc}
+                  onChange={(e) => setNewActionDesc(e.target.value)}
+                  style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #CBD5E1" }}
+                />
+              </div>
+
+              <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+                <button
+                  type="button"
+                  onClick={() => setIsCreatingAction(false)}
+                  style={{ flex: 1, padding: "8px", backgroundColor: "#F1F5F9", border: "1px solid #CBD5E1", borderRadius: "4px", cursor: "pointer" }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  style={{
+                    flex: 2,
+                    padding: "8px",
+                    backgroundColor: LW_DESIGN_TOKENS.colors.royalNavy,
+                    color: "#FFFFFF",
+                    border: "none",
+                    borderRadius: "4px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  Create Action Item
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

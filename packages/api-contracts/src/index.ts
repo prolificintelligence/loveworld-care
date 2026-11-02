@@ -7,17 +7,55 @@
 
 import type {
   AppointmentState,
+  CareContinuityPlan,
   CareEpisodeState,
+  CareRelationship,
+  CareTask,
+  ClinicalObservation,
   ConsultationModality,
+  CoordinationTask,
   CurrencyCode,
+  DirectorateAction,
+  DirectorateMetric,
   EncounterState,
   EntitlementState,
+  FinanceException,
   FundingRouteType,
+  MedicationInstruction,
+  NetworkFacility,
+  PatientSubject,
   PaymentGatewayProvider,
   ProtocolBundleState,
   ProtocolOutcomeType,
+  ReconciliationSummary,
   ReferralState,
 } from "@loveworld-care/domain-types";
+
+export type {
+  AppointmentState,
+  CareContinuityPlan,
+  CareEpisodeState,
+  CareRelationship,
+  CareTask,
+  ClinicalObservation,
+  ConsultationModality,
+  CoordinationTask,
+  CurrencyCode,
+  DirectorateAction,
+  DirectorateMetric,
+  EncounterState,
+  EntitlementState,
+  FinanceException,
+  FundingRouteType,
+  MedicationInstruction,
+  NetworkFacility,
+  PatientSubject,
+  PaymentGatewayProvider,
+  ProtocolBundleState,
+  ProtocolOutcomeType,
+  ReconciliationSummary,
+  ReferralState,
+};
 
 export interface ApiErrorEnvelope {
   readonly error_code: string;
@@ -259,6 +297,8 @@ export interface SponsorPoolSummaryDTO {
   readonly redeemed_settled_minor: number;
   readonly available_to_reserve_minor: number;
   readonly eligible_beneficiary_count: number;
+  readonly eligible_population_count?: number;
+  readonly beneficiaries_served_count?: number;
   readonly completed_encounters_count: number;
   readonly k_anonymity_suppressed: boolean;
 }
@@ -339,6 +379,244 @@ export interface ExecutiveMetricsResponse {
     readonly sponsor_unredeemed_liability_minor: number;
     readonly clinician_pending_payables_minor: number;
   };
+}
+
+// =============================================================================
+// Longitudinal Care, Coordination, Facilities, Companion & Governance DTOs
+// =============================================================================
+
+export interface CreateSubjectRequest {
+  readonly full_name: string;
+  readonly dob_iso: string;
+  readonly gender?: string;
+  readonly relationship?: string;
+  readonly jurisdiction?: string;
+}
+
+export interface CreateCareRelationshipRequest {
+  readonly patient_id: string;
+  readonly relationship_type?: string;
+  readonly allowed_scopes?: readonly string[];
+}
+
+export interface CreateCarePlanRequest {
+  readonly episode_id: string;
+  readonly encounter_id: string;
+  readonly programme_name: string;
+  readonly monitoring_instructions: string;
+  readonly due_at_iso: string;
+  readonly goals?: readonly string[];
+  readonly actions?: readonly string[];
+}
+
+export interface PrescribeMedicationRequest {
+  readonly encounter_id: string;
+  readonly medication_name: string;
+  readonly dosage_instructions: string;
+  readonly frequency_per_day?: number;
+  readonly duration_days?: number;
+  readonly clinical_indication?: string;
+}
+
+export interface RecordAdherenceRequest {
+  readonly status: "TAKEN" | "SKIPPED" | "ISSUE";
+  readonly notes?: string | null;
+}
+
+export interface CreateCareTaskRequest {
+  readonly episode_id?: string | null;
+  readonly encounter_id?: string | null;
+  readonly assigned_to?: "PATIENT" | "CLINICIAN" | "COORDINATOR";
+  readonly task_type?:
+    | "MEDICATION_REMINDER"
+    | "CHECK_IN"
+    | "RESULT_REVIEW"
+    | "FOLLOW_UP"
+    | "REFERRAL_FOLLOW_UP"
+    | "CLINICAL_REVIEW";
+  readonly title: string;
+  readonly description?: string;
+  readonly due_at_iso: string;
+}
+
+export interface ResolveCareTaskRequest {
+  readonly self_reported?: boolean;
+  readonly notes?: string | null;
+}
+
+export interface RecordObservationRequest {
+  readonly kind: "SYMPTOM" | "VITAL" | "LAB_RESULT" | "DOCUMENT";
+  readonly name: string;
+  readonly value: string;
+  readonly unit?: string | null;
+  readonly notes?: string | null;
+  readonly source?: "PATIENT_REPORTED" | "CLINICIAN_ENTERED" | "LAB_UPLOAD";
+}
+
+export interface CompanionChatRequest {
+  readonly patient_id?: string | null;
+  readonly message: string;
+  readonly jurisdiction?: string;
+}
+
+export interface CompanionChatResponse {
+  readonly intent: string;
+  readonly emergency: boolean;
+  readonly reply: string;
+  readonly emergency_contacts?: readonly {
+    readonly region: string;
+    readonly label: string;
+    readonly phone: string;
+  }[];
+  readonly suggested_actions?: readonly string[];
+  readonly provenance: {
+    readonly source: string;
+    readonly protocol_id: string;
+    readonly timestamp: string;
+    readonly disclaimer: string;
+  };
+}
+
+export interface PatientDashboardResponse {
+  readonly patient_id: string;
+  readonly subject: {
+    readonly patient_id: string;
+    readonly full_name: string;
+    readonly relationship: string;
+    readonly jurisdiction: string;
+  };
+  readonly active_episodes: readonly {
+    readonly episode_id: string;
+    readonly state: string;
+    readonly care_service: string;
+    readonly chief_complaint?: string;
+    readonly assigned_clinician_id?: string | null;
+    readonly active_protocol_outcome?: string | null;
+    readonly created_at: string;
+  }[];
+  readonly active_appointments: readonly {
+    readonly encounter_id: string;
+    readonly episode_id: string;
+    readonly modality: string;
+    readonly state: string;
+    readonly clinician_name: string;
+    readonly specialty: string;
+    readonly starts_at: string | null;
+  }[];
+  readonly due_tasks: readonly {
+    readonly task_id: string;
+    readonly task_type: string;
+    readonly title: string;
+    readonly description: string;
+    readonly due_at: string;
+    readonly status: string;
+    readonly self_reported: boolean;
+  }[];
+  readonly active_medications: readonly {
+    readonly medication_id: string;
+    readonly medication_name: string;
+    readonly dosage_instructions: string;
+    readonly frequency_per_day: number;
+    readonly duration_days: number;
+    readonly clinical_indication: string;
+    readonly status: string;
+    readonly prescribed_at: string;
+    readonly adherence_count: number;
+  }[];
+  readonly active_care_plans: readonly {
+    readonly plan_id: string;
+    readonly programme_name: string;
+    readonly monitoring_instructions: string;
+    readonly due_at: string;
+    readonly status: string;
+    readonly goals: readonly string[];
+    readonly actions: readonly string[];
+  }[];
+  readonly recent_observations: readonly {
+    readonly observation_id: string;
+    readonly kind: string;
+    readonly name: string;
+    readonly value: string;
+    readonly unit?: string | null;
+    readonly observed_at: string;
+    readonly source: string;
+    readonly verification_status: string;
+  }[];
+  readonly next_action: {
+    readonly type: string;
+    readonly label: string;
+    readonly details: string;
+    readonly link: string;
+  } | null;
+  readonly last_sync_time: string;
+}
+
+export interface ResolveCoordinationTaskRequest {
+  readonly disposition: string;
+}
+
+export interface AcceptReferralRequest {
+  readonly receiving_facility_code: string;
+}
+
+export interface DeclineReferralRequest {
+  readonly decline_reason: string;
+}
+
+export interface FacilityRegistrationRequest {
+  readonly facility_id: string;
+  readonly facility_name: string;
+  readonly facility_code: string;
+  readonly address: string;
+  readonly jurisdiction?: string;
+  readonly geocoordinates?: { readonly lat: number; readonly lng: number };
+  readonly services?: readonly string[];
+  readonly hours?: string;
+  readonly contact_phone?: string;
+  readonly is_verified?: boolean;
+  readonly readiness_state?: "CONFIRMED_AVAILABLE" | "STALE" | "UNAVAILABLE";
+  readonly validity_minutes?: number;
+}
+
+export interface FacilityReadinessRequest {
+  readonly readiness_state: "CONFIRMED_AVAILABLE" | "STALE" | "UNAVAILABLE";
+  readonly validity_minutes?: number;
+}
+
+export interface CreateFinanceExceptionRequest {
+  readonly agreement_id?: string | null;
+  readonly encounter_id?: string | null;
+  readonly exception_type: string;
+  readonly amount_minor: number;
+  readonly currency?: string;
+  readonly reason: string;
+}
+
+export interface ActionFinanceExceptionRequest {
+  readonly action: "APPROVE" | "REJECT" | "REMEDIATE";
+  readonly notes: string;
+}
+
+export interface CreateDirectorateActionRequest {
+  readonly metric_id: string;
+  readonly title: string;
+  readonly description: string;
+  readonly owner_team: string;
+  readonly assigned_to: string;
+  readonly due_date_iso: string;
+}
+
+export interface UpdateDirectorateActionRequest {
+  readonly status: "OPEN" | "IN_PROGRESS" | "RESOLVED";
+  readonly evidence_notes?: string;
+}
+
+export interface DirectorateMetricsResponse {
+  readonly reporting_period: string;
+  readonly refresh_time_iso: string;
+  readonly metrics: readonly DirectorateMetric[];
+  readonly action_items_count: number;
+  readonly free_text_phi_included: false;
 }
 
 // =============================================================================
@@ -544,6 +822,222 @@ export class LoveWorldCareApiClient {
     return this.request<Record<string, unknown>>(
       "POST",
       `/v1/care/episodes/${encodeURIComponent(episodeId)}/intelligence-handoff`,
+      payload
+    );
+  }
+
+  // Identity & Subjects
+  listSubjects() {
+    return this.request<readonly PatientSubject[]>("GET", "/v1/identity/subjects");
+  }
+
+  createSubject(payload: CreateSubjectRequest) {
+    return this.request<PatientSubject>("POST", "/v1/identity/subjects", payload);
+  }
+
+  createCareRelationship(payload: CreateCareRelationshipRequest) {
+    return this.request<CareRelationship>("POST", "/v1/identity/relationships", payload);
+  }
+
+  revokeCareRelationship(relationshipId: string) {
+    return this.request<{ revoked: boolean; relationship_id: string }>(
+      "POST",
+      `/v1/identity/relationships/${encodeURIComponent(relationshipId)}/revoke`
+    );
+  }
+
+  // Patient Longitudinal Care
+  getPatientDashboard(patientId: string) {
+    return this.request<PatientDashboardResponse>(
+      "GET",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/dashboard`
+    );
+  }
+
+  listCarePlans(patientId: string) {
+    return this.request<readonly CareContinuityPlan[]>(
+      "GET",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/care-plans`
+    );
+  }
+
+  createCarePlan(patientId: string, payload: CreateCarePlanRequest) {
+    return this.request<CareContinuityPlan>(
+      "POST",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/care-plans`,
+      payload
+    );
+  }
+
+  listMedications(patientId: string) {
+    return this.request<readonly MedicationInstruction[]>(
+      "GET",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/medications`
+    );
+  }
+
+  prescribeMedication(patientId: string, payload: PrescribeMedicationRequest) {
+    return this.request<MedicationInstruction>(
+      "POST",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/medications`,
+      payload
+    );
+  }
+
+  reportMedicationAdherence(
+    patientId: string,
+    medicationId: string,
+    payload: RecordAdherenceRequest
+  ) {
+    return this.request<Record<string, unknown>>(
+      "POST",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/medications/${encodeURIComponent(
+        medicationId
+      )}/adherence`,
+      payload
+    );
+  }
+
+  listTasks(patientId: string) {
+    return this.request<readonly CareTask[]>(
+      "GET",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/tasks`
+    );
+  }
+
+  resolveTask(patientId: string, taskId: string, payload: ResolveCareTaskRequest) {
+    return this.request<CareTask>(
+      "POST",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/tasks/${encodeURIComponent(
+        taskId
+      )}/resolve`,
+      payload
+    );
+  }
+
+  listRecords(patientId: string) {
+    return this.request<readonly Record<string, unknown>[]>(
+      "GET",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/records`
+    );
+  }
+
+  addObservation(patientId: string, payload: RecordObservationRequest) {
+    return this.request<ClinicalObservation>(
+      "POST",
+      `/v1/care/patients/${encodeURIComponent(patientId)}/observations`,
+      payload
+    );
+  }
+
+  // Health Intelligence Companion
+  companionChat(payload: CompanionChatRequest) {
+    return this.request<CompanionChatResponse>("POST", "/v1/companion/chat", payload);
+  }
+
+  // Network Facilities & Readiness
+  listFacilities(jurisdiction = "NG", service?: string) {
+    const s = service ? `&service=${encodeURIComponent(service)}` : "";
+    return this.request<readonly NetworkFacility[]>(
+      "GET",
+      `/v1/network/facilities?jurisdiction=${encodeURIComponent(jurisdiction)}${s}`
+    );
+  }
+
+  registerFacility(payload: FacilityRegistrationRequest) {
+    return this.request<NetworkFacility>("POST", "/v1/network/facilities", payload);
+  }
+
+  updateFacilityReadiness(facilityId: string, payload: FacilityReadinessRequest) {
+    return this.request<NetworkFacility>(
+      "POST",
+      `/v1/network/facilities/${encodeURIComponent(facilityId)}/readiness`,
+      payload
+    );
+  }
+
+  // Coordination Board & Referrals
+  listCoordinationBoard() {
+    return this.request<readonly CoordinationTask[]>("GET", "/v1/coordination/board");
+  }
+
+  claimCoordinationTask(taskId: string) {
+    return this.request<CoordinationTask>(
+      "POST",
+      `/v1/coordination/board/${encodeURIComponent(taskId)}/claim`
+    );
+  }
+
+  resolveCoordinationTask(taskId: string, payload: ResolveCoordinationTaskRequest) {
+    return this.request<CoordinationTask>(
+      "POST",
+      `/v1/coordination/board/${encodeURIComponent(taskId)}/resolve`,
+      payload
+    );
+  }
+
+  listReferrals() {
+    return this.request<readonly Record<string, unknown>[]>("GET", "/v1/referrals");
+  }
+
+  acceptReferral(referralId: string, payload: AcceptReferralRequest) {
+    return this.request<Record<string, unknown>>(
+      "POST",
+      `/v1/referrals/${encodeURIComponent(referralId)}/accept`,
+      payload
+    );
+  }
+
+  declineReferral(referralId: string, payload: DeclineReferralRequest) {
+    return this.request<Record<string, unknown>>(
+      "POST",
+      `/v1/referrals/${encodeURIComponent(referralId)}/decline`,
+      payload
+    );
+  }
+
+  // Finance Operations
+  listFinanceExceptions(status?: string, agreementId?: string) {
+    const params = new URLSearchParams();
+    if (status) params.set("status", status);
+    if (agreementId) params.set("agreement_id", agreementId);
+    const q = params.toString() ? `?${params.toString()}` : "";
+    return this.request<readonly FinanceException[]>("GET", `/v1/finance/exceptions${q}`);
+  }
+
+  createFinanceException(payload: CreateFinanceExceptionRequest) {
+    return this.request<FinanceException>("POST", "/v1/finance/exceptions", payload);
+  }
+
+  actionFinanceException(exceptionId: string, payload: ActionFinanceExceptionRequest) {
+    return this.request<FinanceException>(
+      "POST",
+      `/v1/finance/exceptions/${encodeURIComponent(exceptionId)}/action`,
+      payload
+    );
+  }
+
+  getFinanceReconciliation() {
+    return this.request<ReconciliationSummary>("GET", "/v1/finance/reconciliation");
+  }
+
+  // Directorate Governance & Metrics
+  getDirectorateMetrics() {
+    return this.request<DirectorateMetricsResponse>("GET", "/v1/directorate/metrics");
+  }
+
+  listDirectorateActions() {
+    return this.request<readonly DirectorateAction[]>("GET", "/v1/directorate/actions");
+  }
+
+  createDirectorateAction(payload: CreateDirectorateActionRequest) {
+    return this.request<DirectorateAction>("POST", "/v1/directorate/actions", payload);
+  }
+
+  updateDirectorateAction(actionId: string, payload: UpdateDirectorateActionRequest) {
+    return this.request<DirectorateAction>(
+      "PATCH",
+      `/v1/directorate/actions/${encodeURIComponent(actionId)}`,
       payload
     );
   }

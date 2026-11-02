@@ -217,9 +217,12 @@ class ModelGatewayConfig(BaseModel):
     openrouter_free_models: list[str] = Field(
         default_factory=lambda: [
             "openrouter/free",
-            "meta-llama/llama-3.3-70b-instruct:free",
-            "google/gemma-3-27b-it:free",
-            "mistralai/mistral-small-3.1-24b-instruct:free",
+            "google/gemma-4-31b-it:free",
+            "google/gemma-4-26b-a4b-it:free",
+            "nvidia/nemotron-3.5-lightning:free",
+            "liquid/lfm-2.5-2.6b:free",
+            "thinkingmachines/inkling-small:free",
+            "cohere/north-mini-code:free",
         ]
     )
     gemini_api_key: str | None = None

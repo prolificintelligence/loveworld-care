@@ -2,29 +2,31 @@
 
 import React, { useEffect, useState } from "react";
 import { SharedDeviceSessionLockBar, LW_DESIGN_TOKENS } from "@loveworld-care/design-system";
-import { formatMoneyMinor } from "@loveworld-care/domain-types";
+import { formatMoneyMinor, type CurrencyCode } from "@loveworld-care/domain-types";
 import { LoveWorldCareApiClient, SponsorPoolSummaryDTO } from "@loveworld-care/api-contracts";
 
+type SponsorTab = "OVERVIEW" | "STATEMENTS" | "TERMS";
+
 export default function SponsorCareWorkspacePage() {
+  const [activeTab, setActiveTab] = useState<SponsorTab>("OVERVIEW");
   const [sessionLocked, setSessionLocked] = useState(false);
   const [sponsorAdminId] = useState("sponsor-admin-01");
   const [sponsorName] = useState("LoveWorld Medicaid Humanitarian Foundation");
   const [sponsorOrg] = useState("sponsor-loveworld-medicaid");
-  const [agreementId, setAgreementId] = useState("AGR-LW-MEDICAID-NG-2026");
+  const [agreementId] = useState("AGR-LW-MEDICAID-NG-2026");
 
   // API State
   const [apiClient, setApiClient] = useState<LoveWorldCareApiClient | null>(null);
   const [poolReport, setPoolReport] = useState<SponsorPoolSummaryDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [networkError, setNetworkError] = useState<string | null>(null);
-  const [simulateSmallCohort, setSimulateSmallCohort] = useState(false);
 
   // Initialize Auth & API Client
   useEffect(() => {
     async function initSponsor() {
       setIsLoading(true);
       try {
-        let token = localStorage.getItem("lw_sponsor_token");
+        let token = typeof window !== "undefined" ? localStorage.getItem("lw_sponsor_token") : null;
         if (!token) {
           const devRes = await fetch("/v1/auth/dev-token", {
             method: "POST",
@@ -35,13 +37,15 @@ export default function SponsorCareWorkspacePage() {
               roles: ["SPONSOR_ADMIN"],
               org: sponsorOrg,
               mfa: true,
-              ttl_minutes: 180,
+              ttl_minutes: 240,
             }),
           });
           if (devRes.ok) {
             const data = await devRes.json();
             token = data.access_token;
-            if (token) localStorage.setItem("lw_sponsor_token", token);
+            if (token && typeof window !== "undefined") {
+              localStorage.setItem("lw_sponsor_token", token);
+            }
           }
         }
 
@@ -75,406 +79,451 @@ export default function SponsorCareWorkspacePage() {
     }
   };
 
+  const handleDownloadCsv = () => {
+    if (!poolReport) return;
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [
+        "Agreement ID,Sponsor Name,Currency,Committed Unfunded,Funded Cash,Active Reserved,Redeemed Settled,Available,Beneficiaries Served,Completed Encounters,k-Anonymity Suppressed",
+        `${poolReport.agreement_id},"${poolReport.sponsor_name}",${poolReport.currency},${poolReport.committed_unfunded_minor / 100},${poolReport.funded_cash_received_minor / 100},${poolReport.active_reserved_minor / 100},${poolReport.redeemed_settled_minor / 100},${poolReport.available_to_reserve_minor / 100},${poolReport.beneficiaries_served_count ?? poolReport.completed_encounters_count},${poolReport.completed_encounters_count},${poolReport.k_anonymity_suppressed}`,
+      ].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `SponsorCare_Statement_${poolReport.agreement_id}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (sessionLocked) {
     return (
-      <div>
-        <SharedDeviceSessionLockBar
-          workspaceName="SponsorCare Portal"
-          actorDisplayName="Institutional Session (Locked)"
-          isLocked={true}
-          onToggleLock={() => setSessionLocked(false)}
-        />
-        <main
+      <div
+        style={{
+          minHeight: "100vh",
+          backgroundColor: LW_DESIGN_TOKENS.colors.royalNavy,
+          color: "#FFFFFF",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "24px",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ fontSize: "56px", marginBottom: "16px" }}>🔒</div>
+        <h1 style={{ fontSize: "24px", fontWeight: 800, marginBottom: "8px" }}>
+          SponsorCare Institutional Session Protected
+        </h1>
+        <p style={{ color: "#94A3B8", maxWidth: "400px", marginBottom: "24px", fontSize: "14px" }}>
+          Re-authenticate to view institutional health funding pools, utilization audits, and statements.
+        </p>
+        <button
+          type="button"
+          onClick={() => setSessionLocked(false)}
           style={{
-            maxWidth: "480px",
-            margin: "80px auto",
-            textAlign: "center",
-            padding: "24px",
-            backgroundColor: "#FFFFFF",
-            borderRadius: "12px",
-            border: "1px solid #CBD5E1",
+            minHeight: `${LW_DESIGN_TOKENS.touchTarget.minHeightPx}px`,
+            padding: "12px 28px",
+            backgroundColor: LW_DESIGN_TOKENS.colors.warmGold,
+            color: LW_DESIGN_TOKENS.colors.royalNavy,
+            border: "none",
+            borderRadius: LW_DESIGN_TOKENS.radius.md,
+            fontWeight: 800,
+            fontSize: "15px",
+            cursor: "pointer",
           }}
         >
-          <div style={{ fontSize: "48px", marginBottom: "16px" }}>🔒</div>
-          <h2 style={{ color: "#0B1F3A", margin: "0 0 8px 0" }}>Institutional Session Locked</h2>
-          <p style={{ color: "#64748B", fontSize: "14px" }}>
-            Re-authenticate to view institutional care pool balances and aggregate reporting.
-          </p>
-          <button
-            type="button"
-            onClick={() => setSessionLocked(false)}
-            style={{
-              marginTop: "16px",
-              minHeight: "44px",
-              padding: "10px 24px",
-              backgroundColor: "#1E3A8A",
-              color: "#FFFFFF",
-              fontWeight: 700,
-              borderRadius: "6px",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Unlock Session
-          </button>
-        </main>
+          Unlock Sponsor Portal
+        </button>
       </div>
     );
   }
 
-  // Small cohort simulation for AT-14 demonstration
-  const effectiveKSuppressed = simulateSmallCohort || poolReport?.k_anonymity_suppressed;
-
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#F8FAFC" }}>
-      {/* Session Header */}
+    <div style={{ minHeight: "100vh", backgroundColor: "#F8FAFC", display: "flex", flexDirection: "column" }}>
+      {/* 1. Header Bar */}
       <SharedDeviceSessionLockBar
-        workspaceName="SponsorCare & Institutional Workspace"
-        actorDisplayName={`${sponsorName} (Aggregate Reporting Only · §10.5)`}
+        workspaceName="SponsorCare · Institutional Health Funding"
+        actorDisplayName={`${sponsorName} (${sponsorOrg})`}
         isLocked={false}
         onToggleLock={() => setSessionLocked(true)}
         onSignOut={() => {
-          localStorage.removeItem("lw_sponsor_token");
+          if (typeof window !== "undefined") localStorage.removeItem("lw_sponsor_token");
           window.location.reload();
         }}
       />
 
-      <main style={{ maxWidth: "1200px", margin: "24px auto", padding: "0 16px 64px" }}>
-        {/* Error / Offline Alert */}
+      {/* 2. Navigation Tabs */}
+      <nav
+        aria-label="Sponsor Navigation"
+        style={{
+          backgroundColor: "#FFFFFF",
+          borderBottom: "1px solid #CBD5E1",
+          padding: "0 24px",
+          display: "flex",
+          gap: "24px",
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => setActiveTab("OVERVIEW")}
+          style={{
+            padding: "14px 4px",
+            background: "none",
+            border: "none",
+            borderBottom: activeTab === "OVERVIEW" ? `3px solid ${LW_DESIGN_TOKENS.colors.royalNavy}` : "3px solid transparent",
+            color: activeTab === "OVERVIEW" ? LW_DESIGN_TOKENS.colors.royalNavy : "#64748B",
+            fontWeight: 700,
+            fontSize: "14px",
+            cursor: "pointer",
+          }}
+        >
+          📊 Pool Overview & Utilisation
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("STATEMENTS")}
+          style={{
+            padding: "14px 4px",
+            background: "none",
+            border: "none",
+            borderBottom: activeTab === "STATEMENTS" ? `3px solid ${LW_DESIGN_TOKENS.colors.royalNavy}` : "3px solid transparent",
+            color: activeTab === "STATEMENTS" ? LW_DESIGN_TOKENS.colors.royalNavy : "#64748B",
+            fontWeight: 700,
+            fontSize: "14px",
+            cursor: "pointer",
+          }}
+        >
+          📄 Statements & Accounting
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("TERMS")}
+          style={{
+            padding: "14px 4px",
+            background: "none",
+            border: "none",
+            borderBottom: activeTab === "TERMS" ? `3px solid ${LW_DESIGN_TOKENS.colors.royalNavy}` : "3px solid transparent",
+            color: activeTab === "TERMS" ? LW_DESIGN_TOKENS.colors.royalNavy : "#64748B",
+            fontWeight: 700,
+            fontSize: "14px",
+            cursor: "pointer",
+          }}
+        >
+          📜 Programme Terms & Rules
+        </button>
+      </nav>
+
+      {/* Main Body */}
+      <main style={{ maxWidth: "1240px", margin: "24px auto", padding: "0 20px 60px", width: "100%" }}>
         {networkError && (
           <div
             role="alert"
             style={{
-              backgroundColor: "#FEF2F2",
+              backgroundColor: "#FEE2E2",
               border: "1px solid #FCA5A5",
-              color: "#991B1B",
+              borderRadius: LW_DESIGN_TOKENS.radius.md,
               padding: "12px 16px",
-              borderRadius: "8px",
-              marginBottom: "20px",
-              fontSize: "14px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              color: "#991B1B",
+              fontSize: "13px",
+              fontWeight: 600,
+              marginBottom: "16px",
             }}
           >
-            <span>⚠️ {networkError}</span>
-            <button
-              type="button"
-              onClick={() => setNetworkError(null)}
-              style={{ background: "none", border: "none", fontWeight: 700, color: "#991B1B", cursor: "pointer" }}
-            >
-              ✕
-            </button>
+            ⚠️ {networkError}
           </div>
         )}
 
-        {/* Top Header Card */}
-        <section
-          style={{
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #CBD5E1",
-            borderRadius: "12px",
-            padding: "24px",
-            marginBottom: "24px",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.03)",
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px" }}>
-            <div>
-              <span
-                style={{
-                  backgroundColor: "#E0E7FF",
-                  color: "#1E3A8A",
-                  fontWeight: 800,
-                  fontSize: "11px",
-                  padding: "3px 8px",
-                  borderRadius: "4px",
-                  textTransform: "uppercase",
-                }}
-              >
-                Contracted Care Entitlements (§10.2)
-              </span>
-              <h1 style={{ margin: "8px 0 4px 0", fontSize: "22px", color: "#0B1F3A", fontWeight: 800 }}>
-                Agreement <code>{agreementId}</code>
-              </h1>
-              <p style={{ margin: 0, fontSize: "14px", color: "#475569" }}>
-                Sponsor: <strong>{poolReport?.sponsor_name || sponsorName}</strong> • Currency: <strong>{poolReport?.currency || "NGN"}</strong>
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={refreshReport}
-              disabled={isLoading}
+        {/* ================================================================= */}
+        {/* TAB 1: OVERVIEW & UTILISATION                                     */}
+        {/* ================================================================= */}
+        {activeTab === "OVERVIEW" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            {/* Agreement Header */}
+            <div
               style={{
-                minHeight: "44px",
-                padding: "8px 16px",
-                backgroundColor: "#F1F5F9",
+                backgroundColor: "#FFFFFF",
+                borderRadius: LW_DESIGN_TOKENS.radius.lg,
                 border: "1px solid #CBD5E1",
-                borderRadius: "8px",
-                fontWeight: 700,
-                fontSize: "13px",
-                color: "#1E293B",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                display: "inline-flex",
+                padding: "20px 24px",
+                display: "flex",
+                justifyContent: "space-between",
                 alignItems: "center",
-                gap: "6px",
+                flexWrap: "wrap",
+                gap: "12px",
               }}
             >
-              <span>🔄</span> {isLoading ? "Syncing..." : "Sync Live Balances"}
-            </button>
-          </div>
-
-          <div
-            style={{
-              marginTop: "16px",
-              padding: "12px 14px",
-              backgroundColor: "#F8FAFC",
-              border: "1px solid #E2E8F0",
-              borderRadius: "8px",
-              fontSize: "13px",
-              color: "#334155",
-              lineHeight: 1.5,
-            }}
-          >
-            <strong>Accounting &amp; Legal Boundary (§10.1 &amp; §10.4):</strong> This agreement governs a
-            contracted defined-service care entitlement pool. It is not an insurance or indemnity policy.
-            Reservations are atomic against settled cash or Espees credits. Unfunded pledges are non-spendable.
-          </div>
-
-          {/* Atomic Pool Balances Grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
-              gap: "16px",
-              marginTop: "20px",
-            }}
-          >
-            {/* Committed Unfunded */}
-            <div
-              style={{
-                backgroundColor: "#F8FAFC",
-                border: "1px solid #CBD5E1",
-                borderRadius: "10px",
-                padding: "16px",
-              }}
-            >
-              <div style={{ fontSize: "12px", color: "#64748B", fontWeight: 600 }}>
-                Committed Pledge (Uncollected)
-              </div>
-              <div style={{ fontSize: "20px", fontWeight: 800, color: "#64748B", marginTop: "4px" }}>
-                {formatMoneyMinor({
-                  amountMinor: poolReport?.committed_unfunded_minor ?? 500000000,
-                  currency: (poolReport?.currency as any) || "NGN",
-                })}
-              </div>
-              <div style={{ fontSize: "11px", color: "#94A3B8", marginTop: "4px" }}>
-                Non-spendable until bank receipt
-              </div>
-            </div>
-
-            {/* Funded Cash Received */}
-            <div
-              style={{
-                backgroundColor: "#F8FAFC",
-                border: "1px solid #CBD5E1",
-                borderRadius: "10px",
-                padding: "16px",
-              }}
-            >
-              <div style={{ fontSize: "12px", color: "#1E3A8A", fontWeight: 600 }}>
-                Funded Cash Received (Restricted)
-              </div>
-              <div style={{ fontSize: "20px", fontWeight: 800, color: "#0B1F3A", marginTop: "4px" }}>
-                {formatMoneyMinor({
-                  amountMinor: poolReport?.funded_cash_received_minor ?? 1200000000,
-                  currency: (poolReport?.currency as any) || "NGN",
-                })}
-              </div>
-              <div style={{ fontSize: "11px", color: "#0F766E", marginTop: "4px" }}>
-                Settled into LoveWorld Care custodial pool
-              </div>
-            </div>
-
-            {/* Active Reserved */}
-            <div
-              style={{
-                backgroundColor: "#FDF8EC",
-                border: "1px solid #FCD34D",
-                borderRadius: "10px",
-                padding: "16px",
-              }}
-            >
-              <div style={{ fontSize: "12px", color: "#92400E", fontWeight: 600 }}>
-                Active Reserved Entitlements
-              </div>
-              <div style={{ fontSize: "20px", fontWeight: 800, color: "#B45309", marginTop: "4px" }}>
-                {formatMoneyMinor({
-                  amountMinor: poolReport?.active_reserved_minor ?? 0,
-                  currency: (poolReport?.currency as any) || "NGN",
-                })}
-              </div>
-              <div style={{ fontSize: "11px", color: "#B45309", marginTop: "4px" }}>
-                Locked for scheduled consultations
-              </div>
-            </div>
-
-            {/* Redeemed & Settled */}
-            <div
-              style={{
-                backgroundColor: "#F0FDFA",
-                border: "1px solid #99F6E4",
-                borderRadius: "10px",
-                padding: "16px",
-              }}
-            >
-              <div style={{ fontSize: "12px", color: "#115E59", fontWeight: 600 }}>
-                Redeemed &amp; Settled
-              </div>
-              <div style={{ fontSize: "20px", fontWeight: 800, color: "#0F766E", marginTop: "4px" }}>
-                {formatMoneyMinor({
-                  amountMinor: poolReport?.redeemed_settled_minor ?? 0,
-                  currency: (poolReport?.currency as any) || "NGN",
-                })}
-              </div>
-              <div style={{ fontSize: "11px", color: "#0F766E", marginTop: "4px" }}>
-                Doctor signed with Ed25519
-              </div>
-            </div>
-
-            {/* Available to Reserve */}
-            <div
-              style={{
-                backgroundColor: "#F0F9FF",
-                border: "1px solid #BAE6FD",
-                borderRadius: "10px",
-                padding: "16px",
-              }}
-            >
-              <div style={{ fontSize: "12px", color: "#0369A1", fontWeight: 600 }}>
-                Available to Reserve
-              </div>
-              <div style={{ fontSize: "20px", fontWeight: 800, color: "#0284C7", marginTop: "4px" }}>
-                {formatMoneyMinor({
-                  amountMinor: poolReport?.available_to_reserve_minor ?? 1200000000,
-                  currency: (poolReport?.currency as any) || "NGN",
-                })}
-              </div>
-              <div style={{ fontSize: "11px", color: "#0369A1", marginTop: "4px" }}>
-                Immediate beneficiary capacity
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Privacy-Safe Aggregate Utilisation & k>=5 Suppression */}
-        <section
-          style={{
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #CBD5E1",
-            borderRadius: "12px",
-            padding: "24px",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.03)",
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "10px" }}>
-            <div>
-              <h2 style={{ margin: "0 0 6px 0", fontSize: "18px", color: "#0B1F3A", fontWeight: 800 }}>
-                Privacy-Safe Aggregate Utilisation (§10.5 &amp; AT-14)
-              </h2>
-              <p style={{ margin: 0, fontSize: "13px", color: "#475569" }}>
-                Sponsors NEVER receive patient names, intake text, diagnoses, or clinician notes (AT-06).
-              </p>
-            </div>
-
-            <span
-              style={{
-                backgroundColor: "#DCFCE7",
-                color: "#166534",
-                fontSize: "12px",
-                fontWeight: 700,
-                padding: "4px 10px",
-                borderRadius: "6px",
-                border: "1px solid #BBF7D0",
-              }}
-            >
-              Zero PHI Disclosed ✓
-            </span>
-          </div>
-
-          {/* Test Small-Cohort Suppression Toggle */}
-          <div style={{ marginTop: "16px" }}>
-            <label
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "8px 12px",
-                backgroundColor: "#F8FAFC",
-                border: "1px solid #CBD5E1",
-                borderRadius: "8px",
-                fontSize: "13px",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={simulateSmallCohort}
-                onChange={(e) => setSimulateSmallCohort(e.target.checked)}
-                style={{ width: "16px", height: "16px" }}
-              />
-              <span>
-                Simulate Small-Cohort Anonymity Filter (k = 3 beneficiaries &lt; 5 minimum threshold — AT-14)
-              </span>
-            </label>
-          </div>
-
-          {/* Suppression Status Display */}
-          <div
-            style={{
-              marginTop: "16px",
-              padding: "16px",
-              borderRadius: "10px",
-              backgroundColor: effectiveKSuppressed ? "#FEF2F2" : "#F0FDF4",
-              border: `1px solid ${effectiveKSuppressed ? "#FCA5A5" : "#86EFAC"}`,
-              fontSize: "14px",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
               <div>
-                <strong>Eligible Beneficiary Cohort Size:</strong>{" "}
-                <span>
-                  {effectiveKSuppressed
-                    ? "SUPPRESSED (k < 5 small-cohort differential privacy active)"
-                    : `${poolReport?.eligible_beneficiary_count ?? 24} Beneficiaries`}
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ fontSize: "12px", fontWeight: 800, color: "#64748B" }}>AGREEMENT:</span>
+                  <span style={{ fontSize: "16px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy }}>
+                    {agreementId}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      backgroundColor: "#DCFCE7",
+                      color: "#166534",
+                      padding: "2px 8px",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    ACTIVE PROGRAMME
+                  </span>
+                </div>
+                <div style={{ fontSize: "14px", color: "#475569", marginTop: "4px" }}>
+                  {poolReport?.sponsor_name || sponsorName}
+                </div>
+              </div>
+
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                  type="button"
+                  onClick={refreshReport}
+                  disabled={isLoading}
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #CBD5E1",
+                    borderRadius: LW_DESIGN_TOKENS.radius.md,
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  🔄 Refresh Balance
+                </button>
+              </div>
+            </div>
+
+            {/* Balances Grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+              <div style={{ backgroundColor: "#FFFFFF", border: "1px solid #CBD5E1", borderRadius: LW_DESIGN_TOKENS.radius.md, padding: "16px" }}>
+                <div style={{ fontSize: "12px", color: "#64748B", fontWeight: 700 }}>Committed Unfunded</div>
+                <div style={{ fontSize: "22px", fontWeight: 800, color: "#0F172A", marginTop: "4px" }}>
+                  {formatMoneyMinor({ amountMinor: poolReport?.committed_unfunded_minor ?? 0, currency: (poolReport?.currency as CurrencyCode) || "NGN" })}
+                </div>
+                <div style={{ fontSize: "11px", color: "#94A3B8", marginTop: "4px" }}>Pledged institutional commitment</div>
+              </div>
+
+              <div style={{ backgroundColor: "#FFFFFF", border: "1px solid #CBD5E1", borderRadius: LW_DESIGN_TOKENS.radius.md, padding: "16px" }}>
+                <div style={{ fontSize: "12px", color: "#166534", fontWeight: 700 }}>Funded Cash Received</div>
+                <div style={{ fontSize: "22px", fontWeight: 800, color: "#166534", marginTop: "4px" }}>
+                  {formatMoneyMinor({ amountMinor: poolReport?.funded_cash_received_minor ?? 0, currency: (poolReport?.currency as CurrencyCode) || "NGN" })}
+                </div>
+                <div style={{ fontSize: "11px", color: "#166534", marginTop: "4px" }}>Cleared bank / Espees cash in escrow</div>
+              </div>
+
+              <div style={{ backgroundColor: "#FFFFFF", border: "1px solid #CBD5E1", borderRadius: LW_DESIGN_TOKENS.radius.md, padding: "16px" }}>
+                <div style={{ fontSize: "12px", color: "#92400E", fontWeight: 700 }}>Active Reserved</div>
+                <div style={{ fontSize: "22px", fontWeight: 800, color: "#B45309", marginTop: "4px" }}>
+                  {formatMoneyMinor({ amountMinor: poolReport?.active_reserved_minor ?? 0, currency: (poolReport?.currency as CurrencyCode) || "NGN" })}
+                </div>
+                <div style={{ fontSize: "11px", color: "#92400E", marginTop: "4px" }}>In-flight consultations holding escrow</div>
+              </div>
+
+              <div style={{ backgroundColor: "#FFFFFF", border: "1px solid #CBD5E1", borderRadius: LW_DESIGN_TOKENS.radius.md, padding: "16px" }}>
+                <div style={{ fontSize: "12px", color: "#0369A1", fontWeight: 700 }}>Available to Reserve</div>
+                <div style={{ fontSize: "22px", fontWeight: 800, color: "#0284C7", marginTop: "4px" }}>
+                  {formatMoneyMinor({ amountMinor: poolReport?.available_to_reserve_minor ?? 0, currency: (poolReport?.currency as CurrencyCode) || "NGN" })}
+                </div>
+                <div style={{ fontSize: "11px", color: "#0369A1", marginTop: "4px" }}>Unreserved humanitarian capacity</div>
+              </div>
+            </div>
+
+            {/* Privacy-Safe Utilisation & k>=5 Anonymity Section */}
+            <div
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                border: "1px solid #CBD5E1",
+                padding: "24px",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                <div>
+                  <h3 style={{ fontSize: "17px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+                    Privacy-Safe Aggregate Utilisation (§10.5, LWC-SCR-306)
+                  </h3>
+                  <p style={{ fontSize: "13px", color: "#64748B", margin: "4px 0 0" }}>
+                    Sponsors NEVER receive patient names, intake text, diagnoses, or clinical notes (AT-06, AT-14).
+                  </p>
+                </div>
+                <span
+                  style={{
+                    backgroundColor: "#DCFCE7",
+                    color: "#166534",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    padding: "4px 12px",
+                    borderRadius: "6px",
+                  }}
+                >
+                  ✓ Zero PHI Disclosed
                 </span>
               </div>
-              <span
-                style={{
-                  fontSize: "12px",
-                  fontWeight: 700,
-                  color: effectiveKSuppressed ? "#991B1B" : "#166534",
-                }}
-              >
-                {effectiveKSuppressed ? "⚠️ Headcount Redacted" : "✓ k ≥ 5 Met"}
-              </span>
-            </div>
 
-            <div style={{ marginTop: "10px", fontSize: "13px", color: "#334155" }}>
-              <strong>Completed Encounters Count:</strong>{" "}
-              {poolReport?.completed_encounters_count ?? 0}
-            </div>
-
-            <div style={{ marginTop: "6px", fontSize: "12px", color: "#475569" }}>
-              <strong>Clinical Narrative / Diagnoses / Notes Disclosed:</strong>{" "}
-              <code style={{ color: "#B91C1C", fontWeight: 700 }}>
-                NONE (Strictly Forbidden by Server Architecture AT-06 &amp; ADR-0005)
-              </code>
+              {poolReport?.k_anonymity_suppressed ? (
+                /* k < 5 Suppression Notice */
+                <div
+                  style={{
+                    backgroundColor: "#FEF3C7",
+                    border: "1px solid #FCD34D",
+                    borderRadius: LW_DESIGN_TOKENS.radius.md,
+                    padding: "16px",
+                    color: "#92400E",
+                  }}
+                >
+                  <div style={{ fontWeight: 800, fontSize: "14px", marginBottom: "4px" }}>
+                    🔒 k-Anonymity Suppression Active (Cohort &lt; 5 Beneficiaries)
+                  </div>
+                  <p style={{ fontSize: "13px", margin: 0, lineHeight: 1.4 }}>
+                    To prevent re-identification of individual beneficiaries, granular demographic and encounter counts are withheld until at least 5 distinct individuals have accessed care under this pool.
+                  </p>
+                </div>
+              ) : (
+                /* Authoritative Aggregates */
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
+                  <div style={{ backgroundColor: "#F8FAFC", padding: "14px", borderRadius: LW_DESIGN_TOKENS.radius.md }}>
+                    <div style={{ fontSize: "12px", color: "#64748B" }}>Eligible Population</div>
+                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#0F172A", marginTop: "2px" }}>
+                      {poolReport?.eligible_population_count ?? poolReport?.eligible_beneficiary_count ?? 0}
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: "#F8FAFC", padding: "14px", borderRadius: LW_DESIGN_TOKENS.radius.md }}>
+                    <div style={{ fontSize: "12px", color: "#64748B" }}>Beneficiaries Served</div>
+                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#0F172A", marginTop: "2px" }}>
+                      {poolReport?.beneficiaries_served_count ?? poolReport?.completed_encounters_count ?? 0}
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: "#F8FAFC", padding: "14px", borderRadius: LW_DESIGN_TOKENS.radius.md }}>
+                    <div style={{ fontSize: "12px", color: "#64748B" }}>Completed Encounters</div>
+                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#0F172A", marginTop: "2px" }}>
+                      {poolReport?.completed_encounters_count ?? 0}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        </section>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 2: STATEMENTS & ACCOUNTING                                    */}
+        {/* ================================================================= */}
+        {activeTab === "STATEMENTS" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h2 style={{ fontSize: "20px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+                Accounting Statements & Settlement Ledger
+              </h2>
+              <button
+                type="button"
+                onClick={handleDownloadCsv}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: LW_DESIGN_TOKENS.colors.royalNavy,
+                  color: "#FFFFFF",
+                  border: "none",
+                  borderRadius: LW_DESIGN_TOKENS.radius.md,
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                📥 Export Statement (CSV)
+              </button>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                border: "1px solid #CBD5E1",
+                padding: "24px",
+              }}
+            >
+              <h3 style={{ fontSize: "16px", fontWeight: 800, margin: "0 0 12px" }}>
+                Statement for Period: Current Operating Year (2026)
+              </h3>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+                <thead>
+                  <tr style={{ borderBottom: "2px solid #E2E8F0", textAlign: "left", color: "#64748B" }}>
+                    <th style={{ padding: "8px" }}>Ledger Line</th>
+                    <th style={{ padding: "8px" }}>Category</th>
+                    <th style={{ padding: "8px" }}>Status</th>
+                    <th style={{ padding: "8px", textAlign: "right" }}>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: "1px solid #F1F5F9" }}>
+                    <td style={{ padding: "10px 8px" }}>Initial Escrow Cash Received</td>
+                    <td style={{ padding: "10px 8px" }}>Direct Escrow Deposit</td>
+                    <td style={{ padding: "10px 8px", color: "#166534", fontWeight: 700 }}>CLEARED</td>
+                    <td style={{ padding: "10px 8px", textAlign: "right", fontWeight: 700 }}>
+                      {formatMoneyMinor({ amountMinor: poolReport?.funded_cash_received_minor ?? 0, currency: "NGN" })}
+                    </td>
+                  </tr>
+                  <tr style={{ borderBottom: "1px solid #F1F5F9" }}>
+                    <td style={{ padding: "10px 8px" }}>Consultation Redemptions</td>
+                    <td style={{ padding: "10px 8px" }}>Verified Teleconsults</td>
+                    <td style={{ padding: "10px 8px", color: "#0F766E", fontWeight: 700 }}>SETTLED</td>
+                    <td style={{ padding: "10px 8px", textAlign: "right", fontWeight: 700 }}>
+                      {formatMoneyMinor({ amountMinor: poolReport?.redeemed_settled_minor ?? 0, currency: "NGN" })}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: "10px 8px", fontWeight: 800 }}>Remaining Escrow Balance</td>
+                    <td style={{ padding: "10px 8px" }}>Available Humanitarian Escrow</td>
+                    <td style={{ padding: "10px 8px", color: "#0284C7", fontWeight: 800 }}>ACTIVE</td>
+                    <td style={{ padding: "10px 8px", textAlign: "right", fontWeight: 800, color: "#0284C7" }}>
+                      {formatMoneyMinor({ amountMinor: poolReport?.available_to_reserve_minor ?? 0, currency: "NGN" })}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 3: PROGRAMME TERMS & RULES                                    */}
+        {/* ================================================================= */}
+        {activeTab === "TERMS" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: 0 }}>
+              Programme Scope & Governance Terms
+            </h2>
+
+            <div
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: LW_DESIGN_TOKENS.radius.lg,
+                border: "1px solid #CBD5E1",
+                padding: "24px",
+                lineHeight: 1.6,
+                fontSize: "14px",
+                color: "#334155",
+              }}
+            >
+              <h3 style={{ fontSize: "16px", fontWeight: 800, color: LW_DESIGN_TOKENS.colors.royalNavy, margin: "0 0 10px" }}>
+                LoveWorld Medicaid Humanitarian Care Pool (AGR-LW-MEDICAID-NG-2026)
+              </h3>
+              <p>
+                <strong>1. Covered Services:</strong> Remote General Practice teleconsultations, acute malaria/fever triage, initial prescription bridging, and coordination escalation to LoveWorld Medical Centre Ikeja or partner facilities.
+              </p>
+              <p>
+                <strong>2. Entitlement Invariant:</strong> Funds are locked in restricted pool accounts. No funds may be co-mingled with operator working capital. Unused funds remain credited to the sponsor.
+              </p>
+              <p>
+                <strong>3. Privacy Protection:</strong> In accordance with the NDPA 2023, GDPR Article 9, and the LoveWorld Care Blueprint (§10.5), patient personal identifiable information (PII) and personal health information (PHI) are strictly isolated. Sponsors receive aggregate utilization only, subject to k-anonymity suppression (k ≥ 5).
+              </p>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

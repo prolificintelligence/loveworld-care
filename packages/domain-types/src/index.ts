@@ -343,3 +343,192 @@ export function computeEncounterUnitEconomics(
     isStructurallyPositive: contributionMarginMinor > 0,
   };
 }
+
+// =============================================================================
+// §4 & §5 Longitudinal Care, Subjects, Care Plans & Coordination
+// =============================================================================
+
+export interface PatientSubject {
+  readonly patient_id: string;
+  readonly account_id: string;
+  readonly full_name: string;
+  readonly date_of_birth_iso: string;
+  readonly gender: string;
+  readonly relationship_to_account: "SELF" | "CHILD" | "SPOUSE" | "PARENT" | "DEPENDENT" | string;
+  readonly jurisdiction: string;
+  readonly created_at_iso: string;
+}
+
+export interface CareRelationship {
+  readonly relationship_id: string;
+  readonly account_id: string;
+  readonly patient_id: string;
+  readonly relationship_type: "SELF" | "GUARDIAN" | "ADULT_PROXY" | string;
+  readonly allowed_scopes: readonly string[];
+  readonly revoked: boolean;
+}
+
+export interface CareContinuityPlan {
+  readonly plan_id: string;
+  readonly episode_id: string;
+  readonly encounter_id: string;
+  readonly patient_id: string;
+  readonly owning_clinician_id: string;
+  readonly programme_name: string;
+  readonly monitoring_instructions: string;
+  readonly due_at_iso: string;
+  readonly status: "ACTIVE" | "COMPLETED" | "ESCALATED";
+  readonly goals: readonly string[];
+  readonly actions: readonly string[];
+}
+
+export interface MedicationAdherenceReport {
+  readonly report_id: string;
+  readonly status: "TAKEN" | "SKIPPED" | "ISSUE";
+  readonly reported_by_actor_id: string;
+  readonly reported_at_iso: string;
+  readonly notes?: string | null;
+}
+
+export interface MedicationInstruction {
+  readonly medication_id: string;
+  readonly patient_id: string;
+  readonly encounter_id: string;
+  readonly prescriber_clinician_id: string;
+  readonly prescriber_clinician_name: string;
+  readonly medication_name: string;
+  readonly dosage_instructions: string;
+  readonly frequency_per_day: number;
+  readonly duration_days: number;
+  readonly clinical_indication: string;
+  readonly status: "ACTIVE" | "COMPLETED" | "DISCONTINUED";
+  readonly prescribed_at_iso: string;
+  readonly adherence_reports: readonly MedicationAdherenceReport[];
+}
+
+export interface CareTask {
+  readonly task_id: string;
+  readonly patient_id: string;
+  readonly episode_id?: string | null;
+  readonly encounter_id?: string | null;
+  readonly assigned_to: "PATIENT" | "CLINICIAN" | "COORDINATOR";
+  readonly task_type:
+    | "MEDICATION_REMINDER"
+    | "CHECK_IN"
+    | "RESULT_REVIEW"
+    | "FOLLOW_UP"
+    | "REFERRAL_FOLLOW_UP"
+    | "CLINICAL_REVIEW";
+  readonly title: string;
+  readonly description: string;
+  readonly due_at_iso: string;
+  readonly status: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "VERIFIED_CLOSED" | "CANCELLED" | "ESCALATED";
+  readonly self_reported_completion: boolean;
+  readonly resolved_at_iso?: string | null;
+  readonly created_at_iso: string;
+}
+
+export interface ClinicalObservation {
+  readonly observation_id: string;
+  readonly patient_id: string;
+  readonly kind: "SYMPTOM" | "VITAL" | "LAB_RESULT" | "DOCUMENT";
+  readonly name: string;
+  readonly value: string;
+  readonly unit?: string | null;
+  readonly observed_at_iso: string;
+  readonly recorded_at_iso: string;
+  readonly source: "PATIENT_REPORTED" | "CLINICIAN_ENTERED" | "LAB_UPLOAD";
+  readonly verification_status: "UNVERIFIED" | "DRAFT" | "VERIFIED";
+  readonly notes?: string | null;
+}
+
+export interface NetworkFacility {
+  readonly facility_id: string;
+  readonly facility_name: string;
+  readonly facility_code: string;
+  readonly address: string;
+  readonly jurisdiction: string;
+  readonly geocoordinates: { readonly lat: number; readonly lng: number };
+  readonly services: readonly string[];
+  readonly hours: string;
+  readonly contact_phone: string;
+  readonly is_verified: boolean;
+  readonly readiness_state: "CONFIRMED_AVAILABLE" | "STALE" | "UNAVAILABLE";
+  readonly readiness_updated_at_iso: string;
+  readonly readiness_expires_at_iso: string;
+}
+
+export interface CoordinationTask {
+  readonly task_id: string;
+  readonly episode_id: string;
+  readonly patient_id: string;
+  readonly work_state:
+    | "AWAITING_ASSIGNMENT"
+    | "AWAITING_PATIENT"
+    | "CALLBACK_DUE"
+    | "REFERRAL_PENDING"
+    | "RESULT_OVERDUE"
+    | "SERVICE_EXCEPTION";
+  readonly urgency: "ROUTINE" | "URGENT" | "EMERGENCY";
+  readonly due_at_iso: string;
+  readonly owner_team: string;
+  readonly claimed_by?: string | null;
+  readonly communication_status: string;
+  readonly next_action: string;
+  readonly created_at_iso: string;
+}
+
+export interface DirectorateAction {
+  readonly action_id: string;
+  readonly metric_id: string;
+  readonly title: string;
+  readonly description: string;
+  readonly owner_team: string;
+  readonly assigned_to: string;
+  readonly due_date_iso: string;
+  readonly status: "OPEN" | "IN_PROGRESS" | "RESOLVED";
+  readonly evidence_notes: string;
+  readonly created_at_iso: string;
+}
+
+export interface DirectorateMetric {
+  readonly id: string;
+  readonly name: string;
+  readonly value: number;
+  readonly unit: string;
+  readonly definition: string;
+  readonly denominator: string;
+  readonly reporting_period: string;
+  readonly refresh_time_iso: string;
+  readonly source: string;
+  readonly completeness: string;
+}
+
+export interface FinanceException {
+  readonly exception_id: string;
+  readonly agreement_id?: string | null;
+  readonly encounter_id?: string | null;
+  readonly exception_type: string;
+  readonly amount_minor: number;
+  readonly currency: string;
+  readonly reason: string;
+  readonly maker_id: string;
+  readonly checker_id?: string | null;
+  readonly status: "PENDING_REVIEW" | "APPROVED" | "REJECTED" | "REMEDIATED";
+  readonly action_notes?: string | null;
+  readonly created_at_iso: string;
+  readonly resolved_at_iso?: string | null;
+}
+
+export interface ReconciliationSummary {
+  readonly summary_id: string;
+  readonly as_of_iso: string;
+  readonly total_sponsor_cash_received_minor: number;
+  readonly total_reserved_minor: number;
+  readonly total_redeemed_minor: number;
+  readonly total_available_liability_minor: number;
+  readonly total_clinician_payables_minor: number;
+  readonly total_clinician_paid_minor: number;
+  readonly unresolved_exceptions_count: number;
+  readonly double_entry_balanced: boolean;
+}
