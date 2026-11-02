@@ -10,6 +10,7 @@ __pycache__/
 .mypy_cache/
 
 # Build & Cache Artifacts
+.vercel/
 .next/
 out/
 dist/
@@ -23,6 +24,14 @@ build/
 .env.*.local
 *.pem
 *.key
+scripts/check_deployments.py
+scripts/deploy_to_vercel.py
+scripts/get_api_build_log.py
+scripts/set_vercel_api_env.py
+scripts/setup_vercel_projects.py
+scripts/sync_secrets_to_env.py
+scripts/trigger_all_deployments.py
+scripts/update_vercel_api_env.py
 
 # OS & Editor
 .DS_Store
