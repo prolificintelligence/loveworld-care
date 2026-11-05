@@ -4,6 +4,7 @@ export interface ClinicalRow {
   patient_id?: string; encounter_id?: string; service?: string; confidentiality?: string;
   created_at?: string; updated_at?: string; data: Record<string, Value>;
   patient_banner?: Record<string, Value>;
+  use_restriction?: string;
 }
 export interface Option { value: string; label: string }
 export interface Field {

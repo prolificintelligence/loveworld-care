@@ -116,6 +116,18 @@ def install(app, cfg, database, box, actor_for):
     async def presented(session, row):
         resource = s.opened(box, row)
         if row["patient_id"]:
+            markers = (
+                await session.execute(
+                    select(t.records).where(
+                        t.records.c.facility_id == row["facility_id"],
+                        t.records.c.patient_id == row["patient_id"],
+                        t.records.c.kind == "record_error",
+                    )
+                )
+            ).mappings()
+            if any(s.opened(box, marker)["data"]["target_id"] == row["id"] for marker in markers):
+                resource["use_restriction"] = "ENTERED_IN_ERROR"
+        if row["patient_id"]:
             patient = await s.fetch(session, row["facility_id"], row["patient_id"], "patient")
             data = s.opened(box, patient)["data"]
             resource["patient_banner"] = {
@@ -625,7 +637,7 @@ def install(app, cfg, database, box, actor_for):
                         raise
                     withheld += 1
                 else:
-                    visible.append(s.opened(box, row))
+                    visible.append(await presented(session, row))
             allergy_rows = [r for r in visible if r["kind"] == "allergy"]
             await s.audit(
                 session,

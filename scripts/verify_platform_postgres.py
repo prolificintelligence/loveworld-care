@@ -123,7 +123,7 @@ async def verify():
                 {
                     "postgres_verification": "PASSED",
                     "schema_version": version,
-                    "protected_tables": 6,
+                    "protected_tables": 10,
                     "concurrent_duplicate_effects": 1,
                     "key_reuse_conflict": 409,
                     "append_only_trigger": "ENFORCED",

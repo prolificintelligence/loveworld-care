@@ -57,6 +57,32 @@ Live destinations and exact deployment/test evidence are maintained in [the EMR 
 
 ## Assurance and next programme work
 
+The 21 shared specifications have the following implementation coverage. This is software coverage, not acceptance certification.
+
+| Specification | Current coverage | Outstanding qualification or scope |
+|---|---|---|
+| SPEC-001 Screens/design | Functional labelled staff forms, patient banner, error/conflict/empty/denied states | Full screen inventory, accessibility/device/UAT qualification |
+| SPEC-002 Journeys | Institutional and clinical engineering journeys executed | Complete 20-journey service blueprint acceptance |
+| SPEC-003 Authorisation | Persistent roles, clinical privileges, services, treatment/subject and sensitive scope | Complete caregiver/delegation/emergency-access policies and review |
+| SPEC-004 Domain/lineage | Versioned encrypted records, immutable clinical events and policy/professional evidence | Remaining analytics/programme/exchange entities and adopted mappings |
+| SPEC-005 Master/readiness | Facility hierarchy, registry and identity/statutory checks | Adopted global roster, readiness assertions, location/service stewardship |
+| SPEC-006 Forms/fields | Typed native institutional/clinical input contracts | Complete parity/adoption of all 51 suite forms and country variants |
+| SPEC-007 Indicators | Not delivered | Adopted indicator definitions, computation and evidence |
+| SPEC-008 Reporting/quality | Not delivered as a reporting module | Return validation, revision reconciliation and quality stewardship |
+| SPEC-009 State rules | Version/state guards across delivered institutional and EMR flows | Complete remaining state families, exception paths and operating adoption |
+| SPEC-010 API contracts | Typed scoped native API; version/idempotency/error checks | Remaining commands/queries and interface conformance |
+| SPEC-011 Events/jobs | Durable transactional history/outbox and real invitation delivery | Clinical scheduler/escalation, full consumers, dead-letter/recovery qualification |
+| SPEC-012 Exchange | Scoped, revocable native source packages with original versions | Qualified FHIR/counterpart exchange and actual recipient receipts |
+| SPEC-013 Intelligence | Fixed public free-model readiness and control | Governed clinical tools, references, memory, evaluation and data routing |
+| SPEC-014 Analytics | Not delivered | Disclosure controls, aggregate snapshots and executive projections |
+| SPEC-015 Reliability | Health/readiness, restart persistence and actual database concurrency proofs | Load/capacity, service levels, recovery and backup/restore drills |
+| SPEC-016 Security | MFA, secure sessions, encrypted clinical data, protected audit and signed history | Independent security review, penetration test, recovery and operational controls |
+| SPEC-017 Offline | Explicitly deferred by the project lead | Full facility runtime, trusted packages, sync, fencing and outage qualification |
+| SPEC-018 Clinical teamwork | Protected signatures/addenda, order/execution separation and owned obligations | Complete specialist/shift coverage and facility operating acceptance |
+| SPEC-019 Terminology/medicines | Original code/system/version, units/missingness and exact adopted products | Licensed mappings/checking engines, calculations and specialty schedules |
+| SPEC-020 Department/device interfaces | Source/study/accession references and manual native department workflows | Actual LIS/PACS/DICOM/analyser/device integration and conformance |
+| SPEC-021 Jurisdiction activation | Explicit recorded facility authority and bounded service/professional scope | Adopted country dossiers, legal/retention/tax rules and operating approvals |
+
 The release record lists exact executed tests, actual PostgreSQL proofs, schema version, cloud deployment identifiers and external HTTP checks. The suite's 111 acceptance specifications are not silently changed to PASS by a build or a unit test. Actual facility/user UAT and clinical safety/operational acceptance remain separate work.
 
 The next programme priorities are: qualify and complete the outstanding EMR operating/specialty controls; nominate and activate real clinical governance; deliver patient/family self-service; implement reporting/data stewardship and disclosure-controlled Directorate intelligence; complete care-finance and actual external-system integrations; then carry out the deferred facility-local offline deployment and recovery exercises. Optional ERP remains separately scoped.

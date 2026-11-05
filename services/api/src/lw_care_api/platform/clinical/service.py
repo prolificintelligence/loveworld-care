@@ -81,6 +81,8 @@ class ClinicalService:
             "The referenced clinical record belongs to a different context",
             409,
         )
+        if kind in {"order", "medication", "specimen", "procedure", "sharing_grant"}:
+            await self.usable(row)
         return row
 
     async def signed_note(self, identifier, patient_id, encounter_id=None):
@@ -385,8 +387,14 @@ class ClinicalService:
             )
             body["confidentiality"] = "RESTRICTED"
         if body.get("amends_id"):
-            original = await self.signed_note(
-                body["amends_id"], body["patient_id"], body["encounter_id"]
+            original = await self.linked(
+                body["amends_id"], "note", body["patient_id"], body["encounter_id"]
+            )
+            require(
+                original["status"] == "SIGNED",
+                "SIGNED_RECORD_REQUIRED",
+                "An addendum must reference retained signed evidence",
+                409,
             )
             if original["confidentiality"] == "RESTRICTED":
                 require(

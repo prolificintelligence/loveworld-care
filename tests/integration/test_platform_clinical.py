@@ -763,6 +763,15 @@ def test_sensitive_notes_and_entered_error_preserve_source(journey):
         },
     )
     assert error["data"]["target_id"] == note["id"]
+    correction = j.note(
+        patient,
+        encounter,
+        confidentiality="RESTRICTED",
+        note_type="MENTAL_HEALTH",
+        amends_id=note["id"],
+        amendment_reason="Correction of retained entered-in-error source",
+    )
+    assert correction["data"]["amends_id"] == note["id"]
     assert j.get(f"/records/{note['id']}").json()["data"]["narrative"] == note["data"]["narrative"]
 
 
@@ -1273,3 +1282,50 @@ def test_identity_link_requires_independent_review_and_never_merges_charts(journ
         j.get(f"/records/{second['id']}").json()["data"]["display_name"]
         == "Synthetic second identity"
     )
+
+
+def test_entered_in_error_order_blocks_further_actual_execution(journey):
+    j = journey
+    patient, encounter = j.encounter()
+    product, medication = j.medicine(patient, encounter)
+    j.create(
+        f"/records/{medication['id']}/entered-in-error",
+        {
+            "patient_id": patient["id"],
+            "expected_version": 3,
+            "reason": "Synthetic source entered in error",
+            "intent_confirmed": True,
+        },
+    )
+    assert j.get(f"/records/{medication['id']}").json()["use_restriction"] == "ENTERED_IN_ERROR"
+    lot = j.create(
+        "/stock",
+        {
+            "product_id": product["id"],
+            "batch": "ERROR-PROOF",
+            "expires_at": stamp(3),
+            "quantity": "3",
+            "unit": "TEST_UNIT",
+            "evidence": "Synthetic test receipt",
+        },
+        "pharmacy",
+    )
+    response = j.post(
+        "/dispenses",
+        {
+            **j.context(patient, encounter),
+            "medication_id": medication["id"],
+            "expected_order_version": 3,
+            "lot_id": lot["id"],
+            "expected_lot_version": 1,
+            "quantity": "1",
+            "verification": "Synthetic attempted execution",
+            "patient_identity_check": "Synthetic check",
+        },
+        "pharmacy",
+    )
+    assert (
+        response.status_code == 409
+        and response.json()["error"]["code"] == "RECORD_ENTERED_IN_ERROR"
+    )
+    assert Decimal(j.get("/stock", "pharmacy").json()["items"][0]["quantity"]) == 3
