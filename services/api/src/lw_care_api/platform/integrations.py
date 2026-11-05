@@ -67,7 +67,8 @@ async def verify_free_model(cfg):
                 json={
                     "model": cfg.openrouter_model,
                     "messages": [{"role": "user", "content": "Reply with the single word READY."}],
-                    "max_tokens": 64,
+                    "max_tokens": 512,
+                    "reasoning": {"enabled": False},
                     "provider": {"max_price": {"prompt": 0, "completion": 0}},
                 },
             )
