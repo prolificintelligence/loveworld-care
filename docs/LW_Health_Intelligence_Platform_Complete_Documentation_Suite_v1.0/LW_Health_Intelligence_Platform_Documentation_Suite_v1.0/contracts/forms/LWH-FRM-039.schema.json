@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:lwh:LWH-FRM-039:1.0.0",
+  "title": "Postnatal review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "form_id",
+    "schema_version",
+    "stage",
+    "authority_node_id",
+    "actor_id",
+    "facility_or_unit_id",
+    "answers"
+  ],
+  "properties": {
+    "form_id": {
+      "const": "LWH-FRM-039"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "stage": {
+      "enum": [
+        "draft",
+        "submitted"
+      ]
+    },
+    "authority_node_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "actor_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "facility_or_unit_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "patient_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "encounter_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "answers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "programme_episode_id": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/ref"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-039.F001 — Maternal or newborn episode"
+        },
+        "clinical_context": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-039.F002 — Relevant symptoms/concerns and source"
+        },
+        "observations": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/observations"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-039.F003 — Actual measurements"
+        },
+        "feeding_support_context": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-039.F004 — Applicable reviewed support"
+        },
+        "assessment_plan": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-039.F005 — Responsible clinician decision"
+        },
+        "followup_ref": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/ref"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-039.F006 — Review/escalation and accepted owner"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "submitted"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "answers": {
+            "required": [
+              "programme_episode_id",
+              "clinical_context",
+              "assessment_plan",
+              "followup_ref"
+            ]
+          }
+        },
+        "required": [
+          "patient_id"
+        ]
+      }
+    }
+  ]
+}

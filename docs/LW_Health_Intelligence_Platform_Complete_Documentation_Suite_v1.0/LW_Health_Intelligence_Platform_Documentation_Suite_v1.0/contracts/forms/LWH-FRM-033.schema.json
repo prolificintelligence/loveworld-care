@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:lwh:LWH-FRM-033:1.0.0",
+  "title": "Clinical stock movement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "form_id",
+    "schema_version",
+    "stage",
+    "authority_node_id",
+    "actor_id",
+    "facility_or_unit_id",
+    "answers"
+  ],
+  "properties": {
+    "form_id": {
+      "const": "LWH-FRM-033"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "stage": {
+      "enum": [
+        "draft",
+        "submitted"
+      ]
+    },
+    "authority_node_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "actor_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "facility_or_unit_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "answers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "product": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/concept"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-033.F001 — Product/form/strength/unit"
+        },
+        "lot_id": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/ref"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-033.F002 — Batch/expiry/location"
+        },
+        "movement_type": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/stock_move"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-033.F003 — Receipt/issue/return/quarantine/adjustment/reversal"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/quantity"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-033.F004 — Exact signed movement under direction rules"
+        },
+        "source_event_id": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/ref"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-033.F005 — Unique clinical/receiving event"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-033.F006 — Required for adjustment/quarantine"
+        },
+        "approval_ref": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/ref"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-033.F007 — Applicable independent authorisation"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "submitted"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "answers": {
+            "required": [
+              "product",
+              "lot_id",
+              "movement_type",
+              "quantity",
+              "source_event_id"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

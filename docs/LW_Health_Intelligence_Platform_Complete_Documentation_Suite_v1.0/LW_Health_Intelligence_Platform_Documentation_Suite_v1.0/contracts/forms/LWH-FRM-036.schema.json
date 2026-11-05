@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:lwh:LWH-FRM-036:1.0.0",
+  "title": "Transfer and discharge package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "form_id",
+    "schema_version",
+    "stage",
+    "authority_node_id",
+    "actor_id",
+    "facility_or_unit_id",
+    "answers"
+  ],
+  "properties": {
+    "form_id": {
+      "const": "LWH-FRM-036"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "stage": {
+      "enum": [
+        "draft",
+        "submitted"
+      ]
+    },
+    "authority_node_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "actor_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "facility_or_unit_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "patient_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "encounter_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "answers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transition_type": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/concept"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-036.F001 — Ward/facility transfer, discharge, leave, death/other"
+        },
+        "clinical_summary": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-036.F002 — Signed relevant findings and course"
+        },
+        "medicine_reconciliation_refs": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/refs"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-036.F003 — Reviewed continuing/stopped instructions"
+        },
+        "pending_order_task_refs": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/refs"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-036.F004 — Results and follow-up remain owned"
+        },
+        "receiving_handover": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/handover"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-036.F005 — Required for transfer"
+        },
+        "patient_instructions": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-036.F006 — Reviewed usable instructions"
+        },
+        "followup_plan_ref": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/ref"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-036.F007 — Responsible team and review path"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "submitted"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "answers": {
+            "required": [
+              "transition_type",
+              "clinical_summary",
+              "medicine_reconciliation_refs",
+              "patient_instructions",
+              "followup_plan_ref"
+            ]
+          }
+        },
+        "required": [
+          "patient_id"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "rewrites": [{"source": "/(.*)", "destination": "/api/index.py"}],
+  "functions": {"api/index.py": {"includeFiles": "services/api/src/**", "maxDuration": 60}},
+  "crons": [{"path": "/v1/internal/jobs", "schedule": "0 0 * * *"}]
+}

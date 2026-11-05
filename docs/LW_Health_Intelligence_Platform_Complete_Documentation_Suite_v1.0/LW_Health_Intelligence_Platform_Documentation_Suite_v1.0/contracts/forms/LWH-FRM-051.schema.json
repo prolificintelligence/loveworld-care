@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:lwh:LWH-FRM-051:1.0.0",
+  "title": "Treatment consent, refusal and supported decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "form_id",
+    "schema_version",
+    "stage",
+    "authority_node_id",
+    "actor_id",
+    "facility_or_unit_id",
+    "answers"
+  ],
+  "properties": {
+    "form_id": {
+      "const": "LWH-FRM-051"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "stage": {
+      "enum": [
+        "draft",
+        "submitted"
+      ]
+    },
+    "authority_node_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "actor_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "facility_or_unit_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "patient_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "encounter_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "answers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "intervention_scope": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-051.F001 — Specific proposed care and explanation"
+        },
+        "decision_capacity_context": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-051.F002 — Patient/representative authority and support"
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-051.F003 — Consent/refusal/withdrawal/other applicable authority"
+        },
+        "information_provided": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-051.F004 — Relevant explanation and questions addressed"
+        },
+        "authority_evidence": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/refs"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-051.F005 — Representative/emergency/legal evidence as applicable"
+        },
+        "witness_context": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-051.F006 — Required where local policy applies"
+        },
+        "valid_period": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/period"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-051.F007 — Scope/expiry/review"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "submitted"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "answers": {
+            "required": [
+              "intervention_scope",
+              "decision_capacity_context",
+              "decision",
+              "information_provided"
+            ]
+          }
+        },
+        "required": [
+          "patient_id"
+        ]
+      }
+    }
+  ]
+}

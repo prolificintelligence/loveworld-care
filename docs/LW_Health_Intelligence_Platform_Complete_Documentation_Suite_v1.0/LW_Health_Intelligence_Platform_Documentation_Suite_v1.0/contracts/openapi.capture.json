@@ -1,0 +1,3452 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "LW Health Intelligence capture API reference",
+    "version": "1.0.0",
+    "description": "Reference capture surface. State-changing clinical/financial/affiliation commands additionally follow LWH-SPEC-010 and cannot be authorised by capture alone."
+  },
+  "servers": [
+    {
+      "url": "https://facility.example.invalid"
+    }
+  ],
+  "paths": {
+    "/v1/facilities": {
+      "post": {
+        "operationId": "LWH-API-001",
+        "summary": "Facility registration",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-001.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/facilities/{id}/readiness": {
+      "post": {
+        "operationId": "LWH-API-002",
+        "summary": "Readiness assertion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-002.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/obligations/{id}/returns": {
+      "post": {
+        "operationId": "LWH-API-003",
+        "summary": "Facility return submission",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-003.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/zones/{id}/returns": {
+      "post": {
+        "operationId": "LWH-API-004",
+        "summary": "Zone return",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-004.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/health-events": {
+      "post": {
+        "operationId": "LWH-API-005",
+        "summary": "Occurrence notification",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-005.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/interventions": {
+      "post": {
+        "operationId": "LWH-API-006",
+        "summary": "Action proposal/assignment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-006.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/applications/{id}/decisions": {
+      "post": {
+        "operationId": "LWH-API-007",
+        "summary": "Final affiliation decision",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-007.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/applications/{id}/inspections": {
+      "post": {
+        "operationId": "LWH-API-008",
+        "summary": "Inspection evidence",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-008.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/affiliations/{id}/renewals": {
+      "post": {
+        "operationId": "LWH-API-009",
+        "summary": "Renewal application",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-009.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/findings/{id}/responses": {
+      "post": {
+        "operationId": "LWH-API-010",
+        "summary": "Corrective response",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-010.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/affiliations/{id}/restrictions": {
+      "post": {
+        "operationId": "LWH-API-011",
+        "summary": "Adverse decision/review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-011.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/returns/{id}/review": {
+      "post": {
+        "operationId": "LWH-API-012",
+        "summary": "Verification/correction review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-012.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/content-versions": {
+      "post": {
+        "operationId": "LWH-API-013",
+        "summary": "Editorial approval workflow",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-013.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/interventions/{id}/reviews": {
+      "post": {
+        "operationId": "LWH-API-014",
+        "summary": "Outcome review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-014.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/facility-services/{id}/activations": {
+      "post": {
+        "operationId": "LWH-API-015",
+        "summary": "Service activation",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-015.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/referrals": {
+      "post": {
+        "operationId": "LWH-API-016",
+        "summary": "Referral request/handover",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-016.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/sharing-grants": {
+      "post": {
+        "operationId": "LWH-API-017",
+        "summary": "Record-sharing authority",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-017.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/organisation-role-assignments": {
+      "post": {
+        "operationId": "LWH-API-018",
+        "summary": "Role/delegation change",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-018.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/rights-requests": {
+      "post": {
+        "operationId": "LWH-API-019",
+        "summary": "Privacy/complaint request",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-019.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/programmes": {
+      "post": {
+        "operationId": "LWH-API-020",
+        "summary": "Funding/benefit programme",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-020.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/patients": {
+      "post": {
+        "operationId": "LWH-API-021",
+        "summary": "Patient registration",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-021.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/patients/{id}/representative-grants": {
+      "post": {
+        "operationId": "LWH-API-022",
+        "summary": "Caregiver authority",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-022.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/encounters": {
+      "post": {
+        "operationId": "LWH-API-023",
+        "summary": "Encounter assessment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-023.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/encounters/{id}/observations": {
+      "post": {
+        "operationId": "LWH-API-024",
+        "summary": "Triage/observations",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-024.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/encounters/{id}/documents": {
+      "post": {
+        "operationId": "LWH-API-025",
+        "summary": "Clinical note/addendum",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-025.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/patients/{id}/reconciliations": {
+      "post": {
+        "operationId": "LWH-API-026",
+        "summary": "Clinical list reconciliation",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-026.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/clinical-orders": {
+      "post": {
+        "operationId": "LWH-API-027",
+        "summary": "Non-medication order",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-027.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/specimens": {
+      "post": {
+        "operationId": "LWH-API-028",
+        "summary": "Specimen chain",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-028.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/diagnostic-reports": {
+      "post": {
+        "operationId": "LWH-API-029",
+        "summary": "Diagnostic result",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-029.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/medication-orders": {
+      "post": {
+        "operationId": "LWH-API-030",
+        "summary": "Medication intent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-030.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/dispenses": {
+      "post": {
+        "operationId": "LWH-API-031",
+        "summary": "Actual medicine supply",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-031.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/administrations": {
+      "post": {
+        "operationId": "LWH-API-032",
+        "summary": "Actual dose/omission",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-032.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/clinical-stock-movements": {
+      "post": {
+        "operationId": "LWH-API-033",
+        "summary": "Stock movement",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-033.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/admissions": {
+      "post": {
+        "operationId": "LWH-API-034",
+        "summary": "Admission/occupancy",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-034.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/nursing-records": {
+      "post": {
+        "operationId": "LWH-API-035",
+        "summary": "Nursing assessment/care",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-035.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/care-transitions": {
+      "post": {
+        "operationId": "LWH-API-036",
+        "summary": "Transfer/discharge",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-036.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/maternal-reviews": {
+      "post": {
+        "operationId": "LWH-API-037",
+        "summary": "ANC care capture",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-037.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/birth-records": {
+      "post": {
+        "operationId": "LWH-API-038",
+        "summary": "Birth/newborn capture",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-038.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/postnatal-reviews": {
+      "post": {
+        "operationId": "LWH-API-039",
+        "summary": "PNC capture",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-039.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/child-health-reviews": {
+      "post": {
+        "operationId": "LWH-API-040",
+        "summary": "Growth/immunisation capture",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-040.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/procedure-records": {
+      "post": {
+        "operationId": "LWH-API-041",
+        "summary": "Procedure phases/record",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-041.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/anaesthesia-records": {
+      "post": {
+        "operationId": "LWH-API-042",
+        "summary": "Anaesthesia/recovery",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-042.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/transfusion-records": {
+      "post": {
+        "operationId": "LWH-API-043",
+        "summary": "Component/recipient chain",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-043.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/care-invoices": {
+      "post": {
+        "operationId": "LWH-API-044",
+        "summary": "Care charge/invoice",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-044.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/payment-receipts": {
+      "post": {
+        "operationId": "LWH-API-045",
+        "summary": "Cash/provider receipt",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-045.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/claims/{id}/reconciliations": {
+      "post": {
+        "operationId": "LWH-API-046",
+        "summary": "Claim adjudication/remittance",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-045.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/node-reconciliations": {
+      "post": {
+        "operationId": "LWH-API-047",
+        "summary": "Outage/sync resolution",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-046.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/country-activations": {
+      "post": {
+        "operationId": "LWH-API-048",
+        "summary": "Country activation dossier",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-047.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/enterprise/{module}/transactions": {
+      "post": {
+        "operationId": "LWH-API-049",
+        "summary": "Optional ERP transaction",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "module",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-048.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/care-plans": {
+      "post": {
+        "operationId": "LWH-API-050",
+        "summary": "Plan/follow-up",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-049.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/coverage-rosters": {
+      "post": {
+        "operationId": "LWH-API-051",
+        "summary": "Staffed clinical coverage",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-050.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    },
+    "/v1/treatment-consents": {
+      "post": {
+        "operationId": "LWH-API-052",
+        "summary": "Treatment consent/refusal",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./forms/LWH-FRM-051.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created/captured at named authority; no implicit clinical signing or external fulfilment"
+          },
+          "202": {
+            "description": "Durable accepted work with named pending state, not proof of completion"
+          },
+          "403": {
+            "description": "Purpose/role/subject action denied"
+          },
+          "409": {
+            "description": "State, authority or idempotency conflict"
+          },
+          "412": {
+            "description": "Expected version failed"
+          },
+          "422": {
+            "description": "Field/rule validation failure"
+          },
+          "503": {
+            "description": "Required authority unavailable; no fake success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

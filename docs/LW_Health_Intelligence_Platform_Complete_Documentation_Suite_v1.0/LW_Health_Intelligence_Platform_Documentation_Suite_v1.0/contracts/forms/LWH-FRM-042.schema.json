@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:lwh:LWH-FRM-042:1.0.0",
+  "title": "Anaesthesia and recovery record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "form_id",
+    "schema_version",
+    "stage",
+    "authority_node_id",
+    "actor_id",
+    "facility_or_unit_id",
+    "answers"
+  ],
+  "properties": {
+    "form_id": {
+      "const": "LWH-FRM-042"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "stage": {
+      "enum": [
+        "draft",
+        "submitted"
+      ]
+    },
+    "authority_node_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "actor_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "facility_or_unit_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "patient_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "encounter_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "answers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "procedure_ref": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/ref"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-042.F001 — Correct procedure/encounter"
+        },
+        "preassessment": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-042.F002 — Actual assessment and plan"
+        },
+        "monitoring": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/observations"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-042.F003 — Actual time-series observations"
+        },
+        "medication_event_refs": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/refs"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-042.F004 — Link signed orders/actual administrations"
+        },
+        "clinical_events": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/text"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-042.F005 — Actual course, complications and interventions"
+        },
+        "recovery_handover": {
+          "anyOf": [
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/handover"
+            },
+            {
+              "$ref": "urn:lwh:form-types:1.0.0#/$defs/absence"
+            }
+          ],
+          "description": "LWH-FRM-042.F006 — Actual accepted receiver and status"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "submitted"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "answers": {
+            "required": [
+              "procedure_ref",
+              "preassessment"
+            ]
+          }
+        },
+        "required": [
+          "patient_id"
+        ]
+      }
+    }
+  ]
+}

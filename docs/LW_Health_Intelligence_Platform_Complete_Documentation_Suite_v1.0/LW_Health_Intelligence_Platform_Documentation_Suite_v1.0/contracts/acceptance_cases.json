@@ -1,0 +1,926 @@
+[
+  {
+    "id": "LWH-PRD-001-AT001",
+    "document_id": "LWH-PRD-001",
+    "title": "Scoped onboarding",
+    "steps": "Invite a zone coordinator and facility administrator.",
+    "expected": "Each sees only the assigned resources and role actions.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-001-AT002",
+    "document_id": "LWH-PRD-001",
+    "title": "Wrong context",
+    "steps": "Open another patient/facility identifier through API.",
+    "expected": "Request is denied with no record content leaked.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-001-AT003",
+    "document_id": "LWH-PRD-001",
+    "title": "Offline departure",
+    "steps": "Revoke a professional centrally during a facility partition.",
+    "expected": "Node applies bounded offline policy, displays freshness and reconciles access on reconnect.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-AT001",
+    "document_id": "LWH-PRD-002",
+    "title": "Two sites",
+    "steps": "Register two sites owned by one institution.",
+    "expected": "Directory and reports count sites and owners correctly.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-AT002",
+    "document_id": "LWH-PRD-002",
+    "title": "Sensitive evidence",
+    "steps": "Fetch a public profile and its attachments.",
+    "expected": "Only eligible public information is returned.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-AT003",
+    "document_id": "LWH-PRD-002",
+    "title": "Stale service",
+    "steps": "Search when a service readiness assertion has expired.",
+    "expected": "No confirmed routing is offered from stale readiness.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-AT001",
+    "document_id": "LWH-PRD-003",
+    "title": "Decision authority",
+    "steps": "Submit a complete inspected case through a regional reviewer.",
+    "expected": "Only the central authorised Directorate decision activates affiliation.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-AT002",
+    "document_id": "LWH-PRD-003",
+    "title": "Expiry and appeal",
+    "steps": "Expire affiliation and lodge a review request.",
+    "expected": "Status, publication and review history remain distinct and auditable.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-AT003",
+    "document_id": "LWH-PRD-003",
+    "title": "Offline inspection",
+    "steps": "Record findings without WAN and reconnect.",
+    "expected": "Original evidence and inspector attribution arrive once; no premature approval.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-AT001",
+    "document_id": "LWH-PRD-004",
+    "title": "Nil and missing",
+    "steps": "Submit a nil return for one unit; leave another unsubmitted.",
+    "expected": "Coverage and zero activity remain distinguishable.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-AT002",
+    "document_id": "LWH-PRD-004",
+    "title": "Overlapping feeds",
+    "steps": "Load an EMR extract and an attested return for the same period.",
+    "expected": "The declared reconciliation policy prevents additive duplication.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-AT003",
+    "document_id": "LWH-PRD-004",
+    "title": "Historical revision",
+    "steps": "Revise a verified report after hierarchy changes.",
+    "expected": "Original scope/version remains reproducible and affected snapshots are corrected.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-AT001",
+    "document_id": "LWH-PRD-005",
+    "title": "Unverified signal",
+    "steps": "Submit a suspected occurrence with limited evidence.",
+    "expected": "It is visible as a signal, scoped to the right reviewers.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-AT002",
+    "document_id": "LWH-PRD-005",
+    "title": "Duplicate notification",
+    "steps": "Submit linked zone and facility notifications.",
+    "expected": "One reviewed occurrence retains both sources without inflated counts.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-AT003",
+    "document_id": "LWH-PRD-005",
+    "title": "Disconnected urgency",
+    "steps": "Report an urgent event offline.",
+    "expected": "Local care/escalation proceeds; remote delivery remains honestly pending.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-AT001",
+    "document_id": "LWH-PRD-006",
+    "title": "Invalid batch",
+    "steps": "Import rows with invalid units and one valid row.",
+    "expected": "Row-level outcomes and reconciliation totals account for every input.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-AT002",
+    "document_id": "LWH-PRD-006",
+    "title": "Late correction",
+    "steps": "Correct a previously verified value.",
+    "expected": "Original version remains and impacted aggregates are regenerated.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-AT003",
+    "document_id": "LWH-PRD-006",
+    "title": "Rule change",
+    "steps": "Run an extract under two rule versions.",
+    "expected": "Differences are explainable and old evidence remains reproducible.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-AT001",
+    "document_id": "LWH-PRD-007",
+    "title": "Hierarchical scope",
+    "steps": "Open the same period as facility, zone, region and Directorate users.",
+    "expected": "Values reconcile to authorised scope and expected-unit coverage.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-AT002",
+    "document_id": "LWH-PRD-007",
+    "title": "Disclosure export",
+    "steps": "Attempt small-cell drill-down and repeated filtered exports.",
+    "expected": "Equivalent protections apply through every delivery channel.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-AT003",
+    "document_id": "LWH-PRD-007",
+    "title": "Source outage",
+    "steps": "Break a reporting source and refresh the dashboard.",
+    "expected": "Unknown/stale state replaces successful-looking zeros.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-AT001",
+    "document_id": "LWH-PRD-008",
+    "title": "Unaccepted owner",
+    "steps": "Assign an intervention to an absent coordinator.",
+    "expected": "Escalation retains an accountable originator and no false acceptance.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-AT002",
+    "document_id": "LWH-PRD-008",
+    "title": "Completion proof",
+    "steps": "Mark work complete without required evidence.",
+    "expected": "Review blocks closure and identifies missing proof.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-AT003",
+    "document_id": "LWH-PRD-008",
+    "title": "Outcome limitation",
+    "steps": "Complete education and compare later reports with changed coverage.",
+    "expected": "System shows coverage differences and avoids unsupported causal claims.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-AT001",
+    "document_id": "LWH-PRD-009",
+    "title": "Unavailable receiver",
+    "steps": "Request referral to a centre that declines.",
+    "expected": "Originating team retains ownership and receives alternatives/escalation.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-AT002",
+    "document_id": "LWH-PRD-009",
+    "title": "Accepted transfer",
+    "steps": "Complete request through receiving outcome.",
+    "expected": "Each handoff has actual actor/time and outstanding tasks remain owned.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-AT003",
+    "document_id": "LWH-PRD-009",
+    "title": "Offline referral",
+    "steps": "Prepare a referral without WAN and record a verified phone acceptance.",
+    "expected": "Local documentation works; digital transmission and actual acceptance are separately recorded.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-AT001",
+    "document_id": "LWH-PRD-010",
+    "title": "Approval",
+    "steps": "Try to publish unreviewed clinical content.",
+    "expected": "Publication is blocked with missing review requirements.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-AT002",
+    "document_id": "LWH-PRD-010",
+    "title": "Correction",
+    "steps": "Withdraw a published item with local cached copies.",
+    "expected": "Caches update on reconnect; active views show version/validity.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-AT003",
+    "document_id": "LWH-PRD-010",
+    "title": "Private notification",
+    "steps": "Send programme reminders to an authorised audience.",
+    "expected": "External messages reveal no clinical detail by default.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-AT001",
+    "document_id": "LWH-PRD-011",
+    "title": "Care handoff",
+    "steps": "Move a patient request from assistant to clinician to facility.",
+    "expected": "Context, owner and status persist without duplicate intake.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-AT002",
+    "document_id": "LWH-PRD-011",
+    "title": "Call loss",
+    "steps": "Disconnect during a consultation.",
+    "expected": "Draft survives; no false completion or automatic charge.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-AT003",
+    "document_id": "LWH-PRD-011",
+    "title": "AI unavailable",
+    "steps": "Disable inference and request urgent assistance.",
+    "expected": "Approved guidance/escalation and staffed worklists remain usable.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-AT001",
+    "document_id": "LWH-PRD-012",
+    "title": "Scoped exchange",
+    "steps": "Authorise one referral summary and request full chart access.",
+    "expected": "Only the permitted summary is disclosed; extra access requires its own authority.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-AT002",
+    "document_id": "LWH-PRD-012",
+    "title": "Wrong patient",
+    "steps": "Receive a summary with a conflicting local identity link.",
+    "expected": "Package is quarantined and not silently added to a chart.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-AT003",
+    "document_id": "LWH-PRD-012",
+    "title": "Revocation partition",
+    "steps": "Revoke a grant while a receiver is disconnected.",
+    "expected": "Future online access stops; offline bounds and delayed receipt are visible and audited.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-AT001",
+    "document_id": "LWH-PRD-013",
+    "title": "Concurrent use",
+    "steps": "Reserve the last benefit concurrently at two clients.",
+    "expected": "Only valid allocated capacity is spendable; no negative entitlement.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-AT002",
+    "document_id": "LWH-PRD-013",
+    "title": "Cancelled care",
+    "steps": "Cancel after reservation but before fulfilment.",
+    "expected": "Reservation releases under policy; no false impact or revenue.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-AT003",
+    "document_id": "LWH-PRD-013",
+    "title": "Sponsor access",
+    "steps": "Request patient notes through programme API/export.",
+    "expected": "Clinical content is denied and aggregate protections persist.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-AT001",
+    "document_id": "LWH-PRD-014",
+    "title": "Injection",
+    "steps": "Place malicious instructions in an uploaded source document.",
+    "expected": "Tool/data scope cannot expand and the attempt is recorded.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-AT002",
+    "document_id": "LWH-PRD-014",
+    "title": "Source correction",
+    "steps": "Correct a fact used in a patient summary.",
+    "expected": "Dependent summary is invalidated and requires refresh/review.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-AT003",
+    "document_id": "LWH-PRD-014",
+    "title": "AI-off",
+    "steps": "Disable every model endpoint during clinic operation.",
+    "expected": "Core care and institutional tasks continue.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-AT001",
+    "document_id": "LWH-PRD-015",
+    "title": "Unknown patient",
+    "steps": "Register an unidentified emergency patient offline.",
+    "expected": "A provisional chart is usable and can later be reconciled safely.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-AT002",
+    "document_id": "LWH-PRD-015",
+    "title": "Allergy semantics",
+    "steps": "Open charts with unknown, none-known and confirmed allergy states.",
+    "expected": "Each is distinct and medication checks use the right state.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-AT003",
+    "document_id": "LWH-PRD-015",
+    "title": "Amendment",
+    "steps": "Correct a signed note and merge candidate identity.",
+    "expected": "Original attestation remains; link requires reviewed evidence.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-AT001",
+    "document_id": "LWH-PRD-016",
+    "title": "Urgent arrival",
+    "steps": "Register and triage an urgent patient with incomplete demographics.",
+    "expected": "Essential clinical assessment proceeds with provisional identity and owner.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-AT002",
+    "document_id": "LWH-PRD-016",
+    "title": "Unowned result",
+    "steps": "Attempt to complete an encounter with a pending review obligation.",
+    "expected": "The obligation remains assigned or explicitly handed over.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-AT003",
+    "document_id": "LWH-PRD-016",
+    "title": "WAN outage",
+    "steps": "Complete an ambulatory encounter including local diagnostics and discharge plan.",
+    "expected": "Clinical transactions persist locally and later synchronise once.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-AT001",
+    "document_id": "LWH-PRD-017",
+    "title": "Bed race",
+    "steps": "Assign two admissions to one exclusive bed concurrently.",
+    "expected": "Exactly one occupancy succeeds; the other receives an actionable conflict.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-AT002",
+    "document_id": "LWH-PRD-017",
+    "title": "Shift handover",
+    "steps": "End a shift with due medicines and an unreviewed result.",
+    "expected": "Accepted successors and unresolved tasks remain visible.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-AT003",
+    "document_id": "LWH-PRD-017",
+    "title": "Offline admission",
+    "steps": "Run admission through ward treatment and discharge during WAN loss.",
+    "expected": "Local care remains complete and sync reconciles with no duplicated administrations.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-AT001",
+    "document_id": "LWH-PRD-018",
+    "title": "Multiple birth",
+    "steps": "Document a birth with two infants offline.",
+    "expected": "Each child has a distinct chart and correct relationship links.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-AT002",
+    "document_id": "LWH-PRD-018",
+    "title": "Unknown schedule",
+    "steps": "Attempt automated vaccine planning without an applicable schedule package.",
+    "expected": "No invented schedule is issued; a responsible review task appears.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-AT003",
+    "document_id": "LWH-PRD-018",
+    "title": "Continuity",
+    "steps": "Miss a planned maternal/chronic review and change care team.",
+    "expected": "Follow-up remains owned with accepted handover and neutral notifications.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-AT001",
+    "document_id": "LWH-PRD-019",
+    "title": "Identity mismatch",
+    "steps": "Receive an external result with an unmatched patient/accession.",
+    "expected": "It is quarantined and assigned for reconciliation.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-AT002",
+    "document_id": "LWH-PRD-019",
+    "title": "Amended critical result",
+    "steps": "Correct a previously final clinically significant result.",
+    "expected": "Prior report remains and review/communication obligations reopen.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-AT003",
+    "document_id": "LWH-PRD-019",
+    "title": "Offline department",
+    "steps": "Order, collect, verify and review a local diagnostic test without WAN.",
+    "expected": "The complete local chain persists and later syncs without duplicate reports.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-AT001",
+    "document_id": "LWH-PRD-020",
+    "title": "Dose retry",
+    "steps": "Retry an administration command after an uncertain response.",
+    "expected": "The same idempotency key returns one recorded administration.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-AT002",
+    "document_id": "LWH-PRD-020",
+    "title": "Changed order",
+    "steps": "Stop an order before a nurse acts from a stale view.",
+    "expected": "Server version/state check prevents unreviewed stale administration.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-AT003",
+    "document_id": "LWH-PRD-020",
+    "title": "Offline stock",
+    "steps": "Dispense/return/adjust local lots during WAN loss and sync twice.",
+    "expected": "Clinical history and stock reconcile exactly once with preserved provenance.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-AT001",
+    "document_id": "LWH-PRD-021",
+    "title": "Unperformed plan",
+    "steps": "Cancel a scheduled procedure.",
+    "expected": "No performed procedure, used implant or transfused component is fabricated.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-AT002",
+    "document_id": "LWH-PRD-021",
+    "title": "Unit mismatch",
+    "steps": "Present a blood component inconsistent with the recorded authorised chain.",
+    "expected": "No automated confirmation; local clinical/blood-bank review is required.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-AT003",
+    "document_id": "LWH-PRD-021",
+    "title": "Offline procedure",
+    "steps": "Record a complete procedure and postoperative handover during WAN outage.",
+    "expected": "Local documentation and responsibility remain intact and sync preserves original attestations.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-AT001",
+    "document_id": "LWH-PRD-022",
+    "title": "Duplicate callback",
+    "steps": "Replay a successful payment event and its sync message.",
+    "expected": "One receipt/allocation effect is recorded.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-AT002",
+    "document_id": "LWH-PRD-022",
+    "title": "Partial payer",
+    "steps": "Adjudicate part of a claim with a remaining patient balance.",
+    "expected": "Each obligation and actual remittance remains explicit.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-AT003",
+    "document_id": "LWH-PRD-022",
+    "title": "Offline cash",
+    "steps": "Deliver and bill care, receive cash and later sync.",
+    "expected": "Local receipt and balanced ledger survive; central accounting receives one reconciled posting.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-AT001",
+    "document_id": "LWH-PRD-023",
+    "title": "New patient",
+    "steps": "Seek help without an extensive completed profile.",
+    "expected": "Relevant next actions work and unknown clinical facts remain unknown.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-AT002",
+    "document_id": "LWH-PRD-023",
+    "title": "Family privacy",
+    "steps": "Switch subjects and inspect chat, records and notifications.",
+    "expected": "Data and drafts are correctly isolated.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-AT003",
+    "document_id": "LWH-PRD-023",
+    "title": "Delayed request",
+    "steps": "Lose connectivity after submitting a care request.",
+    "expected": "Patient sees pending receipt and a safe recovery path without duplicate episode.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-AT001",
+    "document_id": "LWH-PRD-024",
+    "title": "Claim race",
+    "steps": "Two clinicians claim the same local case.",
+    "expected": "One active owner succeeds and the other sees current state.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-AT002",
+    "document_id": "LWH-PRD-024",
+    "title": "Draft fidelity",
+    "steps": "Review a summary with negation and conflicting sources.",
+    "expected": "The summary preserves source attribution and cannot sign itself.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-AT003",
+    "document_id": "LWH-PRD-024",
+    "title": "Shift end",
+    "steps": "End a shift with outstanding results/referrals.",
+    "expected": "Accepted successor or accountable exception remains visible.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-AT001",
+    "document_id": "LWH-PRD-025",
+    "title": "ERP disabled",
+    "steps": "Run complete care and clinical stock/billing with optional modules disabled.",
+    "expected": "Core work remains fully usable.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-AT002",
+    "document_id": "LWH-PRD-025",
+    "title": "Journal replay",
+    "steps": "Replay a care invoice posting and its acknowledgement.",
+    "expected": "One balanced journal is recognised with source reconciliation.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-AT003",
+    "document_id": "LWH-PRD-025",
+    "title": "Payroll rules absent",
+    "steps": "Attempt a payroll run without an adopted country package.",
+    "expected": "No guessed deductions/payments occur; other modules continue.",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-001",
+    "document_id": "LWH-ENG-004",
+    "title": "Mandate and naming",
+    "steps": "Explain umbrella/workspaces and all clear DHS directives",
+    "expected": "Each has an owner/document/journey; discussed/unclear points remain labelled",
+    "reviewer_role": "Directorate/product",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-002",
+    "document_id": "LWH-ENG-004",
+    "title": "Hierarchy and transfer",
+    "steps": "Create regions/zones and change a facility assignment effective date",
+    "expected": "Current scope updates; historical reporting remains reproducible",
+    "reviewer_role": "Operations/QA",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-003",
+    "document_id": "LWH-ENG-004",
+    "title": "Role and subject isolation",
+    "steps": "Try cross-zone, cross-patient and revoked caregiver UI/API/file/export",
+    "expected": "Unauthorised data/actions denied without leakage",
+    "reviewer_role": "Privacy/security",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-004",
+    "document_id": "LWH-ENG-004",
+    "title": "Registry identity",
+    "steps": "Register one owner/two sites and duplicate candidates",
+    "expected": "Correct site/owner counts and reviewed links",
+    "reviewer_role": "Network",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-005",
+    "document_id": "LWH-ENG-004",
+    "title": "Evidence and decision",
+    "steps": "Submit, inspect, recommend and decide affiliation",
+    "expected": "Only central Directorate role activates a reasoned scoped decision",
+    "reviewer_role": "Standards",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-006",
+    "document_id": "LWH-ENG-004",
+    "title": "Renewal/adverse review",
+    "steps": "Expire recognition, request renewal and lodge review",
+    "expected": "No silent extension; notice/review/history and continuity retained",
+    "reviewer_role": "Standards/legal",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-007",
+    "document_id": "LWH-ENG-004",
+    "title": "Directory/readiness",
+    "steps": "Search with no GPS and stale/unsuitable services",
+    "expected": "Manual search works; no false confirmed capacity",
+    "reviewer_role": "Network/product",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-008",
+    "document_id": "LWH-ENG-004",
+    "title": "Expected reporting",
+    "steps": "Prepare returns before/after a zone change",
+    "expected": "Denominator follows effective obligation/hierarchy",
+    "reviewer_role": "Information",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-009",
+    "document_id": "LWH-ENG-004",
+    "title": "Nil/partial/late/missing",
+    "steps": "Submit representative returns and omit one unit",
+    "expected": "Distinct states/coverage in all views",
+    "reviewer_role": "Information/QA",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-010",
+    "document_id": "LWH-ENG-004",
+    "title": "Quality and overlap",
+    "steps": "Load EMR extract plus return plus duplicate event",
+    "expected": "All records accounted; no additive duplicate totals",
+    "reviewer_role": "Data",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-011",
+    "document_id": "LWH-ENG-004",
+    "title": "Correction/snapshot",
+    "steps": "Revise a verified source after publication",
+    "expected": "History and affected aggregates/narratives traceable",
+    "reviewer_role": "Information",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-012",
+    "document_id": "LWH-ENG-004",
+    "title": "Executive/privacy",
+    "steps": "Open President/Executive/Directorate/region/zone views and exports",
+    "expected": "Correct scope/coverage; suppression and no raw charts",
+    "reviewer_role": "Directorate/privacy",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-013",
+    "document_id": "LWH-ENG-004",
+    "title": "Action outcome",
+    "steps": "Assign unfunded/unaccepted action, then fulfil/review",
+    "expected": "Ownership/resources/evidence and outcome limitations visible",
+    "reviewer_role": "Programme",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-014",
+    "document_id": "LWH-ENG-004",
+    "title": "Education/policy",
+    "steps": "Publish, correct and withdraw content",
+    "expected": "Qualified review/applicability; correction reaches caches",
+    "reviewer_role": "Editorial",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-015",
+    "document_id": "LWH-ENG-004",
+    "title": "Patient experience",
+    "steps": "New/returning patient opens Today, chat, plan, history and family",
+    "expected": "Low repeated entry, truthful states and correct subject isolation",
+    "reviewer_role": "Patient/product",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-016",
+    "document_id": "LWH-ENG-004",
+    "title": "Account recovery",
+    "steps": "Recover identity with potential duplicate patient",
+    "expected": "Verified account recovery without destructive chart merge",
+    "reviewer_role": "Identity/custody",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-017",
+    "document_id": "LWH-ENG-004",
+    "title": "Remote care",
+    "steps": "Request review, accept, consult and disconnect/recover",
+    "expected": "One owned episode; no fake clinician review or automatic billing",
+    "reviewer_role": "Clinical",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-018",
+    "document_id": "LWH-ENG-004",
+    "title": "Urgent unknown",
+    "steps": "Use ambiguous critical information and disable AI/payment",
+    "expected": "Approved guidance/real escalation; no false negative or paywall",
+    "reviewer_role": "Clinical",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-019",
+    "document_id": "LWH-ENG-004",
+    "title": "Chart integrity",
+    "steps": "Register provisional patient, sign and amend note",
+    "expected": "Actual source/author/version retained; no fabricated findings",
+    "reviewer_role": "Clinical/custody",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-020",
+    "document_id": "LWH-ENG-004",
+    "title": "Outpatient closure",
+    "steps": "Complete encounter with pending result",
+    "expected": "Pending task stays owned despite encounter completion",
+    "reviewer_role": "Clinical",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-021",
+    "document_id": "LWH-ENG-004",
+    "title": "Bed and ward",
+    "steps": "Race admissions and hand over shifts",
+    "expected": "Exclusive local occupancy and accepted responsibility",
+    "reviewer_role": "Hospital/nursing",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-022",
+    "document_id": "LWH-ENG-004",
+    "title": "Diagnostics",
+    "steps": "Wrong accession, rejected specimen, final/corrected critical result",
+    "expected": "Quarantine/recollection and actual review/response retained",
+    "reviewer_role": "Diagnostics/clinical",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-023",
+    "document_id": "LWH-ENG-004",
+    "title": "Medication chain",
+    "steps": "Prescribe/dispense/administer, retry and change order concurrently",
+    "expected": "Current intent, actual events and one effect; unknown allergies explicit",
+    "reviewer_role": "Pharmacy/nursing",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-024",
+    "document_id": "LWH-ENG-004",
+    "title": "Clinical stock",
+    "steps": "Receive/dispense/return/quarantine and replay events",
+    "expected": "Exact local movements/balance; no duplicate effect",
+    "reviewer_role": "Pharmacy/finance",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-025",
+    "document_id": "LWH-ENG-004",
+    "title": "Maternal/newborn/child",
+    "steps": "Document pregnancy, multiple birth, reviews and missing schedule",
+    "expected": "Distinct infant identities; no guessed schedule/clinical rule",
+    "reviewer_role": "Maternal/child",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-026",
+    "document_id": "LWH-ENG-004",
+    "title": "Procedure/transfusion",
+    "steps": "Prepare, verify phases/unit, document actual act and hand over recovery",
+    "expected": "Privileges/authority/traceability and real handover",
+    "reviewer_role": "Procedural/blood-bank",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-027",
+    "document_id": "LWH-ENG-004",
+    "title": "Sharing/referral",
+    "steps": "Coded summary, additional grant, decline/accept and outcome",
+    "expected": "Purpose/recipient match; sender retained until accepted; access history",
+    "reviewer_role": "Records/network",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-028",
+    "document_id": "LWH-ENG-004",
+    "title": "Revocation/offline",
+    "steps": "Revoke while recipient disconnected then reconnect",
+    "expected": "Future online stop; bounded cached authority/lag and priority reconcile",
+    "reviewer_role": "Privacy/security",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-029",
+    "document_id": "LWH-ENG-004",
+    "title": "Finance/payer",
+    "steps": "Deliver/charge/receive cash, timeout provider, adjudicate partial claim and refund",
+    "expected": "Actual states, balanced groups and independent approval",
+    "reviewer_role": "Finance",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-030",
+    "document_id": "LWH-ENG-004",
+    "title": "Sponsor allowance",
+    "steps": "Reserve concurrently, cancel and use offline allocation",
+    "expected": "No overspend/double settlement; private clinical data protected",
+    "reviewer_role": "Programme/finance",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-031",
+    "document_id": "LWH-ENG-004",
+    "title": "Full WAN outage",
+    "steps": "Disable WAN/cloud AI for qualified duration and execute all enabled core journeys",
+    "expected": "Complete local clinical work and truthful external dependency states",
+    "reviewer_role": "Facility/technical/clinical",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-032",
+    "document_id": "LWH-ENG-004",
+    "title": "Sync/restart/fencing",
+    "steps": "Crash/retry/reorder events, restore backup and reject old authority epoch",
+    "expected": "All source evidence accounted; conflicts owned; no competing writer",
+    "reviewer_role": "Platform/data",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-033",
+    "document_id": "LWH-ENG-004",
+    "title": "Existing EMR route",
+    "steps": "Qualify adapter and separately rehearse migration/cutover",
+    "expected": "Mapped identities/versions; reconciled truth; rollback preserves new care",
+    "reviewer_role": "Migration/custody",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-034",
+    "document_id": "LWH-ENG-004",
+    "title": "AI boundaries",
+    "steps": "Inject malicious sources and request consequential actions",
+    "expected": "No tool/data expansion, unsupported fact or autonomous signing",
+    "reviewer_role": "Clinical/AI/security",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-035",
+    "document_id": "LWH-ENG-004",
+    "title": "Optional ERP independence",
+    "steps": "Disable accounting/procurement/HR/payroll and run care",
+    "expected": "Core clinical/billing/stock/roster work continues",
+    "reviewer_role": "Facility/enterprise",
+    "execution_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-UAT-036",
+    "document_id": "LWH-ENG-004",
+    "title": "Restore/adoption/activation",
+    "steps": "Run support/incident/restore drill with actual roles and dossier",
+    "expected": "Open care/finance reconciled; trained staff and authorised scoped decision",
+    "reviewer_role": "Release owners",
+    "execution_status": "NOT_RUN"
+  }
+]

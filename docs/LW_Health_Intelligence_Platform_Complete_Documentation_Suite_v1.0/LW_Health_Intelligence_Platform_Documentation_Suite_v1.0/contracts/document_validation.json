@@ -1,0 +1,17 @@
+{
+  "suite_id": "LWH-SUITE-001",
+  "issued": "2026-11-05",
+  "status": "PASSED",
+  "checks": 3807,
+  "failures": [],
+  "controlled_documents": 78,
+  "controlled_document_words": 73693,
+  "form_count": 51,
+  "tagged_fields": 355,
+  "compiled_schemas": 67,
+  "synthetic_structural_examples": 311,
+  "specified_implementation_cases": 111,
+  "implementation_cases_executed": 0,
+  "clinical_approval_claimed": false,
+  "current_repository_or_production_verified": false
+}

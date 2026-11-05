@@ -1,6 +1,8 @@
-# LoveWorld Care — Intelligent Remote Healthcare Network
+# LW Health Intelligence Platform
 
-Production monorepo implementing the **LoveWorld Care Master Product, Clinical, Commercial & Systems Specification (v1.0.0)**.
+Monorepo for the Directorate's institutional health platform and its LW Care capability. The current institutional increment provides persistent identity, scoped administration, facility onboarding and standards/directory workflows. Full clinical, offline, reporting and finance scope is tracked against the documentation suite and remains in progress.
+
+The institutional frontend is `apps/platform-web`; its authoritative backend is `services/api/src/lw_care_api/platform` with Vercel entrypoint `api/platform.py`. Production configuration uses encrypted Vercel environment settings and Neon schema `health_platform`. See [implementation evidence](docs/implementation/2026-11-05-institutional-foundation.md), [cloud release procedure](docs/implementation/2026-11-05-cloud-release.md) and [organisation research](docs/CHRIST_EMBASSY_ORGANISATION_RESEARCH.md).
 
 ## Strict `D:\` Drive Toolchain Isolation
 

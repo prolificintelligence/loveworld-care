@@ -1,0 +1,16 @@
+{
+  "researched_at": "2026-11-05",
+  "coverage": "PARTIAL_PUBLIC_SOURCE_EVIDENCE",
+  "directorate_adoption": "NOT_ADOPTED",
+  "notes": "This is evidence for review, not a complete global master register. No ministry unit code, effective date or unreported parent relationship is invented.",
+  "items": [
+    {"id":"CE-SOURCE-001","region":"USA Region 2","zone":"CE Dallas Zone","source_url":"https://christembassydallaszone.org/","source_title":"Christ Embassy Dallas Zone","evidence_status":"EXPLICIT_CURRENT_SITE_STATEMENT","limitation":"Regional and zonal headings on the same official zonal site; Directorate effective dates and codes not published."},
+    {"id":"CE-SOURCE-002","region":"USA Region 1","zone":"Zone 2","source_url":"https://www.christembassynewyork.org/","source_title":"Christ Embassy New York","evidence_status":"PRIMARY_SITE_SEARCH_INDEX","limitation":"Search-indexed site heading states USA Region 1 Zone 2. Direct fetch timed out; recheck with the Directorate before adoption."},
+    {"id":"CE-SOURCE-003","region":"UK Region 2","zone":"Zone 4","source_url":"https://christembassy.org/pastor-chris-reveals-amazing-truths-during-q-a-segment-at-global-service/","source_title":"Pastor Chris Reveals Amazing Truths During Q & A Segment at Global Service","evidence_status":"EXPLICIT_HISTORICAL_MINISTRY_REPORT","limitation":"Historical ministry article; not evidence of current jurisdiction, effective dates or an exhaustive UK roster."},
+    {"id":"CE-SOURCE-004","region":null,"zone":"Lagos Zone 1","source_url":"https://celz1.org/contact-us/church-locations/","source_title":"Christ Embassy Lagos Zone 1 — Church Locations","evidence_status":"PRIMARY_ZONAL_DIRECTORY","limitation":"The directory identifies the zone and its churches; it does not establish the zone's current regional parent."},
+    {"id":"CE-SOURCE-005","region":null,"zone":"Lagos Zone 2","source_url":"https://www.celz2.org/rhapsody-signup.php","source_title":"Christ Embassy Lagos Zone 2","evidence_status":"PRIMARY_SITE_SEARCH_INDEX","limitation":"Zone identity found; regional parent and effective dates are unverified."},
+    {"id":"CE-SOURCE-006","region":null,"zone":"Lagos Zone 5","source_url":"https://www.celz5.org/index.php/home","source_title":"Christ Embassy Lagos Zone 5","evidence_status":"PRIMARY_SITE_SEARCH_INDEX","limitation":"Zone identity found; regional parent and effective dates are unverified."},
+    {"id":"CE-SOURCE-007","region":null,"zone":"Lagos Zone 6","source_url":"https://live.christembassycitychurch.com/","source_title":"CE Lagos Zone 6","evidence_status":"PRIMARY_SITE_SEARCH_INDEX","limitation":"Zone identity found; regional parent and effective dates are unverified."},
+    {"id":"CE-SOURCE-008","region":null,"zone":"Port Harcourt Zone 1","source_url":"https://www.christembassy.org/blwcommunity/?zone=Port+Harcourt+Zone+1","source_title":"Christ Embassy — Communities of Practice Conference","evidence_status":"PRIMARY_MINISTRY_REGISTRATION_PAGE","limitation":"The ministry form names the zone but requests region as free text. No regional parent is inferred."}
+  ]
+}

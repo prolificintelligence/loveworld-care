@@ -1,0 +1,246 @@
+[
+  {
+    "id": "DHS-REQ-001",
+    "primary_document": "LWH-PRD-002",
+    "owner_role": "Network registry lead",
+    "uat_cases": [
+      "LWH-UAT-004",
+      "LWH-UAT-005",
+      "LWH-UAT-009",
+      "LWH-UAT-011"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-002",
+    "primary_document": "LWH-PRD-002",
+    "owner_role": "Network registry lead",
+    "uat_cases": [
+      "LWH-UAT-004"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-003",
+    "primary_document": "LWH-PRD-003",
+    "owner_role": "Directorate standards lead",
+    "uat_cases": [
+      "LWH-UAT-005"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-004",
+    "primary_document": "LWH-PRD-002",
+    "owner_role": "Network registry lead",
+    "uat_cases": [
+      "LWH-UAT-007"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-005",
+    "primary_document": "LWH-PRD-004",
+    "owner_role": "Health information lead",
+    "uat_cases": [
+      "LWH-UAT-009",
+      "LWH-UAT-010"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-006",
+    "primary_document": "LWH-PRD-004",
+    "owner_role": "Health information lead",
+    "uat_cases": [
+      "LWH-UAT-009",
+      "LWH-UAT-010",
+      "LWH-UAT-011"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-007",
+    "primary_document": "LWH-PRD-007",
+    "owner_role": "Directorate intelligence owner",
+    "uat_cases": [
+      "LWH-UAT-012"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-008",
+    "primary_document": "LWH-PRD-010",
+    "owner_role": "Clinical editorial and Directorate policy lead",
+    "uat_cases": [
+      "LWH-UAT-014"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-009",
+    "primary_document": "LWH-PRD-009",
+    "owner_role": "Network clinical operations lead",
+    "uat_cases": [
+      "LWH-UAT-007",
+      "LWH-UAT-027"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-010",
+    "primary_document": "LWH-PRD-001",
+    "owner_role": "Identity and Directorate operations lead",
+    "uat_cases": [
+      "LWH-UAT-002",
+      "LWH-UAT-003"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-011",
+    "primary_document": "LWH-PRD-001",
+    "owner_role": "Identity and Directorate operations lead",
+    "uat_cases": [
+      "LWH-UAT-015",
+      "LWH-UAT-017"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-012",
+    "primary_document": "LWH-PRD-008",
+    "owner_role": "Directorate programme operations lead",
+    "uat_cases": [
+      "LWH-UAT-011",
+      "LWH-UAT-013"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-013",
+    "primary_document": "LWH-PRD-003",
+    "owner_role": "Directorate standards lead",
+    "uat_cases": [
+      "LWH-UAT-006"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-014",
+    "primary_document": "LWH-PRD-003",
+    "owner_role": "Directorate standards lead",
+    "uat_cases": [
+      "LWH-UAT-005",
+      "LWH-UAT-013"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-015",
+    "primary_document": "LWH-PRD-012",
+    "owner_role": "Clinical information and privacy leads",
+    "uat_cases": [
+      "LWH-UAT-019",
+      "LWH-UAT-020",
+      "LWH-UAT-021",
+      "LWH-UAT-022",
+      "LWH-UAT-023",
+      "LWH-UAT-025",
+      "LWH-UAT-026",
+      "LWH-UAT-027",
+      "LWH-UAT-028",
+      "LWH-UAT-033"
+    ],
+    "evidence_status": "discussed_recording_plus_confirmed_emr_scope",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-016",
+    "primary_document": "LWH-SPEC-006",
+    "owner_role": "Clinical information, standards and reporting leads",
+    "uat_cases": [
+      "LWH-UAT-009",
+      "LWH-UAT-011"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-017",
+    "primary_document": "LWH-GOV-003",
+    "owner_role": "Privacy officer and accountable data custodians",
+    "uat_cases": [
+      "LWH-UAT-012",
+      "LWH-UAT-028"
+    ],
+    "evidence_status": "recording_directive",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-018",
+    "primary_document": "LWH-GOV-005",
+    "owner_role": "Directorate authorised standards body",
+    "uat_cases": [
+      "LWH-UAT-006"
+    ],
+    "evidence_status": "discussed_operating_detail_unresolved",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-019",
+    "primary_document": "LWH-PRD-009",
+    "owner_role": "Network clinical operations lead",
+    "uat_cases": [
+      "LWH-UAT-007",
+      "LWH-UAT-018",
+      "LWH-UAT-027"
+    ],
+    "evidence_status": "discussed_operating_detail_unresolved",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  },
+  {
+    "id": "DHS-REQ-020",
+    "primary_document": "LWH-DIR-001",
+    "owner_role": "Directorate business analyst",
+    "uat_cases": [
+      "LWH-UAT-001"
+    ],
+    "evidence_status": "tentative_identity_unresolved",
+    "implementation_evidence": "NOT_ASSESSED",
+    "policy_adoption": "REQUIRED_FOR_APPLICABLE_LIVE_USE"
+  }
+]

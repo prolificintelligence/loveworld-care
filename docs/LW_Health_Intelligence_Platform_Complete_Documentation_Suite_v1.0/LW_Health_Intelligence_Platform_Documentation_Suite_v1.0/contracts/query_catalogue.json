@@ -1,0 +1,107 @@
+[
+  {
+    "id": "LWH-QRY-001",
+    "method": "GET",
+    "path": "/v1/directory",
+    "purpose": "Public service search",
+    "contract": "service/population, country/manual location, hours/readiness filters; public fields only"
+  },
+  {
+    "id": "LWH-QRY-002",
+    "method": "GET",
+    "path": "/v1/facilities/{id}",
+    "purpose": "Private/eligible public facility profile",
+    "contract": "Scope and field projection from role/purpose"
+  },
+  {
+    "id": "LWH-QRY-003",
+    "method": "GET",
+    "path": "/v1/applications/{id}",
+    "purpose": "Application dossier",
+    "contract": "Assigned applicant/reviewer/decider; evidence access separate"
+  },
+  {
+    "id": "LWH-QRY-004",
+    "method": "GET",
+    "path": "/v1/reporting-obligations",
+    "purpose": "Expected reporting units",
+    "contract": "Scope/period/template/hierarchy version"
+  },
+  {
+    "id": "LWH-QRY-005",
+    "method": "GET",
+    "path": "/v1/returns/{id}/versions",
+    "purpose": "Return history",
+    "contract": "Source versions, verification and missingness"
+  },
+  {
+    "id": "LWH-QRY-006",
+    "method": "GET",
+    "path": "/v1/leadership/measures",
+    "purpose": "Permitted indicator snapshot",
+    "contract": "Metric/version, period, scope, coverage and disclosure"
+  },
+  {
+    "id": "LWH-QRY-007",
+    "method": "GET",
+    "path": "/v1/interventions",
+    "purpose": "Owned programme work",
+    "contract": "Acceptance, due/resource/evidence and scope"
+  },
+  {
+    "id": "LWH-QRY-008",
+    "method": "GET",
+    "path": "/v1/patients/search",
+    "purpose": "Purpose-limited patient matching",
+    "contract": "Qualified identifiers/context; no public/blanket chart browse"
+  },
+  {
+    "id": "LWH-QRY-009",
+    "method": "GET",
+    "path": "/v1/patients/{id}/chart",
+    "purpose": "Authorised source-attributed chart",
+    "contract": "Subject/purpose/grant/privilege, as-of/source freshness"
+  },
+  {
+    "id": "LWH-QRY-010",
+    "method": "GET",
+    "path": "/v1/clinical-work",
+    "purpose": "Assigned clinical worklist",
+    "contract": "Team/facility, urgency source, due/owner and accepted handover"
+  },
+  {
+    "id": "LWH-QRY-011",
+    "method": "GET",
+    "path": "/v1/diagnostic-reports/{id}",
+    "purpose": "Permitted report/current and prior",
+    "contract": "Patient/order/source/version, verification and actual clinical review"
+  },
+  {
+    "id": "LWH-QRY-012",
+    "method": "GET",
+    "path": "/v1/medication-orders/{id}/administrations",
+    "purpose": "Current intent and actual MAR",
+    "contract": "Treating role, correct subject/order/version and history"
+  },
+  {
+    "id": "LWH-QRY-013",
+    "method": "GET",
+    "path": "/v1/referrals/{id}",
+    "purpose": "Actual handover states",
+    "contract": "Sender/receiver purpose, summary grant, acceptance/receipt/outcome"
+  },
+  {
+    "id": "LWH-QRY-014",
+    "method": "GET",
+    "path": "/v1/patient-accounts/{id}",
+    "purpose": "Care finance statement",
+    "contract": "Patient/payer/finance scope; actual pending/received/claim states"
+  },
+  {
+    "id": "LWH-QRY-015",
+    "method": "GET",
+    "path": "/v1/nodes/{id}/sync-status",
+    "purpose": "Operational replication health",
+    "contract": "Authorised technical minimum; semantic outcomes and no raw clinical payload"
+  }
+]

@@ -14,7 +14,12 @@ for base in dirs_to_check:
         if os.path.exists(p) and p not in sys.path:
             sys.path.insert(0, p)
 
-from lw_care_api.main import create_app
-from lw_care_api.config import get_settings
+if os.environ.get("LWH_RUNTIME") == "institutional":
+    from lw_care_api.platform.main import create_platform_app
 
-app = create_app(get_settings())
+    app = create_platform_app()
+else:
+    from lw_care_api.main import create_app
+    from lw_care_api.config import get_settings
+
+    app = create_app(get_settings())

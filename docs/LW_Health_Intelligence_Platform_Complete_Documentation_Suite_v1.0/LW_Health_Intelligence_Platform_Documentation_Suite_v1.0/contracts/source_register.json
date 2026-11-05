@@ -1,0 +1,512 @@
+[
+  {
+    "id": "LWH-SRC-001",
+    "title": "WHO Master Facility List resource package",
+    "version": "2019 guide citation; landing metadata 2018",
+    "url": "https://www.who.int/publications/i/item/-9789241513302",
+    "review_scope": "MFL governance and maintenance overview",
+    "use": "Registry identity/location/stewardship domains",
+    "boundary": "Does not establish affiliation or statutory licence; guide/instrument adoption remains scoped",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-002",
+    "title": "WHO Harmonized Health Facility Assessment",
+    "version": "HHFA resource/module overview",
+    "url": "https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment",
+    "review_scope": "Introduction and four-module structure",
+    "use": "Availability/readiness/quality/management assessment domains",
+    "boundary": "Project criteria are not a complete HHFA or WHO-endorsed accreditation",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-003",
+    "title": "WHO HHFA combined core questionnaire",
+    "version": "June 2023 core version",
+    "url": "https://www.who.int/publications/m/item/hhfa-combined-questionnaire-availability--readiness-and-management-and-finance-june-2023_core_only",
+    "review_scope": "Questionnaire publication, scope and collection-method metadata",
+    "use": "Candidate availability/readiness/management evidence families",
+    "boundary": "No verbatim item-level mapping or official survey score claimed; adopt full instrument only within its method/terms",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-004",
+    "title": "WHO RHIS toolkit",
+    "version": "Online modules checked 2026-11-05",
+    "url": "https://www.who.int/data/data-collection-tools/health-service-data/toolkit-for-routine-health-information-system-data/modules",
+    "review_scope": "Core indicators, general analysis and programme modules",
+    "use": "Period reporting, denominators, coverage and decision use",
+    "boundary": "Local case/indicator definitions and actual source templates require adoption",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-005",
+    "title": "WHO Data Quality Assurance toolkit",
+    "version": "Online DQA resource overview",
+    "url": "https://www.who.int/data/data-collection-tools/health-service-data/data-quality-assurance-dqa",
+    "review_scope": "DQA overview and RHIS module dimensions",
+    "use": "Completeness/timeliness, consistency, source review and improvement",
+    "boundary": "Automated validation does not certify clinical truth",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-006",
+    "title": "WHO IPC minimum-requirement assessment for primary care",
+    "version": "WHO/UHL/IHS/IPC/2023.2",
+    "url": "https://www.who.int/publications/i/item/WHO-UHL-IHS-IPC-2023.2",
+    "review_scope": "Purpose and explicit self-assessment boundary",
+    "use": "Improvement-oriented primary-care IPC evidence",
+    "boundary": "The source states this is not an audit tool; no relabelled formal compliance score",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-007",
+    "title": "WHO incident reporting and learning guidance",
+    "version": "2020; ISBN 9789240010338",
+    "url": "https://www.who.int/publications/i/item/9789240010338",
+    "review_scope": "Purpose/strengths/limitations and learning overview",
+    "use": "Reviewed signals, quality learning and cautious interpretation",
+    "boundary": "Incident report counts are not automatically population harm/incidence",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-008",
+    "title": "HL7 EHR-System Functional Model",
+    "version": "2.1.1 Normative1; rendered functional model",
+    "url": "https://hl7.org/ehrs/uv/ehrsfmr2/Normative1/en/chapter4.html",
+    "review_scope": "Functional-model overview and care/care-support sections",
+    "use": "EHR capability coverage and record/trust requirements reference",
+    "boundary": "This suite does not claim formal EHR-S FM conformance/certification",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-009",
+    "title": "HL7 FHIR R4",
+    "version": "4.0.1 permanent publication; security reference",
+    "url": "https://www.hl7.org/fhir/R4/security.html",
+    "review_scope": "Security module and selected resource definitions",
+    "use": "Exchange baseline, access/audit/provenance building blocks",
+    "boundary": "FHIR representation alone does not enforce permissions or certify an EMR",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-010",
+    "title": "HL7 International Patient Summary",
+    "version": "2.0.1 STU2; FHIR R4",
+    "url": "https://www.hl7.org/fhir/uv/ips/2.0.1/en/Structure-of-the-International-Patient-Summary.html",
+    "review_scope": "Summary structure and missing-data semantics",
+    "use": "Minimum source-attributed cross-facility summary design",
+    "boundary": "Partner profile/terminology validation required; not a complete chart",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-011",
+    "title": "WHO Antenatal Care Digital Adaptation Kit",
+    "version": "2021; ISBN 9789240020306",
+    "url": "https://www.who.int/publications/i/item/9789240020306",
+    "review_scope": "DAK components and annex inventory metadata",
+    "use": "Maternal workflow/data/indicator curation framework",
+    "boundary": "Project forms do not reproduce full ANC dictionary or executable treatment logic",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-012",
+    "title": "WHO Postnatal Care Digital Adaptation Kit",
+    "version": "2025; ISBN 9789240090347",
+    "url": "https://www.who.int/publications/i/item/9789240090347",
+    "review_scope": "Publication and point-of-service content overview",
+    "use": "Maternal/newborn postnatal workflow family",
+    "boundary": "Actual applicable content and clinical review required",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-013",
+    "title": "WHO Immunization Digital Adaptation Kit",
+    "version": "2025; ISBN 9789240099456",
+    "url": "https://www.who.int/publications/i/item/9789240099456",
+    "review_scope": "Publication/content scope",
+    "use": "Immunisation record and programme workflow family",
+    "boundary": "No universal vaccine schedule/dose recommendation is adopted",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-014",
+    "title": "WHO medication safety in high-risk situations",
+    "version": "WHO/UHC/SDS/2019.10",
+    "url": "https://www.who.int/publications/i/item/WHO-UHC-SDS-2019.10",
+    "review_scope": "High-risk and transitions/polypharmacy context",
+    "use": "Medication-chain safety and governance domains",
+    "boundary": "No drug database, dose or interaction algorithm reproduced",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-015",
+    "title": "WHO Surgical Safety Checklist resources",
+    "version": "2009 instrument and adaptation resources",
+    "url": "https://www.who.int/teams/integrated-health-services/quality-of-care-and-patient-safety/patient-safety-guidance-and-tools/safe-surgery/tool-and-resources",
+    "review_scope": "Checklist purpose, local adaptation and reproduction conditions",
+    "use": "Team-phase/procedural documentation design",
+    "boundary": "Modified tool cannot use WHO logo; confirm applicable attribution/permission before reproduction",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-016",
+    "title": "WHO-ICRC Basic Emergency Care",
+    "version": "2018; ISBN 9789241513081",
+    "url": "https://www.who.int/publications/i/item/9789241513081",
+    "review_scope": "First-contact trained-provider purpose",
+    "use": "Emergency workflow/training reference and local escalation context",
+    "boundary": "Not autonomous remote diagnosis or proof of trained local staffing",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-017",
+    "title": "DICOM web services",
+    "version": "PS3.18 2026d as retrieved",
+    "url": "https://dicom.nema.org/medical/dicom/current/output/html/part18.html",
+    "review_scope": "Web-services scope/structure",
+    "use": "Image/archive interface design",
+    "boundary": "Pin exact implementation conformance; moving current URL must be rechecked",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-018",
+    "title": "LOINC licence",
+    "version": "Online official licence checked 2026-11-05",
+    "url": "https://loinc.org/license/",
+    "review_scope": "Licence and permitted use terms",
+    "use": "Observation/test terminology selection and attribution",
+    "boundary": "Use subject to licence; mappings/edition require expert review",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-019",
+    "title": "SNOMED CT access/licensing",
+    "version": "Official access information checked 2026-11-05",
+    "url": "https://www.snomed.org/get-snomed",
+    "review_scope": "Member/licensee access and implementation context",
+    "use": "Candidate detailed clinical terminology",
+    "boundary": "Territory/edition/licence must be resolved; no universal free-use claim",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-020",
+    "title": "Unified Code for Units of Measure",
+    "version": "Online specification; deployed package must pin version/hash",
+    "url": "https://ucum.org/ucum",
+    "review_scope": "Unit-code specification reference",
+    "use": "Coded units and deterministic conversion policy",
+    "boundary": "Clinical applicability/precision/source units remain locally reviewed",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-021",
+    "title": "WHO International Classification of Diseases",
+    "version": "Official ICD portal; country edition selected at activation",
+    "url": "https://www.who.int/standards/classifications/classification-of-diseases",
+    "review_scope": "Classification and implementation reference",
+    "use": "Clinical/reporting code-system selection and mortality context",
+    "boundary": "No global compulsory edition, automatic case definition or incidence claim",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-022",
+    "title": "W3C Web Content Accessibility Guidelines",
+    "version": "WCAG 2.2",
+    "url": "https://www.w3.org/TR/WCAG22/",
+    "review_scope": "Testable accessibility criteria and conformance framework",
+    "use": "AA engineering target and manual/automated review",
+    "boundary": "No conformance claim without actual assessment",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-023",
+    "title": "OWASP Application Security Verification Standard",
+    "version": "5.0.0 stable reference as checked",
+    "url": "https://asvs.owasp.org/",
+    "review_scope": "ASVS version/reference methodology",
+    "use": "Risk-scoped security control/evidence matrix",
+    "boundary": "Applicable requirement mapping and tests remain implementation work",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-024",
+    "title": "IETF OAuth security best current practice",
+    "version": "RFC 9700; January 2025",
+    "url": "https://www.rfc-editor.org/rfc/rfc9700.html",
+    "review_scope": "OAuth threat/security practice",
+    "use": "Scoped token/session and modern flow selection",
+    "boundary": "Implementation/provider and local identity design still need testing",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-025",
+    "title": "IETF HTTP Semantics",
+    "version": "RFC 9110; 2022",
+    "url": "https://www.rfc-editor.org/rfc/rfc9110.html",
+    "review_scope": "Conditional request and If-Match semantics",
+    "use": "Version preconditions and explicit transport outcomes",
+    "boundary": "HTTP success does not prove clinical/external fulfilment",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-026",
+    "title": "IETF UUID specification",
+    "version": "RFC 9562; 2024",
+    "url": "https://www.rfc-editor.org/rfc/rfc9562.html",
+    "review_scope": "UUID definitions",
+    "use": "Offline collision-resistant identifier design",
+    "boundary": "Identifiers are not authentication or access grants",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-027",
+    "title": "NIST contingency planning",
+    "version": "SP 800-34 Rev.1",
+    "url": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final",
+    "review_scope": "Contingency/recovery planning reference",
+    "use": "Business-impact, restore/drill and continuity process",
+    "boundary": "Not a universal medical SLA or proof of backup effectiveness",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-028",
+    "title": "NIST AI Risk Management Framework",
+    "version": "AI RMF 1.0; 2023; revision underway per source page",
+    "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+    "review_scope": "Voluntary framework and update status",
+    "use": "AI risk/evaluation/governance structure",
+    "boundary": "No certification/endorsement; recheck before future adoption",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-029",
+    "title": "Nigeria Data Protection Commission",
+    "version": "2023 Act official resources/FAQ and indexed section 39",
+    "url": "https://ndpc.gov.ng/resources/",
+    "review_scope": "Official index/search excerpts; direct PDF/FAQ returned 403 during this run",
+    "use": "Example country privacy/security authority for later jurisdiction dossier",
+    "boundary": "Full operative text/current instruments require local review; Nigeria is not selected as pilot",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-030",
+    "title": "UK ICO anonymisation/pseudonymisation guidance",
+    "version": "Current online guidance; marked under review by publisher",
+    "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/pseudonymisation/",
+    "review_scope": "Technical distinction and controlled linkage",
+    "use": "Precise anonymous versus protected coded terminology",
+    "boundary": "Not a global legal basis; country rules assessed separately",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-031",
+    "title": "WHO AI for health: large multi-modal models",
+    "version": "2024 guidance",
+    "url": "https://www.who.int/publications/b/70584",
+    "review_scope": "Publication and governance scope",
+    "use": "Clinical AI governance and intended-use review reference",
+    "boundary": "No model/system endorsement or clinical approval",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-032",
+    "title": "WHO Patient Safety Rights Charter",
+    "version": "2024; ISBN 9789240093249",
+    "url": "https://www.who.int/publications/i/item/9789240093249",
+    "review_scope": "Charter publication and WHO launch explanation",
+    "use": "Patient information, supported decisions, records/complaints and dignity",
+    "boundary": "Local legal/policy adoption and approved ministry wording remain distinct",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-033",
+    "title": "W3C Web Authentication",
+    "version": "Level 2 permanent reference",
+    "url": "https://www.w3.org/TR/webauthn-2/",
+    "review_scope": "Public-key credential API reference",
+    "use": "Candidate strong local authentication factor",
+    "boundary": "Actual local origin/device/browser deployment must be qualified",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-034",
+    "title": "WHO Labour Care Guide user manual",
+    "version": "2020; ISBN 9789240017566",
+    "url": "https://www.who.int/publications/b/56119",
+    "review_scope": "Purpose and CC BY-NC-SA licensing metadata",
+    "use": "Skilled maternal-team record/workflow reference",
+    "boundary": "Commercial reproduction/adaptation needs applicable permission; no clinical thresholds copied",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-035",
+    "title": "WHO/ICRC/MSF Interagency Integrated Triage Tool",
+    "version": "Official routine/mass-casualty tool page",
+    "url": "https://www.who.int/tools/triage",
+    "review_scope": "Facility-based emergency-unit intended use",
+    "use": "Qualified facility triage/content adoption reference",
+    "boundary": "Not automatically valid for unsupervised patient self-triage",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-036",
+    "title": "FHIR Patient",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/patient.html",
+    "review_scope": "Identity/name/contact/date and link resource fields",
+    "use": "Registration/matching candidate field structure",
+    "boundary": "Project capture schema is not a complete FHIR Patient profile",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-037",
+    "title": "FHIR Encounter",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/encounter.html",
+    "review_scope": "Encounter context/status/participants",
+    "use": "Encounter/ADT mapping reference",
+    "boundary": "Local state/authority mapping requires explicit profile",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-038",
+    "title": "FHIR Observation",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/observation.html",
+    "review_scope": "Typed clinical measurements and context",
+    "use": "Observation/value/unit/absence/provenance design",
+    "boundary": "No clinical interpretation/reference limits inferred",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-039",
+    "title": "FHIR AllergyIntolerance",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/allergyintolerance.html",
+    "review_scope": "Agent/reaction, clinical and verification status",
+    "use": "Allergy record semantics and unknown-state handling",
+    "boundary": "Local list absence semantics and clinical reconciliation remain explicit",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-040",
+    "title": "FHIR MedicationRequest",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/medicationrequest.html",
+    "review_scope": "Request/dosage/supply intent fields",
+    "use": "Prescribed medication structure",
+    "boundary": "No medication dose or permission to prescribe supplied",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-041",
+    "title": "FHIR MedicationAdministration",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/medicationadministration.html",
+    "review_scope": "Actual effective time, performer and event structure",
+    "use": "Actual administration/omission data distinction",
+    "boundary": "Dose safety/clinical rules require adopted content",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-042",
+    "title": "FHIR DiagnosticReport",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/diagnosticreport.html",
+    "review_scope": "Specimen/results/imaging/status/time fields",
+    "use": "Structured report and amendment mapping",
+    "boundary": "Final report is not automatically reviewed by treating team",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-043",
+    "title": "FHIR Specimen",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/specimen.html",
+    "review_scope": "Specimen/collection/source structure",
+    "use": "Specimen/accession chain mapping",
+    "boundary": "Actual department quality/identity processes still qualified",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-044",
+    "title": "FHIR Consent",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/consent.html",
+    "review_scope": "Consent representation/provisions",
+    "use": "Treatment/sharing authority data structure",
+    "boundary": "A Consent resource does not itself enforce or establish lawful permission",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-045",
+    "title": "FHIR Provenance",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/provenance.html",
+    "review_scope": "Source/agent/activity/target history",
+    "use": "Authorship, transformations and correction linkage",
+    "boundary": "Source fidelity and legal attestation independently assessed",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-046",
+    "title": "FHIR AuditEvent",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/auditevent.html",
+    "review_scope": "Audit event/agent/entity structure",
+    "use": "Protected access/operation evidence",
+    "boundary": "Tamper evidence/access/retention require implementation controls",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-047",
+    "title": "FHIR MedicationDispense",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/medicationdispense.html",
+    "review_scope": "Actual dispensing structure",
+    "use": "Prescribed-versus-supplied medication distinction",
+    "boundary": "Not proof of patient ingestion/administration",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-048",
+    "title": "FHIR CarePlan",
+    "version": "R4 4.0.1",
+    "url": "https://www.hl7.org/fhir/R4/careplan.html",
+    "review_scope": "Care activities/goals/responsibility structure",
+    "use": "Continuity and follow-up data mapping",
+    "boundary": "Actual clinical plan remains reviewed/signed by responsible team",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-049",
+    "title": "JSON Schema",
+    "version": "Draft 2020-12",
+    "url": "https://json-schema.org/draft/2020-12",
+    "review_scope": "Core/validation specification reference",
+    "use": "Executable capture contracts and structural validation",
+    "boundary": "Does not validate clinical truth, legal authority or complete state transitions",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-050",
+    "title": "IMDRF SaMD Clinical Evaluation",
+    "version": "N41FINAL:2017",
+    "url": "https://www.imdrf.org/sites/default/files/docs/imdrf/final/technical/imdrf-tech-170921-samd-n41-clinical-evaluation_1.pdf",
+    "review_scope": "Intended-use clinical evaluation framework",
+    "use": "Software-function evidence and jurisdiction assessment reference",
+    "boundary": "International guidance is not national authorisation; current local requirements prevail",
+    "checked": "2026-11-05"
+  },
+  {
+    "id": "LWH-SRC-051",
+    "title": "OpenAPI Specification",
+    "version": "3.1.0 selected reference; newer versions exist",
+    "url": "https://spec.openapis.org/oas/v3.1.0.html",
+    "review_scope": "OpenAPI/JSON Schema compatible interface description",
+    "use": "Reference capture API contract",
+    "boundary": "Capture OpenAPI is not complete clinical command conformance or proof of backend implementation",
+    "checked": "2026-11-05"
+  }
+]

@@ -41,6 +41,8 @@ jobs:
 
   web:
     runs-on: ubuntu-latest
+    env:
+      LWH_API_ORIGIN: http://127.0.0.1:8000
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

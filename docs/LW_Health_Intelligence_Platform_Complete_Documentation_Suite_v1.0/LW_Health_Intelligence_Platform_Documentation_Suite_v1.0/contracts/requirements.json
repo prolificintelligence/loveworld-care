@@ -1,0 +1,1802 @@
+[
+  {
+    "id": "LWH-PRD-001-R001",
+    "document_id": "LWH-PRD-001",
+    "title": "Separate actor and subject",
+    "requirement": "MUST separate login account, patient, caregiver, professional, organisation member and payer identifiers.",
+    "verification": "Switch a dependent profile without changing the authenticated actor.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-001-R002",
+    "document_id": "LWH-PRD-001",
+    "title": "Effective hierarchy",
+    "requirement": "MUST store typed parent/reporting relationships with start/end dates and reject cycles.",
+    "verification": "A historical return retains its original reporting scope after a zone transfer.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-001-R003",
+    "document_id": "LWH-PRD-001",
+    "title": "Scoped grants",
+    "requirement": "MUST bind roles to resource scope, validity, grantor and delegation depth; default deny.",
+    "verification": "A zone officer cannot read another zone through API/export.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-001-R004",
+    "document_id": "LWH-PRD-001",
+    "title": "Multiple contexts",
+    "requirement": "MUST show an explicit context selector and clear drafts/cache when subject changes.",
+    "verification": "A clinician who is also a patient sees separated workspaces.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-001-R005",
+    "document_id": "LWH-PRD-001",
+    "title": "Privileged identity",
+    "requirement": "MUST require strong authentication for professional, reviewer, finance and administrative actions.",
+    "verification": "An ordinary patient session cannot elevate itself.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-001-R006",
+    "document_id": "LWH-PRD-001",
+    "title": "Delegation",
+    "requirement": "MUST record acting assignments, expiry, conflicts and accepted handover of open work.",
+    "verification": "An expired acting officer loses new decisions but historical authorship remains.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-001-R007",
+    "document_id": "LWH-PRD-001",
+    "title": "Offboarding",
+    "requirement": "MUST revoke grants/sessions, reassign work and queue node revocation updates.",
+    "verification": "An offline node reports its permission freshness and receives revocation on reconnect.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-001-R008",
+    "document_id": "LWH-PRD-001",
+    "title": "Recovery",
+    "requirement": "MUST support verified account recovery without silently merging patients or bypassing professional credential checks.",
+    "verification": "Changed email preserves correct subject linkage and access history.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-R001",
+    "document_id": "LWH-PRD-002",
+    "title": "Stable site identity",
+    "requirement": "MUST distinguish operating organisation, physical/virtual service site and external registry identifiers.",
+    "verification": "One owner with two hospitals produces two sites, not duplicate owners.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-R002",
+    "document_id": "LWH-PRD-002",
+    "title": "Ownership categories",
+    "requirement": "MUST separately label ministry-owned, member-owned and external ownership/relationship.",
+    "verification": "A member-owned hospital is never published as ministry-owned.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-R003",
+    "document_id": "LWH-PRD-002",
+    "title": "Separate status axes",
+    "requirement": "MUST store affiliation, statutory evidence, publication, service capability and live readiness independently.",
+    "verification": "Expired readiness does not erase historical affiliation.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-R004",
+    "document_id": "LWH-PRD-002",
+    "title": "Duplicate stewardship",
+    "requirement": "MUST suggest duplicates and require reviewed link/merge with preserved identifiers and audit.",
+    "verification": "A later import does not create a second count of the same site.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-R005",
+    "document_id": "LWH-PRD-002",
+    "title": "Scoped publication",
+    "requirement": "MUST publish only approved public fields with current eligibility and verification dates.",
+    "verification": "Evidence documents and private staff contacts remain private.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-R006",
+    "document_id": "LWH-PRD-002",
+    "title": "Suitable search",
+    "requirement": "MUST filter service/population suitability before proximity; allow manual location and list access.",
+    "verification": "No GPS still allows a usable search and accessible results.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-R007",
+    "document_id": "LWH-PRD-002",
+    "title": "Truthful availability",
+    "requirement": "MUST distinguish listed hours, capability, readiness and confirmed acceptance.",
+    "verification": "An emergency contact is labelled as contact information, not dispatch.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-002-R008",
+    "document_id": "LWH-PRD-002",
+    "title": "Change lifecycle",
+    "requirement": "MUST review material changes and propagate closures/restrictions to directory and routing.",
+    "verification": "Withdrawn site disappears from new recommendations while history remains.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-R001",
+    "document_id": "LWH-PRD-003",
+    "title": "Applicable criteria",
+    "requirement": "MUST select a versioned criterion set by facility type, services and jurisdiction.",
+    "verification": "An application retains the criteria used for its decision.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-R002",
+    "document_id": "LWH-PRD-003",
+    "title": "Evidence provenance",
+    "requirement": "MUST retain original evidence, issuer/source, expiry and verification outcomes.",
+    "verification": "Reviewer comments never overwrite applicant documents.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-R003",
+    "document_id": "LWH-PRD-003",
+    "title": "Inspection independence",
+    "requirement": "MUST assign competent inspectors, record conflicts and distinguish observed from self-reported findings.",
+    "verification": "Conflicted assessors cannot silently approve their own findings.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-R004",
+    "document_id": "LWH-PRD-003",
+    "title": "Corrective work",
+    "requirement": "MUST give findings, response rights, corrective actions, deadlines and evidence of resolution.",
+    "verification": "A submitted correction awaits review rather than auto-closing.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-R005",
+    "document_id": "LWH-PRD-003",
+    "title": "Central decision",
+    "requirement": "MUST restrict approve/conditional/reject/renew/suspend/remove decisions to authorised Directorate roles.",
+    "verification": "A region reviewer can recommend but cannot activate affiliation.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-R006",
+    "document_id": "LWH-PRD-003",
+    "title": "Recognition meaning",
+    "requirement": "MUST show exact scope, conditions, effective/expiry dates and separate statutory status.",
+    "verification": "The public badge cannot imply government accreditation.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-R007",
+    "document_id": "LWH-PRD-003",
+    "title": "Renewal",
+    "requirement": "MUST schedule reassessment under an adopted calendar and prevent silent expiry extension.",
+    "verification": "A proposed renewal retains prior decision and current expiry.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-003-R008",
+    "document_id": "LWH-PRD-003",
+    "title": "Review and continuity",
+    "requirement": "MUST preserve notices, reasons, response, review/appeal and reinstatement; transfer active care responsibilities.",
+    "verification": "Suspension does not delete clinical/financial/inspection history.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-R001",
+    "document_id": "LWH-PRD-004",
+    "title": "Obligation calendar",
+    "requirement": "MUST version expected reporting units, period, due date, indicator set and scope by effective date.",
+    "verification": "A later zone transfer does not rewrite historical completeness.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-R002",
+    "document_id": "LWH-PRD-004",
+    "title": "Automatic preparation",
+    "requirement": "MUST prefill from authorised LW EMR/integration data with visible lineage and gaps.",
+    "verification": "An officer reviews a generated return without retyping known totals.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-R003",
+    "document_id": "LWH-PRD-004",
+    "title": "Multiple channels",
+    "requirement": "MUST support direct forms, controlled bulk imports and authenticated interfaces.",
+    "verification": "Imported rows receive equivalent validation and evidence rules.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-R004",
+    "document_id": "LWH-PRD-004",
+    "title": "Missingness",
+    "requirement": "MUST distinguish nil, unknown, missing, partial, late and not-applicable.",
+    "verification": "No submission cannot appear as zero illness.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-R005",
+    "document_id": "LWH-PRD-004",
+    "title": "Separate streams",
+    "requirement": "MUST keep facility encounters, unique patients, community events and ministry population denominators distinct.",
+    "verification": "A referral appearing at two facilities does not become two unique people.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-R006",
+    "document_id": "LWH-PRD-004",
+    "title": "Attestation and review",
+    "requirement": "MUST record submitter, source period/version and scoped verification.",
+    "verification": "Submission alone never produces a verified executive count.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-R007",
+    "document_id": "LWH-PRD-004",
+    "title": "Correction lineage",
+    "requirement": "MUST preserve submitted versions, reasons and reviewer decisions; recompute affected aggregates.",
+    "verification": "A revised death count is traceable in old/new snapshots.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-004-R008",
+    "document_id": "LWH-PRD-004",
+    "title": "Template reconciliation",
+    "requirement": "MUST reconcile the draft form catalogue with the Director supplied templates before adoption.",
+    "verification": "Every mandated field is mapped, replaced with rationale or recorded as a gap.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-R001",
+    "document_id": "LWH-PRD-005",
+    "title": "Event categories",
+    "requirement": "MUST version event types, reporting source, occurrence time, location precision and review owner.",
+    "verification": "A death notification is not automatically a certified cause of death.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-R002",
+    "document_id": "LWH-PRD-005",
+    "title": "Minimum capture",
+    "requirement": "MUST allow a concise initial notification and subsequent structured completion.",
+    "verification": "Reporter can preserve an urgent signal without completing an unnecessary long form.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-R003",
+    "document_id": "LWH-PRD-005",
+    "title": "Review state",
+    "requirement": "MUST distinguish signal, under-review, verified, duplicate, unsubstantiated and closed.",
+    "verification": "Executive views do not relabel every report as a confirmed disease case.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-R004",
+    "document_id": "LWH-PRD-005",
+    "title": "Urgency ownership",
+    "requirement": "MUST route time-sensitive work to an actually covered team with acknowledgement/escalation.",
+    "verification": "No owner/coverage creates an explicit operational exception.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-R005",
+    "document_id": "LWH-PRD-005",
+    "title": "Privacy purpose",
+    "requirement": "MUST minimise identifiable details and restrict case-level clinical safety review.",
+    "verification": "A general coordinator cannot retrieve confidential incident narratives.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-R006",
+    "document_id": "LWH-PRD-005",
+    "title": "Learning",
+    "requirement": "MUST record contributing factors, corrective actions and reviewed learning separately from individual blame.",
+    "verification": "An incident review yields an accepted action and follow-up.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-R007",
+    "document_id": "LWH-PRD-005",
+    "title": "Duplicates",
+    "requirement": "MUST relate reports of the same occurrence across community/facility channels without erasing sources.",
+    "verification": "Multiple notifications can resolve to one reviewed event.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-005-R008",
+    "document_id": "LWH-PRD-005",
+    "title": "Statutory interface",
+    "requirement": "MUST preserve jurisdiction-specific external reporting obligations and receipts where adopted.",
+    "verification": "A ministry notification is not presented as completed government reporting.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-R001",
+    "document_id": "LWH-PRD-006",
+    "title": "Validation layers",
+    "requirement": "MUST apply schema, code/unit, temporal, arithmetic, cross-field and historical consistency checks.",
+    "verification": "A count cannot be negative or exceed its applicable total without a defined exception.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-R002",
+    "document_id": "LWH-PRD-006",
+    "title": "Severity",
+    "requirement": "MUST distinguish blocking errors, review warnings and informational findings.",
+    "verification": "A warning override requires a reason and reviewer attribution.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-R003",
+    "document_id": "LWH-PRD-006",
+    "title": "Source verification",
+    "requirement": "MUST record evidence examined, method, scope and verifier.",
+    "verification": "Verified means the named check was performed, not universal accuracy.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-R004",
+    "document_id": "LWH-PRD-006",
+    "title": "Stewardship queue",
+    "requirement": "MUST assign duplicate, unmapped-code, missing-source and conflicting-data cases.",
+    "verification": "A failed import cannot silently drop invalid rows.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-R005",
+    "document_id": "LWH-PRD-006",
+    "title": "Corrections",
+    "requirement": "MUST preserve raw source, corrected value, reason, author and downstream impact.",
+    "verification": "An analyst cannot edit a signed source note through a dashboard.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-R006",
+    "document_id": "LWH-PRD-006",
+    "title": "Reproducibility",
+    "requirement": "MUST version rules, source extracts and aggregation runs.",
+    "verification": "A historical snapshot can be reproduced with its original definitions.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-R007",
+    "document_id": "LWH-PRD-006",
+    "title": "Quality visibility",
+    "requirement": "MUST expose completeness, timeliness, verification coverage and limitations next to measures.",
+    "verification": "A high headline count does not hide poor source coverage.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-006-R008",
+    "document_id": "LWH-PRD-006",
+    "title": "Feedback",
+    "requirement": "MUST return actionable findings to the responsible unit and track resolution.",
+    "verification": "Repeated data-quality failures produce training/improvement work.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-R001",
+    "document_id": "LWH-PRD-007",
+    "title": "Role views",
+    "requirement": "MUST provide distinct leadership, Directorate operational, region, zone and facility defaults.",
+    "verification": "A senior strategic view is concise; operational users can reach their tasks.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-R002",
+    "document_id": "LWH-PRD-007",
+    "title": "Measurement contract",
+    "requirement": "MUST display period, unit, denominator, coverage, freshness and definition access.",
+    "verification": "A rate with unreliable population denominator is withheld or labelled appropriately.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-R003",
+    "document_id": "LWH-PRD-007",
+    "title": "Verified and provisional",
+    "requirement": "MUST visibly separate verified snapshots, provisional operational signals and forecasts.",
+    "verification": "A model narrative cannot elevate unverified reports.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-R004",
+    "document_id": "LWH-PRD-007",
+    "title": "Disclosure",
+    "requirement": "MUST apply purpose/scoped views, small-cell and differencing protections to UI, API and exports.",
+    "verification": "A CSV cannot bypass a suppressed cell.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-R005",
+    "document_id": "LWH-PRD-007",
+    "title": "Actionability",
+    "requirement": "MUST link a concern to source evidence, an authorised action and its accountable owner.",
+    "verification": "A leadership decision can be followed through to reviewed outcome.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-R006",
+    "document_id": "LWH-PRD-007",
+    "title": "Historical comparison",
+    "requirement": "MUST show hierarchy/definition changes and comparable cohorts.",
+    "verification": "A region split does not create a false unexplained improvement.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-R007",
+    "document_id": "LWH-PRD-007",
+    "title": "Unknown states",
+    "requirement": "MUST distinguish zero, missing, stale and unavailable.",
+    "verification": "Backend failure cannot show a clean zero-demand dashboard.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-007-R008",
+    "document_id": "LWH-PRD-007",
+    "title": "Narrative assistance",
+    "requirement": "MUST source-link AI summaries and retain deterministic numeric reconciliation.",
+    "verification": "Unsupported causal or clinical claims are withheld for review.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-R001",
+    "document_id": "LWH-PRD-008",
+    "title": "Evidence-linked action",
+    "requirement": "MUST link each intervention to a finding, decision or justified request with scope and intended result.",
+    "verification": "An action can be traced to the information that prompted it.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-R002",
+    "document_id": "LWH-PRD-008",
+    "title": "Acceptance",
+    "requirement": "MUST distinguish assigned from accepted responsibility and require a fallback owner.",
+    "verification": "An unaccepted task remains on the assigning owner exception board.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-R003",
+    "document_id": "LWH-PRD-008",
+    "title": "Resources",
+    "requirement": "MUST record required resources, budget authority, dependencies and due/review dates.",
+    "verification": "Unfunded work is visible rather than reported as underway.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-R004",
+    "document_id": "LWH-PRD-008",
+    "title": "Progress evidence",
+    "requirement": "MUST record milestones, impediments and completion evidence.",
+    "verification": "An email delivery cannot mark a clinic improvement complete.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-R005",
+    "document_id": "LWH-PRD-008",
+    "title": "Outcome review",
+    "requirement": "MUST distinguish activity completion from observed outcome and causal claim.",
+    "verification": "A completed campaign does not automatically claim reduced illness.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-R006",
+    "document_id": "LWH-PRD-008",
+    "title": "Reopening",
+    "requirement": "MUST support rejected completion, recurrence, owner change and reopening with history.",
+    "verification": "An overdue action cannot disappear through reassignment.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-R007",
+    "document_id": "LWH-PRD-008",
+    "title": "Escalation",
+    "requirement": "MUST trigger owned overdue/dependency escalation under adopted calendars.",
+    "verification": "Reminder failures create an alternative support task.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-008-R008",
+    "document_id": "LWH-PRD-008",
+    "title": "Learning",
+    "requirement": "MUST retain lessons, templates and follow-on actions within permitted disclosure.",
+    "verification": "Sensitive case details do not leak into general learning content.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-R001",
+    "document_id": "LWH-PRD-009",
+    "title": "Clinic scope",
+    "requirement": "MUST declare approved services/populations, staff, equipment, hours and referral routes per clinic.",
+    "verification": "An unstaffed clinic cannot appear operational.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-R002",
+    "document_id": "LWH-PRD-009",
+    "title": "Readiness assertions",
+    "requirement": "MUST time-bound readiness by service and source, including temporary constraints.",
+    "verification": "A closed maternity service is excluded despite an active facility listing.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-R003",
+    "document_id": "LWH-PRD-009",
+    "title": "Suitable matching",
+    "requirement": "MUST consider clinical need, capability, location, access and readiness before travel distance.",
+    "verification": "A nearby unsuitable centre is not ranked as an appropriate destination.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-R004",
+    "document_id": "LWH-PRD-009",
+    "title": "Referral states",
+    "requirement": "MUST distinguish request, acknowledgement, acceptance, departure, receipt and outcome.",
+    "verification": "Sending a request does not prove the receiving facility accepted.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-R005",
+    "document_id": "LWH-PRD-009",
+    "title": "Safe handover",
+    "requirement": "MUST include authorised summary, owner, transport/communication needs and outstanding results.",
+    "verification": "A receiving team explicitly accepts its responsibility.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-R006",
+    "document_id": "LWH-PRD-009",
+    "title": "Unavailability",
+    "requirement": "MUST preserve originating ownership on decline/unreachable service and offer owned alternatives.",
+    "verification": "The patient is not left with a failed transfer and no responsible team.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-R007",
+    "document_id": "LWH-PRD-009",
+    "title": "Emergency channels",
+    "requirement": "MUST show only verified local response contacts and actual dispatch/acceptance receipts.",
+    "verification": "No universal ambulance coverage is implied.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-009-R008",
+    "document_id": "LWH-PRD-009",
+    "title": "Closed loop",
+    "requirement": "MUST record receiving outcome, follow-up, feedback and unresolved obligations.",
+    "verification": "Referral closure cannot discard a pending critical result.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-R001",
+    "document_id": "LWH-PRD-010",
+    "title": "Content provenance",
+    "requirement": "MUST store author, reviewer, sources, purpose, audience, jurisdiction, language and version.",
+    "verification": "A clinical article has an accountable qualified reviewer.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-R002",
+    "document_id": "LWH-PRD-010",
+    "title": "Approval and expiry",
+    "requirement": "MUST separate drafting, review, approval, publication, review-due, withdrawal and correction.",
+    "verification": "Unapproved/withdrawn clinical content cannot be served as current guidance.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-R003",
+    "document_id": "LWH-PRD-010",
+    "title": "Policy accuracy",
+    "requirement": "MUST use separately approved ministry wording rather than infer restrictions from unclear audio.",
+    "verification": "Unresolved transcript phrases are absent from live treatment instructions.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-R004",
+    "document_id": "LWH-PRD-010",
+    "title": "Accessible delivery",
+    "requirement": "MUST support concise text, readable documents and contextual links without compulsory long onboarding.",
+    "verification": "Patient can read the relevant explanation from the care-plan task.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-R005",
+    "document_id": "LWH-PRD-010",
+    "title": "Targeted distribution",
+    "requirement": "MUST use consented preferences and permitted audience segments without exposing diagnoses in notifications.",
+    "verification": "A lock-screen message contains a neutral prompt.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-R006",
+    "document_id": "LWH-PRD-010",
+    "title": "Linked support",
+    "requirement": "MUST link content to appropriate care/referral/contact paths and explain its purpose.",
+    "verification": "Education does not silently replace needed clinical review.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-R007",
+    "document_id": "LWH-PRD-010",
+    "title": "Correction propagation",
+    "requirement": "MUST identify affected versions/audiences and distribute meaningful corrections.",
+    "verification": "An offline cache marks expired content and receives withdrawal on reconnect.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-010-R008",
+    "document_id": "LWH-PRD-010",
+    "title": "Feedback and effect",
+    "requirement": "MUST separate delivery, engagement, understanding and health outcomes.",
+    "verification": "A delivered campaign is not reported as proven behaviour change.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-R001",
+    "document_id": "LWH-PRD-011",
+    "title": "One episode",
+    "requirement": "MUST preserve episode identity across conversation, review, appointment, consultation, referral and follow-up.",
+    "verification": "Patient does not repeat an intake when a clinician accepts the case.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-R002",
+    "document_id": "LWH-PRD-011",
+    "title": "Truthful assistance",
+    "requirement": "MUST label automated assistance and distinguish received, clinician-acknowledged and assessed.",
+    "verification": "AI greeting never implies a clinician has reviewed the patient.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-R003",
+    "document_id": "LWH-PRD-011",
+    "title": "Clinical routing",
+    "requirement": "MUST use approved low-risk protocols and emergency escalation independently of payment/AI availability.",
+    "verification": "Unknown critical information cannot default to a reassuring negative.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-R004",
+    "document_id": "LWH-PRD-011",
+    "title": "Covered service",
+    "requirement": "MUST match by privileges, jurisdiction, capacity, continuity and service hours.",
+    "verification": "Unavailable coverage gives a truthful next step and owner.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-R005",
+    "document_id": "LWH-PRD-011",
+    "title": "Consult recovery",
+    "requirement": "MUST preserve draft and episode during call/network failure, with alternative review/reschedule.",
+    "verification": "Disconnected video does not sign, complete or bill care automatically.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-R006",
+    "document_id": "LWH-PRD-011",
+    "title": "Clinical completion",
+    "requirement": "MUST require an authorised signed assessment and owned follow-up/results.",
+    "verification": "An unresolved result survives consultation completion.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-R007",
+    "document_id": "LWH-PRD-011",
+    "title": "Facility link",
+    "requirement": "MUST exchange a permitted referral/summary and await receiving acceptance.",
+    "verification": "A facility appointment is not confirmed from a sent request alone.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-011-R008",
+    "document_id": "LWH-PRD-011",
+    "title": "Care finance",
+    "requirement": "MUST separate clinical urgency, entitlement, price acceptance, payment and settlement.",
+    "verification": "Urgent guidance works without login or settled payment.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-R001",
+    "document_id": "LWH-PRD-012",
+    "title": "Identity crosswalk",
+    "requirement": "MUST preserve local patient IDs, issuing facility and reviewed cross-network identity links.",
+    "verification": "A name/date similarity cannot silently merge two charts.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-R002",
+    "document_id": "LWH-PRD-012",
+    "title": "Disclosure lanes",
+    "requirement": "MUST separate aggregate/anonymised intelligence, protected coded cases and authorised identified care records.",
+    "verification": "A coded summary never appears in a public/general facility browse list.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-R003",
+    "document_id": "LWH-PRD-012",
+    "title": "Grant contract",
+    "requirement": "MUST record subject, recipient/team, purpose, records/fields, legal authority, validity and revocation.",
+    "verification": "Access beyond a granted purpose or record scope is denied.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-R004",
+    "document_id": "LWH-PRD-012",
+    "title": "Minimum clinical view",
+    "requirement": "MUST use appropriate source-attributed summaries and obtain further access when required.",
+    "verification": "The receiving team can identify unknown, absent and conflicting facts.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-R005",
+    "document_id": "LWH-PRD-012",
+    "title": "Correct-patient check",
+    "requirement": "MUST validate recipient, subject linkage and treatment context before integrating a disclosure into a clinical chart.",
+    "verification": "An authorisation token alone cannot attach records to an unmatched patient.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-R006",
+    "document_id": "LWH-PRD-012",
+    "title": "Provenance and correction",
+    "requirement": "MUST retain authorship, source version, signature/attestation and addenda.",
+    "verification": "Receiving an amended report does not erase the prior signed version.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-R007",
+    "document_id": "LWH-PRD-012",
+    "title": "Revocation",
+    "requirement": "MUST stop future access/disclosure and notify replicas under the adopted retention/access policy.",
+    "verification": "Revocation does not pretend already lawfully retained clinical documentation never existed.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-012-R008",
+    "document_id": "LWH-PRD-012",
+    "title": "Patient visibility",
+    "requirement": "MUST provide readable access history, sharing controls and correction requests.",
+    "verification": "A patient can see recipient/purpose and contest an incorrect link.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-R001",
+    "document_id": "LWH-PRD-013",
+    "title": "Programme definition",
+    "requirement": "MUST version eligibility, covered services, limits, periods, fund restrictions and accountable operator.",
+    "verification": "A benefit cannot be offered outside its approved terms.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-R002",
+    "document_id": "LWH-PRD-013",
+    "title": "Subject and payer",
+    "requirement": "MUST separate patient, beneficiary, sponsor, payer and contracting institution.",
+    "verification": "A sponsor account does not become a patient caregiver.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-R003",
+    "document_id": "LWH-PRD-013",
+    "title": "Reservations",
+    "requirement": "MUST reserve entitlements atomically with idempotency and expiry/release rules.",
+    "verification": "Concurrent requests cannot spend the same balance twice.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-R004",
+    "document_id": "LWH-PRD-013",
+    "title": "Fulfilment evidence",
+    "requirement": "MUST settle benefits against actual qualifying service evidence.",
+    "verification": "A booked or cancelled service is not automatically a consumed benefit.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-R005",
+    "document_id": "LWH-PRD-013",
+    "title": "Adjustments",
+    "requirement": "MUST use reasoned maker-checker adjustments, reversals and reconciliation.",
+    "verification": "An operator cannot approve their own balance correction.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-R006",
+    "document_id": "LWH-PRD-013",
+    "title": "Disclosure",
+    "requirement": "MUST report permitted aggregate impact and financial usage with small-cohort protections.",
+    "verification": "Sponsor export cannot reveal clinical notes through beneficiary identifiers.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-R007",
+    "document_id": "LWH-PRD-013",
+    "title": "Financial classification",
+    "requirement": "MUST distinguish cash received, restricted funds, payable liabilities and earned service revenue.",
+    "verification": "Funding receipt is not automatically recognised as service revenue.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-013-R008",
+    "document_id": "LWH-PRD-013",
+    "title": "Urgency independence",
+    "requirement": "MUST keep urgent clinical guidance and priority independent of entitlement balance.",
+    "verification": "An exhausted benefit presents a funding route without changing clinical urgency.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-R001",
+    "document_id": "LWH-PRD-014",
+    "title": "Use-case registry",
+    "requirement": "MUST version intended use, user, data scope, tools, owner, review class and evaluation.",
+    "verification": "An unregistered assistant cannot call privileged production tools.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-R002",
+    "document_id": "LWH-PRD-014",
+    "title": "Bounded retrieval",
+    "requirement": "MUST supply only authorised subject/facility/purpose context with source references.",
+    "verification": "Prompt injection cannot request another patient or payroll dataset.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-R003",
+    "document_id": "LWH-PRD-014",
+    "title": "Clinical review",
+    "requirement": "MUST require clinician review for consequential assessment, orders, prescribing, signing and treatment changes.",
+    "verification": "AI drafts cannot directly execute those commands.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-R004",
+    "document_id": "LWH-PRD-014",
+    "title": "Institutional authority",
+    "requirement": "MUST retain human review for affiliation, sanctions, protected disclosures and funding approvals.",
+    "verification": "A model score cannot activate recognition or release funds.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-R005",
+    "document_id": "LWH-PRD-014",
+    "title": "Approved protocols",
+    "requirement": "MUST execute only current, signed, applicable protocol rules with exclusions and escalation.",
+    "verification": "Unknown safety inputs never default to a safe classification.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-R006",
+    "document_id": "LWH-PRD-014",
+    "title": "Memory correction",
+    "requirement": "MUST distinguish patient report, observed fact, clinician decision and derived summary with lineage.",
+    "verification": "Correcting a source invalidates dependent memories/summaries.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-R007",
+    "document_id": "LWH-PRD-014",
+    "title": "Evaluation and cost",
+    "requirement": "MUST compare usefulness, errors, latency, staff correction burden and cost against a baseline.",
+    "verification": "A fluent answer with unsupported facts fails evaluation.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-014-R008",
+    "document_id": "LWH-PRD-014",
+    "title": "AI-off continuity",
+    "requirement": "MUST preserve core institutional and clinical workflows without inference.",
+    "verification": "Cloud/model outage cannot prevent local care, signing or reporting.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-R001",
+    "document_id": "LWH-PRD-015",
+    "title": "Progressive registration",
+    "requirement": "MUST capture the minimum viable identity/contact and expand only for care or legal need.",
+    "verification": "Emergency/unknown patients can receive provisional IDs without fabricated demographics.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-R002",
+    "document_id": "LWH-PRD-015",
+    "title": "Local identifiers",
+    "requirement": "MUST issue collision-resistant site-qualified identifiers and preserve external identifier systems.",
+    "verification": "Offline registration does not depend on central sequence allocation.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-R003",
+    "document_id": "LWH-PRD-015",
+    "title": "Identity safeguards",
+    "requirement": "MUST support patient/representative confirmation and context-appropriate independent identifiers.",
+    "verification": "A bed number alone is not treated as permanent patient identity.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-R004",
+    "document_id": "LWH-PRD-015",
+    "title": "Longitudinal facts",
+    "requirement": "MUST separate history, problems, allergies, medicines, observations, procedures and plans with source/status.",
+    "verification": "Unknown allergy status differs from no known allergies and from no recorded data.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-R005",
+    "document_id": "LWH-PRD-015",
+    "title": "Sensitive attributes",
+    "requirement": "MUST distinguish recorded sex/gender and relevant physiological/clinical context where needed.",
+    "verification": "Missing attributes are not inferred from name or ministry role.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-R006",
+    "document_id": "LWH-PRD-015",
+    "title": "Duplicate resolution",
+    "requirement": "MUST require reviewed matching/merge and preserve reversible source crosswalks.",
+    "verification": "Conflicting charts cannot be destructively merged by a similarity score.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-R007",
+    "document_id": "LWH-PRD-015",
+    "title": "Documentation integrity",
+    "requirement": "MUST support drafts, attestation, signed versions, addenda and entered-in-error correction.",
+    "verification": "An amendment preserves the original signed statement.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-015-R008",
+    "document_id": "LWH-PRD-015",
+    "title": "Patient continuity",
+    "requirement": "MUST link encounters, episodes, dependants/caregivers, access grants and pending obligations without conflating them.",
+    "verification": "An adult dependant profile does not give another family member blanket access.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-R001",
+    "document_id": "LWH-PRD-016",
+    "title": "Arrival paths",
+    "requirement": "MUST support booked, walk-in, referred and emergency arrivals with correct patient matching.",
+    "verification": "An urgent arrival can bypass nonessential administrative completion.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-R002",
+    "document_id": "LWH-PRD-016",
+    "title": "Triage governance",
+    "requirement": "MUST record observations, source, urgency assessment and assessor under an approved local triage policy.",
+    "verification": "AI cannot independently certify a low-risk clinical disposition.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-R003",
+    "document_id": "LWH-PRD-016",
+    "title": "Queue ownership",
+    "requirement": "MUST distinguish arrival, triage, assigned, acknowledged and assessment; capacity is explicit.",
+    "verification": "Patients/staff see who owns unacknowledged work.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-R004",
+    "document_id": "LWH-PRD-016",
+    "title": "Structured encounter",
+    "requirement": "MUST support complaint/history, examination, assessment, problems, plan, orders and follow-up with unknowns.",
+    "verification": "No examination is auto-filled from a conversational summary.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-R005",
+    "document_id": "LWH-PRD-016",
+    "title": "Privilege checks",
+    "requirement": "MUST check clinician/service/jurisdiction authority at consequential actions.",
+    "verification": "An expired/unprivileged user cannot sign or prescribe.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-R006",
+    "document_id": "LWH-PRD-016",
+    "title": "Parallel teamwork",
+    "requirement": "MUST allow role-scoped observations and tasks while protecting signed content and current orders.",
+    "verification": "Concurrent edits create conflict/review rather than lost clinical facts.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-R007",
+    "document_id": "LWH-PRD-016",
+    "title": "Disposition",
+    "requirement": "MUST support home plan, observation, admission, referral and emergency transfer with owned obligations.",
+    "verification": "Encounter completion cannot orphan a pending result.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-016-R008",
+    "document_id": "LWH-PRD-016",
+    "title": "Continuity",
+    "requirement": "MUST create clear patient instructions, reminders and responsible review tasks.",
+    "verification": "A delivered reminder alone does not close clinical follow-up.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-R001",
+    "document_id": "LWH-PRD-017",
+    "title": "Admission and bed",
+    "requirement": "MUST distinguish admission order, actual admission, bed reservation and occupancy with local concurrency control.",
+    "verification": "Two simultaneous assignments cannot occupy one exclusive bed.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-R002",
+    "document_id": "LWH-PRD-017",
+    "title": "Responsible team",
+    "requirement": "MUST assign consultant/duty team, nursing responsibility and shift handover.",
+    "verification": "Ending a shift does not erase care ownership.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-R003",
+    "document_id": "LWH-PRD-017",
+    "title": "Nursing care",
+    "requirement": "MUST support observations, nursing assessments, care tasks, fluid/intake-output where appropriate and escalation.",
+    "verification": "Late-entry observations retain actual observation and recorded times.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-R004",
+    "document_id": "LWH-PRD-017",
+    "title": "Medication administration",
+    "requirement": "MUST integrate current signed orders and actual administration/omission records.",
+    "verification": "A dispensed medicine is not automatically marked administered.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-R005",
+    "document_id": "LWH-PRD-017",
+    "title": "Rounds and orders",
+    "requirement": "MUST show current plans, results, active orders, critical acknowledgements and outstanding work.",
+    "verification": "A discontinued order cannot remain silently active on a stale task view.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-R006",
+    "document_id": "LWH-PRD-017",
+    "title": "Transfer",
+    "requirement": "MUST record sender/receiver, ward/bed, time, care summary and accepted responsibility.",
+    "verification": "Internal or external transfer is not completed merely by requesting it.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-R007",
+    "document_id": "LWH-PRD-017",
+    "title": "Discharge",
+    "requirement": "MUST reconcile medications, final plan, summary, pending tests, review owner and patient instructions.",
+    "verification": "A pending result survives discharge and reaches a responsible clinician.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-017-R008",
+    "document_id": "LWH-PRD-017",
+    "title": "Special dispositions",
+    "requirement": "MUST handle leave, self-discharge/refusal, death and return according to approved local policy.",
+    "verification": "Clinical event, bed release, billing and statutory documentation remain separate actions.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-R001",
+    "document_id": "LWH-PRD-018",
+    "title": "Programme episodes",
+    "requirement": "MUST create scoped pregnancy, newborn, child and chronic-care episodes linked to the patient chart.",
+    "verification": "An episode does not replace the longitudinal patient record.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-R002",
+    "document_id": "LWH-PRD-018",
+    "title": "Maternal context",
+    "requirement": "MUST record relevant history, gestation/dating source, observations, assessments, plans and authorised referrals.",
+    "verification": "Uncertain dating/history remains explicitly uncertain.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-R003",
+    "document_id": "LWH-PRD-018",
+    "title": "Labour and birth",
+    "requirement": "MUST support local approved labour/birth documentation, team, procedures, outcomes and handover.",
+    "verification": "Clinical decisions/thresholds come from a signed applicable protocol package.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-R004",
+    "document_id": "LWH-PRD-018",
+    "title": "Mother-infant linkage",
+    "requirement": "MUST issue each infant an independent identity with relationship evidence and its own chart.",
+    "verification": "Twins are distinct patients; access does not automatically follow a family label.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-R005",
+    "document_id": "LWH-PRD-018",
+    "title": "Postnatal follow-up",
+    "requirement": "MUST assign maternal/newborn reviews, feeding/support observations and escalation under approved scope.",
+    "verification": "Missed review creates an owned task, not just a notification.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-R006",
+    "document_id": "LWH-PRD-018",
+    "title": "Child growth and immunisation",
+    "requirement": "MUST record measurements/units/age context, vaccine product/batch/administration and approved schedule version.",
+    "verification": "No dose schedule or growth interpretation is fabricated from incomplete inputs.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-R007",
+    "document_id": "LWH-PRD-018",
+    "title": "Chronic continuity",
+    "requirement": "MUST track patient-agreed goals, clinical measures, medicine reconciliation, reviews and self-reported observations.",
+    "verification": "Patient-reported adherence is attributed and not presented as verified administration.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-018-R008",
+    "document_id": "LWH-PRD-018",
+    "title": "Sensitive access",
+    "requirement": "MUST enforce age, representative, confidentiality and programme-specific access policies.",
+    "verification": "Parent/caregiver authority is checked against applicable current rules.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-R001",
+    "document_id": "LWH-PRD-019",
+    "title": "Order authority",
+    "requirement": "MUST record patient/encounter, requester, service, clinical context, priority and authorisation before release.",
+    "verification": "An unsigned/unprivileged request cannot become an active order.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-R002",
+    "document_id": "LWH-PRD-019",
+    "title": "Specimen chain",
+    "requirement": "MUST separate requested test, specimen collection, accession, receipt, rejection and analysis.",
+    "verification": "Wrong/unlabelled specimens follow a documented rejection/recollection path.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-R003",
+    "document_id": "LWH-PRD-019",
+    "title": "Result structure",
+    "requirement": "MUST preserve value or coded/text result, units, reference context, method, status, author and source.",
+    "verification": "A numeric result without required unit/mapping enters review.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-R004",
+    "document_id": "LWH-PRD-019",
+    "title": "Verification",
+    "requirement": "MUST distinguish preliminary, final, corrected, cancelled and entered-in-error results.",
+    "verification": "A corrected report retains the earlier report and notifies affected reviewers.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-R005",
+    "document_id": "LWH-PRD-019",
+    "title": "Critical follow-up",
+    "requirement": "MUST create an owned critical-result task under an approved laboratory/clinical policy and record acknowledgement.",
+    "verification": "Message delivery is not clinician acknowledgement or patient contact.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-R006",
+    "document_id": "LWH-PRD-019",
+    "title": "Imaging",
+    "requirement": "MUST link image study/accession, report and authorised image access; protect image metadata.",
+    "verification": "A study URL cannot bypass patient/recipient authorisation.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-R007",
+    "document_id": "LWH-PRD-019",
+    "title": "External ingestion",
+    "requirement": "MUST quarantine unmapped identities/codes and uncertain OCR until reviewed.",
+    "verification": "A scanned external report is not presented as a verified structured fact.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-019-R008",
+    "document_id": "LWH-PRD-019",
+    "title": "Closure",
+    "requirement": "MUST track review, clinical response and patient communication obligations.",
+    "verification": "A final report cannot disappear from the review worklist after discharge.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-R001",
+    "document_id": "LWH-PRD-020",
+    "title": "Product identity",
+    "requirement": "MUST store medication code/system/version, ingredient/product, form, strength and units as distinct concepts.",
+    "verification": "Free-text display cannot silently substitute a different strength/product.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-R002",
+    "document_id": "LWH-PRD-020",
+    "title": "Prescribing",
+    "requirement": "MUST require an authorised signed order with patient, indication/context, dose/unit, route, timing and duration/stop intent as applicable.",
+    "verification": "No template or AI draft supplies an unreviewed treatment instruction.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-R003",
+    "document_id": "LWH-PRD-020",
+    "title": "Safety context",
+    "requirement": "MUST surface allergy status, relevant current medicines and approved checking results with source freshness.",
+    "verification": "Unknown allergies are not shown as no known allergies.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-R004",
+    "document_id": "LWH-PRD-020",
+    "title": "Dispensing",
+    "requirement": "MUST record prescribed versus actually dispensed item, quantity, batch/expiry and permitted substitution approval.",
+    "verification": "Stock issue does not falsely prove patient ingestion.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-R005",
+    "document_id": "LWH-PRD-020",
+    "title": "Administration",
+    "requirement": "MUST link an actual administration/omission to the current order, patient, time, actor and reason.",
+    "verification": "Retried requests cannot create a second dose record.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-R006",
+    "document_id": "LWH-PRD-020",
+    "title": "Reconciliation",
+    "requirement": "MUST reconcile medicines at admission, transfer, review and discharge.",
+    "verification": "Discontinued/changed orders remain historically visible and update future tasks.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-R007",
+    "document_id": "LWH-PRD-020",
+    "title": "Clinical stock",
+    "requirement": "MUST maintain local lot movements, expiry/recall/quarantine, reservations and witnessed adjustments under policy.",
+    "verification": "Duplicate sync cannot decrement stock twice.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-020-R008",
+    "document_id": "LWH-PRD-020",
+    "title": "Exceptions",
+    "requirement": "MUST record hold, refusal, omission, shortage, adverse event and authorised emergency deviations without fabricating fulfilment.",
+    "verification": "A shortage creates a responsible clinical/pharmacy action.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-R001",
+    "document_id": "LWH-PRD-021",
+    "title": "Clinical plan",
+    "requirement": "MUST link procedure indication, patient, encounter, responsible team, site/context and approved privileges.",
+    "verification": "A facility without the service capability cannot publish the procedure as available.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-R002",
+    "document_id": "LWH-PRD-021",
+    "title": "Consent and preparation",
+    "requirement": "MUST record applicable consent/authority, pre-assessment, required investigations and readiness checks.",
+    "verification": "A checklist does not substitute for the clinician assessment or valid authority.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-R003",
+    "document_id": "LWH-PRD-021",
+    "title": "Safety phases",
+    "requirement": "MUST support team verification before anaesthesia/procedure, before incision/intervention and before leaving the room as applicable.",
+    "verification": "Each required phase records actual participants, findings and exceptions.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-R004",
+    "document_id": "LWH-PRD-021",
+    "title": "Procedure record",
+    "requirement": "MUST capture actual procedure, times, findings, specimens, implants/devices, complications and operator attestation.",
+    "verification": "Planned procedure is not automatically recorded as performed.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-R005",
+    "document_id": "LWH-PRD-021",
+    "title": "Anaesthesia and recovery",
+    "requirement": "MUST support the approved local anaesthesia record, monitoring, medicines and recovery handover.",
+    "verification": "Required intra-procedure documentation remains locally usable offline.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-R006",
+    "document_id": "LWH-PRD-021",
+    "title": "Transfusion chain",
+    "requirement": "MUST link clinical order, specimen/crossmatch evidence, identified component/unit, checks, issue, actual transfusion and reaction monitoring.",
+    "verification": "AI cannot certify compatibility or substitute the blood-bank authorisation.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-R007",
+    "document_id": "LWH-PRD-021",
+    "title": "Traceability",
+    "requirement": "MUST retain component/implant identifiers, stock/disposition and recall links.",
+    "verification": "A recalled item can be traced to actual recipient records within authorised scope.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-021-R008",
+    "document_id": "LWH-PRD-021",
+    "title": "Handover",
+    "requirement": "MUST transfer postoperative/procedure obligations, analgesia/order plans, pending specimens/results and complications to an accepted team.",
+    "verification": "Recovery departure cannot orphan follow-up.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-R001",
+    "document_id": "LWH-PRD-022",
+    "title": "Price book",
+    "requirement": "MUST version service, payer contract, currency, tax/discount applicability and effective dates.",
+    "verification": "A charge uses the approved price applicable to its actual service event.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-R002",
+    "document_id": "LWH-PRD-022",
+    "title": "Charge evidence",
+    "requirement": "MUST link charges to delivered/authorised billable service evidence and reversal reasons.",
+    "verification": "Booking or failed consultation cannot automatically become earned service revenue.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-R003",
+    "document_id": "LWH-PRD-022",
+    "title": "Invoice and receipt",
+    "requirement": "MUST separate invoice, payment intent, received cash/confirmed provider receipt, allocation and refund.",
+    "verification": "A pending external payment is never labelled settled.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-R004",
+    "document_id": "LWH-PRD-022",
+    "title": "Ledger integrity",
+    "requirement": "MUST use append-only balanced transaction groups, currency minor-unit amounts and immutable source keys.",
+    "verification": "Duplicate callbacks or sync cannot duplicate financial effects.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-R005",
+    "document_id": "LWH-PRD-022",
+    "title": "Payer split",
+    "requirement": "MUST support patient, sponsor and institutional responsibility with prior authorisation/claim state where applicable.",
+    "verification": "Benefit exhaustion cannot silently charge an unconsenting patient.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-R006",
+    "document_id": "LWH-PRD-022",
+    "title": "Claims lifecycle",
+    "requirement": "MUST preserve submitted version, acknowledgement, rejection, adjudication, remittance and appeals.",
+    "verification": "Claim submission does not imply payer approval or payment.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-R007",
+    "document_id": "LWH-PRD-022",
+    "title": "Controls",
+    "requirement": "MUST require reasoned independent approval for refunds, write-offs and sensitive adjustments.",
+    "verification": "Maker cannot approve their own transaction outside an adopted exception.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-022-R008",
+    "document_id": "LWH-PRD-022",
+    "title": "Optional accounting",
+    "requirement": "MUST export/reconcile journals to optional general ledger without making it a care prerequisite.",
+    "verification": "Accounting outage queues postings while clinical and care billing work continues.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-R001",
+    "document_id": "LWH-PRD-023",
+    "title": "Progressive account",
+    "requirement": "MUST support verified personal access and optional dependant/caregiver relationships without long mandatory onboarding.",
+    "verification": "User can seek help before completing unrelated profile sections.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-R002",
+    "document_id": "LWH-PRD-023",
+    "title": "Today dashboard",
+    "requirement": "MUST prioritise next care action, active episode, due plan/medicine/review and family subject.",
+    "verification": "An empty account receives useful start actions rather than demo records.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-R003",
+    "document_id": "LWH-PRD-023",
+    "title": "Conversation",
+    "requirement": "MUST identify assistant versus human, preserve source context and offer direct actions.",
+    "verification": "The patient can open their care plan without navigating a chat transcript.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-R004",
+    "document_id": "LWH-PRD-023",
+    "title": "History and progress",
+    "requirement": "MUST show patient-readable timeline, plans, medications, appointments, results and progress with provenance.",
+    "verification": "Unreviewed results and uncertain self-reports are not presented as clinical conclusions.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-R005",
+    "document_id": "LWH-PRD-023",
+    "title": "Family isolation",
+    "requirement": "MUST isolate every subject chart, conversation, draft, reminder and sharing grant.",
+    "verification": "Switching a child profile cannot expose an adult relative record.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-R006",
+    "document_id": "LWH-PRD-023",
+    "title": "Reminders and routines",
+    "requirement": "MUST provide controllable neutral notifications and self-reports without changing prescribed instructions.",
+    "verification": "Reminder completion is not recorded as verified clinical adherence.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-R007",
+    "document_id": "LWH-PRD-023",
+    "title": "Attentive handoff",
+    "requirement": "MUST show request status, responsible team, next step and truthful expected update.",
+    "verification": "Delayed clinical acknowledgement creates an owned service exception.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-023-R008",
+    "document_id": "LWH-PRD-023",
+    "title": "Accessible support",
+    "requirement": "MUST support keyboard/screen reader, low-bandwidth text, manual location and clear emergency access.",
+    "verification": "No compulsory video/voice or inaccessible map blocks help.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-R001",
+    "document_id": "LWH-PRD-024",
+    "title": "Prioritised worklist",
+    "requirement": "MUST show assigned/unclaimed work, urgency source, due obligations, service context and workload.",
+    "verification": "A clinician can identify the next accountable task without scanning unrelated dashboards.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-R002",
+    "document_id": "LWH-PRD-024",
+    "title": "Claim and coverage",
+    "requirement": "MUST enforce one current claim owner and valid privileges/capacity for the service.",
+    "verification": "Concurrent claims do not create two independent treating owners.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-R003",
+    "document_id": "LWH-PRD-024",
+    "title": "Source summary",
+    "requirement": "MUST prepare an editable summary with provenance, negation, contradictions and pending results.",
+    "verification": "AI cannot invent an examination or hide an important conflicting fact.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-R004",
+    "document_id": "LWH-PRD-024",
+    "title": "Drafting and signing",
+    "requirement": "MUST support structured notes, drafts, references and intentional authenticated signing.",
+    "verification": "Accepting a draft is distinct from signing and releasing an order.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-R005",
+    "document_id": "LWH-PRD-024",
+    "title": "Result and follow-up",
+    "requirement": "MUST organise due results, plans, recalls and patient communication with accepted handover.",
+    "verification": "A finished appointment does not close an unresolved result.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-R006",
+    "document_id": "LWH-PRD-024",
+    "title": "Scheduling and workload",
+    "requirement": "MUST show actual commitments, leave/coverage and limits; optional HR is not required.",
+    "verification": "Time includes preparation, documentation and follow-up, not only call duration.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-R007",
+    "document_id": "LWH-PRD-024",
+    "title": "References",
+    "requirement": "MUST retrieve current approved references with source/version and applicability.",
+    "verification": "Unsupported/expired references are visibly restricted.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-024-R008",
+    "document_id": "LWH-PRD-024",
+    "title": "Override and learning",
+    "requirement": "MUST allow authorised clinical override with reason and reviewable audit; no silent model training.",
+    "verification": "Override informs evaluation without automatically changing policy.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-R001",
+    "document_id": "LWH-PRD-025",
+    "title": "Independent modules",
+    "requirement": "MUST independently enable accounting, procurement, HR and payroll by contracted facility/organisation.",
+    "verification": "Disabling ERP leaves core clinical and care-finance functions usable.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-R002",
+    "document_id": "LWH-PRD-025",
+    "title": "Accounting",
+    "requirement": "MUST support chart of accounts, journals, AP/AR, cash/bank reconciliation, budgets, periods and controlled close.",
+    "verification": "Every posting group balances per currency and retains source linkage.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-R003",
+    "document_id": "LWH-PRD-025",
+    "title": "Clinical posting interface",
+    "requirement": "MUST consume care-finance journals idempotently with acknowledgement and difference reports.",
+    "verification": "Accounting failure cannot block care billing or duplicate revenue.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-R004",
+    "document_id": "LWH-PRD-025",
+    "title": "Procurement",
+    "requirement": "MUST support requisition, approvals, supplier/quotation, purchase order, receiving and invoice matching.",
+    "verification": "Procurement receipt creates an authorised stock movement rather than rewriting clinical dispensing history.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-R005",
+    "document_id": "LWH-PRD-025",
+    "title": "HR",
+    "requirement": "MUST support employment records, contracts, assignments, leave and attendance under scoped access.",
+    "verification": "An HR job title alone cannot grant clinical privileges.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-R006",
+    "document_id": "LWH-PRD-025",
+    "title": "Payroll",
+    "requirement": "MUST version country/employer pay rules, approved inputs, calculation, review, payment file and posting.",
+    "verification": "No invented universal tax/pension deductions are activated.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-R007",
+    "document_id": "LWH-PRD-025",
+    "title": "Segregation",
+    "requirement": "MUST separate supplier/employee maintenance, approval, payment and review with reasoned exceptions.",
+    "verification": "A user cannot silently create and pay a beneficiary under incompatible duties.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  },
+  {
+    "id": "LWH-PRD-025-R008",
+    "document_id": "LWH-PRD-025",
+    "title": "Privacy and integration",
+    "requirement": "MUST keep salary/employment information separate from patient charts and executive health aggregates.",
+    "verification": "An exported clinical report contains no payroll details.",
+    "implementation_status": "NOT_ASSESSED",
+    "verification_status": "NOT_RUN"
+  }
+]

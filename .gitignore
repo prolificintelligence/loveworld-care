@@ -17,6 +17,8 @@ dist/
 build/
 .turbo/
 *.tsbuildinfo
+.test-tmp/
+.toolchain/
 
 # Secrets & Local Environment
 .env

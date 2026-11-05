@@ -1,0 +1,844 @@
+[
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:clinical_document.sign:1.0.0",
+    "title": "clinical_document.sign",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "evidence_refs"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "clinical_document.sign"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:clinical_order.release:1.0.0",
+    "title": "clinical_order.release",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "clinical_order.release"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:medication_order.stop:1.0.0",
+    "title": "medication_order.stop",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "reason"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "medication_order.stop"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:referral.accept:1.0.0",
+    "title": "referral.accept",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "receiving_team_id"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "referral.accept"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "receiving_team_id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:referral.confirm_receipt:1.0.0",
+    "title": "referral.confirm_receipt",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "referral.confirm_receipt"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:task.accept_handover:1.0.0",
+    "title": "task.accept_handover",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "receiving_team_id"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "task.accept_handover"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "receiving_team_id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:result.acknowledge:1.0.0",
+    "title": "result.acknowledge",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "result.acknowledge"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:sharing_grant.revoke:1.0.0",
+    "title": "sharing_grant.revoke",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "reason"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "sharing_grant.revoke"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:return.verify:1.0.0",
+    "title": "return.verify",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "evidence_refs"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "return.verify"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:affiliation.decide:1.0.0",
+    "title": "affiliation.decide",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "reason",
+      "evidence_refs",
+      "decision"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "affiliation.decide"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "decision": {
+        "enum": [
+          "approve",
+          "conditional",
+          "reject",
+          "renew",
+          "suspend",
+          "remove"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:entitlement.reserve:1.0.0",
+    "title": "entitlement.reserve",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "allocation_request"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "entitlement.reserve"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "allocation_request": {
+        "type": "object",
+        "required": [
+          "allocation_id",
+          "kind",
+          "amount"
+        ],
+        "properties": {
+          "allocation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "enum": [
+              "service_units",
+              "currency_minor_units"
+            ]
+          },
+          "amount": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:entitlement.settle:1.0.0",
+    "title": "entitlement.settle",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "evidence_refs"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "entitlement.settle"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:finance.reverse:1.0.0",
+    "title": "finance.reverse",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "reason",
+      "evidence_refs",
+      "independent_approval_ref"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "finance.reverse"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "independent_approval_ref": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:encounter.complete:1.0.0",
+    "title": "encounter.complete",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "encounter.complete"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:lwh:command:stay.discharge:1.0.0",
+    "title": "stay.discharge",
+    "type": "object",
+    "required": [
+      "command_name",
+      "resource_id",
+      "expected_version",
+      "idempotency_key",
+      "intent_confirmed",
+      "evidence_refs"
+    ],
+    "properties": {
+      "command_name": {
+        "const": "stay.discharge"
+      },
+      "resource_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_version": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "idempotency_key": {
+        "type": "string",
+        "minLength": 16
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "intent_confirmed": {
+        "const": true
+      },
+      "related_task_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "additionalProperties": false
+  }
+]
