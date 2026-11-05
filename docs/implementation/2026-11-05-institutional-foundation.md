@@ -1,6 +1,6 @@
 # Institutional foundation — implementation and release evidence
 
-Date: 5 November 2026. Status: **IMPLEMENTED IN WORKSPACE; CLOUD RELEASE NOT APPLIED**.
+Date: 5 November 2026. This file records the initial implementation evidence. The subsequent cloud release is **DEPLOYED AND VERIFIED**, as detailed in the [release record](2026-11-05-cloud-release.md).
 
 The user selected foundations and facility onboarding first, confirmed existing data is test/demo data, and explicitly changed the target to live Vercel/Neon deployment with real integrations. Full platform scope remains the LWH suite. This increment does not satisfy the entire suite or establish clinical production readiness.
 
@@ -42,15 +42,17 @@ Repository baseline commit: `6de23be49a7a1fa693dcd04b8d3db8775247249e`; changes 
 | Targeted Ruff and whitespace checks | **Passed** | Institutional code, release tooling and new tests |
 | Original controlled-document hashes | **78 match** | Document integrity, not implementation acceptance |
 
-Final institutional source-tree SHA-256: `c88b083408a3adf640236e93270413c9f229d650811c0cbabb91d4bb0c442cfb`.
+Initial institutional source-tree SHA-256: `c88b083408a3adf640236e93270413c9f229d650811c0cbabb91d4bb0c442cfb`.
 
-Final frontend source-tree SHA-256: `d5889839453b2b19661f7dc4127adbf40a8ef3a493cb9265e13fda7a0217c79e`.
+Initial frontend source-tree SHA-256: `d5889839453b2b19661f7dc4127adbf40a8ef3a493cb9265e13fda7a0217c79e`.
 
 Tests cover restart/replica-visible persistence, session/grant revocation, MFA replay, enrolment token reuse, failed-login throttling, sensitive validation-error redaction, wrong-zone access, administrative/clinical separation, operation-key conflicts, current-authority checks on receipt replay, stale versions, independent review/decision, publication gating and public-field minimisation. The institutional chain uses explicitly synthetic, isolated evidence fixtures; it does not claim an R2 upload, malware scan or live institutional approval.
 
 The suite's 111 supplied implementation acceptance cases remain **NOT_RUN**. PostgreSQL-specific concurrency/trigger tests, browser/accessibility/device tests, real email/storage/scanner receipts, backup/restore and live end-to-end qualification have not run.
 
-## Cloud access and outstanding authority
+## Cloud access at the initial implementation review
+
+The access failures in this section were subsequently resolved using the supplied credentials; see the release record for the successful migration, deployment, provider checks and invitation receipt.
 
 Vercel account access initially succeeded and returned the existing LoveWorld projects. Subsequent approved shell calls failed DNS resolution or connection checks for Vercel, Neon and Resend. No new production project, migration or deployment is asserted. The new release's configuration phase has not been applied. No administrator invitation has been sent.
 
