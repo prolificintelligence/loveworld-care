@@ -31,6 +31,20 @@ async def create_invitation(session, cfg, box, payload, grantor, correlation_id)
             "This role requires central scope",
             422,
         )
+    if payload.role == "CLINICAL_STAFF":
+        require(
+            payload.scope_type == "FACILITY",
+            "VALIDATION_FAILED",
+            "Clinical staff invitations require a facility scope",
+            422,
+        )
+    if payload.role == "CLINICAL_GOVERNOR":
+        require(
+            payload.scope_type in {"GLOBAL", "FACILITY"},
+            "VALIDATION_FAILED",
+            "Clinical governance requires global or facility scope",
+            422,
+        )
     if payload.scope_type != "GLOBAL":
         require(
             payload.scope_id is not None,

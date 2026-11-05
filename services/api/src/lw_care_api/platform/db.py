@@ -16,6 +16,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     event,
+    func,
     text,
 )
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
@@ -36,7 +37,7 @@ def uid() -> str:
 
 
 def now() -> str:
-    return datetime.now(UTC).isoformat()
+    return datetime.now(UTC).isoformat(timespec="microseconds")
 
 
 accounts = Table(
@@ -289,17 +290,23 @@ class Database:
             yield session
 
     async def migrate(self):
+        from .clinical import tables as clinical_tables
+
         async with self.engine.begin() as connection:
             if self.postgres:
                 await connection.execute(text("SELECT pg_advisory_xact_lock(718540119)"))
                 await connection.execute(text(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}"))
             await connection.run_sync(metadata.create_all)
             present = await connection.scalar(
-                schema_versions.select().with_only_columns(schema_versions.c.version)
+                schema_versions.select().with_only_columns(func.max(schema_versions.c.version))
             )
             if present is None:
                 await connection.execute(
                     schema_versions.insert().values(version=1, applied_at=now())
+                )
+            if present is None or present < 2:
+                await connection.execute(
+                    schema_versions.insert().values(version=2, applied_at=now())
                 )
             if self.postgres:
                 await connection.execute(
@@ -309,7 +316,15 @@ class Database:
                     RAISE EXCEPTION 'Append-only institutional history'; END; $$
                 """)
                 )
-                for table in (audit, revisions, decisions, inspections, criteria, evidence):
+                for table in (
+                    audit,
+                    revisions,
+                    decisions,
+                    inspections,
+                    criteria,
+                    evidence,
+                    *clinical_tables.IMMUTABLE,
+                ):
                     await connection.execute(
                         text(f"DROP TRIGGER IF EXISTS immutable_history ON {SCHEMA}.{table.name}")
                     )
@@ -320,12 +335,35 @@ class Database:
                             f"EXECUTE FUNCTION {SCHEMA}.reject_history_mutation()"
                         )
                     )
+                await connection.execute(
+                    text(f"""
+                    CREATE OR REPLACE FUNCTION {SCHEMA}.protect_clinical_records()
+                    RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
+                    IF TG_OP = 'DELETE' THEN
+                        RAISE EXCEPTION 'Clinical source records cannot be deleted';
+                    END IF;
+                    IF OLD.kind = 'note' AND OLD.status = 'SIGNED' THEN
+                        RAISE EXCEPTION 'Signed clinical content is immutable; append an addendum';
+                    END IF;
+                    RETURN NEW; END; $$
+                """)
+                )
+                await connection.execute(
+                    text(
+                        f"DROP TRIGGER IF EXISTS protect_clinical_records ON {SCHEMA}.clinical_records"
+                    )
+                )
+                await connection.execute(
+                    text(
+                        f"CREATE TRIGGER protect_clinical_records BEFORE UPDATE OR DELETE ON {SCHEMA}.clinical_records FOR EACH ROW EXECUTE FUNCTION {SCHEMA}.protect_clinical_records()"
+                    )
+                )
 
     async def ready(self) -> bool:
         async with self.transaction() as session:
             return (
                 await session.scalar(
-                    schema_versions.select().with_only_columns(schema_versions.c.version)
+                    schema_versions.select().with_only_columns(func.max(schema_versions.c.version))
                 )
-                == 1
+                == 2
             )

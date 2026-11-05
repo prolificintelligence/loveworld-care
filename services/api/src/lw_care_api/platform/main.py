@@ -82,6 +82,18 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     @app.middleware("http")
     async def security_headers(request: Request, call_next):
         request.state.correlation_id = db.uid()
+        if request.url.path.startswith("/v1/clinical/") and request.method == "POST":
+            body = await request.body()
+            if len(body) > 1_048_576:
+                return JSONResponse(
+                    {
+                        "error": {
+                            "code": "PAYLOAD_TOO_LARGE",
+                            "message": "Clinical commands are limited to 1 MiB",
+                        }
+                    },
+                    status_code=413,
+                )
         if (
             request.method == "POST"
             and not request.headers.get("authorization")
@@ -110,6 +122,24 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
 
     @app.exception_handler(RuleError)
     async def rule_error(request, exc):
+        if request.url.path.startswith("/v1/clinical/") and not getattr(
+            request.state, "clinical_denial_recorded", False
+        ):
+            from .clinical import store as clinical_store
+
+            actor_id = getattr(request.state, "actor_id", None)
+            parts = request.url.path.split("/")
+            facility_id = parts[3] if len(parts) > 3 and len(parts[3]) == 36 else None
+            async with database.transaction() as session:
+                await clinical_store.audit(
+                    session,
+                    {"id": actor_id} if actor_id else None,
+                    facility_id,
+                    None,
+                    "clinical.request_denied",
+                    request.state.correlation_id,
+                    "DENIED",
+                )
         return JSONResponse(
             {
                 "error": {
@@ -191,6 +221,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             actor is not None, "AUTH_REQUIRED", "Sign in with your account and authenticator", 401
         )
         actor["authority_node_id"] = cfg.authority_node_id
+        request.state.actor_id = actor["id"]
         return actor
 
     async def command(request, payload, action, callback):
@@ -309,7 +340,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     @app.get("/v1/ready")
     async def ready():
         require(await database.ready(), "AUTHORITY_UNAVAILABLE", "Database migration required", 503)
-        return {"status": "READY", "schema_version": 1}
+        return {"status": "READY", "schema_version": 2}
 
     @app.post("/v1/auth/login")
     async def login(payload: c.Login, request: Request, response: Response):
@@ -1608,4 +1639,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
 
         return await deliver_invitations(database, cfg, box)
 
+    from .clinical.router import install as install_clinical
+
+    install_clinical(app, cfg, database, box, actor_for)
     return app

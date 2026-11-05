@@ -314,7 +314,7 @@ def migrate():
         database = Database(settings.database_url)
         try:
             await database.migrate()
-            print(json.dumps({"migration": "APPLIED", "schema_version": 1, "seeded_records": 0}))
+            print(json.dumps({"migration": "APPLIED", "schema_version": 2, "seeded_records": 0}))
         finally:
             await database.engine.dispose()
 

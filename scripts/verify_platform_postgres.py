@@ -29,14 +29,14 @@ async def verify():
     assert re.fullmatch(r"lwh_verify_[0-9a-f]{32}", namespace)
     try:
         async with database.transaction() as session:
-            version = await session.scalar(select(db.schema_versions.c.version))
+            version = await session.scalar(select(func.max(db.schema_versions.c.version)))
             triggers = await session.scalar(
                 text("""select count(*) from information_schema.triggers
                 where trigger_schema='health_platform' and trigger_name='immutable_history'""")
             )
             assert (
-                version == 1 and triggers == 12
-            )  # UPDATE and DELETE entries for six protected tables.
+                version == 2 and triggers == 20
+            )  # UPDATE and DELETE entries for ten protected history tables.
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             translated = await connection.execution_options(
