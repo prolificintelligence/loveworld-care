@@ -2,6 +2,8 @@
 
 Assessment date: 5 November 2026. Baseline: `LW_Health_Intelligence_Platform_Complete_Documentation_Suite_v1.0/LW_Health_Intelligence_Platform_Documentation_Suite_v1.0`, including its manifest, 25 PRDs, 21 shared specifications, 200 granular requirements and 111 specified acceptance cases.
 
+**Latest release:** the [cloud EMR workspace](https://lw-health-intelligence.vercel.app/care) and API are deployed and externally verified. Neon is at schema version 2. Runtime commit `112e69dad39faabec8372c6c7eaf1145721623ca` passed all **92** CI tests plus web and secrets checks. Actual PostgreSQL concurrency/immutability proofs passed in an isolated namespace. No synthetic patients, clinicians, facility approvals or tariffs were seeded into production.
+
 This report separates implemented software, deployment verification and operating acceptance. It is not a percentage estimate or a claim that every requirement in a partially delivered PRD has been completed. The archived controlled suite remains unchanged. Its acceptance cases remain specification records; executed engineering tests and their results are recorded separately in the release evidence.
 
 ## Current delivered platform
