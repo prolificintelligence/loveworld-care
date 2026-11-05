@@ -17,7 +17,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 from uuid import uuid4
 
@@ -46,7 +46,12 @@ from lw_protocol_runtime import (
 
 from ..crypto.signing import ClinicalDocumentSigner, SignedClinicalEnvelope
 from ..integrations.rtc_livekit import LiveKitRTCAdapter
-from ..security.auth import AuthenticatedActor, IdentityAndSessionManager, ProxyAuthorityGrant, TamperEvidentAuditLogger
+from ..security.auth import (
+    AuthenticatedActor,
+    IdentityAndSessionManager,
+    ProxyAuthorityGrant,
+    TamperEvidentAuditLogger,
+)
 from .ledger_engine import FinancialLedgerEngine
 
 
@@ -67,7 +72,7 @@ def build_default_verified_ng_protocol_bundle() -> ProtocolBundle:
     Constructs a dual-authorized, SHA-256 verified active ProtocolBundle for Nigeria (`NG`).
     Signed by distinct Clinical Owner and Clinical Reviewer per §7.2.
     """
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     bundle = ProtocolBundle(
         bundle_id="LW-NG-GP-ADULT-V1",
         semver="1.0.0",
@@ -312,10 +317,10 @@ class EncounterRecord:
     episode_id: str
     patient_id: str
     appointment_id: str
-    state: Literal[
-        "OPEN", "IN_PROGRESS", "DOCUMENTATION_PENDING", "SIGNED", "CLOSED", "ABORTED"
+    state: Literal["OPEN", "IN_PROGRESS", "DOCUMENTATION_PENDING", "SIGNED", "CLOSED", "ABORTED"]
+    modality: Literal[
+        "VIDEO", "AUDIO_FALLBACK", "ASYNC_CLINICAL_MESSAGING", "CLINIC_TO_CLINICIAN_TELECONSULT"
     ]
-    modality: Literal["VIDEO", "AUDIO_FALLBACK", "ASYNC_CLINICAL_MESSAGING", "CLINIC_TO_CLINICIAN_TELECONSULT"]
     funding_route: str
     entitlement_reservation_id: str | None
     primary_clinician_id: str | None = None
@@ -369,7 +374,7 @@ class PatientSubjectRecord:
     gender: str
     relationship_to_account: str  # "SELF", "CHILD", "SPOUSE", "PARENT", "DEPENDENT"
     jurisdiction: str = "NG"
-    created_at_iso: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at_iso: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 @dataclass
@@ -389,10 +394,10 @@ class CareRelationshipRecord:
         ]
     )
     valid_until_iso: str = field(
-        default_factory=lambda: (datetime.now(timezone.utc) + timedelta(days=365)).isoformat()
+        default_factory=lambda: (datetime.now(UTC) + timedelta(days=365)).isoformat()
     )
     revoked: bool = False
-    created_at_iso: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at_iso: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 @dataclass
@@ -408,7 +413,7 @@ class MedicationInstructionRecord:
     duration_days: int
     clinical_indication: str
     status: Literal["ACTIVE", "COMPLETED", "DISCONTINUED"] = "ACTIVE"
-    prescribed_at_iso: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    prescribed_at_iso: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     adherence_reports: list[dict[str, Any]] = field(default_factory=list)
 
 
@@ -435,7 +440,7 @@ class CareTaskRecord:
     ] = "OPEN"
     self_reported_completion: bool = False
     resolved_at_iso: str | None = None
-    created_at_iso: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at_iso: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 @dataclass
@@ -489,7 +494,7 @@ class CoordinationTaskRecord:
     claimed_by: str | None = None
     communication_status: str = "PENDING"
     next_action: str = ""
-    created_at_iso: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at_iso: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 @dataclass
@@ -503,7 +508,7 @@ class DirectorateActionRecord:
     due_date_iso: str
     status: Literal["OPEN", "IN_PROGRESS", "RESOLVED"] = "OPEN"
     evidence_notes: str = ""
-    created_at_iso: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at_iso: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 class ClinicalOperationsService:
@@ -571,7 +576,7 @@ class ClinicalOperationsService:
         §8.5 & AT-10:
         Never exposes unstaffed, already-booked, expired, or expired-credential clinician slots.
         """
-        check_now = now or datetime.now(timezone.utc)
+        check_now = now or datetime.now(UTC)
         available: list[StaffedRosterSlot] = []
         for slot in self._slots.values():
             if slot.is_booked or not slot.staffing_verified:
@@ -616,7 +621,7 @@ class ClinicalOperationsService:
             jurisdiction=jurisdiction,
             state="DRAFT",
             chief_complaint_summary=chief_complaint_summary,
-            created_at_iso=datetime.now(timezone.utc).isoformat(),
+            created_at_iso=datetime.now(UTC).isoformat(),
         )
         self._episodes[ep_id] = ep
         self._emit_outbox_event(
@@ -695,7 +700,10 @@ class ClinicalOperationsService:
                 actor_id=actor.actor_id,
                 request_id=request_id,
                 ai_extraction_provenance=(
-                    {"invocation_id": ai_draft_meta["invocation_id"], "status": ai_draft_meta["status"]}
+                    {
+                        "invocation_id": ai_draft_meta["invocation_id"],
+                        "status": ai_draft_meta["status"],
+                    }
                     if ai_draft_meta
                     else None
                 ),
@@ -710,7 +718,7 @@ class ClinicalOperationsService:
                 "structured_answers": structured_answers,
                 "raw_patient_statement": raw_patient_statement,
                 "ai_draft": ai_draft_meta,
-                "submitted_at_iso": datetime.now(timezone.utc).isoformat(),
+                "submitted_at_iso": datetime.now(UTC).isoformat(),
             }
         )
         ep.protocol_runs.append(proto_res)
@@ -735,7 +743,9 @@ class ClinicalOperationsService:
         actor: AuthenticatedActor,
         episode_id: str,
         slot_id: str,
-        modality: Literal["VIDEO", "AUDIO_FALLBACK", "ASYNC_CLINICAL_MESSAGING", "CLINIC_TO_CLINICIAN_TELECONSULT"],
+        modality: Literal[
+            "VIDEO", "AUDIO_FALLBACK", "ASYNC_CLINICAL_MESSAGING", "CLINIC_TO_CLINICIAN_TELECONSULT"
+        ],
         funding_route: str,
         sponsor_agreement_id: str | None = None,
         idempotency_key: str,
@@ -747,12 +757,17 @@ class ClinicalOperationsService:
         Atomically verifies live clinician staffing & active licence, reserves sponsor entitlement
         if sponsored, and opens an unassigned/queued Encounter for clinician claim.
         """
-        check_now = now or datetime.now(timezone.utc)
+        check_now = now or datetime.now(UTC)
         ep = self._episodes[episode_id]
 
         async with self._booking_lock:
             slot = self._slots.get(slot_id)
-            if not slot or slot.is_booked or not slot.staffing_verified or slot.ends_at <= check_now:
+            if (
+                not slot
+                or slot.is_booked
+                or not slot.staffing_verified
+                or slot.ends_at <= check_now
+            ):
                 raise StaleOrUnstaffedSlotError(
                     "STALE_OR_UNSTAFFED_SLOT: The requested slot is no longer staffed or available."
                 )
@@ -834,7 +849,10 @@ class ClinicalOperationsService:
                 now=now,
             )
 
-            if enc.primary_clinician_id is not None and enc.primary_clinician_id != clinician.actor_id:
+            if (
+                enc.primary_clinician_id is not None
+                and enc.primary_clinician_id != clinician.actor_id
+            ):
                 raise CaseClaimConflictError(
                     f"CONFLICT_CASE_ALREADY_CLAIMED: Encounter {encounter_id} is already owned by {enc.primary_clinician_id}."
                 )
@@ -842,7 +860,7 @@ class ClinicalOperationsService:
             enc.primary_clinician_id = clinician.actor_id
             enc.state = "IN_PROGRESS"
             enc.version += 1
-            enc.claimed_at_iso = (now or datetime.now(timezone.utc)).isoformat()
+            enc.claimed_at_iso = (now or datetime.now(UTC)).isoformat()
 
             ep = self._episodes[enc.episode_id]
             ep.assigned_clinician_id = clinician.actor_id
@@ -875,8 +893,13 @@ class ClinicalOperationsService:
         now: datetime | None = None,
     ) -> EncounterRecord:
         """AT-07: Operations safely reassigns an active encounter when a clinician's licence expires."""
-        if "CLINICAL_OPS" not in ops_actor.roles and "CLINICAL_GOVERNANCE_LEAD" not in ops_actor.roles:
-            raise PermissionError("Only CLINICAL_OPS or CLINICAL_GOVERNANCE_LEAD can reassign encounters.")
+        if (
+            "CLINICAL_OPS" not in ops_actor.roles
+            and "CLINICAL_GOVERNANCE_LEAD" not in ops_actor.roles
+        ):
+            raise PermissionError(
+                "Only CLINICAL_OPS or CLINICAL_GOVERNANCE_LEAD can reassign encounters."
+            )
         if not new_clinician.is_clinician_credential_active(now):
             raise PermissionError("Replacement clinician must have an active verified licence.")
 
@@ -950,7 +973,7 @@ class ClinicalOperationsService:
                 f"OPTIMISTIC_LOCK_MISMATCH: expected version {expected_version}, actual {enc.version}"
             )
 
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
         note_payload = {
             "encounter_id": encounter_id,
             "episode_id": enc.episode_id,
@@ -1008,8 +1031,10 @@ class ClinicalOperationsService:
                 episode_id=enc.episode_id,
                 patient_id=enc.patient_id,
                 work_state="REFERRAL_PENDING",
-                urgency="URGENT" if referral_spec.get("priority") in ("urgent", "stat") else "ROUTINE",
-                due_at_iso=(datetime.now(timezone.utc) + timedelta(hours=24)).isoformat(),
+                urgency="URGENT"
+                if referral_spec.get("priority") in ("urgent", "stat")
+                else "ROUTINE",
+                due_at_iso=(datetime.now(UTC) + timedelta(hours=24)).isoformat(),
                 owner_team="REFERRAL_COORDINATION",
                 next_action=f"Confirm acceptance from {referral_spec['receiving_facility_name']} for {referral_spec['specialty_code']}",
             )
@@ -1043,7 +1068,7 @@ class ClinicalOperationsService:
                     task_type="MEDICATION_REMINDER",
                     title=f"Take {med.medication_name}",
                     description=f"{med.dosage_instructions} ({med.clinical_indication})",
-                    due_at_iso=(datetime.now(timezone.utc) + timedelta(hours=12)).isoformat(),
+                    due_at_iso=(datetime.now(UTC) + timedelta(hours=12)).isoformat(),
                 )
 
         # Handle CareContinuity follow-up plan if specified
@@ -1058,9 +1083,11 @@ class ClinicalOperationsService:
                 owning_clinician_id=clinician.actor_id,
                 programme_name=follow_up_spec["care_continuity_programme"],
                 monitoring_instructions=follow_up_spec["monitoring_instructions"],
-                due_at_iso=(datetime.now(timezone.utc) + timedelta(days=due_days)).isoformat(),
+                due_at_iso=(datetime.now(UTC) + timedelta(days=due_days)).isoformat(),
                 goals=follow_up_spec.get("goals", ["Symptom resolution and vitals monitoring"]),
-                actions=follow_up_spec.get("actions", ["Daily temperature check", "Adherence tracking"]),
+                actions=follow_up_spec.get(
+                    "actions", ["Daily temperature check", "Adherence tracking"]
+                ),
             )
             self._care_plans[plan_id] = plan
             if ep.state != "REFERRED":
@@ -1166,7 +1193,7 @@ class ClinicalOperationsService:
         if not self.auth_manager.verify_totp_step_up(clinician.actor_id, mfa_step_up_code):
             raise PermissionError("INVALID_MFA_STEP_UP_CODE")
 
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
         addendum_payload = {
             "addendum_id": str(uuid4()),
             "encounter_id": encounter_id,
@@ -1229,7 +1256,9 @@ class ClinicalOperationsService:
                 outcome="DENIED",
                 reason_code="DENIED_MISSING_EXPLICIT_USER_TRANSFER_CONSENT",
             )
-            raise PermissionError("AT-15_DENIED: Explicit user consent required for cross-product scan transfer.")
+            raise PermissionError(
+                "AT-15_DENIED: Explicit user consent required for cross-product scan transfer."
+            )
 
         self.auth_manager.authorize_clinical_t3_access(
             request_id=request_id,
@@ -1247,7 +1276,7 @@ class ClinicalOperationsService:
             "product_name": product_name,
             "extracted_ingredients": list(extracted_ingredients),
             "patient_question": patient_question,
-            "consented_at_iso": datetime.now(timezone.utc).isoformat(),
+            "consented_at_iso": datetime.now(UTC).isoformat(),
         }
         ep.consented_handoff_items.append(minimal_dto)
         return minimal_dto
@@ -1259,7 +1288,7 @@ class ClinicalOperationsService:
             {
                 "event_id": str(uuid4()),
                 "event_type": event_type,
-                "occurred_at": datetime.now(timezone.utc).isoformat(),
+                "occurred_at": datetime.now(UTC).isoformat(),
                 "correlation_id": correlation_id,
                 "source": "care-service",
                 "schema_version": 1,
@@ -1268,8 +1297,8 @@ class ClinicalOperationsService:
         )
 
     def _seed_default_facilities(self) -> None:
-        now_iso = datetime.now(timezone.utc).isoformat()
-        exp_iso = (datetime.now(timezone.utc) + timedelta(minutes=60)).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
+        exp_iso = (datetime.now(UTC) + timedelta(minutes=60)).isoformat()
         fac1 = FacilityRecord(
             facility_id="fac-lmc-ikeja",
             facility_name="LoveWorld Medical Centre",
@@ -1343,7 +1372,14 @@ class ClinicalOperationsService:
             account_id=actor.actor_id,
             patient_id=self_id,
             relationship_type="SELF",
-            allowed_scopes=["INTAKE", "BOOKING", "VIEW_RECORDS", "CARE_PLAN", "REMINDERS", "PAYMENTS"],
+            allowed_scopes=[
+                "INTAKE",
+                "BOOKING",
+                "VIEW_RECORDS",
+                "CARE_PLAN",
+                "REMINDERS",
+                "PAYMENTS",
+            ],
         )
         self._relationships[rel.relationship_id] = rel
         return subj
@@ -1376,7 +1412,14 @@ class ClinicalOperationsService:
             account_id=actor.actor_id,
             patient_id=subj_id,
             relationship_type=rel_type,
-            allowed_scopes=["INTAKE", "BOOKING", "VIEW_RECORDS", "CARE_PLAN", "REMINDERS", "PAYMENTS"],
+            allowed_scopes=[
+                "INTAKE",
+                "BOOKING",
+                "VIEW_RECORDS",
+                "CARE_PLAN",
+                "REMINDERS",
+                "PAYMENTS",
+            ],
         )
         self._relationships[rel.relationship_id] = rel
 
@@ -1386,7 +1429,7 @@ class ClinicalOperationsService:
             patient_id=subj_id,
             representative_user_id=actor.actor_id,
             allowed_scopes=tuple(rel.allowed_scopes),
-            valid_until=datetime.now(timezone.utc) + timedelta(days=365),
+            valid_until=datetime.now(UTC) + timedelta(days=365),
             revoked=False,
         )
         actor.active_proxy_grants.append(proxy_grant)
@@ -1469,7 +1512,11 @@ class ClinicalOperationsService:
         # Active appointments
         active_appts: list[dict[str, Any]] = []
         for enc in self._encounters.values():
-            if enc.patient_id == patient_id and enc.state in ("OPEN", "IN_PROGRESS", "DOCUMENTATION_PENDING"):
+            if enc.patient_id == patient_id and enc.state in (
+                "OPEN",
+                "IN_PROGRESS",
+                "DOCUMENTATION_PENDING",
+            ):
                 slot = self._slots.get(enc.appointment_id)
                 active_appts.append(
                     {
@@ -1477,7 +1524,9 @@ class ClinicalOperationsService:
                         "episode_id": enc.episode_id,
                         "modality": enc.modality,
                         "state": enc.state,
-                        "clinician_name": slot.clinician_display_name if slot else "Attending Doctor",
+                        "clinician_name": slot.clinician_display_name
+                        if slot
+                        else "Attending Doctor",
                         "specialty": slot.specialty if slot else "General Practice",
                         "starts_at": slot.starts_at.isoformat() if slot else None,
                     }
@@ -1593,7 +1642,7 @@ class ClinicalOperationsService:
             "active_care_plans": active_plans,
             "recent_observations": recent_obs[:5],
             "next_action": next_action,
-            "last_sync_time": datetime.now(timezone.utc).isoformat(),
+            "last_sync_time": datetime.now(UTC).isoformat(),
         }
 
     # =========================================================================
@@ -1671,7 +1720,7 @@ class ClinicalOperationsService:
             task_type="MEDICATION_REMINDER",
             title=f"Take {med.medication_name}",
             description=f"{med.dosage_instructions} ({med.clinical_indication})",
-            due_at_iso=(datetime.now(timezone.utc) + timedelta(hours=8)).isoformat(),
+            due_at_iso=(datetime.now(UTC) + timedelta(hours=8)).isoformat(),
         )
         return med
 
@@ -1690,7 +1739,7 @@ class ClinicalOperationsService:
             "report_id": report_id,
             "status": status,
             "reported_by_actor_id": actor.actor_id,
-            "reported_at_iso": datetime.now(timezone.utc).isoformat(),
+            "reported_at_iso": datetime.now(UTC).isoformat(),
             "notes": notes,
         }
         med.adherence_reports.append(report)
@@ -1711,10 +1760,12 @@ class ClinicalOperationsService:
             raise ValueError("TASK_NOT_FOUND")
         task.self_reported_completion = self_reported
         task.status = "RESOLVED"
-        task.resolved_at_iso = datetime.now(timezone.utc).isoformat()
+        task.resolved_at_iso = datetime.now(UTC).isoformat()
         return task
 
-    def list_patient_records(self, actor: AuthenticatedActor, patient_id: str) -> list[dict[str, Any]]:
+    def list_patient_records(
+        self, actor: AuthenticatedActor, patient_id: str
+    ) -> list[dict[str, Any]]:
         """Longitudinal history of encounters, signed notes, addenda and observations."""
         records: list[dict[str, Any]] = []
 
@@ -1726,13 +1777,17 @@ class ClinicalOperationsService:
                     {
                         "type": "ENCOUNTER",
                         "record_id": enc.encounter_id,
-                        "date": enc.signed_at_iso or enc.claimed_at_iso or datetime.now(timezone.utc).isoformat(),
+                        "date": enc.signed_at_iso
+                        or enc.claimed_at_iso
+                        or datetime.now(UTC).isoformat(),
                         "state": enc.state,
                         "modality": enc.modality,
                         "clinician_id": enc.primary_clinician_id,
                         "chief_complaint": ep.chief_complaint_summary if ep else None,
                         "signed_note": enc.signed_clinical_note,
-                        "document_hash": enc.signed_envelope.document_sha256 if enc.signed_envelope else None,
+                        "document_hash": enc.signed_envelope.document_sha256
+                        if enc.signed_envelope
+                        else None,
                         "addenda": enc.addenda,
                     }
                 )
@@ -1793,8 +1848,8 @@ class ClinicalOperationsService:
             name=name,
             value=value,
             unit=unit,
-            observed_at_iso=datetime.now(timezone.utc).isoformat(),
-            recorded_at_iso=datetime.now(timezone.utc).isoformat(),
+            observed_at_iso=datetime.now(UTC).isoformat(),
+            recorded_at_iso=datetime.now(UTC).isoformat(),
             source=source,
             verification_status="VERIFIED" if source == "CLINICIAN_ENTERED" else "UNVERIFIED",
             notes=notes,
@@ -1806,10 +1861,11 @@ class ClinicalOperationsService:
     # Network Facilities & Coordination Board (§7, LWC-SCR-302, LWC-SCR-303)
     # =========================================================================
 
-    def list_facilities(self, jurisdiction: str = "NG", service: str | None = None) -> list[FacilityRecord]:
+    def list_facilities(
+        self, jurisdiction: str = "NG", service: str | None = None
+    ) -> list[FacilityRecord]:
         results = [
-            f for f in self._facilities.values()
-            if f.jurisdiction.upper() == jurisdiction.upper()
+            f for f in self._facilities.values() if f.jurisdiction.upper() == jurisdiction.upper()
         ]
         if service:
             results = [f for f in results if service.upper() in [s.upper() for s in f.services]]
@@ -1820,20 +1876,27 @@ class ClinicalOperationsService:
         return facility
 
     def update_facility_readiness(
-        self, facility_id: str, state: Literal["CONFIRMED_AVAILABLE", "STALE", "UNAVAILABLE"], validity_minutes: int = 30
+        self,
+        facility_id: str,
+        state: Literal["CONFIRMED_AVAILABLE", "STALE", "UNAVAILABLE"],
+        validity_minutes: int = 30,
     ) -> FacilityRecord:
         fac = self._facilities.get(facility_id)
         if not fac:
             raise ValueError("FACILITY_NOT_FOUND")
         fac.readiness_state = state
-        fac.readiness_updated_at_iso = datetime.now(timezone.utc).isoformat()
-        fac.readiness_expires_at_iso = (datetime.now(timezone.utc) + timedelta(minutes=validity_minutes)).isoformat()
+        fac.readiness_updated_at_iso = datetime.now(UTC).isoformat()
+        fac.readiness_expires_at_iso = (
+            datetime.now(UTC) + timedelta(minutes=validity_minutes)
+        ).isoformat()
         return fac
 
     def list_coordination_board(self) -> list[CoordinationTaskRecord]:
         return list(self._coordination_tasks.values())
 
-    def claim_coordination_task(self, actor: AuthenticatedActor, task_id: str) -> CoordinationTaskRecord:
+    def claim_coordination_task(
+        self, actor: AuthenticatedActor, task_id: str
+    ) -> CoordinationTaskRecord:
         task = self._coordination_tasks.get(task_id)
         if not task:
             raise ValueError("COORDINATION_TASK_NOT_FOUND")
@@ -1877,7 +1940,7 @@ class ClinicalOperationsService:
             patient_id=ref.patient_id,
             work_state="SERVICE_EXCEPTION",
             urgency="URGENT",
-            due_at_iso=(datetime.now(timezone.utc) + timedelta(hours=4)).isoformat(),
+            due_at_iso=(datetime.now(UTC) + timedelta(hours=4)).isoformat(),
             owner_team="REFERRAL_COORDINATION",
             next_action=f"Referral declined by {ref.receiving_facility_name}: {decline_reason}. Re-route patient.",
         )
@@ -1928,15 +1991,27 @@ class ClinicalOperationsService:
                     "the nearest hospital emergency room right now."
                 ),
                 "emergency_contacts": [
-                    {"region": "NG-NATIONAL", "label": "Nigeria National Emergency Number", "phone": "112"},
-                    {"region": "NG-LAGOS", "label": "Lagos State Emergency / LASAMBUS", "phone": "767"},
-                    {"region": "NG-LMC", "label": "LoveWorld Medical Centre Reception", "phone": "+234-1-888-0000"},
+                    {
+                        "region": "NG-NATIONAL",
+                        "label": "Nigeria National Emergency Number",
+                        "phone": "112",
+                    },
+                    {
+                        "region": "NG-LAGOS",
+                        "label": "Lagos State Emergency / LASAMBUS",
+                        "phone": "767",
+                    },
+                    {
+                        "region": "NG-LMC",
+                        "label": "LoveWorld Medical Centre Reception",
+                        "phone": "+234-1-888-0000",
+                    },
                 ],
                 "suggested_actions": ["Call 112", "Call 767", "Go to Nearest Emergency Room"],
                 "provenance": {
                     "source": "CLINICAL_PROTOCOL_HARD_STOP",
                     "protocol_id": "LW-NG-GP-ADULT-V1",
-                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "timestamp": datetime.now(UTC).isoformat(),
                     "disclaimer": "Emergency protocol triggered. Immediate in-person care required.",
                 },
             }
@@ -1949,7 +2024,11 @@ class ClinicalOperationsService:
                 "Caution: If you experience persistent vomiting, inability to retain oral fluids, dark urine, or extreme lethargy, "
                 "seek in-person medical evaluation immediately."
             )
-            actions = ["Book GP Teleconsultation", "Complete Guided Intake", "Find Nearby Network Clinic"]
+            actions = [
+                "Book GP Teleconsultation",
+                "Complete Guided Intake",
+                "Find Nearby Network Clinic",
+            ]
         elif any(w in msg_lower for w in ["cough", "cold", "sore throat", "catarrh"]):
             reply_text = (
                 "For mild upper respiratory symptoms, ensure warm fluid intake, steam inhalation, and monitor your temperature. "
@@ -1961,7 +2040,11 @@ class ClinicalOperationsService:
                 "Managing blood pressure requires consistent medication adherence and routine checks. "
                 "Record your latest readings in 'Records & Progress'. If you experience sudden blurred vision, severe headache, or chest tightness, seek urgent care."
             )
-            actions = ["Log Blood Pressure Reading", "Review Medication Routine", "Book Follow-up Review"]
+            actions = [
+                "Log Blood Pressure Reading",
+                "Review Medication Routine",
+                "Book Follow-up Review",
+            ]
         else:
             reply_text = (
                 "I am your LoveWorld Care Health Intelligence Companion. I can help navigate symptoms, "
@@ -1978,7 +2061,7 @@ class ClinicalOperationsService:
             "provenance": {
                 "source": "BOUNDED_HEALTH_COMPANION",
                 "protocol_id": "LW-NG-GP-ADULT-V1",
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
                 "disclaimer": "This information is approved guidance for navigation and does not substitute for a clinician-signed diagnostic assessment.",
             },
         }
@@ -1989,24 +2072,50 @@ class ClinicalOperationsService:
 
     def get_directorate_metrics(self) -> dict[str, Any]:
         """Computes live authoritative metrics per LWC-MET-001 to LWC-MET-016."""
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
         total_episodes = len(self._episodes)
         signed_encounters = sum(1 for e in self._encounters.values() if e.state == "SIGNED")
-        active_encounters = sum(1 for e in self._encounters.values() if e.state in ("OPEN", "IN_PROGRESS"))
+        active_encounters = sum(
+            1 for e in self._encounters.values() if e.state in ("OPEN", "IN_PROGRESS")
+        )
         total_slots = len(self._slots)
         booked_slots = sum(1 for s in self._slots.values() if s.is_booked)
         verified_facilities = len(self._facilities)
-        confirmed_facilities = sum(1 for f in self._facilities.values() if f.readiness_state == "CONFIRMED_AVAILABLE")
+        confirmed_facilities = sum(
+            1 for f in self._facilities.values() if f.readiness_state == "CONFIRMED_AVAILABLE"
+        )
         total_referrals = len(self._referrals)
-        accepted_referrals = sum(1 for r in self._referrals.values() if r.state in ("ACCEPTED", "COMPLETED"))
+        accepted_referrals = sum(
+            1 for r in self._referrals.values() if r.state in ("ACCEPTED", "COMPLETED")
+        )
         due_tasks = sum(1 for t in self._tasks.values() if t.status in ("OPEN", "IN_PROGRESS"))
-        resolved_tasks = sum(1 for t in self._tasks.values() if t.status in ("RESOLVED", "VERIFIED_CLOSED"))
+        resolved_tasks = sum(
+            1 for t in self._tasks.values() if t.status in ("RESOLVED", "VERIFIED_CLOSED")
+        )
 
-        access_fulfilment_pct = round((signed_encounters + active_encounters) / max(1, total_episodes) * 100, 1) if total_episodes else 100.0
-        continuity_completion_pct = round(resolved_tasks / max(1, due_tasks + resolved_tasks) * 100, 1) if (due_tasks + resolved_tasks) else 100.0
-        facility_readiness_pct = round(confirmed_facilities / max(1, verified_facilities) * 100, 1) if verified_facilities else 100.0
-        referral_completion_pct = round(accepted_referrals / max(1, total_referrals) * 100, 1) if total_referrals else 100.0
-        workforce_load_pct = round(booked_slots / max(1, total_slots) * 100, 1) if total_slots else 0.0
+        access_fulfilment_pct = (
+            round((signed_encounters + active_encounters) / max(1, total_episodes) * 100, 1)
+            if total_episodes
+            else 100.0
+        )
+        continuity_completion_pct = (
+            round(resolved_tasks / max(1, due_tasks + resolved_tasks) * 100, 1)
+            if (due_tasks + resolved_tasks)
+            else 100.0
+        )
+        facility_readiness_pct = (
+            round(confirmed_facilities / max(1, verified_facilities) * 100, 1)
+            if verified_facilities
+            else 100.0
+        )
+        referral_completion_pct = (
+            round(accepted_referrals / max(1, total_referrals) * 100, 1)
+            if total_referrals
+            else 100.0
+        )
+        workforce_load_pct = (
+            round(booked_slots / max(1, total_slots) * 100, 1) if total_slots else 0.0
+        )
 
         metrics_list = [
             {
@@ -2036,7 +2145,11 @@ class ClinicalOperationsService:
             {
                 "id": "LWC-MET-004",
                 "name": "Unmet Demand (Capacity Gap)",
-                "value": sum(1 for ep in self._episodes.values() if ep.active_protocol_outcome == "OUT_OF_SCOPE"),
+                "value": sum(
+                    1
+                    for ep in self._episodes.values()
+                    if ep.active_protocol_outcome == "OUT_OF_SCOPE"
+                ),
                 "unit": "requests",
                 "definition": "Requests not fulfilled due to service capability or clinician capacity gaps",
                 "denominator": f"{total_episodes} Total Episodes",
@@ -2141,7 +2254,10 @@ class ClinicalOperationsService:
         return action
 
     def update_directorate_action(
-        self, action_id: str, status: Literal["OPEN", "IN_PROGRESS", "RESOLVED"], evidence_notes: str
+        self,
+        action_id: str,
+        status: Literal["OPEN", "IN_PROGRESS", "RESOLVED"],
+        evidence_notes: str,
     ) -> DirectorateActionRecord:
         action = self._directorate_actions.get(action_id)
         if not action:

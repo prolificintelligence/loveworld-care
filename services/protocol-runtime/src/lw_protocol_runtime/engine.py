@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any, Literal
 from uuid import uuid4
@@ -203,7 +203,7 @@ class ProtocolBundle(BaseModel):
             return False
         if not self.test_report_hash:
             return False
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         if self.expires_at and self.expires_at <= now:
             return False
         if self.effective_at and self.effective_at > now:
@@ -404,23 +404,24 @@ def validate_structured_answers(
         if spec.field_type == "boolean" and not isinstance(val, bool):
             issues.append(field_id)
         elif spec.field_type == "number":
-            if isinstance(val, bool) or not isinstance(val, (int, float)):
-                issues.append(field_id)
-            else:
-                if spec.min_value is not None and float(val) < spec.min_value:
-                    issues.append(field_id)
-                if spec.max_value is not None and float(val) > spec.max_value:
-                    issues.append(field_id)
-        elif spec.field_type == "enum":
-            if not isinstance(val, str) or (
-                spec.allowed_values and val not in spec.allowed_values
+            if (
+                isinstance(val, bool)
+                or not isinstance(val, (int, float))
+                or (
+                    (spec.min_value is not None and float(val) < spec.min_value)
+                    or (spec.max_value is not None and float(val) > spec.max_value)
+                )
             ):
                 issues.append(field_id)
-        elif spec.field_type == "string_list":
-            if not isinstance(val, list):
+        elif spec.field_type == "enum":
+            if not isinstance(val, str) or (spec.allowed_values and val not in spec.allowed_values):
                 issues.append(field_id)
-            elif spec.allowed_values and any(item not in spec.allowed_values for item in val):
-                issues.append(field_id)
+        elif spec.field_type == "string_list" and (
+            not isinstance(val, list)
+            or spec.allowed_values
+            and any(item not in spec.allowed_values for item in val)
+        ):
+            issues.append(field_id)
 
     return sorted(set(issues))
 
@@ -433,7 +434,7 @@ def execute_protocol(
     §7.3 Deterministic execution contract.
     Never invokes an LLM; always writes full rule provenance and truthful fallbacks.
     """
-    now_iso = datetime.now(timezone.utc).isoformat()
+    now_iso = datetime.now(UTC).isoformat()
     bundle = protocol_registry.active_for(case.population, case.jurisdiction)
 
     # 1. Missing or unvalidated protocol bundle -> truthful PROTOCOL_UNAVAILABLE fallback

@@ -18,9 +18,9 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from math import ceil
-from typing import Literal
+from typing import Any, Literal
 from uuid import uuid4
 
 CurrencyCode = Literal["NGN", "ESP", "USD"]
@@ -123,10 +123,12 @@ class FinanceExceptionItem:
     currency: CurrencyCode
     maker_actor_id: str
     maker_reason: str
-    status: Literal["PENDING_CHECKER", "PENDING_REVIEW", "APPROVED", "REJECTED", "REMEDIATED"] = "PENDING_REVIEW"
+    status: Literal["PENDING_CHECKER", "PENDING_REVIEW", "APPROVED", "REJECTED", "REMEDIATED"] = (
+        "PENDING_REVIEW"
+    )
     checker_actor_id: str | None = None
     checker_notes: str | None = None
-    created_at_iso: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at_iso: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     resolved_at_iso: str | None = None
 
 
@@ -199,7 +201,7 @@ class FinancialLedgerEngine:
         if amount_minor <= 0:
             raise ValueError("Journal entry amount_minor must be strictly positive.")
         batch_id = str(uuid4())
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
         self._journal.append(
             JournalLine(
                 line_id=str(uuid4()),
@@ -334,7 +336,7 @@ class FinancialLedgerEngine:
                 currency=pool.currency,
                 state="RESERVED",
                 idempotency_key=idempotency_key,
-                created_at_iso=datetime.now(timezone.utc).isoformat(),
+                created_at_iso=datetime.now(UTC).isoformat(),
             )
             self._reservations[res_id] = res
             self._idempotency_index[idempotency_key] = res_id
@@ -430,7 +432,7 @@ class FinancialLedgerEngine:
                 clinician_payable_minor=clinician_payable_minor,
                 currency=res.currency,
                 status="ACCRUED_PENDING_APPROVAL",
-                created_at_iso=datetime.now(timezone.utc).isoformat(),
+                created_at_iso=datetime.now(UTC).isoformat(),
             )
             self._payables_by_encounter[signed_encounter_id] = payable
             return res, payable
@@ -608,12 +610,10 @@ class FinancialLedgerEngine:
         exc.status = decision
         exc.checker_actor_id = checker_actor_id
         exc.checker_notes = checker_notes
-        exc.resolved_at_iso = datetime.now(timezone.utc).isoformat()
+        exc.resolved_at_iso = datetime.now(UTC).isoformat()
         return exc
 
-    def build_sponsor_utilisation_report(
-        self, agreement_id: str
-    ) -> SponsorSafeUtilisationReport:
+    def build_sponsor_utilisation_report(self, agreement_id: str) -> SponsorSafeUtilisationReport:
         """
         §10.5 & AT-14:
         Produces an aggregate-only SponsorCare report.
@@ -672,7 +672,11 @@ class FinancialLedgerEngine:
             + refund_quality_reserve_minor
         )
         margin = recognised_revenue_minor - total_var
-        pct = round((margin / recognised_revenue_minor) * 100.0, 2) if recognised_revenue_minor > 0 else 0.0
+        pct = (
+            round((margin / recognised_revenue_minor) * 100.0, 2)
+            if recognised_revenue_minor > 0
+            else 0.0
+        )
         return EncounterContributionBreakdown(
             encounter_id=encounter_id,
             payer_cohort=payer_cohort,
@@ -703,7 +707,7 @@ class FinancialLedgerEngine:
         remaining_fixed = max(0, monthly_fixed_operating_cost_minor - ic)
         if weighted_encounter_contribution_minor <= 0:
             raise ValueError("weighted_encounter_contribution_minor must be positive")
-        return int(ceil(remaining_fixed / weighted_encounter_contribution_minor))
+        return ceil(remaining_fixed / weighted_encounter_contribution_minor)
 
     def _serialize_exception(
         self,
@@ -728,7 +732,7 @@ class FinancialLedgerEngine:
             "checker_id": exc.checker_actor_id,
             "status": exc.status,
             "action_notes": exc.checker_notes,
-            "created_at_iso": getattr(exc, "created_at_iso", datetime.now(timezone.utc).isoformat()),
+            "created_at_iso": getattr(exc, "created_at_iso", datetime.now(UTC).isoformat()),
             "resolved_at_iso": exc.resolved_at_iso,
         }
 
@@ -754,7 +758,7 @@ class FinancialLedgerEngine:
         }
         category = cat_map.get(exception_type, "MANUAL_ADJUSTMENT")
         ref_id = agreement_id or encounter_id or f"ref-{uuid4().hex[:8]}"
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
         exc_id = f"exc-{uuid4().hex[:8]}"
         exc = FinanceExceptionItem(
             exception_id=exc_id,
@@ -768,7 +772,9 @@ class FinancialLedgerEngine:
             created_at_iso=now_iso,
         )
         self._exceptions[exc.exception_id] = exc
-        return self._serialize_exception(exc, agreement_id=agreement_id, encounter_id=encounter_id, exception_type=exception_type)
+        return self._serialize_exception(
+            exc, agreement_id=agreement_id, encounter_id=encounter_id, exception_type=exception_type
+        )
 
     def action_finance_exception(
         self,
@@ -782,7 +788,9 @@ class FinancialLedgerEngine:
             raise KeyError(f"Exception {exception_id} not found")
         exc = self._exceptions[exception_id]
         if exc.maker_actor_id == checker_id:
-            raise PermissionError("MAKER_CHECKER_VIOLATION: MAKER_CANNOT_ACT_AS_CHECKER: The creator of a financial exception cannot approve or reject it.")
+            raise PermissionError(
+                "MAKER_CHECKER_VIOLATION: MAKER_CANNOT_ACT_AS_CHECKER: The creator of a financial exception cannot approve or reject it."
+            )
         status_map: dict[str, Any] = {
             "APPROVE": "APPROVED",
             "REJECT": "REJECTED",
@@ -791,7 +799,7 @@ class FinancialLedgerEngine:
         exc.status = status_map.get(action, "APPROVED")
         exc.checker_actor_id = checker_id
         exc.checker_notes = notes
-        exc.resolved_at_iso = datetime.now(timezone.utc).isoformat()
+        exc.resolved_at_iso = datetime.now(UTC).isoformat()
         return self._serialize_exception(exc)
 
     def list_finance_exceptions(
@@ -802,17 +810,17 @@ class FinancialLedgerEngine:
             items = [e for e in items if e.status == status]
         serialized = [self._serialize_exception(e) for e in items]
         if agreement_id:
-            serialized = [s for s in serialized if s.get("agreement_id") == agreement_id or s.get("reference_id") == agreement_id]
+            serialized = [
+                s
+                for s in serialized
+                if s.get("agreement_id") == agreement_id or s.get("reference_id") == agreement_id
+            ]
         return serialized
 
     def compute_reconciliation_summary(self) -> dict[str, Any]:
         """§17.1 & LWC-SCR-305: Reconciled ledger state, restricted pools, and imbalance detection."""
-        total_debits = sum(
-            l.amount_minor for l in self._journal if l.direction == "DEBIT"
-        )
-        total_credits = sum(
-            l.amount_minor for l in self._journal if l.direction == "CREDIT"
-        )
+        total_debits = sum(l.amount_minor for l in self._journal if l.direction == "DEBIT")
+        total_credits = sum(l.amount_minor for l in self._journal if l.direction == "CREDIT")
         is_balanced = total_debits == total_credits
 
         total_funded_cash = sum(p.funded_cash_minor for p in self._pools.values())
@@ -832,10 +840,12 @@ class FinancialLedgerEngine:
         )
 
         pending_exceptions_count = sum(
-            1 for e in self._exceptions.values() if e.status in ("PENDING_CHECKER", "PENDING_REVIEW")
+            1
+            for e in self._exceptions.values()
+            if e.status in ("PENDING_CHECKER", "PENDING_REVIEW")
         )
 
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
         return {
             "summary_id": f"rec-{uuid4().hex[:8]}",
             "as_of_iso": now_iso,

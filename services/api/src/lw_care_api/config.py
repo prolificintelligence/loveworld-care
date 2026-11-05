@@ -120,7 +120,6 @@ class Settings(BaseSettings):
     default_gp_clinician_payable_ngn_minor: int = 330000  # 3,300.00 NGN in kobo
     default_institutional_access_fee_ngn_minor: int = 35000  # 350.00 NGN in kobo
 
-
     # ------------------------------------------------------------------
     # Fail-closed runtime validation (ADR-0003)
     # ------------------------------------------------------------------

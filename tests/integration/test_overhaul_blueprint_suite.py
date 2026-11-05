@@ -6,6 +6,7 @@ Verifies LWC-ACC-001..005, LWC-SCR-101..306, LWC-MET-001..016, and Maker/Checker
 from __future__ import annotations
 
 from datetime import timedelta
+
 import pytest
 from fastapi.testclient import TestClient
 from lw_care_api.main import create_app
@@ -22,7 +23,9 @@ def client(app):
     return TestClient(app)
 
 
-def _token(app, sub: str, aud: str, roles: list[str], mfa: bool = True, org: str | None = None) -> str:
+def _token(
+    app, sub: str, aud: str, roles: list[str], mfa: bool = True, org: str | None = None
+) -> str:
     tokens: TokenService = app.state.token_service
     return tokens.issue(
         sub=sub,
@@ -95,7 +98,9 @@ class TestIdentityAndSubjects:
         assert rel["relationship_id"].startswith("rel-")
 
         # Revoke care relationship
-        rev_res = client.post(f"/v1/identity/relationships/{rel['relationship_id']}/revoke", headers=headers)
+        rev_res = client.post(
+            f"/v1/identity/relationships/{rel['relationship_id']}/revoke", headers=headers
+        )
         assert rev_res.status_code == 200
         assert rev_res.json()["revoked"] is True
 

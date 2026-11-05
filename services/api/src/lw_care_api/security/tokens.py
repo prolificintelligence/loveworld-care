@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import secrets
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import jwt
@@ -95,7 +95,7 @@ class TokenService:
         sid: str | None = None,
     ) -> str:
         self._assert_roles_allowed(audience, roles)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         payload: dict[str, object] = {
             "iss": self._issuer,
             "aud": audience,
@@ -153,7 +153,7 @@ class TokenService:
             sid=str(data["sid"]),
             jti=str(data["jti"]),
             org=str(org) if org else None,
-            expires_at=datetime.fromtimestamp(int(data["exp"]), tz=timezone.utc),
+            expires_at=datetime.fromtimestamp(int(data["exp"]), tz=UTC),
         )
 
     def revoke_session(self, sid: str) -> None:
@@ -176,7 +176,9 @@ class TokenService:
         except jwt.PyJWTError:
             return None
         roles = data.get("roles")
-        role_tuple = tuple(r for r in roles if isinstance(r, str)) if isinstance(roles, list) else ()
+        role_tuple = (
+            tuple(r for r in roles if isinstance(r, str)) if isinstance(roles, list) else ()
+        )
         return str(data["sub"]), role_tuple
 
     def public_jwk(self) -> dict[str, str]:

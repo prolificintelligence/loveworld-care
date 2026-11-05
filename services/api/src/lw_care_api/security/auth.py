@@ -9,7 +9,7 @@ import hashlib
 import hmac
 import json
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Literal
 from uuid import uuid4
 
@@ -53,14 +53,12 @@ class AuthenticatedActor:
 
     def is_clinician_credential_active(self, now: datetime | None = None) -> bool:
         """§8.1 & AT-07: Credential expiry automatically blocks clinical case claiming/signing."""
-        check_now = now or datetime.now(timezone.utc)
+        check_now = now or datetime.now(UTC)
         if self.clinician_status != "APPROVED_ACTIVE":
             return False
         if not self.clinician_mdcn_licence:
             return False
-        if self.credential_expires_at and self.credential_expires_at <= check_now:
-            return False
-        return True
+        return not (self.credential_expires_at and self.credential_expires_at <= check_now)
 
 
 @dataclass(frozen=True)
@@ -112,7 +110,7 @@ class TamperEvidentAuditLogger:
         reason_code: str,
     ) -> AuditRecord:
         seq = len(self._entries) + 1
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
         bg_id = actor.active_break_glass.grant_id if actor.active_break_glass else None
 
         canonical = json.dumps(
@@ -203,9 +201,7 @@ class IdentityAndSessionManager:
         self._sessions: dict[str, AuthenticatedActor] = {}
         self._totp_secrets: dict[str, str] = {}
 
-    def register_session(
-        self, actor: AuthenticatedActor, totp_secret: str | None = None
-    ) -> str:
+    def register_session(self, actor: AuthenticatedActor, totp_secret: str | None = None) -> str:
         self._sessions[actor.session_id] = actor
         if totp_secret:
             self._totp_secrets[actor.actor_id] = totp_secret
@@ -217,7 +213,7 @@ class IdentityAndSessionManager:
             "sid": actor.session_id,
             "roles": actor.roles,
             "mfa": actor.mfa_verified,
-            "exp": datetime.now(timezone.utc) + timedelta(hours=8),
+            "exp": datetime.now(UTC) + timedelta(hours=8),
         }
         return jwt.encode(payload, self._jwt_secret, algorithm="HS256")
 
@@ -294,7 +290,7 @@ class IdentityAndSessionManager:
             )
             raise PermissionError("Active clinician credential required for break-glass access.")
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         grant = BreakGlassGrant(
             grant_id=str(uuid4()),
             clinician_id=clinician.actor_id,
@@ -328,7 +324,7 @@ class IdentityAndSessionManager:
         assigned_clinician_id: str | None,
         now: datetime | None = None,
     ) -> None:
-        check_now = now or datetime.now(timezone.utc)
+        check_now = now or datetime.now(UTC)
 
         # AT-13: Shared device session lock check
         if actor.session_locked:
@@ -450,7 +446,11 @@ class IdentityAndSessionManager:
             return
 
         # Patient / Proxy check
-        if "PATIENT" in actor.roles and actor.actor_id == patient_id and action in {"READ", "WRITE"}:
+        if (
+            "PATIENT" in actor.roles
+            and actor.actor_id == patient_id
+            and action in {"READ", "WRITE"}
+        ):
             self._audit.record(
                 request_id=request_id,
                 actor=actor,

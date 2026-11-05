@@ -16,9 +16,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import re
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any, Literal
 from uuid import uuid4
@@ -137,7 +138,11 @@ AGENT_REGISTRY: dict[AgentRoleId, AgentDefinition] = {
         max_permissible_data_tier=DataTier.T2_PERSONAL,
         allowed_backends=[ModelProviderBackend.GOOGLE_GEMINI_VERTEX],
         allowed_tools=["verify_contract_cohort_rule"],
-        prohibited_actions=["read_clinical_narrative", "redirect_funds", "override_entitlement_cap"],
+        prohibited_actions=[
+            "read_clinical_narrative",
+            "redirect_funds",
+            "override_entitlement_cap",
+        ],
         requires_human_sign_off=True,
         max_tokens=512,
         max_cost_ngn_minor=5000,
@@ -177,7 +182,9 @@ PROMPT_INJECTION_PATTERNS: list[re.Pattern[str]] = [
     re.compile(r"system\s*prompt", re.IGNORECASE),
     re.compile(r"override\s+hard[_\s-]?stop", re.IGNORECASE),
     re.compile(r"call\s+tool|execute\s+command|exfiltrate|dump\s+database", re.IGNORECASE),
-    re.compile(r"redeem[_\s-]?entitlement|approve[_\s-]?payout|sign[_\s-]?encounter", re.IGNORECASE),
+    re.compile(
+        r"redeem[_\s-]?entitlement|approve[_\s-]?payout|sign[_\s-]?encounter", re.IGNORECASE
+    ),
     re.compile(r"you\s+are\s+now\s+an?\s+unrestricted", re.IGNORECASE),
 ]
 
@@ -297,7 +304,7 @@ class ModelGatewayRouter:
 
     async def invoke(self, req: ModelInvocationRequest) -> ModelInvocationResult:
         started = time.perf_counter()
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
         agent_def = AGENT_REGISTRY[req.agent_id]
 
         prompt_hash = hashlib.sha256(
@@ -496,13 +503,14 @@ class ModelGatewayRouter:
                             int(usage.get("prompt_tokens", 120)),
                             int(usage.get("completion_tokens", 80)),
                         )
-            except Exception:
-                pass
+            except (httpx.HTTPError, ValueError, KeyError, IndexError) as exc:
+                logging.getLogger(__name__).warning(
+                    "Private model request failed: %s", type(exc).__name__
+                )
 
         # 2. Live OpenRouter Free-Tier Provider (with automatic free-model fallback)
-        if (
-            self.config.openrouter_api_key
-            and not self.config.openrouter_api_key.startswith("REPLACE_")
+        if self.config.openrouter_api_key and not self.config.openrouter_api_key.startswith(
+            "REPLACE_"
         ):
             for candidate_model in self.config.openrouter_free_models:
                 try:
@@ -556,7 +564,10 @@ class ModelGatewayRouter:
                                     int(usage.get("prompt_tokens", 110)),
                                     int(usage.get("completion_tokens", 65)),
                                 )
-                except Exception:
+                except (httpx.HTTPError, ValueError, KeyError, IndexError) as exc:
+                    logging.getLogger(__name__).warning(
+                        "Free model request failed: %s", type(exc).__name__
+                    )
                     continue
 
         # Deterministic structured clinical summary fallback when external LLM API is offline

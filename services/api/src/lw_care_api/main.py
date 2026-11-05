@@ -4,10 +4,10 @@ LoveWorld Care — Production /v1 FastAPI Application (§12, §14, §15, §16, �
 
 from __future__ import annotations
 
-from dataclasses import asdict, replace
-from datetime import datetime, timedelta, timezone
 import hashlib
 import secrets
+from dataclasses import asdict, replace
+from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 from uuid import uuid4
 
@@ -25,19 +25,12 @@ from .config import Settings, get_settings
 from .crypto.signing import ClinicalDocumentSigner
 from .db.neon_migrator import NeonDatabaseManager
 from .domain.clinical_service import (
-    CareContinuityPlanRecord,
     CareEpisodeRecord,
-    CareRelationshipRecord,
-    CareTaskRecord,
     CaseClaimConflictError,
-    ClinicalObservationRecord,
     ClinicalOperationsService,
-    CoordinationTaskRecord,
-    DirectorateActionRecord,
     EncounterRecord,
     FacilityRecord,
     ImmutableClinicalRecordError,
-    MedicationInstructionRecord,
     PatientSubjectRecord,
     StaffedRosterSlot,
     StaleOrUnstaffedSlotError,
@@ -142,7 +135,9 @@ class SignEncounterPayload(BaseModel):
     mfa_step_up_code: str
     remote_suitability_accepted: bool = True
     modality_used: str = "VIDEO"
-    modality_limitations_noted: str = "Standard video consultation; physical palpation/auscultation not applicable remotely."
+    modality_limitations_noted: str = (
+        "Standard video consultation; physical palpation/auscultation not applicable remotely."
+    )
     history_and_findings: str
     clinical_assessment: str
     management_plan: str
@@ -345,9 +340,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     # Core runtime singletons
     neon_db = NeonDatabaseManager(cfg.database_url)
-    upstash_redis = UpstashRedisRestClient(
-        cfg.upstash_redis_rest_url, cfg.upstash_redis_rest_token
-    )
+    upstash_redis = UpstashRedisRestClient(cfg.upstash_redis_rest_url, cfg.upstash_redis_rest_token)
     audit_logger = TamperEvidentAuditLogger(cfg.audit_hmac_chain_key)
     auth_manager = IdentityAndSessionManager(cfg.jwt_signing_key, audit_logger)
     signer = ClinicalDocumentSigner(cfg.clinical_signing_seed_hex)
@@ -398,7 +391,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     # Synthetic roster clinician & SponsorCare pool for development/test ONLY. In production,
     # clinicians enter the roster exclusively through verified credentialing (§8.1), and
     # sponsor pools are funded through finance-approved agreements (§10.2).
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     if not cfg.is_production:
         _seed_non_production_fixtures(cfg, auth_manager, clinical_service, ledger, now)
 
@@ -440,7 +433,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     def _unauthorized(code: str) -> HTTPException:
         return HTTPException(
-            status_code=401, detail=code, headers={"WWW-Authenticate": 'Bearer error="invalid_token"'}
+            status_code=401,
+            detail=code,
+            headers={"WWW-Authenticate": 'Bearer error="invalid_token"'},
         )
 
     def _actor_from_claims(claims: TokenClaims) -> AuthenticatedActor:
@@ -448,9 +443,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             # §8.1 / AT-07: licence, status and expiry come from the server-side roster only.
             registered = clinical_service._clinician_actors.get(claims.sub)
             if registered is not None:
-                return replace(
-                    registered, mfa_verified=claims.mfa, session_id=claims.sid
-                )
+                return replace(registered, mfa_verified=claims.mfa, session_id=claims.sid)
         return AuthenticatedActor(
             actor_id=claims.sub,
             full_name=claims.sub,
@@ -550,9 +543,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/v1/auth/me")
     async def get_current_identity(
         request: Request,
-        actor: AuthenticatedActor = Depends(
-            authenticated(AUD_PATIENT, AUD_CLINICIAN, AUD_COMMAND, AUD_SPONSOR)
-        ),
+        actor: AuthenticatedActor = Depends(any_authenticated_actor),
     ) -> dict[str, Any]:
         claims: TokenClaims = request.state.token_claims
         return {
@@ -570,9 +561,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.post("/v1/auth/logout", status_code=204)
     async def logout(
         request: Request,
-        _actor: AuthenticatedActor = Depends(
-            authenticated(AUD_PATIENT, AUD_CLINICIAN, AUD_COMMAND, AUD_SPONSOR)
-        ),
+        _actor: AuthenticatedActor = Depends(any_authenticated_actor),
     ) -> Response:
         token_service.revoke_session(request.state.token_claims.sid)
         return Response(status_code=204)
@@ -589,7 +578,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if "@" not in email or "." not in email:
             raise HTTPException(status_code=400, detail="INVALID_EMAIL_FORMAT")
         raw_token = secrets.token_urlsafe(32)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         pending_magic_links[raw_token] = {
             "email": email,
             "expires_at": now + timedelta(minutes=15),
@@ -605,7 +594,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.post("/v1/auth/magic-link/verify")
     async def verify_magic_link(payload: MagicLinkVerifyPayload) -> dict[str, Any]:
         record = pending_magic_links.get(payload.token)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         if not record or record["used"] or record["expires_at"] < now:
             raise HTTPException(status_code=401, detail="INVALID_OR_EXPIRED_MAGIC_LINK")
         record["used"] = True
@@ -862,7 +851,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
             if payload.funding_route in ("SELF_PAY", "ESPEES_WALLET_DIRECT"):
                 payment_ref = f"pay-{idempotency_key}"
-                if payload.payment_provider == "ESPEES_WALLET" or payload.funding_route == "ESPEES_WALLET_DIRECT":
+                if (
+                    payload.payment_provider == "ESPEES_WALLET"
+                    or payload.funding_route == "ESPEES_WALLET_DIRECT"
+                ):
                     session = espees_adapter.initiate_checkout(
                         reference=payment_ref,
                         episode_id=payload.episode_id,
@@ -1045,7 +1037,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 prescriptions=payload.prescriptions,
                 document_sha256=enc.signed_envelope.document_sha256,
                 signature_ed25519_base64=enc.signed_envelope.signature_ed25519_base64,
-                signed_at=datetime.now(timezone.utc),
+                signed_at=datetime.now(UTC),
             )
             return {
                 "encounter_id": enc.encounter_id,
@@ -1435,10 +1427,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         payload: FacilityRegistrationPayload,
         actor: AuthenticatedActor = Depends(command_actor),
     ) -> dict[str, Any]:
-        now_iso = datetime.now(timezone.utc).isoformat()
-        expires_iso = (
-            datetime.now(timezone.utc) + timedelta(minutes=payload.validity_minutes)
-        ).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
+        expires_iso = (datetime.now(UTC) + timedelta(minutes=payload.validity_minutes)).isoformat()
         fac = FacilityRecord(
             facility_id=payload.facility_id,
             facility_name=payload.facility_name,

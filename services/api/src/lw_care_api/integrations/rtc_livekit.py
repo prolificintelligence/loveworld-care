@@ -15,7 +15,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Literal
 
 import jwt
@@ -73,7 +73,7 @@ class LiveKitRTCAdapter:
         explicit_recording_consent: bool = False,
         ttl_minutes: int = 45,
     ) -> RTCRoomSessionCredentials:
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         expires_at = now + timedelta(minutes=ttl_minutes)
         room_name = f"lw-care-enc-{encounter_id}"
 

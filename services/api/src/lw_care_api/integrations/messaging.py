@@ -13,7 +13,7 @@ Security & Clinical Privacy Invariant (§2.4 & §14.5):
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Literal
 from uuid import uuid4
 
@@ -90,7 +90,7 @@ class PhiFreeNotificationDispatcher:
         if template_id not in APPROVED_NOTIFICATION_TEMPLATES:
             raise ValueError(f"Unapproved notification template_id: {template_id}")
 
-        lower_keys = {k.lower() for k in template_vars.keys()}
+        lower_keys = {k.lower() for k in template_vars}
         forbidden_overlap = lower_keys.intersection(FORBIDDEN_TEMPLATE_VARIABLES)
         if forbidden_overlap:
             raise ValueError(
@@ -105,7 +105,7 @@ class PhiFreeNotificationDispatcher:
             template_id=template_id,
             rendered_preview_phi_free=rendered,
             proves_clinician_acknowledgement=False,
-            dispatched_at_iso=datetime.now(timezone.utc).isoformat(),
+            dispatched_at_iso=datetime.now(UTC).isoformat(),
         )
         self._outbox_log.append(receipt)
         return receipt

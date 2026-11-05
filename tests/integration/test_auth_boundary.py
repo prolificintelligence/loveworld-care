@@ -5,17 +5,16 @@ revocation, and fail-closed production configuration (ADR-0002, ADR-0003, ADR-00
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import jwt
 import pytest
+from conftest import make_test_settings
 from fastapi.testclient import TestClient
 from lw_care_api.config import InsecureConfigurationError
 from lw_care_api.main import create_app
 from lw_care_api.security.tokens import TokenService
-
-from conftest import make_test_settings
 
 # One representative identity per audience (MFA on, so only audience/role is under test).
 IDENTITIES = {
@@ -40,7 +39,13 @@ ROUTES = [
     ("POST", "/v1/encounters/x/claim", None, {}, {"lwc:clinician"}),
     ("POST", "/v1/encounters/x/sign", {}, {}, {"lwc:clinician"}),
     ("POST", "/v1/encounters/x/addenda", {}, {}, {"lwc:clinician"}),
-    ("GET", "/v1/sponsor/pools/AGR-LW-MEDICAID-NG-2026/report", None, {}, {"lwc:sponsor", "lwc:command"}),
+    (
+        "GET",
+        "/v1/sponsor/pools/AGR-LW-MEDICAID-NG-2026/report",
+        None,
+        {},
+        {"lwc:sponsor", "lwc:command"},
+    ),
     ("POST", "/v1/care/episodes/x/intelligence-handoff", {}, {}, {"lwc:patient"}),
     ("POST", "/v1/governance/ai-kill-switch", {}, {}, {"lwc:command"}),
     ("GET", "/v1/executive/metrics", None, {}, {"lwc:command"}),
@@ -76,7 +81,11 @@ def test_route_audience_matrix(app, client, method, path, body, extra, allowed) 
     assert res.status_code == 401, (path, "anonymous")
 
     # Legacy identity headers are ignored entirely
-    spoof = {**extra, "X-Actor-Id": "dr-adebayo-okonkwo", "X-Actor-Roles": "CLINICIAN_GP,PLATFORM_SRE"}
+    spoof = {
+        **extra,
+        "X-Actor-Id": "dr-adebayo-okonkwo",
+        "X-Actor-Roles": "CLINICIAN_GP,PLATFORM_SRE",
+    }
     assert client.request(method, path, json=body, headers=spoof).status_code == 401
 
     for audience in ALL:
@@ -99,13 +108,17 @@ def test_tampered_foreign_and_expired_tokens_rejected(app, client) -> None:
     good = _headers(app, "lwc:patient")["Authorization"].split(" ")[1]
     head, payload, sig = good.split(".")
     tampered = f"{head}.{payload}.{sig[:-2]}{'A' if sig[-2] != 'A' else 'B'}{sig[-1]}"
-    assert client.get("/v1/auth/me", headers={"Authorization": f"Bearer {tampered}"}).json()[
-        "detail"
-    ] == "TOKEN_INVALID"
+    assert (
+        client.get("/v1/auth/me", headers={"Authorization": f"Bearer {tampered}"}).json()["detail"]
+        == "TOKEN_INVALID"
+    )
 
     foreign = TokenService(signing_seed_hex="22" * 32, issuer=app.state.settings.token_issuer)
     foreign_tok = foreign.issue(sub="pat-x", audience="lwc:patient", roles=["PATIENT"], mfa=True)
-    assert client.get("/v1/auth/me", headers={"Authorization": f"Bearer {foreign_tok}"}).status_code == 401
+    assert (
+        client.get("/v1/auth/me", headers={"Authorization": f"Bearer {foreign_tok}"}).status_code
+        == 401
+    )
 
     expired = app.state.token_service.issue(
         sub="pat-x", audience="lwc:patient", roles=["PATIENT"], mfa=True, ttl=timedelta(seconds=-5)
@@ -114,7 +127,10 @@ def test_tampered_foreign_and_expired_tokens_rejected(app, client) -> None:
     assert res.json()["detail"] == "TOKEN_EXPIRED"
 
     none_alg = jwt.encode({"sub": "x", "aud": "lwc:command"}, key=None, algorithm="none")
-    assert client.get("/v1/auth/me", headers={"Authorization": f"Bearer {none_alg}"}).status_code == 401
+    assert (
+        client.get("/v1/auth/me", headers={"Authorization": f"Bearer {none_alg}"}).status_code
+        == 401
+    )
 
 
 def test_role_smuggled_into_wrong_audience_rejected(app, client) -> None:
@@ -122,7 +138,7 @@ def test_role_smuggled_into_wrong_audience_rejected(app, client) -> None:
         app.state.token_service.issue(
             sub="p", audience="lwc:patient", roles=["PATIENT", "SPONSOR_ADMIN"], mfa=True
         )
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     forged = jwt.encode(
         {
             "iss": app.state.settings.token_issuer,
@@ -162,21 +178,24 @@ def test_clinician_credentials_come_from_roster_not_token(app, client) -> None:
 
 
 def test_staff_mutations_require_mfa(app, client) -> None:
-    res = client.post(
-        "/v1/encounters/x/claim", headers=_headers(app, "lwc:clinician", mfa=False)
-    )
+    res = client.post("/v1/encounters/x/claim", headers=_headers(app, "lwc:clinician", mfa=False))
     assert res.status_code == 403 and res.json()["detail"] == "DENIED_MFA_REQUIRED"
 
 
 def test_kill_switch_role_and_mfa(app, client) -> None:
     body = {"enabled": True, "reason": "matrix-test"}
     support = _headers(app, "lwc:command", sub="support-1", roles=["SUPPORT_AGENT"])
-    assert client.post("/v1/governance/ai-kill-switch", json=body, headers=support).status_code == 403
+    assert (
+        client.post("/v1/governance/ai-kill-switch", json=body, headers=support).status_code == 403
+    )
 
     lead_no_mfa = _headers(
         app, "lwc:command", sub="gov-1", roles=["CLINICAL_GOVERNANCE_LEAD"], mfa=False
     )
-    assert client.post("/v1/governance/ai-kill-switch", json=body, headers=lead_no_mfa).status_code == 403
+    assert (
+        client.post("/v1/governance/ai-kill-switch", json=body, headers=lead_no_mfa).status_code
+        == 403
+    )
 
     lead = _headers(app, "lwc:command", sub="gov-1", roles=["CLINICAL_GOVERNANCE_LEAD"])
     res = client.post("/v1/governance/ai-kill-switch", json=body, headers=lead)
@@ -204,11 +223,18 @@ def test_patient_cannot_act_on_another_patients_episode(app, client) -> None:
     episode_id = _create_episode(client, alice, "pat-alice")
 
     # Bob cannot create an episode in Alice's name, read it, book on it, or attach data to it.
-    assert client.post(
-        "/v1/care/episodes",
-        headers=bob,
-        json={"patient_id": "pat-alice", "consent_grant_id": "c", "chief_complaint_summary": "s"},
-    ).status_code == 403
+    assert (
+        client.post(
+            "/v1/care/episodes",
+            headers=bob,
+            json={
+                "patient_id": "pat-alice",
+                "consent_grant_id": "c",
+                "chief_complaint_summary": "s",
+            },
+        ).status_code
+        == 403
+    )
     assert client.get(f"/v1/care/episodes/{episode_id}", headers=bob).status_code == 403
     book = client.post(
         "/v1/appointments",
@@ -273,7 +299,9 @@ def _safe_production(tmp_path: Path, **overrides: object):
 
 def test_production_refuses_shipped_defaults(tmp_path) -> None:
     with pytest.raises(InsecureConfigurationError) as exc:
-        create_app(make_test_settings(tmp_path, environment="production", token_signing_seed_hex=""))
+        create_app(
+            make_test_settings(tmp_path, environment="production", token_signing_seed_hex="")
+        )
     message = str(exc.value)
     assert "clinical_signing_seed_hex still uses the shipped default" in message
     assert "database_url points at SQLite" in message

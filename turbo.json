@@ -3,6 +3,7 @@
   "ui": "tui",
   "tasks": {
     "build": {
+      "env": ["LWH_API_ORIGIN", "LW_API_INTERNAL_URL", "NEXT_PUBLIC_API_URL", "FASTAPI_BACKEND_URL", "NEXT_PUBLIC_APP_ENV"],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]

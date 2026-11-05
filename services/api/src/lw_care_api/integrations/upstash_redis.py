@@ -12,7 +12,7 @@ Provides zero-connection-overhead distributed primitives for serverless & cloud 
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import httpx
@@ -48,7 +48,7 @@ class UpstashRedisRestClient:
                 )
                 if resp.status_code == 200:
                     return resp.json().get("result")
-        except Exception:
+        except (httpx.HTTPError, ValueError):
             return None
         return None
 
@@ -72,7 +72,7 @@ class UpstashRedisRestClient:
             return None
         try:
             return json.loads(raw)
-        except Exception:
+        except (httpx.HTTPError, ValueError):
             return None
 
     async def acquire_distributed_lock(
@@ -85,16 +85,14 @@ class UpstashRedisRestClient:
         )
         return res == "OK"
 
-    async def set_ai_kill_switch_state(
-        self, *, enabled: bool, actor_id: str, reason: str
-    ) -> bool:
+    async def set_ai_kill_switch_state(self, *, enabled: bool, actor_id: str, reason: str) -> bool:
         return await self.set_json(
             "lw_care:governance:ai_kill_switch",
             {
                 "enabled": enabled,
                 "actor_id": actor_id,
                 "reason": reason,
-                "updated_at_iso": datetime.now(timezone.utc).isoformat(),
+                "updated_at_iso": datetime.now(UTC).isoformat(),
             },
         )
 

@@ -15,12 +15,13 @@ Handles:
 from __future__ import annotations
 
 import ssl
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 from sqlalchemy import func, select, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -30,19 +31,15 @@ from sqlalchemy.ext.asyncio import (
 
 from ..domain.clinical_service import build_default_verified_ng_protocol_bundle
 from .models import (
-    AppointmentModel,
-    AuditEventModel,
+    POSTGRES_IMMUTABILITY_TRIGGER_STATEMENTS,
+    POSTGRES_SCHEMA_AND_IMMUTABILITY_DDL_STATEMENTS,
     Base,
     CareEpisodeModel,
-    ClinicalAddendumModel,
     ClinicalDocumentModel,
     ClinicianCredentialModel,
-    DoubleEntryLedgerLineModel,
     EncounterEconomicsFactModel,
     EncounterModel,
     IntakeAnswerSetModel,
-    POSTGRES_IMMUTABILITY_TRIGGER_STATEMENTS,
-    POSTGRES_SCHEMA_AND_IMMUTABILITY_DDL_STATEMENTS,
     ProtocolBundleModel,
     ProtocolRunModel,
     SponsorPoolModel,
@@ -123,170 +120,169 @@ class NeonDatabaseManager:
             for trig_stmt in POSTGRES_IMMUTABILITY_TRIGGER_STATEMENTS:
                 await conn.execute(text(trig_stmt))
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         bundle = build_default_verified_ng_protocol_bundle()
 
-        async with self._session_factory() as session:
-            async with session.begin():
-                # 1. Seed Verified MDCN Clinicians
-                await session.execute(
-                    pg_insert(UserIdentityModel)
-                    .values(
-                        [
-                            {
-                                "id": "dr-adebayo-okonkwo",
-                                "email": "adebayo.okonkwo@care.loveworld.org",
-                                "phone_e164": "+2348030004421",
-                                "full_name": "Dr. Adebayo Okonkwo",
-                                "password_hash": "argon2id$verified$clinical_lead",
-                                "roles_json": ["CLINICIAN_GP", "CLINICAL_GOVERNANCE_LEAD"],
-                                "mfa_enabled": True,
-                                "jurisdiction": "NG",
-                                "is_active": True,
-                            },
-                            {
-                                "id": "dr-chidinma-eze",
-                                "email": "chidinma.eze@care.loveworld.org",
-                                "phone_e164": "+2348030003890",
-                                "full_name": "Dr. Chidinma Eze",
-                                "password_hash": "argon2id$verified$clinical_reviewer",
-                                "roles_json": ["CLINICIAN_SPECIALIST", "CLINICAL_GOVERNANCE_LEAD"],
-                                "mfa_enabled": True,
-                                "jurisdiction": "NG",
-                                "is_active": True,
-                            },
-                        ]
-                    )
-                    .on_conflict_do_nothing(index_elements=["id"])
-                )
-
-                await session.execute(
-                    pg_insert(ClinicianCredentialModel)
-                    .values(
-                        [
-                            {
-                                "clinician_id": "dr-adebayo-okonkwo",
-                                "mdcn_licence_number": "MDCN/R/44210",
-                                "specialty": "General Practice",
-                                "jurisdiction": "NG",
-                                "lifecycle_status": "APPROVED_ACTIVE",
-                                "licence_expires_at": now + timedelta(days=365),
-                                "indemnity_verified": True,
-                                "verified_by_actor_id": "clinical-governance-directorate",
-                            },
-                            {
-                                "clinician_id": "dr-chidinma-eze",
-                                "mdcn_licence_number": "MDCN/R/38901",
-                                "specialty": "Internal Medicine / SpecialistBridge",
-                                "jurisdiction": "NG",
-                                "lifecycle_status": "APPROVED_ACTIVE",
-                                "licence_expires_at": now + timedelta(days=365),
-                                "indemnity_verified": True,
-                                "verified_by_actor_id": "clinical-governance-directorate",
-                            },
-                        ]
-                    )
-                    .on_conflict_do_nothing(index_elements=["clinician_id"])
-                )
-
-                # 2. Seed Active Dual-Signed Protocol Bundle (LW-NG-GP-ADULT-V1)
-                await session.execute(
-                    pg_insert(ProtocolBundleModel)
-                    .values(
+        async with self._session_factory() as session, session.begin():
+            # 1. Seed Verified MDCN Clinicians
+            await session.execute(
+                pg_insert(UserIdentityModel)
+                .values(
+                    [
                         {
-                            "bundle_id": bundle.bundle_id,
-                            "semver": bundle.semver,
-                            "jurisdiction": bundle.jurisdiction,
-                            "population": bundle.population,
-                            "status": bundle.status.value,
-                            "clinical_owner": bundle.clinical_owner or "dr-adebayo-okonkwo",
-                            "reviewers_json": bundle.reviewers,
-                            "document_hash": bundle.document_hash,
-                            "bundle_payload_json": bundle.model_dump(mode="json"),
-                        }
-                    )
-                    .on_conflict_do_nothing(index_elements=["bundle_id"])
+                            "id": "dr-adebayo-okonkwo",
+                            "email": "adebayo.okonkwo@care.loveworld.org",
+                            "phone_e164": "+2348030004421",
+                            "full_name": "Dr. Adebayo Okonkwo",
+                            "password_hash": "argon2id$verified$clinical_lead",
+                            "roles_json": ["CLINICIAN_GP", "CLINICAL_GOVERNANCE_LEAD"],
+                            "mfa_enabled": True,
+                            "jurisdiction": "NG",
+                            "is_active": True,
+                        },
+                        {
+                            "id": "dr-chidinma-eze",
+                            "email": "chidinma.eze@care.loveworld.org",
+                            "phone_e164": "+2348030003890",
+                            "full_name": "Dr. Chidinma Eze",
+                            "password_hash": "argon2id$verified$clinical_reviewer",
+                            "roles_json": ["CLINICIAN_SPECIALIST", "CLINICAL_GOVERNANCE_LEAD"],
+                            "mfa_enabled": True,
+                            "jurisdiction": "NG",
+                            "is_active": True,
+                        },
+                    ]
                 )
+                .on_conflict_do_nothing(index_elements=["id"])
+            )
 
-                # 3. Seed Verified Staffed Slots
-                await session.execute(
-                    pg_insert(StaffedRosterSlotModel)
-                    .values(
-                        [
-                            {
-                                "slot_id": "slot-ng-gp-001",
-                                "clinician_id": "dr-adebayo-okonkwo",
-                                "clinician_display_name": "Dr. Adebayo Okonkwo (GP · MDCN/R/44210)",
-                                "clinician_mdcn_licence": "MDCN/R/44210",
-                                "specialty": "GP",
-                                "jurisdiction": "NG",
-                                "starts_at": now + timedelta(minutes=15),
-                                "ends_at": now + timedelta(days=30),
-                                "supported_modalities_json": [
-                                    "VIDEO",
-                                    "AUDIO_FALLBACK",
-                                    "ASYNC_CLINICAL_MESSAGING",
-                                ],
-                                "fee_minor": 600_000,
-                                "currency": "NGN",
-                                "is_booked": False,
-                                "staffing_verified": True,
-                            },
-                            {
-                                "slot_id": "slot-ng-spec-002",
-                                "clinician_id": "dr-chidinma-eze",
-                                "clinician_display_name": "Dr. Chidinma Eze (SpecialistBridge · MDCN/R/38901)",
-                                "clinician_mdcn_licence": "MDCN/R/38901",
-                                "specialty": "SPECIALIST_INTERNAL_MEDICINE",
-                                "jurisdiction": "NG",
-                                "starts_at": now + timedelta(minutes=30),
-                                "ends_at": now + timedelta(days=30),
-                                "supported_modalities_json": ["VIDEO", "AUDIO_FALLBACK"],
-                                "fee_minor": 1_200_000,
-                                "currency": "NGN",
-                                "is_booked": False,
-                                "staffing_verified": True,
-                            },
-                        ]
-                    )
-                    .on_conflict_do_nothing(index_elements=["slot_id"])
+            await session.execute(
+                pg_insert(ClinicianCredentialModel)
+                .values(
+                    [
+                        {
+                            "clinician_id": "dr-adebayo-okonkwo",
+                            "mdcn_licence_number": "MDCN/R/44210",
+                            "specialty": "General Practice",
+                            "jurisdiction": "NG",
+                            "lifecycle_status": "APPROVED_ACTIVE",
+                            "licence_expires_at": now + timedelta(days=365),
+                            "indemnity_verified": True,
+                            "verified_by_actor_id": "clinical-governance-directorate",
+                        },
+                        {
+                            "clinician_id": "dr-chidinma-eze",
+                            "mdcn_licence_number": "MDCN/R/38901",
+                            "specialty": "Internal Medicine / SpecialistBridge",
+                            "jurisdiction": "NG",
+                            "lifecycle_status": "APPROVED_ACTIVE",
+                            "licence_expires_at": now + timedelta(days=365),
+                            "indemnity_verified": True,
+                            "verified_by_actor_id": "clinical-governance-directorate",
+                        },
+                    ]
                 )
+                .on_conflict_do_nothing(index_elements=["clinician_id"])
+            )
 
-                # 4. Seed SponsorCare Pools (NGN Medicaid Pool & ESP Espees Global Pool)
-                await session.execute(
-                    pg_insert(SponsorPoolModel)
-                    .values(
-                        [
-                            {
-                                "agreement_id": "AGR-LW-MEDICAID-NG-2026",
-                                "sponsor_id": "sponsor-loveworld-medicaid",
-                                "sponsor_name": "LoveWorld Medicaid Humanitarian Care Pool (NGN)",
-                                "funding_type": "SPONSOR_DEFINED_SERVICES",
-                                "currency": "NGN",
-                                "committed_unfunded_minor": 500_000_000,
-                                "funded_cash_minor": 1_200_000_000,
-                                "active_reserved_minor": 0,
-                                "redeemed_minor": 0,
-                                "eligible_beneficiary_count": 24,
-                                "version": 1,
-                            },
-                            {
-                                "agreement_id": "AGR-LW-ESPEES-PARTNERS-2026",
-                                "sponsor_id": "sponsor-loveworld-partners-esp",
-                                "sponsor_name": "LoveWorld Partners Espees Care Pool (ESP)",
-                                "funding_type": "SPONSOR_DEFINED_SERVICES",
-                                "currency": "ESP",
-                                "committed_unfunded_minor": 100_000,
-                                "funded_cash_minor": 500_000,
-                                "active_reserved_minor": 0,
-                                "redeemed_minor": 0,
-                                "eligible_beneficiary_count": 50,
-                                "version": 1,
-                            },
-                        ]
-                    )
-                    .on_conflict_do_nothing(index_elements=["agreement_id"])
+            # 2. Seed Active Dual-Signed Protocol Bundle (LW-NG-GP-ADULT-V1)
+            await session.execute(
+                pg_insert(ProtocolBundleModel)
+                .values(
+                    {
+                        "bundle_id": bundle.bundle_id,
+                        "semver": bundle.semver,
+                        "jurisdiction": bundle.jurisdiction,
+                        "population": bundle.population,
+                        "status": bundle.status.value,
+                        "clinical_owner": bundle.clinical_owner or "dr-adebayo-okonkwo",
+                        "reviewers_json": bundle.reviewers,
+                        "document_hash": bundle.document_hash,
+                        "bundle_payload_json": bundle.model_dump(mode="json"),
+                    }
                 )
+                .on_conflict_do_nothing(index_elements=["bundle_id"])
+            )
+
+            # 3. Seed Verified Staffed Slots
+            await session.execute(
+                pg_insert(StaffedRosterSlotModel)
+                .values(
+                    [
+                        {
+                            "slot_id": "slot-ng-gp-001",
+                            "clinician_id": "dr-adebayo-okonkwo",
+                            "clinician_display_name": "Dr. Adebayo Okonkwo (GP · MDCN/R/44210)",
+                            "clinician_mdcn_licence": "MDCN/R/44210",
+                            "specialty": "GP",
+                            "jurisdiction": "NG",
+                            "starts_at": now + timedelta(minutes=15),
+                            "ends_at": now + timedelta(days=30),
+                            "supported_modalities_json": [
+                                "VIDEO",
+                                "AUDIO_FALLBACK",
+                                "ASYNC_CLINICAL_MESSAGING",
+                            ],
+                            "fee_minor": 600_000,
+                            "currency": "NGN",
+                            "is_booked": False,
+                            "staffing_verified": True,
+                        },
+                        {
+                            "slot_id": "slot-ng-spec-002",
+                            "clinician_id": "dr-chidinma-eze",
+                            "clinician_display_name": "Dr. Chidinma Eze (SpecialistBridge · MDCN/R/38901)",
+                            "clinician_mdcn_licence": "MDCN/R/38901",
+                            "specialty": "SPECIALIST_INTERNAL_MEDICINE",
+                            "jurisdiction": "NG",
+                            "starts_at": now + timedelta(minutes=30),
+                            "ends_at": now + timedelta(days=30),
+                            "supported_modalities_json": ["VIDEO", "AUDIO_FALLBACK"],
+                            "fee_minor": 1_200_000,
+                            "currency": "NGN",
+                            "is_booked": False,
+                            "staffing_verified": True,
+                        },
+                    ]
+                )
+                .on_conflict_do_nothing(index_elements=["slot_id"])
+            )
+
+            # 4. Seed SponsorCare Pools (NGN Medicaid Pool & ESP Espees Global Pool)
+            await session.execute(
+                pg_insert(SponsorPoolModel)
+                .values(
+                    [
+                        {
+                            "agreement_id": "AGR-LW-MEDICAID-NG-2026",
+                            "sponsor_id": "sponsor-loveworld-medicaid",
+                            "sponsor_name": "LoveWorld Medicaid Humanitarian Care Pool (NGN)",
+                            "funding_type": "SPONSOR_DEFINED_SERVICES",
+                            "currency": "NGN",
+                            "committed_unfunded_minor": 500_000_000,
+                            "funded_cash_minor": 1_200_000_000,
+                            "active_reserved_minor": 0,
+                            "redeemed_minor": 0,
+                            "eligible_beneficiary_count": 24,
+                            "version": 1,
+                        },
+                        {
+                            "agreement_id": "AGR-LW-ESPEES-PARTNERS-2026",
+                            "sponsor_id": "sponsor-loveworld-partners-esp",
+                            "sponsor_name": "LoveWorld Partners Espees Care Pool (ESP)",
+                            "funding_type": "SPONSOR_DEFINED_SERVICES",
+                            "currency": "ESP",
+                            "committed_unfunded_minor": 100_000,
+                            "funded_cash_minor": 500_000,
+                            "active_reserved_minor": 0,
+                            "redeemed_minor": 0,
+                            "eligible_beneficiary_count": 50,
+                            "version": 1,
+                        },
+                    ]
+                )
+                .on_conflict_do_nothing(index_elements=["agreement_id"])
+            )
 
         return await self.get_health_summary()
 
@@ -318,7 +314,9 @@ class NeonDatabaseManager:
                 doc_count = await session.scalar(
                     select(func.count()).select_from(ClinicalDocumentModel)
                 )
-                pool_count = await session.scalar(select(func.count()).select_from(SponsorPoolModel))
+                pool_count = await session.scalar(
+                    select(func.count()).select_from(SponsorPoolModel)
+                )
                 clinician_count = await session.scalar(
                     select(func.count()).select_from(ClinicianCredentialModel)
                 )
@@ -336,35 +334,34 @@ class NeonDatabaseManager:
                         "signed_clinical_documents": int(doc_count or 0),
                     },
                 }
-        except Exception as exc:
-            return {"connected": False, "error": str(exc)}
+        except (SQLAlchemyError, OSError, TimeoutError) as exc:
+            return {"connected": False, "error_type": type(exc).__name__}
 
     async def persist_episode(self, ep: Any) -> None:
         if not self.is_postgres_configured or self._session_factory is None:
             return
         try:
-            async with self._session_factory() as session:
-                async with session.begin():
-                    await session.execute(
-                        pg_insert(CareEpisodeModel)
-                        .values(
-                            {
-                                "id": ep.episode_id,
-                                "patient_id": ep.patient_id,
-                                "acting_proxy_grant_id": ep.acting_proxy_grant_id,
-                                "consent_grant_id": ep.consent_grant_id,
-                                "care_service": ep.care_service,
-                                "jurisdiction": ep.jurisdiction,
-                                "state": ep.state,
-                                "chief_complaint_summary": ep.chief_complaint_summary,
-                                "assigned_clinician_id": ep.assigned_clinician_id,
-                                "active_protocol_outcome": ep.active_protocol_outcome,
-                            }
-                        )
-                        .on_conflict_do_nothing(index_elements=["id"])
+            async with self._session_factory() as session, session.begin():
+                await session.execute(
+                    pg_insert(CareEpisodeModel)
+                    .values(
+                        {
+                            "id": ep.episode_id,
+                            "patient_id": ep.patient_id,
+                            "acting_proxy_grant_id": ep.acting_proxy_grant_id,
+                            "consent_grant_id": ep.consent_grant_id,
+                            "care_service": ep.care_service,
+                            "jurisdiction": ep.jurisdiction,
+                            "state": ep.state,
+                            "chief_complaint_summary": ep.chief_complaint_summary,
+                            "assigned_clinician_id": ep.assigned_clinician_id,
+                            "active_protocol_outcome": ep.active_protocol_outcome,
+                        }
                     )
-        except Exception:
-            pass
+                    .on_conflict_do_nothing(index_elements=["id"])
+                )
+        except (SQLAlchemyError, OSError, TimeoutError):
+            raise RuntimeError("Clinical database write failed") from None
 
     async def persist_intake_and_protocol_run(
         self,
@@ -381,46 +378,45 @@ class NeonDatabaseManager:
         if not self.is_postgres_configured or self._session_factory is None:
             return
         try:
-            async with self._session_factory() as session:
-                async with session.begin():
-                    await session.execute(
-                        pg_insert(IntakeAnswerSetModel)
-                        .values(
-                            {
-                                "id": intake_id,
-                                "episode_id": episode_id,
-                                "revision": revision,
-                                "structured_answers_json": structured_answers,
-                                "raw_patient_statement": raw_patient_statement,
-                                "language_code": "en-NG",
-                                "ai_draft_json": ai_draft,
-                                "submitted_by_actor_id": actor_id,
-                            }
-                        )
-                        .on_conflict_do_nothing(index_elements=["id"])
+            async with self._session_factory() as session, session.begin():
+                await session.execute(
+                    pg_insert(IntakeAnswerSetModel)
+                    .values(
+                        {
+                            "id": intake_id,
+                            "episode_id": episode_id,
+                            "revision": revision,
+                            "structured_answers_json": structured_answers,
+                            "raw_patient_statement": raw_patient_statement,
+                            "language_code": "en-NG",
+                            "ai_draft_json": ai_draft,
+                            "submitted_by_actor_id": actor_id,
+                        }
                     )
-                    await session.execute(
-                        pg_insert(ProtocolRunModel)
-                        .values(
-                            {
-                                "id": proto_res.protocol_run_id,
-                                "episode_id": episode_id,
-                                "intake_id": intake_id,
-                                "protocol_bundle_id": proto_res.protocol_bundle_id,
-                                "protocol_version": proto_res.protocol_version,
-                                "protocol_document_hash": proto_res.protocol_document_hash,
-                                "outcome_type": proto_res.outcome_type.value,
-                                "hard_stop_triggered": proto_res.hard_stop_triggered,
-                                "executed_rule_ids_json": proto_res.executed_rule_ids,
-                                "fired_rule_ids_json": proto_res.fired_rule_ids,
-                                "unresolved_fields_json": proto_res.unresolved_fields,
-                                "approved_content_id": proto_res.approved_content_id,
-                            }
-                        )
-                        .on_conflict_do_nothing(index_elements=["id"])
+                    .on_conflict_do_nothing(index_elements=["id"])
+                )
+                await session.execute(
+                    pg_insert(ProtocolRunModel)
+                    .values(
+                        {
+                            "id": proto_res.protocol_run_id,
+                            "episode_id": episode_id,
+                            "intake_id": intake_id,
+                            "protocol_bundle_id": proto_res.protocol_bundle_id,
+                            "protocol_version": proto_res.protocol_version,
+                            "protocol_document_hash": proto_res.protocol_document_hash,
+                            "outcome_type": proto_res.outcome_type.value,
+                            "hard_stop_triggered": proto_res.hard_stop_triggered,
+                            "executed_rule_ids_json": proto_res.executed_rule_ids,
+                            "fired_rule_ids_json": proto_res.fired_rule_ids,
+                            "unresolved_fields_json": proto_res.unresolved_fields,
+                            "approved_content_id": proto_res.approved_content_id,
+                        }
                     )
-        except Exception:
-            pass
+                    .on_conflict_do_nothing(index_elements=["id"])
+                )
+        except (SQLAlchemyError, OSError, TimeoutError):
+            raise RuntimeError("Clinical database write failed") from None
 
     async def persist_signed_encounter(
         self,
@@ -444,72 +440,71 @@ class NeonDatabaseManager:
         if not self.is_postgres_configured or self._session_factory is None:
             return
         try:
-            async with self._session_factory() as session:
-                async with session.begin():
-                    await session.execute(
-                        pg_insert(EncounterModel)
-                        .values(
-                            {
-                                "id": encounter_id,
-                                "episode_id": episode_id,
-                                "patient_id": patient_id,
-                                "clinician_id": clinician_id,
-                                "status": "SIGNED",
-                                "modality": modality_used,
-                                "version": 3,
-                                "remote_suitability_accepted": True,
-                                "signed_at": signed_at,
-                                "signed_document_hash": document_sha256,
-                                "signature_ed25519_base64": signature_ed25519_base64,
-                            }
-                        )
-                        .on_conflict_do_update(
-                            index_elements=["id"],
-                            set_={
-                                "status": "SIGNED",
-                                "signed_at": signed_at,
-                                "signed_document_hash": document_sha256,
-                                "signature_ed25519_base64": signature_ed25519_base64,
-                            },
-                        )
+            async with self._session_factory() as session, session.begin():
+                await session.execute(
+                    pg_insert(EncounterModel)
+                    .values(
+                        {
+                            "id": encounter_id,
+                            "episode_id": episode_id,
+                            "patient_id": patient_id,
+                            "clinician_id": clinician_id,
+                            "status": "SIGNED",
+                            "modality": modality_used,
+                            "version": 3,
+                            "remote_suitability_accepted": True,
+                            "signed_at": signed_at,
+                            "signed_document_hash": document_sha256,
+                            "signature_ed25519_base64": signature_ed25519_base64,
+                        }
                     )
-                    await session.execute(
-                        pg_insert(ClinicalDocumentModel)
-                        .values(
-                            {
-                                "id": f"doc-{encounter_id}",
-                                "encounter_id": encounter_id,
-                                "patient_id": patient_id,
-                                "author_clinician_id": clinician_id,
-                                "author_mdcn_licence": clinician_mdcn,
-                                "modality_used": modality_used,
-                                "modality_limitations_noted": modality_limitations_noted,
-                                "history_and_findings": history_and_findings,
-                                "clinical_assessment": clinical_assessment,
-                                "management_plan": management_plan,
-                                "safety_net_instructions": safety_net_instructions,
-                                "prescriptions_json": prescriptions,
-                                "document_sha256": document_sha256,
-                                "signature_ed25519_base64": signature_ed25519_base64,
-                                "signed_at": signed_at,
-                            }
-                        )
-                        .on_conflict_do_nothing(index_elements=["id"])
+                    .on_conflict_do_update(
+                        index_elements=["id"],
+                        set_={
+                            "status": "SIGNED",
+                            "signed_at": signed_at,
+                            "signed_document_hash": document_sha256,
+                            "signature_ed25519_base64": signature_ed25519_base64,
+                        },
                     )
-                    await session.execute(
-                        pg_insert(EncounterEconomicsFactModel)
-                        .values(
-                            {
-                                "encounter_id": encounter_id,
-                                "payer_cohort": "SPONSOR_DEFINED_SERVICES",
-                                "currency": "NGN",
-                                "recognised_revenue_minor": 600_000,
-                                "clinician_direct_cost_minor": 330_000,
-                                "total_variable_cost_minor": 425_000,
-                                "contribution_margin_minor": 175_000,
-                            }
-                        )
-                        .on_conflict_do_nothing(index_elements=["encounter_id"])
+                )
+                await session.execute(
+                    pg_insert(ClinicalDocumentModel)
+                    .values(
+                        {
+                            "id": f"doc-{encounter_id}",
+                            "encounter_id": encounter_id,
+                            "patient_id": patient_id,
+                            "author_clinician_id": clinician_id,
+                            "author_mdcn_licence": clinician_mdcn,
+                            "modality_used": modality_used,
+                            "modality_limitations_noted": modality_limitations_noted,
+                            "history_and_findings": history_and_findings,
+                            "clinical_assessment": clinical_assessment,
+                            "management_plan": management_plan,
+                            "safety_net_instructions": safety_net_instructions,
+                            "prescriptions_json": prescriptions,
+                            "document_sha256": document_sha256,
+                            "signature_ed25519_base64": signature_ed25519_base64,
+                            "signed_at": signed_at,
+                        }
                     )
-        except Exception:
-            pass
+                    .on_conflict_do_nothing(index_elements=["id"])
+                )
+                await session.execute(
+                    pg_insert(EncounterEconomicsFactModel)
+                    .values(
+                        {
+                            "encounter_id": encounter_id,
+                            "payer_cohort": "SPONSOR_DEFINED_SERVICES",
+                            "currency": "NGN",
+                            "recognised_revenue_minor": 600_000,
+                            "clinician_direct_cost_minor": 330_000,
+                            "total_variable_cost_minor": 425_000,
+                            "contribution_margin_minor": 175_000,
+                        }
+                    )
+                    .on_conflict_do_nothing(index_elements=["encounter_id"])
+                )
+        except (SQLAlchemyError, OSError, TimeoutError):
+            raise RuntimeError("Clinical database write failed") from None

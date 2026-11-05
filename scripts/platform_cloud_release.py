@@ -180,7 +180,15 @@ def configure():
     with http_client(vercel_credential()) as client:
         for name, settings in (
             (API, {"framework": None, "rootDirectory": None}),
-            (WEB, {"framework": "nextjs", "rootDirectory": "apps/platform-web"}),
+            (
+                WEB,
+                {
+                    "framework": "nextjs",
+                    "rootDirectory": None,
+                    "installCommand": "pnpm install --frozen-lockfile",
+                    "buildCommand": "pnpm run build",
+                },
+            ),
         ):
             response = client.get(f"https://api.vercel.com/v9/projects/{name}")
             if response.status_code == 404:
@@ -236,23 +244,23 @@ def source_files(target):
         files["requirements.txt"] = (ROOT / "requirements.platform.txt").read_bytes()
         files["vercel.json"] = (ROOT / "vercel.platform.json").read_bytes()
     else:
-        for base in ("apps", "packages"):
-            for path in (ROOT / base).rglob("*"):
-                if not path.is_file() or any(
-                    x in path.parts for x in ("node_modules", ".next", ".vercel", "__pycache__")
-                ):
-                    continue
-                if path.suffix in (".ts", ".tsx", ".css", ".mjs", ".json"):
-                    files[path.relative_to(ROOT).as_posix()] = path.read_bytes()
-        for filename in (
-            "package.json",
-            "pnpm-lock.yaml",
-            "pnpm-workspace.yaml",
-            "tsconfig.base.json",
-            "turbo.json",
-            ".npmrc",
-        ):
-            files[filename] = (ROOT / filename).read_bytes()
+        web_root = ROOT / "apps/platform-web"
+        for path in web_root.rglob("*"):
+            if not path.is_file() or any(
+                part in path.parts for part in ("node_modules", ".next", ".vercel")
+            ):
+                continue
+            if path.suffix in (".ts", ".tsx", ".css", ".mjs", ".json"):
+                files[path.relative_to(web_root).as_posix()] = path.read_bytes()
+        # Preserve the verified pnpm graph while producing a self-contained
+        # deployment root for this independently hosted workspace.
+        lock = (ROOT / "pnpm-lock.yaml").read_text()
+        importer = re.search(r"(?ms)^  apps/platform-web:\n(.*?)(?=^  [^ ]|^packages:|\Z)", lock)
+        if not importer:
+            raise RuntimeError("The platform workspace is missing from the verified lockfile")
+        standalone = lock[: lock.index("importers:")] + "importers:\n\n  .:\n" + importer.group(1)
+        standalone += "\n" + lock[lock.index("packages:") :]
+        files["pnpm-lock.yaml"] = standalone.encode()
     return [
         {"file": name, "data": base64.b64encode(content).decode(), "encoding": "base64"}
         for name, content in sorted(files.items())

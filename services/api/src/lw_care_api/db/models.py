@@ -15,17 +15,17 @@ Isolated Schemas:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from typing import Any
+from datetime import UTC, datetime
+from typing import Any, ClassVar
 
 from sqlalchemy import (
+    JSON,
     BigInteger,
     Boolean,
     CheckConstraint,
     DateTime,
     Index,
     Integer,
-    JSON,
     String,
     Text,
     UniqueConstraint,
@@ -34,7 +34,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 def utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class Base(DeclarativeBase):
@@ -48,7 +48,7 @@ class Base(DeclarativeBase):
 
 class UserIdentityModel(Base):
     __tablename__ = "identity_users"
-    __table_args__ = {"schema": "identity"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "identity"}
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     email: Mapped[str | None] = mapped_column(String(255), unique=True, index=True)
@@ -65,7 +65,7 @@ class UserIdentityModel(Base):
 
 class ProxyAuthorityModel(Base):
     __tablename__ = "identity_proxy_authorities"
-    __table_args__ = {"schema": "identity"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "identity"}
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     patient_id: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
@@ -81,15 +81,13 @@ class ProxyAuthorityModel(Base):
 
 class ClinicianCredentialModel(Base):
     __tablename__ = "identity_clinician_credentials"
-    __table_args__ = {"schema": "identity"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "identity"}
 
     clinician_id: Mapped[str] = mapped_column(String(64), primary_key=True)
     mdcn_licence_number: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     specialty: Mapped[str] = mapped_column(String(64), nullable=False)
     jurisdiction: Mapped[str] = mapped_column(String(16), default="NG", nullable=False)
-    lifecycle_status: Mapped[str] = mapped_column(
-        String(32), default="APPLIED", nullable=False
-    )
+    lifecycle_status: Mapped[str] = mapped_column(String(32), default="APPLIED", nullable=False)
     licence_expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     indemnity_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     verified_by_actor_id: Mapped[str | None] = mapped_column(String(64))
@@ -98,7 +96,7 @@ class ClinicianCredentialModel(Base):
 
 class ConsentGrantModel(Base):
     __tablename__ = "identity_consent_grants"
-    __table_args__ = {"schema": "identity"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "identity"}
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     patient_id: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
@@ -140,7 +138,7 @@ class CareEpisodeModel(Base):
 
 class IntakeAnswerSetModel(Base):
     __tablename__ = "care_intake_answer_sets"
-    __table_args__ = {"schema": "care_clinical"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "care_clinical"}
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     episode_id: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
@@ -155,7 +153,7 @@ class IntakeAnswerSetModel(Base):
 
 class ProtocolRunModel(Base):
     __tablename__ = "care_protocol_runs"
-    __table_args__ = {"schema": "care_clinical"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "care_clinical"}
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     episode_id: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
@@ -236,7 +234,7 @@ class ClinicalDocumentModel(Base):
     """
 
     __tablename__ = "care_clinical_documents"
-    __table_args__ = {"schema": "care_clinical"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "care_clinical"}
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     encounter_id: Mapped[str] = mapped_column(String(64), unique=True, index=True, nullable=False)
@@ -257,11 +255,13 @@ class ClinicalDocumentModel(Base):
 
 class ClinicalAddendumModel(Base):
     __tablename__ = "care_clinical_addenda"
-    __table_args__ = {"schema": "care_clinical"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "care_clinical"}
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     encounter_id: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
-    original_signed_document_hash: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
+    original_signed_document_hash: Mapped[str] = mapped_column(
+        String(128), index=True, nullable=False
+    )
     author_clinician_id: Mapped[str] = mapped_column(String(64), nullable=False)
     amendment_reason: Mapped[str] = mapped_column(Text, nullable=False)
     addendum_text: Mapped[str] = mapped_column(Text, nullable=False)
@@ -412,7 +412,7 @@ class AuditEventModel(Base):
 
 class TransactionalOutboxModel(Base):
     __tablename__ = "transactional_outbox"
-    __table_args__ = {"schema": "governance_audit"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "governance_audit"}
 
     event_id: Mapped[str] = mapped_column(String(64), primary_key=True)
     event_type: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
@@ -428,7 +428,7 @@ class TransactionalOutboxModel(Base):
 
 class StaffedRosterSlotModel(Base):
     __tablename__ = "care_staffed_slots"
-    __table_args__ = {"schema": "care_clinical"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "care_clinical"}
 
     slot_id: Mapped[str] = mapped_column(String(64), primary_key=True)
     clinician_id: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
@@ -447,7 +447,7 @@ class StaffedRosterSlotModel(Base):
 
 class ProtocolBundleModel(Base):
     __tablename__ = "care_protocol_bundles"
-    __table_args__ = {"schema": "care_clinical"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "care_clinical"}
 
     bundle_id: Mapped[str] = mapped_column(String(64), primary_key=True)
     semver: Mapped[str] = mapped_column(String(32), nullable=False)
@@ -463,7 +463,7 @@ class ProtocolBundleModel(Base):
 
 class EncounterEconomicsFactModel(Base):
     __tablename__ = "encounter_unit_economics_facts"
-    __table_args__ = {"schema": "analytics"}
+    __table_args__: ClassVar[dict[str, str]] = {"schema": "analytics"}
 
     encounter_id: Mapped[str] = mapped_column(String(64), primary_key=True)
     payer_cohort: Mapped[str] = mapped_column(String(64), nullable=False)

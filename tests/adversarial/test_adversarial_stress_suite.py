@@ -15,7 +15,7 @@ import asyncio
 import hashlib
 import hmac
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
@@ -32,7 +32,6 @@ from lw_care_api.domain.ledger_engine import FinancialLedgerEngine
 from lw_care_api.integrations.messaging import PhiFreeNotificationDispatcher
 from lw_care_api.integrations.payment_gateways import (
     EspeesWalletGatewayAdapter,
-    PaystackGatewayAdapter,
 )
 from lw_care_api.integrations.rtc_livekit import LiveKitRTCAdapter
 from lw_care_api.main import create_app
@@ -137,7 +136,7 @@ async def test_at01_duplicate_checkout_and_reservation_idempotency() -> None:
 @pytest.mark.asyncio
 async def test_at02_two_doctors_claim_same_case_concurrently() -> None:
     service, _, auth, _, _, _ = build_test_harness()
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     doc_a = AuthenticatedActor(
         actor_id="doc-a",
@@ -401,7 +400,7 @@ def test_at06_sponsor_admin_denied_clinical_record_access(test_settings, bearer)
 @pytest.mark.asyncio
 async def test_at07_expired_medical_licence_blocks_claim_and_allows_ops_reassignment() -> None:
     service, _, auth, _, _, _ = build_test_harness()
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     doc_expiring = AuthenticatedActor(
         actor_id="doc-exp",
@@ -497,7 +496,7 @@ async def test_at07_expired_medical_licence_blocks_claim_and_allows_ops_reassign
 @pytest.mark.asyncio
 async def test_at08_signed_note_immutability_and_linked_addendum() -> None:
     service, _, auth, _, _, _ = build_test_harness()
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     doc = AuthenticatedActor(
         actor_id="doc-08",
         full_name="Dr. Signer",
@@ -591,9 +590,7 @@ async def test_at08_signed_note_immutability_and_linked_addendum() -> None:
 def test_at09_video_drop_after_brief_connection_never_auto_completes_billing() -> None:
     _, _, _, _, _, rtc = build_test_harness()
     raw_body = b'{"event":"participant_aborted","encounter_id":"enc-09"}'
-    sig = hmac.new(
-        b"test-webhook-secret-32-bytes-long", raw_body, hashlib.sha256
-    ).hexdigest()
+    sig = hmac.new(b"test-webhook-secret-32-bytes-long", raw_body, hashlib.sha256).hexdigest()
 
     disposition = rtc.verify_webhook_and_evaluate_session(
         raw_body=raw_body,
@@ -604,7 +601,10 @@ def test_at09_video_drop_after_brief_connection_never_auto_completes_billing() -
     )
     assert disposition.interrupted_early is True
     assert disposition.triggers_billable_completion is False
-    assert disposition.recommended_clinical_action == "OFFER_AUDIO_FALLBACK_OR_RESCHEDULE_NO_AUTO_CHARGE"
+    assert (
+        disposition.recommended_clinical_action
+        == "OFFER_AUDIO_FALLBACK_OR_RESCHEDULE_NO_AUTO_CHARGE"
+    )
 
 
 # =============================================================================
@@ -613,7 +613,7 @@ def test_at09_video_drop_after_brief_connection_never_auto_completes_billing() -
 @pytest.mark.asyncio
 async def test_at10_unstaffed_or_stale_slot_rejected() -> None:
     service, _, auth, _, _, _ = build_test_harness()
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     doc = AuthenticatedActor(
         actor_id="doc-10",
         full_name="Dr. Ten",

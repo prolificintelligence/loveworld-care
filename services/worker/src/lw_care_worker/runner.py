@@ -13,7 +13,7 @@ Responsibilities:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from lw_care_api.domain.ledger_engine import FinancialLedgerEngine
@@ -69,7 +69,7 @@ class OutboxAndReconciliationWorker:
         prolific_ngn_ok = self._ledger.verify_trial_balance("PROLIFIC_INTELLIGENCE", "NGN")
 
         return DailyCloseReconciliationSummary(
-            closed_at_iso=datetime.now(timezone.utc).isoformat(),
+            closed_at_iso=datetime.now(UTC).isoformat(),
             care_operator_ngn_balanced=care_ngn_ok,
             care_operator_esp_balanced=care_esp_ok,
             prolific_ngn_balanced=prolific_ngn_ok,
