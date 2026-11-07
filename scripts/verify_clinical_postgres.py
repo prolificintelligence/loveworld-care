@@ -44,7 +44,7 @@ async def verify():
     evidence = {}
     try:
         async with database.transaction() as session:
-            assert await session.scalar(select(func.max(db.schema_versions.c.version))) == 2
+            assert await session.scalar(select(func.max(db.schema_versions.c.version))) in {2, 3}
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             translated = await connection.execution_options(

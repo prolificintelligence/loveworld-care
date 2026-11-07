@@ -35,8 +35,8 @@ async def verify():
                 where trigger_schema='health_platform' and trigger_name='immutable_history'""")
             )
             assert (
-                version == 2 and triggers == 20
-            )  # UPDATE and DELETE entries for ten protected history tables.
+                (version == 2 and triggers == 20) or (version == 3 and triggers == 56)
+            )  # UPDATE and DELETE entries for the protected history tables.
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             translated = await connection.execution_options(

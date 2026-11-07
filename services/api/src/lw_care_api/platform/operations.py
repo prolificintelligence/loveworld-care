@@ -24,7 +24,7 @@ async def create_invitation(session, cfg, box, payload, grantor, correlation_id)
         "The grant must have a future expiry with time zone",
         422,
     )
-    if payload.role in ("PLATFORM_ADMIN", "STANDARDS_DECIDER"):
+    if payload.role in ("PLATFORM_ADMIN", "STANDARDS_DECIDER", "DATA_GOVERNOR"):
         require(
             payload.scope_type == "GLOBAL",
             "VALIDATION_FAILED",

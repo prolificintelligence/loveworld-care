@@ -29,6 +29,7 @@ class PlatformSettings(BaseSettings):
     upstash_rest_url: str = ""
     upstash_rest_token: str = Field(default="", repr=False)
     session_minutes: int = Field(default=30, ge=5, le=60)
+    reporting_enabled: bool = True
 
     @property
     def production(self) -> bool:

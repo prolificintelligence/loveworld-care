@@ -1,0 +1,452 @@
+[
+  {
+    "metric_id": "LWH-MET-001",
+    "name": "Verified registry coverage",
+    "baseline_definition": "Verified active in-scope facility sites / all expected in-scope sites",
+    "source": "Registry IDs and expected-site inventory",
+    "limitations": "Site, owner category, region/zone; unknown expected coverage stated",
+    "owner": "Network lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-002",
+    "name": "Active affiliation",
+    "baseline_definition": "Distinct sites with an effective active/conditional Directorate decision; report conditions separately",
+    "source": "Affiliation decision at as-of time",
+    "limitations": "Ownership/facility type; licence and readiness not implied",
+    "owner": "Standards lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-003",
+    "name": "Corrective completion",
+    "baseline_definition": "Corrective actions independently accepted by due date / corrective actions due",
+    "source": "Action due and reviewer acceptance",
+    "limitations": "Criteria version/severity; overdue still included",
+    "owner": "Standards lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-004",
+    "name": "Renewal timeliness",
+    "baseline_definition": "Renewals decided before prior expiry / recognitions due to expire in period",
+    "source": "Prior decision expiry and renewal decision",
+    "limitations": "Do not remove expired/nonresponding sites from denominator",
+    "owner": "Standards lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-005",
+    "name": "Reporting completeness",
+    "baseline_definition": "Verified complete or explicit nil returns / expected unit-period obligations",
+    "source": "Effective-dated obligation and return versions",
+    "limitations": "Partial/unknown/missing shown separately; period hierarchy fixed",
+    "owner": "Information lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-006",
+    "name": "Submission timeliness",
+    "baseline_definition": "Expected returns received by adopted deadline / expected returns due",
+    "source": "Receipt time and deadline",
+    "limitations": "Late offline arrival remains late with outage context",
+    "owner": "Information lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-007",
+    "name": "Verification lag",
+    "baseline_definition": "Elapsed central receipt to verification; median/p90 and outstanding ages",
+    "source": "Return receipt/review events",
+    "limitations": "Open unverified returns reported alongside completed samples",
+    "owner": "Information lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-008",
+    "name": "Correction rate",
+    "baseline_definition": "Verified returns requiring subsequent revision / verified returns in cohort",
+    "source": "Version/correction lineage",
+    "limitations": "Cause and magnitude shown; higher reporting quality may initially increase detection",
+    "owner": "Information lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-009",
+    "name": "Source quality",
+    "baseline_definition": "Values passing specified reviewed checks / eligible checked values; verification coverage separately",
+    "source": "Validation runs and check scope",
+    "limitations": "No unexplained composite trust score",
+    "owner": "Data steward",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-010",
+    "name": "Service contacts",
+    "baseline_definition": "Distinct qualifying completed encounter IDs in period",
+    "source": "Signed clinical encounter/disposition or verified return",
+    "limitations": "Not unique people; remote/facility overlap reconciled",
+    "owner": "Clinical information lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-011",
+    "name": "Distinct patients served",
+    "baseline_definition": "Distinct reviewed patient links among qualifying encounters in defined cohort",
+    "source": "Custodian-approved identity crosswalk",
+    "limitations": "Unresolved links and cross-country limits disclosed",
+    "owner": "Clinical information lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-012",
+    "name": "Condition-coded encounters",
+    "baseline_definition": "Qualifying encounters with specified condition/case-definition version",
+    "source": "Source-coded diagnosis/assessment and approved inclusion rules",
+    "limitations": "Separate confirmed/suspected; not population incidence",
+    "owner": "Programme clinical lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-013",
+    "name": "Institutional inpatient deaths",
+    "baseline_definition": "Verified inpatient death dispositions by occurrence period",
+    "source": "Signed source/death report under adopted definition",
+    "limitations": "Community deaths, arrival-dead and unconfirmed reports separate",
+    "owner": "Quality/information lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-014",
+    "name": "Institutional mortality proportion",
+    "baseline_definition": "Eligible inpatient deaths / eligible discharges including deaths in same defined cohort",
+    "source": "Stay dispositions and approved inclusion/exclusion definition",
+    "limitations": "Case mix, transfer effects and incomplete records shown; not population mortality",
+    "owner": "Clinical quality lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-015",
+    "name": "Health-event review",
+    "baseline_definition": "Time to acknowledgement/review and open urgent/unverified counts",
+    "source": "Event/task state and actual owner receipts",
+    "limitations": "Reports are signals until verified; no direct incidence denominator",
+    "owner": "Quality lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-016",
+    "name": "Access fulfilment",
+    "baseline_definition": "Eligible care requests receiving the suitable requested service / eligible requests",
+    "source": "Request, service and disposition events",
+    "limitations": "Withdrawn, unavailable and ineligible shown separately",
+    "owner": "Care operations",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-017",
+    "name": "Human acknowledgement",
+    "baseline_definition": "Request accepted into covered team queue to actual clinician acknowledgement; median/p90/open overdue",
+    "source": "Owned task/acknowledgement events",
+    "limitations": "Automated acknowledgement excluded",
+    "owner": "Clinical operations",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-018",
+    "name": "Unmet demand",
+    "baseline_definition": "Distinct eligible requests unfulfilled because suitable capacity/capability unavailable",
+    "source": "Request/decline/availability evidence",
+    "limitations": "Deduplicate repeated attempts in an episode; show service/geography",
+    "owner": "Network lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-019",
+    "name": "Arrival-to-assessment",
+    "baseline_definition": "Actual arrival to first appropriate clinical assessment; distribution and overdue",
+    "source": "Arrival/triage/assessment timestamps",
+    "limitations": "Stratify adopted urgency, service and incomplete timestamps",
+    "owner": "Facility clinical lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-020",
+    "name": "Continuity completion",
+    "baseline_definition": "Required follow-up/result tasks accepted complete within adopted window / tasks due",
+    "source": "Clinical task evidence and due time",
+    "limitations": "Reminder delivery and patient nonresponse not automatically completion",
+    "owner": "Clinical operations",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-021",
+    "name": "Patient progress",
+    "baseline_definition": "Programme-specific approved follow-up measure versus usable baseline",
+    "source": "Versioned condition/programme measure and sourced observations",
+    "limitations": "Missing follow-up, selection and self-report attribution visible",
+    "owner": "Programme clinical lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-022",
+    "name": "Clinical workload",
+    "baseline_definition": "Attributable clinical task minutes / available approved staffed minutes",
+    "source": "Roster, workload/task records",
+    "limitations": "Includes prep/documentation/results/handover; preserve breaks and urgent reserve",
+    "owner": "Workforce lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-023",
+    "name": "Service coverage",
+    "baseline_definition": "Required service windows actually covered by privileged team / planned approved windows",
+    "source": "Roster, privilege and operating windows",
+    "limitations": "No inference from account count or optional HR employment list",
+    "owner": "Clinical operations",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-024",
+    "name": "Readiness freshness",
+    "baseline_definition": "Active service capabilities with valid readiness / capabilities expected to operate",
+    "source": "Capability/readiness assertions",
+    "limitations": "Readiness is not accepted referral or guaranteed future availability",
+    "owner": "Network lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-025",
+    "name": "Referral acceptance",
+    "baseline_definition": "Requests with actual receiving acceptance / eligible requests",
+    "source": "Referral request and acceptance receipts",
+    "limitations": "Declines/unreachable/pending separated; window and cohort explicit",
+    "owner": "Referral coordinator",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-026",
+    "name": "Referral completion",
+    "baseline_definition": "Referrals with verified receiving outcome / referrals due for outcome",
+    "source": "Accepted handover, receipt and outcome evidence",
+    "limitations": "Acceptance and travel alone not completion",
+    "owner": "Referral coordinator",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-027",
+    "name": "Geographic service reach",
+    "baseline_definition": "Demand areas meeting adopted serviceability definition / required demand areas",
+    "source": "Civil geography, actual capabilities and travel/access model",
+    "limitations": "Facility count alone insufficient; estimation assumptions visible",
+    "owner": "Network planning lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-028",
+    "name": "Diagnostic turnaround",
+    "baseline_definition": "Order/collection/receipt/release stage durations by service",
+    "source": "Department timestamps",
+    "limitations": "Outside-reference labs and rejected specimens separated",
+    "owner": "Diagnostic lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-029",
+    "name": "Critical result follow-through",
+    "baseline_definition": "Critical results with actual acknowledgement/action under policy / critical results requiring review",
+    "source": "Approved critical flag and clinical task evidence",
+    "limitations": "Delivery receipt is not clinical acknowledgement",
+    "owner": "Clinical quality lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-030",
+    "name": "Medication reconciliation",
+    "baseline_definition": "Eligible transitions with completed reviewed reconciliation / transitions requiring it",
+    "source": "Admission/transfer/discharge and medication review",
+    "limitations": "Actual review evidence, not empty checkbox; missing data explicit",
+    "owner": "Medication safety lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-031",
+    "name": "Medication omissions",
+    "baseline_definition": "Actual not-given/held/refused events by eligible administration opportunities",
+    "source": "Current order schedules and MAR",
+    "limitations": "Clinical appropriateness reviewed; omissions not all errors",
+    "owner": "Nursing/pharmacy leads",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-032",
+    "name": "Clinical stockouts",
+    "baseline_definition": "Service/product periods with unavailable essential local stock under defined catalogue",
+    "source": "Stock movements, physical verification and demand",
+    "limitations": "Uncertain stock and quarantine separate; actual required products defined locally",
+    "owner": "Pharmacy lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-033",
+    "name": "Occupancy",
+    "baseline_definition": "Occupied qualified bed-time / available staffed qualified bed-time",
+    "source": "Actual local occupancy and service capacity",
+    "limitations": "Closed/unqualified beds excluded with reason; reservations separate",
+    "owner": "Hospital operations",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-034",
+    "name": "Length of stay",
+    "baseline_definition": "Actual admission to discharge duration distribution for eligible stays",
+    "source": "Stay and disposition events",
+    "limitations": "Open stays, transfers, service/case mix and incomplete timestamps visible",
+    "owner": "Hospital quality lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-035",
+    "name": "Education delivery",
+    "baseline_definition": "Delivered/engaged/reviewed-understanding measures separately by approved programme",
+    "source": "Content version and actual channel/feedback evidence",
+    "limitations": "Delivery is not comprehension or health improvement",
+    "owner": "Editorial/programme lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-036",
+    "name": "Intervention fulfilment",
+    "baseline_definition": "Accepted-evidence completed interventions / interventions due; outcome review separately",
+    "source": "Owner acceptance, due, evidence and reviewer events",
+    "limitations": "Unfunded/unaccepted/blocked included as exceptions",
+    "owner": "Directorate operations",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-037",
+    "name": "Sponsored care delivery",
+    "baseline_definition": "Distinct eligible beneficiaries with qualifying delivered services; fund use and continuity separately",
+    "source": "Programme eligibility, fulfilment and reviewed patient links",
+    "limitations": "No raw clinical sponsor disclosure or double-counted included care",
+    "owner": "Programme finance",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-038",
+    "name": "Care contribution",
+    "baseline_definition": "Approved recognised care revenue minus attributable variable costs",
+    "source": "Finance ledger/recognition and cost allocation",
+    "limitations": "Restricted funds/receipt not automatically revenue; no double-counted provider cost",
+    "owner": "Finance",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-039",
+    "name": "Reconciliation exceptions",
+    "baseline_definition": "Unmatched/unbalanced service, receipt, claim or posting items by age/value",
+    "source": "Ledger/provider/claim/source reconciliation",
+    "limitations": "Per-currency; estimates separated from confirmed amounts",
+    "owner": "Finance",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-040",
+    "name": "AI usefulness",
+    "baseline_definition": "Time saved and correction burden versus baseline, critical errors and cost per useful task",
+    "source": "Governed evaluation and reviewed workflow samples",
+    "limitations": "Fluency/usage not safety or efficacy",
+    "owner": "Clinical/AI leads",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-041",
+    "name": "Experience burden",
+    "baseline_definition": "Unassisted task success, repeat-entry count, abandonment and reported attentiveness",
+    "source": "Consented usability/product evidence",
+    "limitations": "Segment patient/caregiver/clinical/institutional roles and accessibility needs",
+    "owner": "Product",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-042",
+    "name": "Local continuity",
+    "baseline_definition": "Completed enabled clinical journeys during qualified WAN outage / tested enabled journeys",
+    "source": "Offline scenario evidence and transaction counts",
+    "limitations": "Qualification result, not proof of universal uptime",
+    "owner": "Platform/facility lead",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-043",
+    "name": "Sync health",
+    "baseline_definition": "Oldest unacknowledged event age; accepted/duplicate/conflict/quarantine counts",
+    "source": "Outbox/inbox and reconciliation receipts",
+    "limitations": "Central receipt differs from semantic acceptance; local care not labelled failed by WAN alone",
+    "owner": "Platform/data stewards",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-044",
+    "name": "Disclosure safety",
+    "baseline_definition": "Detected unauthorised access/disclosure and control test outcomes",
+    "source": "Protected audit/incidents/evaluation",
+    "limitations": "Absence of reports not proof of anonymity or security",
+    "owner": "Privacy/security",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  },
+  {
+    "metric_id": "LWH-MET-045",
+    "name": "Country/service readiness",
+    "baseline_definition": "Scoped activations with complete adopted evidence / proposed activations",
+    "source": "Country/facility activation dossiers",
+    "limitations": "Architecture/global accounts do not imply clinical coverage",
+    "owner": "Directorate activation owner",
+    "status": "AUTHORED_BASELINE_REQUIRES_ADOPTION",
+    "source_document_id": "LWH-SPEC-007"
+  }
+]

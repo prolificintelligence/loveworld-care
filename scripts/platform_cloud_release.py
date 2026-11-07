@@ -238,7 +238,7 @@ def source_files(target):
                 or relative.as_posix() in ("__init__.py", "db/__init__.py", "db/connection.py")
             ):
                 files[path.relative_to(ROOT).as_posix()] = path.read_bytes()
-        for path in (ROOT / "services/api/src/lw_care_api/platform").glob("*.json"):
+        for path in (ROOT / "services/api/src/lw_care_api/platform").rglob("*.json"):
             files[path.relative_to(ROOT).as_posix()] = path.read_bytes()
         files["api/index.py"] = (ROOT / "api/platform.py").read_bytes()
         files["requirements.txt"] = (ROOT / "requirements.platform.txt").read_bytes()
@@ -314,7 +314,7 @@ def migrate():
         database = Database(settings.database_url)
         try:
             await database.migrate()
-            print(json.dumps({"migration": "APPLIED", "schema_version": 2, "seeded_records": 0}))
+            print(json.dumps({"migration": "APPLIED", "schema_version": 3, "seeded_records": 0}))
         finally:
             await database.engine.dispose()
 

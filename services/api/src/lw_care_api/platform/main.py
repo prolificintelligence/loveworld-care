@@ -14,7 +14,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from sqlalchemy import func, select, update
+from sqlalchemy import func, select, text, update
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from starlette.concurrency import run_in_threadpool
@@ -82,14 +82,17 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     @app.middleware("http")
     async def security_headers(request: Request, call_next):
         request.state.correlation_id = db.uid()
-        if request.url.path.startswith("/v1/clinical/") and request.method == "POST":
+        if (
+            request.url.path.startswith(("/v1/clinical/", "/v1/reporting/"))
+            and request.method == "POST"
+        ):
             body = await request.body()
             if len(body) > 1_048_576:
                 return JSONResponse(
                     {
                         "error": {
                             "code": "PAYLOAD_TOO_LARGE",
-                            "message": "Clinical commands are limited to 1 MiB",
+                            "message": "Care and reporting commands are limited to 1 MiB",
                         }
                     },
                     status_code=413,
@@ -122,6 +125,24 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
 
     @app.exception_handler(RuleError)
     async def rule_error(request, exc):
+        if (
+            request.url.path.startswith("/v1/reporting/")
+            and getattr(request.state, "reporting_ready", False)
+            and not getattr(request.state, "reporting_denial_recorded", False)
+        ):
+            from .reporting import store as reporting_store
+
+            actor_id = getattr(request.state, "actor_id", None)
+            async with database.transaction() as session:
+                await reporting_store.audit(
+                    session,
+                    {"id": actor_id} if actor_id else None,
+                    "reporting.request_denied",
+                    None,
+                    None,
+                    request.state.correlation_id,
+                    outcome="DENIED",
+                )
         if request.url.path.startswith("/v1/clinical/") and not getattr(
             request.state, "clinical_denial_recorded", False
         ):
@@ -339,8 +360,15 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
 
     @app.get("/v1/ready")
     async def ready():
-        require(await database.ready(), "AUTHORITY_UNAVAILABLE", "Database migration required", 503)
-        return {"status": "READY", "schema_version": 2}
+        version = await database.version()
+        require(version in (2, 3), "AUTHORITY_UNAVAILABLE", "Database migration required", 503)
+        return {
+            "status": "READY",
+            "schema_version": version,
+            "reporting": "READY"
+            if version == 3 and cfg.reporting_enabled
+            else "PAUSED_OR_AWAITING_MIGRATION",
+        }
 
     @app.post("/v1/auth/login")
     async def login(payload: c.Login, request: Request, response: Response):
@@ -1562,7 +1590,24 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
         )
         from .operations import deliver_invitations
 
-        return await deliver_invitations(database, cfg, box)
+        result = await deliver_invitations(database, cfg, box)
+        if cfg.reporting_enabled and (await database.version() or 0) >= 3:
+            from .reporting.operations import DirectorateService
+
+            async with database.transaction() as session:
+                if database.postgres:
+                    await session.execute(text("SELECT pg_advisory_xact_lock(782025011)"))
+                # This job records overdue exceptions only. It cannot accept
+                # responsibility, release evidence or sign a human review.
+                service = DirectorateService(
+                    session,
+                    cfg,
+                    box,
+                    {"id": "REPORTING_SCHEDULER", "grants": []},
+                    request.state.correlation_id,
+                )
+                result["reporting"] = await service.reconcile()
+        return result
 
     @app.get("/v1/integrations")
     async def integration_status(request: Request):
@@ -1642,4 +1687,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     from .clinical.router import install as install_clinical
 
     install_clinical(app, cfg, database, box, actor_for)
+    from .reporting.router import install as install_reporting
+
+    install_reporting(app, cfg, database, box, actor_for)
     return app
