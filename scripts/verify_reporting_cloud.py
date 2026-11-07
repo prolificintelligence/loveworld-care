@@ -39,8 +39,7 @@ def verify(api_deployment, web_deployment):
             for source in sources:
                 path = source["file"]
                 if not (
-                    path.startswith("services/api/src/lw_care_api/platform/")
-                    or path.startswith("src/app/")
+                    path.startswith(("services/api/src/lw_care_api/platform/", "src/app/"))
                     or path == "api/index.py"
                 ):
                     continue
