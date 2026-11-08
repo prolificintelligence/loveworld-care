@@ -1,6 +1,6 @@
 # Phase 4B: hierarchy, affiliation lifecycle and approved publication
 
-Date: 8 November 2026, Africa/Lagos. Release verification is in progress. This record covers the requested institutional/publication increment; it does not declare the whole platform or every Phase 4B requirement accepted.
+Date: 8 November 2026, Africa/Lagos. The institutional/publication increment is deployed and externally verified, including the fresh production recovery rehearsal. This record does not declare the whole platform or every Phase 4B requirement accepted.
 
 ## Implemented scope
 
@@ -18,7 +18,28 @@ Source: `platform/institutional/{tables,contracts,base,master,affiliation,knowle
 
 The final focused lifecycle/reliability run passed **34 tests in 247.11 seconds** (22 new institutional/publication tests, 12 recovery/integrity tests). It exercises historical scope, expected versions, independent review, scheduled/cancelled changes, closure/duplicate preservation, loss of custodian authority, expired recognition, correction review, central decisions, appeal independence, assignment acceptance, notice response rights, protected file access, scanner failure, editorial authority, review expiry/applicability, correction propagation, bounded version/history reads and permission revocation before receipt replay. Earlier affected institutional regressions passed 14 tests. Frontend type checking and the production build passed. No Playwright was installed or used.
 
-CI, actual Neon/private-object proof, staged compatibility, live deployment identifiers, source hashes and production archive results will be recorded here after execution. Specification acceptance remains NOT_RUN.
+Runtime source: `80dd7a63c3abfe57eacc54a457b049a01d43a850`. [CI run 42460668577](https://github.com/prolificintelligence/loveworld-care/actions/runs/42460668577) passed all jobs. Python job `128669061924` reports **170 passed, 1 warning in 96.26 seconds**; web and secrets checks also passed. Specification acceptance remains NOT_RUN.
+
+The final-source actual Neon institutional drill passed in a disposable schema: concurrent hierarchy proposals produced one effect with identical receipts; historical reporting scope remained intact; concurrent central decisions produced one new decision and retained the prior decision; unreviewed publication and wrong-facility access were denied; withdrawn text was unavailable; history mutation was rejected and restart retained committed state. Synthetic pre-existing accepted-evidence metadata was used only in that namespace. This does not qualify malware scanning and seeded zero production domain rows.
+
+The separate actual Neon/private-object recovery drill passed with **90 tables, two files across both `evidence` and `institutional_case_files`, 27 decrypted fields, five valid clinical signatures and 48 protected history tables**. It recovered using the independently encrypted manifest with a deliberately wrong configured application key, rejected a wrong recovery key and actual corrupted stored ciphertext, reconciled open care/stock/ledger and removed disposable namespaces and owned private objects. The file fixtures were explicitly unscanned engineering bytes; this does not qualify a scanner.
+
+The exact packaged API passed isolated import, health, real database readiness and unauthenticated-access checks. Before migration, the live API remained ready on schema 5, enforced authentication on existing controls and returned HTTP 503 for the new institutional/publication routes. Migration 6 applied with zero seeded domain records. The post-migration actual Neon check passed: 48 protected history tables / 96 UPDATE+DELETE trigger event entries; one effect for concurrent duplicate requests; conflicting key reuse HTTP 409; direct history mutation rejected. The separate signed clinical-record protection remains installed.
+
+Both Vercel deployments are READY:
+
+- Backend: `dpl_4eFZQbcBYCi96hUMxAxkDGHt7VpY`
+- Frontend: `dpl_5Q4UW8VDQnPZdichBWC4ZzWUuiaD`
+
+The live verifier matched **48 backend and 18 frontend uploaded source hashes**. Both cloud origins report schema 6 and reporting READY, return no-store responses, enforce HTTP 401 on clinical/reporting/control/institutional routes and serve the public knowledge query with HTTP 200. All nine public workspace/entry pages returned HTTP 200 with the actual platform title, including [governance](https://lw-health-intelligence.vercel.app/governance) and [approved information](https://lw-health-intelligence.vercel.app/learn). This HTTP/source evidence does not substitute for observed keyboard/screen-reader/user task qualification.
+
+The retained production schema-5 archive `6543789e-67d3-4b21-bf51-6345cff0e37b` was successfully rehearsed **after migration 6**: 72 tables / 54 rows / 0 files, one recovered encrypted field, 38 history protections, no executed integrity exceptions, and temporary schema/files removed. Elapsed time: 121.097 seconds. Its original source snapshot, key and private archive remain retained.
+
+The new schema-6 archive `316eba01-cc37-457b-a8ec-f90cf176b0c4` captured **90 tables / 96 rows / 0 files** at `2026-11-08T08:02:11.164163+00:00` in 49.556 seconds. Its actual isolated restore passed in **167.446 seconds**, recovering five encrypted fields, installing all 48 history protections, reconciling the executed aggregate checks and removing the temporary schema/files. The zero clinical signatures/files in this actual production snapshot reflect its empty clinical population; the separate nonempty synthetic proof above covers those behaviours. Current production integrity reconciliation completed at `2026-11-08T08:06:17.193029+00:00` with no exceptions in the executed checks. No restore activated a replacement live authority or overwrote production. These small-population measurements are not adopted RPO/RTO or representative-load qualification.
+
+The final metadata-only production check at `2026-11-08T08:07:07.609497+00:00` confirmed schema 6, all 48 history protections and the two signed-record trigger entries. All 18 new institutional tables are empty, as are facilities, criteria, clinical records/sites/stock/ledger, evidence and operating policy packages. Seven immutable assurance observations record the actual earlier/current backups, retained-archive rehearsal, new restore and reconciliations. No disposable recovery/institutional verification schemas remain. Actual roster, criteria, operating approvals and published content still require adoption; no synthetic domain rows or external notices were created.
+
+All **78 controlled document hashes** still match the suite manifest. The 200-entry requirement register retains NOT_RUN baselines; 18 affected requirements now link bounded partial engineering evidence. The 111 archived acceptance specifications remain unchanged. The [overall progress report](2026-11-05-platform-progress.md) reviews all 25 PRDs and 21 shared specifications and records the next recommended sequence.
 
 ## Adoption and remaining work
 
