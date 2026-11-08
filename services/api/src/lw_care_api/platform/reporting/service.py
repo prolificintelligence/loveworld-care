@@ -121,7 +121,9 @@ class ReportingService:
 
     async def create_obligation(self, body):
         self.governor()
-        scope = await s.scope_for(self.session, body["scope_type"], body["scope_id"])
+        scope = await s.scope_for(
+            self.session, body["scope_type"], body["scope_id"], at=body["period_start"]
+        )
         expected_scope = {
             "FACILITY_ACTIVITY": "FACILITY",
             "ZONE_COMMUNITY": "ZONE",

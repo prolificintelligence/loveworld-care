@@ -187,7 +187,7 @@ async def status(session, cfg):
     return {
         "latest": latest,
         "as_of": db.now(),
-        "schema_version": 5,
+        "schema_version": await session.scalar(select(func.max(db.schema_versions.c.version))),
         "backup_cadence": "OPERATOR_EXECUTED_NO_AUTOMATIC_BACKUP_CLAIM",
         "recovery_targets": "NOT_ADOPTED",
         "independent_off_account_copy": "NOT_QUALIFIED",

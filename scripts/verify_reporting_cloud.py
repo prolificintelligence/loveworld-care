@@ -79,6 +79,10 @@ def verify(api_deployment, web_deployment):
                 ("/v1/operations/jobs", 401),
                 ("/v1/operations/reliability", 401),
                 ("/v1/operations/assurance-runs", 401),
+                ("/v1/institutional/context", 401),
+                ("/v1/institutional/cases", 401),
+                ("/v1/institutional/articles", 401),
+                ("/v1/knowledge", 200),
                 ("/v1/reporting/safety-cases", 401),
                 ("/v1/reporting/snapshots", 401),
             ):
@@ -92,8 +96,8 @@ def verify(api_deployment, web_deployment):
                     "cache_control": response.headers.get("cache-control"),
                 }
                 if path.endswith("/ready"):
-                    assert response.json()["schema_version"] == 5
-                    record["schema_version"] = 5
+                    assert response.json()["schema_version"] == 6
+                    record["schema_version"] = 6
                     record["reporting"] = response.json().get("reporting")
                 print(json.dumps(record))
         for path in (
@@ -102,6 +106,8 @@ def verify(api_deployment, web_deployment):
             "/directorate",
             "/operations",
             "/recover",
+            "/governance",
+            "/learn",
             "/activate",
             "/directory",
         ):

@@ -34,6 +34,7 @@ from lw_care_api.platform.control.continuity import (
     rehearse_restore,
     unseal,
 )
+from lw_care_api.platform.institutional import tables as institutional
 from lw_care_api.platform.main import create_platform_app
 from test_platform_controls import ORIGIN, seed_controls, stamp
 
@@ -74,7 +75,7 @@ async def verify():
     app.state.database.engine = mapped
     app.state.database.session = async_sessionmaker(mapped, expire_on_commit=False)
     try:
-        assert await database.version() in {4, 5}
+        assert await database.version() in {4, 5, 6}
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             translated = await connection.execution_options(
@@ -84,7 +85,7 @@ async def verify():
             await db.protect_history(translated, namespace)
         async with app.state.database.transaction() as session:
             await session.execute(
-                db.schema_versions.insert().values(version=5, applied_at=db.now())
+                db.schema_versions.insert().values(version=6, applied_at=db.now())
             )
         actors, facility = await seed_controls(app)
         async with httpx.AsyncClient(
@@ -214,6 +215,40 @@ async def verify():
                     created_at=db.now(),
                 )
             )
+            case_id = db.uid()
+            await session.execute(
+                institutional.cases.insert().values(
+                    id=case_id,
+                    facility_id=facility,
+                    kind="RENEWAL",
+                    state="OPEN",
+                    version=1,
+                    criteria_id=criteria,
+                    criteria_snapshot={"id": criteria, "synthetic_only": True},
+                    created_by=actors["admin"][0],
+                    respondent_id=actors["admin"][0],
+                    due_at=stamp(1),
+                    created_at=db.now(),
+                    details_ciphertext=app.state.box.encrypt('{"synthetic_recovery_only":true}'),
+                )
+            )
+            await session.execute(
+                institutional.case_files.insert().values(
+                    id=db.uid(),
+                    case_id=case_id,
+                    criterion="SYNTHETIC",
+                    object_key=source_key,
+                    sha256=hashlib.sha256(file_content).hexdigest(),
+                    filename="synthetic-only.pdf",
+                    media_type="application/pdf",
+                    size=len(file_content),
+                    source="Synthetic case-file byte recovery; scanner not qualified",
+                    expires_at=stamp(1),
+                    scan_status="TEST_NOT_SCANNED",
+                    uploaded_by=actors["admin"][0],
+                    created_at=db.now(),
+                )
+            )
             await session.execute(
                 clinical.lots.insert().values(
                     id=lot,
@@ -291,7 +326,11 @@ async def verify():
         restored = await rehearse_restore(
             database, no_original_key, key, backup_id, objects=objects, record_result=False
         )
-        assert restored["files"] == 1 and restored["clinical_signatures_verified"] >= 5
+        assert restored["files"] == 2 and restored["clinical_signatures_verified"] >= 5
+        assert {entry["file_table"] for entry in manifest["files"]} == {
+            "evidence",
+            "institutional_case_files",
+        }
         assert restored["integrity"]["population"]["open_indexed_tasks"] == 1
         assert restored["integrity"]["population"]["stock_lots"] == 1
         assert restored["integrity"]["population"]["ledger_entries"] == 2
@@ -319,6 +358,9 @@ async def verify():
                     "wrong_recovery_key": "REJECTED",
                     "tampered_cloud_chunk": "REJECTED",
                     "files": restored["files"],
+                    "file_tables_verified": sorted(
+                        {entry["file_table"] for entry in manifest["files"]}
+                    ),
                     "tables": restored["tables"],
                     "decrypted_fields_verified": restored["decrypted_fields_verified"],
                     "clinical_signatures_verified": restored["clinical_signatures_verified"],
@@ -335,7 +377,8 @@ async def verify():
                 or any(name.startswith(prefix) for prefix in objects.archive_prefixes)
                 or bool(
                     re.fullmatch(
-                        r"continuity/rehearsals/lwh_restore_[0-9a-f]{32}/[0-9a-f-]{36}", name
+                        r"continuity/rehearsals/lwh_restore_[0-9a-f]{32}/(?:evidence|institutional_case_files)/[0-9a-f-]{36}",
+                        name,
                     )
                 )
             )

@@ -268,10 +268,11 @@ schema_versions = Table(
 )
 
 
-async def protect_history(connection, schema=SCHEMA):
+async def protect_history(connection, schema=SCHEMA, schema_version=6):
     """Install the same protections in production and a newly created restore schema."""
     from .clinical import tables as clinical_tables
     from .control import tables as control_tables
+    from .institutional import tables as institutional_tables
     from .reporting import tables as reporting_tables
 
     if not re.fullmatch(r"[a-z][a-z0-9_]{0,62}", schema):
@@ -293,6 +294,7 @@ async def protect_history(connection, schema=SCHEMA):
         *clinical_tables.IMMUTABLE,
         *reporting_tables.IMMUTABLE,
         *control_tables.IMMUTABLE,
+        *(institutional_tables.IMMUTABLE if schema_version >= 6 else ()),
     ):
         await connection.execute(
             text(f"DROP TRIGGER IF EXISTS immutable_history ON {schema}.{table.name}")
@@ -350,6 +352,7 @@ class Database:
     async def migrate(self):
         from .clinical import tables as clinical_tables  # noqa: F401 -- register metadata
         from .control import tables as control_tables  # noqa: F401
+        from .institutional import tables as institutional_tables  # noqa: F401
         from .reporting import tables as reporting_tables  # noqa: F401
 
         async with self.engine.begin() as connection:
@@ -380,6 +383,10 @@ class Database:
                 await connection.execute(
                     schema_versions.insert().values(version=5, applied_at=now())
                 )
+            if present is None or present < 6:
+                await connection.execute(
+                    schema_versions.insert().values(version=6, applied_at=now())
+                )
             if self.postgres:
                 await protect_history(connection)
 
@@ -391,4 +398,4 @@ class Database:
 
     async def ready(self) -> bool:
         # Version 2 remains supported during the staged reporting rollout.
-        return await self.version() in (2, 3, 4, 5)
+        return await self.version() in (2, 3, 4, 5, 6)

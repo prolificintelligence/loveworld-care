@@ -27,6 +27,10 @@ class ClinicalService:
         return s.opened(self.box, row)["data"]
 
     async def create(self, kind, content, *, site=None, **kwargs):
+        if kind in {"patient", "encounter", "stay", "appointment", "programme"}:
+            from ..institutional.master import accepting_new_care
+
+            await accepting_new_care(self.session, self.facility_id)
         site = site or await s.site_for(self.session, self.cfg, self.facility_id, write=True)
         return await s.create(
             self.session,

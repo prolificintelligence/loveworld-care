@@ -85,7 +85,24 @@ def object_name(backup_id, relative):
     return prefix(backup_id) + relative
 
 
-def shape():
+def archive_tables(version=6):
+    from ..institutional import tables as institutional_tables  # noqa: F401
+    from ..reporting import tables as reporting_tables  # noqa: F401
+
+    return [
+        table
+        for table in db.metadata.sorted_tables
+        if version >= 6 or not table.name.startswith("institutional_")
+    ]
+
+
+def file_tables():
+    from ..institutional.tables import case_files
+
+    return {db.evidence.name: db.evidence, case_files.name: case_files}
+
+
+def shape(version=6):
     from ..reporting import tables as reporting_tables  # noqa: F401 -- register metadata
 
     return {
@@ -94,7 +111,7 @@ def shape():
             "types": [str(c.type) for c in table.c],
             "primary_key": [c.name for c in table.primary_key],
         }
-        for table in db.metadata.sorted_tables
+        for table in archive_tables(version)
     }
 
 
@@ -188,17 +205,18 @@ async def create_archive(
                     actual = await connection.run_sync(
                         lambda sync: inspect(sync).get_table_names(schema=source_schema)
                     )
-                    if set(actual) != set(manifest["shape"]):
-                        raise ArchiveError("Database and archive schema differ")
                 version = await connection.scalar(
                     select(db.schema_versions.c.version)
                     .order_by(db.schema_versions.c.version.desc())
                     .limit(1)
                 )
-                if version != 5:
-                    raise ArchiveError("Archive requires migrated schema 5")
+                if version not in {5, 6}:
+                    raise ArchiveError("Archive requires supported schema 5 or 6")
+                manifest["shape"] = shape(version)
+                if database.postgres and set(actual) != set(manifest["shape"]):
+                    raise ArchiveError("Database and archive schema differ")
                 manifest["schema_version"] = version
-                for table in db.metadata.sorted_tables:
+                for table in archive_tables(version):
                     entry = {"name": table.name, "rows": 0, "chunks": []}
                     digest = hashlib.sha256()
                     pending, pending_size = [], 2
@@ -234,7 +252,7 @@ async def create_archive(
                             pending_size += len(encoded) + 1
                             digest.update(encoded + b"\n")
                         entry["rows"] += len(values)
-                        if table is db.evidence:
+                        if table.name in file_tables():
                             for row in values:
                                 content = await asyncio.to_thread(objects.get, row["object_key"])
                                 if (
@@ -246,12 +264,13 @@ async def create_archive(
                                     objects,
                                     recovery_key,
                                     identifier,
-                                    f"files/{row['id']}.enc",
+                                    f"files/{table.name}/{row['id']}.enc",
                                     content,
                                 )
                                 manifest["files"].append(
                                     {
                                         **file,
+                                        "file_table": table.name,
                                         "evidence_id": row["id"],
                                         "source_sha256": row["sha256"],
                                         "source_size": row["size"],
@@ -401,13 +420,15 @@ async def rehearse_restore(
         if (
             manifest["format"] != FORMAT
             or manifest["id"] != backup_id
-            or manifest["shape"] != shape()
-            or manifest["schema_version"] != 5
+            or manifest["schema_version"] not in {5, 6}
+            or manifest["shape"] != shape(manifest["schema_version"])
         ):
             raise ArchiveError("Incompatible archive")
-        if len(manifest["tables"]) != len(shape()) or {
+        version = manifest["schema_version"]
+        tables = archive_tables(version)
+        if len(manifest["tables"]) != len(shape(version)) or {
             t["name"] for t in manifest["tables"]
-        } != set(shape()):
+        } != set(shape(version)):
             raise ArchiveError("Incomplete archive tables")
         # Recovery uses the wrapped key, not the configured application key.
         recovered_box = SecretBox(manifest["data_key_hex"])
@@ -417,7 +438,9 @@ async def rehearse_restore(
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             created = True
             target = await connection.execution_options(schema_translate_map={db.SCHEMA: namespace})
-            await target.run_sync(db.metadata.create_all)
+            await target.run_sync(
+                lambda connection: db.metadata.create_all(connection, tables=tables)
+            )
             constraints = (
                 await target.execute(
                     text("""select c.relname, k.conname
@@ -439,7 +462,7 @@ async def rehearse_restore(
         by_name = {entry["name"]: entry for entry in manifest["tables"]}
         async with database.engine.begin() as connection:
             target = await connection.execution_options(schema_translate_map={db.SCHEMA: namespace})
-            for table in db.metadata.sorted_tables:
+            for table in archive_tables(version):
                 entry, digest, rows = by_name[table.name], hashlib.sha256(), 0
                 for chunk in entry["chunks"]:
                     values = json.loads(
@@ -448,8 +471,8 @@ async def rehearse_restore(
                     if not isinstance(values, list) or not 1 <= len(values) <= CHUNK_ROWS:
                         raise ArchiveError("Invalid row chunk")
                     for row in values:
-                        if table is db.evidence:
-                            expected_files[row["id"]] = (row["sha256"], row["size"])
+                        if table.name in file_tables():
+                            expected_files[(table.name, row["id"])] = (row["sha256"], row["size"])
                         for column, value in row.items():
                             if column.endswith("ciphertext") and value is not None:
                                 recovered_box.decrypt(value)
@@ -461,7 +484,7 @@ async def rehearse_restore(
                     rows += len(values)
                 if rows != entry["rows"] or digest.hexdigest() != entry["sha256"]:
                     raise ArchiveError("Source row reconciliation failed")
-            for table in db.metadata.sorted_tables:
+            for table in archive_tables(version):
                 digest, count = hashlib.sha256(), 0
                 result = await target.stream(select(table).order_by(*table.primary_key.columns))
                 async for row in result.mappings():
@@ -481,14 +504,14 @@ async def rehearse_restore(
             # Validate deferred hierarchy/foreign-key checks before trigger DDL;
             # PostgreSQL rejects DDL while deferred trigger events are pending.
             await target.execute(text("SET CONSTRAINTS ALL IMMEDIATE"))
-            await db.protect_history(target, namespace)
+            await db.protect_history(target, namespace, schema_version=version)
             protected = await target.scalar(
                 text(
                     "select count(distinct event_object_table) from information_schema.triggers where trigger_schema=:schema and trigger_name='immutable_history'"
                 ),
                 {"schema": namespace},
             )
-            if protected != 38:
+            if protected != (38 if version == 5 else 48):
                 raise ArchiveError("Restored history protection incomplete")
             # Probe append-only protection using a savepoint; no original row is changed.
             from sqlalchemy.exc import DBAPIError
@@ -507,11 +530,13 @@ async def rehearse_restore(
                     if by_name[table.name]["rows"]:
                         raise ArchiveError("Restored history accepted mutation")
         if len(manifest["files"]) != len(expected_files) or {
-            file["evidence_id"] for file in manifest["files"]
+            (file.get("file_table", "evidence"), file["evidence_id"]) for file in manifest["files"]
         } != set(expected_files):
             raise ArchiveError("Archive evidence inventory incomplete")
         for file in manifest["files"]:
-            if (file["source_sha256"], file["source_size"]) != expected_files[file["evidence_id"]]:
+            if (file["source_sha256"], file["source_size"]) != expected_files[
+                (file.get("file_table", "evidence"), file["evidence_id"])
+            ]:
                 raise ArchiveError("Archive evidence metadata mismatch")
             content = await get_encrypted(objects, recovery_key, backup_id, file)
             if (
@@ -519,7 +544,7 @@ async def rehearse_restore(
                 or len(content) != file["source_size"]
             ):
                 raise ArchiveError("Recovered evidence bytes differ")
-            target_key = f"continuity/rehearsals/{namespace}/{UUID(file['evidence_id'])!s}"
+            target_key = f"continuity/rehearsals/{namespace}/{file.get('file_table', 'evidence')}/{UUID(file['evidence_id'])!s}"
             copied_files.append(target_key)
             await asyncio.to_thread(objects.put, target_key, content)
             if await asyncio.to_thread(objects.get, target_key) != content:

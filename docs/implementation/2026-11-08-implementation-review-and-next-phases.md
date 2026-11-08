@@ -1,5 +1,7 @@
 # Implementation review and recommended next phases
 
+**Phase 4B update:** The requested hierarchy/site, affiliation lifecycle and approved publication increment is implemented in schema 6, with `/governance` and `/learn`. See [current release evidence](2026-11-08-institutional-publication-release.md) for the exact verification/deployment state. PRD-010 moves to Partial: the updated matrix has 21 Partial, 2 Not delivered (013/023), 1 infrastructure-only (014), and 1 deferred/optional (025). No percentage is asserted. Full Phase 4B reporting/template/operating acceptance is still outstanding; Phase 5 is the next clinical capability sequence. Historical review findings and release counts below retain their original context.
+
 Review date: **8 November 2026**, Africa/Lagos. This is a delivery assessment and proposed implementation sequence. It preserves the authored baseline and the project lead's decisions to defer offline installation and avoid Playwright installation. No application implementation, migration or deployment was performed during this review.
 
 ## Subsequent scope decision

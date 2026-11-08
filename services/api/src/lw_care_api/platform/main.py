@@ -84,9 +84,16 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
         request.state.correlation_id = db.uid()
         if (
             request.url.path.startswith(
-                ("/v1/clinical/", "/v1/reporting/", "/v1/operations/", "/v1/auth/recovery")
+                (
+                    "/v1/clinical/",
+                    "/v1/reporting/",
+                    "/v1/operations/",
+                    "/v1/auth/recovery",
+                    "/v1/institutional/",
+                )
             )
             and request.method == "POST"
+            and not request.url.path.endswith("/files")
         ):
             body = await request.body()
             if len(body) > 1_048_576:
@@ -113,6 +120,24 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 },
                 status_code=403,
             )
+        if request.url.path.startswith("/v1/") and not request.url.path.startswith(
+            ("/v1/auth/", "/v1/health", "/v1/ready", "/v1/internal/")
+        ):
+            from .institutional.master import refresh
+
+            try:
+                await refresh(database, cfg, box)
+            except (RuleError, SQLAlchemyError):
+                return JSONResponse(
+                    {
+                        "error": {
+                            "code": "CURRENT_SCOPE_UNAVAILABLE",
+                            "message": "Current dated authority is reconciling; retry before using this workspace",
+                        }
+                    },
+                    status_code=503,
+                    headers={"Cache-Control": "no-store"},
+                )
         response = await call_next(request)
         response.headers.update(
             {
@@ -128,7 +153,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     @app.exception_handler(RuleError)
     async def rule_error(request, exc):
         if (
-            request.url.path.startswith("/v1/operations/")
+            request.url.path.startswith(("/v1/operations/", "/v1/institutional/"))
             and (await database.version() or 0) >= 4
             and not getattr(request.state, "control_denial_recorded", False)
         ):
@@ -142,7 +167,12 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                     box,
                     {"id": identity} if identity else None,
                     request.state.correlation_id,
-                ).audit("control.request_denied", outcome="DENIED")
+                ).audit(
+                    "institutional.request_denied"
+                    if request.url.path.startswith("/v1/institutional/")
+                    else "control.request_denied",
+                    outcome="DENIED",
+                )
         if (
             request.url.path.startswith("/v1/reporting/")
             and getattr(request.state, "reporting_ready", False)
@@ -384,7 +414,9 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     @app.get("/v1/ready")
     async def ready():
         version = await database.version()
-        require(version in (2, 3, 4, 5), "AUTHORITY_UNAVAILABLE", "Database migration required", 503)
+        require(
+            version in (2, 3, 4, 5, 6), "AUTHORITY_UNAVAILABLE", "Database migration required", 503
+        )
         return {
             "status": "READY",
             "schema_version": version,
@@ -869,6 +901,12 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             row = await facility_for(session, actor, str(facility_id), lock=True)
             require(scoped(actor, {"REGISTRY_STEWARD"}, row))
             expected(row, payload.expected_version)
+            require(
+                row["identity_status"] not in {"CLOSED", "LINKED"},
+                "LIFECYCLE_REVIEW_REQUIRED",
+                "Closed or linked sites require their own reviewed lifecycle; verification cannot reopen them",
+                409,
+            )
             row.pop("region_id")
             row = await amend(
                 session,
@@ -1512,6 +1550,9 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             require(scoped(actor, {"REGISTRY_STEWARD"}, row))
             expected(row, payload.expected_version)
             if payload.action == "PUBLISH":
+                from .institutional.master import accepting_new_care
+
+                await accepting_new_care(session, str(facility_id))
                 require(
                     publication_eligible(row),
                     "INVALID_TRANSITION",
@@ -1729,4 +1770,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     from .control.router import install as install_controls
 
     install_controls(app, cfg, database, box, actor_for, throttle, set_cookie)
+    from .institutional.router import install as install_institutional
+
+    install_institutional(app, cfg, database, box, actor_for)
     return app

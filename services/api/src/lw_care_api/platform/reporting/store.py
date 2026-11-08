@@ -90,7 +90,7 @@ def visibility(actor, roles, table):
     return or_(*clauses) if clauses else false()
 
 
-async def scope_for(session, scope_type, scope_id):
+async def scope_for(session, scope_type, scope_id, at=None):
     result = {
         "scope_type": scope_type,
         "scope_id": str(scope_id) if scope_id else "GLOBAL",
@@ -138,6 +138,20 @@ async def scope_for(session, scope_type, scope_id):
         require(row, "NOT_FOUND_OR_NOT_PERMITTED", "Reporting unit unavailable", 404)
         result["region_id"] = row["id"] if scope_type == "REGION" else row["parent_id"]
         result["zone_id"] = row["id"] if scope_type == "ZONE" else None
+    if at:
+        from ..institutional.master import historical_parent
+
+        if result["facility_id"]:
+            result["zone_id"] = await historical_parent(
+                session, "FACILITY_ZONE", result["facility_id"], at, result["zone_id"]
+            )
+        if result["zone_id"]:
+            parent = await session.scalar(
+                select(db.units.c.parent_id).where(db.units.c.id == result["zone_id"])
+            )
+            result["region_id"] = await historical_parent(
+                session, "ZONE_REGION", result["zone_id"], at, parent
+            )
     references = [
         (db.facilities, result["facility_id"]),
         (db.units, result["zone_id"]),

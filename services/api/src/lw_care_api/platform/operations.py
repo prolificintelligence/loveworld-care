@@ -29,6 +29,7 @@ async def create_invitation(session, cfg, box, payload, grantor, correlation_id)
         "STANDARDS_DECIDER",
         "DATA_GOVERNOR",
         "IDENTITY_REVIEWER",
+        "POLICY_OWNER",
     ):
         require(
             payload.scope_type == "GLOBAL",
