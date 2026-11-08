@@ -1,6 +1,6 @@
 # Phase 4A cloud controls release
 
-Date: 8 November 2026, Africa/Lagos. Release verification is in progress; this record will be completed with the actual commit, CI result, migration and deployment evidence. This is a bounded cloud increment, not completion of all Phase 4A or full-suite acceptance.
+Date: 8 November 2026, Africa/Lagos. The cloud release is deployed and externally verified; exact evidence is recorded below. This is a bounded cloud increment, not completion of all Phase 4A or full-suite acceptance.
 
 ## Scope and implementation
 
@@ -16,7 +16,13 @@ New clinical activations require current independently reviewed country/operator
 
 Local control integration: **20 passed**, 113.24 seconds. Exact isolated API packaging/import/health/database readiness/authentication checks passed. Actual Neon proof passed in a disposable schema: concurrent recovery-code generation returned one set and identical receipts; concurrent recovery requests created one challenge/job; competing workers obtained one lease; backup-code consumption occurred once; reset revoked old sessions and preserved identity/grants; history mutation was rejected; and job state survived application restart. The disposable namespace was removed. A concurrent first-use rate-limit insert race found during verification was corrected using a keyed PostgreSQL transaction lock before lookup/insert, and the Neon proof then passed.
 
-Final exact-commit CI, uploaded source hashes, cloud migration and deployment identifiers are pending below. No synthetic domain data or policy approvals were seeded in the production schema. No real recovery message was sent merely to exercise a release test. No Playwright or additional service host was installed. Provider delivery, manual accessibility and facility UAT remain unexecuted release acceptance work.
+Exact runtime source: `61f5317de9aca744e1ea244464880e8baaea829c`. [GitHub CI run 42440477315](https://github.com/prolificintelligence/loveworld-care/actions/runs/42440477315) passed Python, frontend and secrets checks. Python job `128608439687` records **136 passed, 1 warning in 49.81 seconds**. This includes the 20 new controls tests; it does not replace the suite's 111 specified acceptance cases. The local frontend production build and type check also passed.
+
+Production API deployment: `dpl_Hw9xqnZGZN54dwpUXy1r5VGsBc2G`. Frontend deployment: `dpl_GafgpFvSmZqHtm5viyjkw8xTJTJe`. Both are READY. The live verifier matched **38 actual uploaded API source hashes** and **15 frontend source hashes** against the release source. It confirmed both API origins' health/readiness, schema 4, reporting readiness, unauthenticated clinical/reporting/operations denials and no-store responses, plus HTTP 200 for `/`, `/care`, `/directorate`, `/operations`, `/recover`, `/activate` and `/directory`.
+
+Staged rollout was exercised: the new API remained ready on schema 3 and returned 503 for unmigrated controls. Migration 4 then completed with zero seeded domain records. Post-migration PostgreSQL checks confirmed **37 immutable history tables** (74 UPDATE/DELETE trigger entries) plus the separate signed clinical record protection. Isolated institutional duplicate-command/idempotency/history and clinical signature/bed/stock proofs passed against the current Neon engine. Metadata-only production inspection at **2026-11-08T03:04:42Z** confirmed no recovery jobs/challenges, policy packages/reviews, coverage, offboarding cases or clinical records had been seeded. Reviewer appointments, clinical activation and policy adoption remain actual operating work.
+
+All 78 original controlled document hashes match. The [200-entry evidence register](2026-11-08-requirement-evidence-register.csv) records partial direct evidence and unresolved original verification expectations without changing the archived baseline. No percentage completion is inferred from test counts. No synthetic domain data or policy approvals were seeded in the production schema. No real recovery message was sent merely to exercise a release test. No Playwright or additional service host was installed. Provider delivery, manual accessibility and facility UAT remain unexecuted release acceptance work.
 
 ## Rollout and containment
 
