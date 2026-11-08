@@ -4,6 +4,8 @@ import argparse
 import base64
 import hashlib
 import json
+from time import monotonic
+from uuid import uuid4
 
 import httpx
 from platform_cloud_release import checked, source_files, vercel_credential
@@ -100,6 +102,35 @@ def verify(api_deployment, web_deployment):
                     record["schema_version"] = 7
                     record["reporting"] = response.json().get("reporting")
                 print(json.dumps(record))
+            # Validate the actual POST path and proxy, not only signed-out GETs.
+            # A reserved invalid subject cannot authenticate or affect a real account.
+            started = monotonic()
+            login = client.post(
+                origin + "/v1/auth/login",
+                headers={"Origin": "https://lw-health-intelligence.vercel.app"},
+                json={
+                    "email": "login-probe-" + uuid4().hex + "@example.invalid",
+                    "password": "Invalid connectivity probe only",
+                    "otp": "000000",
+                },
+            )
+            assert login.status_code == 401
+            assert login.json()["error"]["code"] == "AUTH_REQUIRED"
+            assert "set-cookie" not in login.headers
+            assert "no-store" in login.headers.get("cache-control", "")
+            print(
+                json.dumps(
+                    {
+                        "origin": origin,
+                        "path": "/v1/auth/login",
+                        "method": "POST",
+                        "http": 401,
+                        "elapsed_seconds": round(monotonic() - started, 3),
+                        "invalid_credentials_rejected": True,
+                        "session_created": False,
+                    }
+                )
+            )
         for path in (
             "/",
             "/care",
