@@ -323,6 +323,17 @@ def install(app, cfg, database, box, actor_for):
                 "Facility activation changed",
                 412,
             )
+            package = None
+            if cfg.production or cfg.enforce_activation_dossiers:
+                require(
+                    (await database.version() or 0) >= 4,
+                    "CONTROLS_MIGRATION_REQUIRED",
+                    "Clinical activation awaits the operating-control migration",
+                    503,
+                )
+                from ..control.service import validate_activation
+
+                package = await validate_activation(session, cfg, box, actor, dict(facility), body)
             values = {
                 k: body[k]
                 for k in (
@@ -355,6 +366,19 @@ def install(app, cfg, database, box, actor_for):
                 identifier = db.uid()
                 await session.execute(
                     t.sites.insert().values(id=identifier, facility_id=str(facility_id), **values)
+                )
+            if package:
+                from ..control import tables as controls
+
+                await session.execute(
+                    controls.site_packages.insert().values(
+                        id=db.uid(),
+                        facility_id=str(facility_id),
+                        site_version=values["version"],
+                        package_id=package["id"],
+                        actor_id=actor["id"],
+                        created_at=db.now(),
+                    )
                 )
             await s.audit(
                 session,

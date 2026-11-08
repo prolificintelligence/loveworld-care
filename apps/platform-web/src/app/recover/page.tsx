@@ -1,0 +1,30 @@
+"use client";
+
+import {useEffect,useState,type FormEvent} from "react";
+import {api} from "../api";
+
+type Proof={status:string;expires_at?:string;review_requirement?:string};
+export default function Recover(){
+  const [token,setToken]=useState(""),[state,setState]=useState("EMAIL_PENDING"),[method,setMethod]=useState("AUTHENTICATOR"),[setup,setSetup]=useState<{setup_key:string;authenticator_uri:string}|null>(null);
+  const [busy,setBusy]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState(""),[expires,setExpires]=useState("");
+  useEffect(()=>{const value=new URLSearchParams(window.location.hash.slice(1)).get("token");if(value){setToken(value);window.history.replaceState(null,"","/recover");}},[]);
+  async function submit(event:FormEvent<HTMLFormElement>,action:string){
+    event.preventDefault();const data=new FormData(event.currentTarget);setBusy(true);setError("");
+    try{
+      if(action==="request"){const response=await api<{instruction:string}>("/auth/recovery/request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:String(data.get("email"))})});setMessage(response.instruction);}
+      if(action==="prove"){const response=await api<Proof>("/auth/recovery/prove",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token,method,proof:String(data.get("proof")||"")})});setState(response.status);setExpires(response.expires_at||"");setMessage(response.review_requirement||"The required recovery proof is recorded.");}
+      if(action==="setup"){if(data.get("password")!==data.get("confirm"))throw new Error("The new passwords do not match.");const response=await api<{setup_key:string;authenticator_uri:string}>("/auth/recovery/setup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token,password:String(data.get("password"))})});setSetup(response);setState("ENROLLING");setMessage("Add the replacement secret to your authenticator, then confirm a code. Your previous credentials remain active until confirmation.");}
+      if(action==="complete"){await api("/auth/recovery/complete",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token,otp:String(data.get("otp"))})});setToken("");setSetup(null);setState("COMPLETED");setMessage("Your credentials were replaced and prior sessions revoked. Account identity and existing permissions were preserved.");}
+    }catch(cause){setError((cause as Error).message);}finally{setBusy(false);}
+  }
+  return <main id="main" className="auth"><a className="wordmark" href="/">LW <span>HEALTH INTELLIGENCE<br/>ACCOUNT RECOVERY</span></a><section className="panel"><h1>Recover your account.</h1><p className="muted">Recovery verifies your identity and replaces sign-in credentials. It preserves patient records and existing professional permissions.</p>{error&&<p role="alert" className="error">{error}</p>}{message&&<p role="status" className="success">{message}</p>}
+    {state==="COMPLETED"?<a href="/operations">Open your account and generate new recovery codes</a>:<>
+    {!token&&<form onSubmit={event=>void submit(event,"request")}><label>Registered email<input type="email" name="email" autoComplete="username" required maxLength={254}/></label><button disabled={busy}>{busy?"Submitting...":"Request a recovery email"}</button></form>}
+    <details open={Boolean(token)}><summary>Use an existing recovery link</summary><label>Private recovery token<input type="password" value={token} onChange={event=>setToken(event.target.value)} autoComplete="off" maxLength={200}/></label><p className="muted">Open the link from your registered email or paste its private token. Do not share recovery secrets with support staff.</p></details>
+    {token&&["EMAIL_PENDING","REVIEW_REQUIRED"].includes(state)&&<form onSubmit={event=>void submit(event,"prove")}><h2>Verify another recovery factor</h2><label>Verification method<select value={method} onChange={event=>setMethod(event.target.value)}><option value="AUTHENTICATOR">Current authenticator</option><option value="BACKUP_CODE">Saved one-use recovery code</option><option value="INDEPENDENT_REVIEW">Independent identity review</option></select></label>{method!=="INDEPENDENT_REVIEW"&&<label>{method==="AUTHENTICATOR"?"Authenticator code":"One-use recovery code"}<input name="proof" type="password" autoComplete="one-time-code" required maxLength={200}/></label>}{method==="INDEPENDENT_REVIEW"&&<p className="muted">Two distinct authorised identity reviewers must examine your recovery request. An administrator role alone cannot approve it. Review is available only when eligible reviewers are actually assigned.</p>}<button disabled={busy}>{state==="REVIEW_REQUIRED"?"Check review status":"Verify recovery proof"}</button></form>}
+    {state==="AUTHORIZED"&&<form onSubmit={event=>void submit(event,"setup")}><h2>Choose replacement credentials</h2><label>New password<input type="password" name="password" autoComplete="new-password" required minLength={14} maxLength={256}/></label><label>Confirm new password<input type="password" name="confirm" autoComplete="new-password" required minLength={14} maxLength={256}/></label><button disabled={busy}>Prepare replacement authenticator</button></form>}
+    {state==="ENROLLING"&&setup&&<form onSubmit={event=>void submit(event,"complete")}><h2>Confirm your replacement authenticator</h2><label>Private setup key<input value={setup.setup_key} readOnly autoComplete="off"/></label><details><summary>Authenticator provisioning URI</summary><p style={{overflowWrap:"anywhere"}}>{setup.authenticator_uri}</p></details><label>Code from the replacement authenticator<input name="otp" inputMode="numeric" pattern="[0-9]{6}" autoComplete="one-time-code" required/></label><button disabled={busy}>Confirm recovery and revoke previous sessions</button></form>}
+    {expires&&<p className="muted">This recovery expires at {expires}. If it expires, request a fresh email.</p>}
+    </>}
+  </section><a href="/">Return to sign in</a></main>;
+}

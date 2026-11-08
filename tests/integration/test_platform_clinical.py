@@ -207,6 +207,7 @@ class Journey:
 def journey(tmp_path):
     cfg = PlatformSettings(
         environment="test",
+        enforce_activation_dossiers=False,
         database_url=f"sqlite+aiosqlite:///{(tmp_path / 'clinical.db').as_posix()}",
         data_key_hex="b2" * 32,
         web_origin=ORIGIN,

@@ -24,7 +24,12 @@ async def create_invitation(session, cfg, box, payload, grantor, correlation_id)
         "The grant must have a future expiry with time zone",
         422,
     )
-    if payload.role in ("PLATFORM_ADMIN", "STANDARDS_DECIDER", "DATA_GOVERNOR"):
+    if payload.role in (
+        "PLATFORM_ADMIN",
+        "STANDARDS_DECIDER",
+        "DATA_GOVERNOR",
+        "IDENTITY_REVIEWER",
+    ):
         require(
             payload.scope_type == "GLOBAL",
             "VALIDATION_FAILED",
@@ -136,7 +141,7 @@ async def create_invitation(session, cfg, box, payload, grantor, correlation_id)
     return {"account_id": account_id, "status": "INVITATION_QUEUED", "expires_in_hours": 24}
 
 
-async def deliver_invitations(database, cfg, box):
+async def deliver_invitations(database, cfg, box, *, limit=2, timeout=20):
     require(
         cfg.resend_api_key and cfg.email_from,
         "AUTHORITY_UNAVAILABLE",
@@ -156,12 +161,12 @@ async def deliver_invitations(database, cfg, box):
                         db.outbox.c.attempts < 20,
                     )
                     .order_by(db.outbox.c.created_at)
-                    .limit(2)
+                    .limit(limit)
                     .with_for_update(skip_locked=True)
                 )
             ).mappings()
         ]
-        async with httpx.AsyncClient(timeout=20) as client:
+        async with httpx.AsyncClient(timeout=timeout) as client:
             for item in items:
                 account = (
                     (

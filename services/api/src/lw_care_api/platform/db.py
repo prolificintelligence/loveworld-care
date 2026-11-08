@@ -25,7 +25,7 @@ from sqlalchemy.pool import NullPool
 from ..db.connection import normalize_async_database_url
 
 SCHEMA = "health_platform"
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 metadata = MetaData(schema=SCHEMA)
 
 
@@ -292,6 +292,7 @@ class Database:
 
     async def migrate(self):
         from .clinical import tables as clinical_tables
+        from .control import tables as control_tables
         from .reporting import tables as reporting_tables
 
         async with self.engine.begin() as connection:
@@ -314,6 +315,10 @@ class Database:
                 await connection.execute(
                     schema_versions.insert().values(version=3, applied_at=now())
                 )
+            if present is None or present < 4:
+                await connection.execute(
+                    schema_versions.insert().values(version=4, applied_at=now())
+                )
             if self.postgres:
                 await connection.execute(
                     text(f"""
@@ -331,6 +336,7 @@ class Database:
                     evidence,
                     *clinical_tables.IMMUTABLE,
                     *reporting_tables.IMMUTABLE,
+                    *control_tables.IMMUTABLE,
                 ):
                     await connection.execute(
                         text(f"DROP TRIGGER IF EXISTS immutable_history ON {SCHEMA}.{table.name}")
@@ -374,4 +380,4 @@ class Database:
 
     async def ready(self) -> bool:
         # Version 2 remains supported during the staged reporting rollout.
-        return await self.version() in (2, 3)
+        return await self.version() in (2, 3, 4)

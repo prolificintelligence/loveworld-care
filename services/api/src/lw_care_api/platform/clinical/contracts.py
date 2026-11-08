@@ -32,6 +32,7 @@ Quantity = Annotated[Decimal, Field(gt=0, max_digits=18, decimal_places=6)]
 
 
 class Activation(StrictModel):
+    activation_package_id: UUID | None = None
     expected_version: int = Field(ge=0)
     services: list[Short] = Field(min_length=1, max_length=50)
     policy_reference: Text

@@ -36,7 +36,7 @@ async def verify():
     namespace = "lwh_emr_verify_" + db.uid().replace("-", "")
     assert re.fullmatch(r"lwh_emr_verify_[0-9a-f]{32}", namespace)
     engine = database.engine.execution_options(schema_translate_map={db.SCHEMA: namespace})
-    app = create_platform_app(cfg.model_copy(update={"environment": "test"}))
+    app = create_platform_app(cfg.model_copy(update={"environment": "test", "enforce_activation_dossiers": False}))
     await app.state.database.engine.dispose()
     app.state.database.engine = engine
     app.state.database.session = async_sessionmaker(engine, expire_on_commit=False)
@@ -44,7 +44,7 @@ async def verify():
     evidence = {}
     try:
         async with database.transaction() as session:
-            assert await session.scalar(select(func.max(db.schema_versions.c.version))) in {2, 3}
+            assert await session.scalar(select(func.max(db.schema_versions.c.version))) in {2, 3, 4}
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             translated = await connection.execution_options(

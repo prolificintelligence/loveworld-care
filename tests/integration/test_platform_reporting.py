@@ -1122,7 +1122,7 @@ def test_version_two_database_keeps_clinical_ready_while_reporting_awaits_migrat
     async def compatibility():
         async with j.app.state.database.transaction() as session:
             await session.execute(
-                db.schema_versions.delete().where(db.schema_versions.c.version == 3)
+                db.schema_versions.delete().where(db.schema_versions.c.version > 2)
             )
 
     run(compatibility())

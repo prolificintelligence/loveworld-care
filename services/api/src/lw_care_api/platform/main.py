@@ -83,7 +83,9 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     async def security_headers(request: Request, call_next):
         request.state.correlation_id = db.uid()
         if (
-            request.url.path.startswith(("/v1/clinical/", "/v1/reporting/"))
+            request.url.path.startswith(
+                ("/v1/clinical/", "/v1/reporting/", "/v1/operations/", "/v1/auth/recovery")
+            )
             and request.method == "POST"
         ):
             body = await request.body()
@@ -92,7 +94,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                     {
                         "error": {
                             "code": "PAYLOAD_TOO_LARGE",
-                            "message": "Care and reporting commands are limited to 1 MiB",
+                            "message": "Care, reporting and operating commands are limited to 1 MiB",
                         }
                     },
                     status_code=413,
@@ -125,6 +127,22 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
 
     @app.exception_handler(RuleError)
     async def rule_error(request, exc):
+        if (
+            request.url.path.startswith("/v1/operations/")
+            and (await database.version() or 0) >= 4
+            and not getattr(request.state, "control_denial_recorded", False)
+        ):
+            from .control.service import ControlService
+
+            async with database.transaction() as session:
+                identity = getattr(request.state, "actor_id", None)
+                await ControlService(
+                    session,
+                    cfg,
+                    box,
+                    {"id": identity} if identity else None,
+                    request.state.correlation_id,
+                ).audit("control.request_denied", outcome="DENIED")
         if (
             request.url.path.startswith("/v1/reporting/")
             and getattr(request.state, "reporting_ready", False)
@@ -328,6 +346,11 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
 
     async def throttle(session, key):
         key = digest(key)
+        if database.postgres:
+            lock_key = int.from_bytes(
+                hashlib.sha256(("rate-limit:" + key).encode()).digest()[:8], signed=True
+            )
+            await session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": lock_key})
         moment = datetime.now(UTC)
         row = (
             (
@@ -361,12 +384,15 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     @app.get("/v1/ready")
     async def ready():
         version = await database.version()
-        require(version in (2, 3), "AUTHORITY_UNAVAILABLE", "Database migration required", 503)
+        require(version in (2, 3, 4), "AUTHORITY_UNAVAILABLE", "Database migration required", 503)
         return {
             "status": "READY",
             "schema_version": version,
             "reporting": "READY"
-            if version == 3 and cfg.reporting_enabled
+            if version >= 3 and cfg.reporting_enabled
+            else "PAUSED_OR_AWAITING_MIGRATION",
+            "controls": "READY"
+            if version >= 4 and cfg.controls_enabled
             else "PAUSED_OR_AWAITING_MIGRATION",
         }
 
@@ -1590,7 +1616,17 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
         )
         from .operations import deliver_invitations
 
-        result = await deliver_invitations(database, cfg, box)
+        result = {}
+        if cfg.controls_enabled and (await database.version() or 0) >= 4:
+            from .control.jobs import run_tick
+
+            result["controls"] = await run_tick(database, cfg, box, limit=2, seconds=20)
+        if cfg.resend_api_key and cfg.email_from:
+            result["invitations"] = await deliver_invitations(
+                database, cfg, box, limit=1, timeout=10
+            )
+        else:
+            result["invitations"] = {"status": "DELIVERY_DEPENDENCY_UNAVAILABLE"}
         if cfg.reporting_enabled and (await database.version() or 0) >= 3:
             from .reporting.operations import DirectorateService
 
@@ -1690,4 +1726,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     from .reporting.router import install as install_reporting
 
     install_reporting(app, cfg, database, box, actor_for)
+    from .control.router import install as install_controls
+
+    install_controls(app, cfg, database, box, actor_for, throttle, set_cookie)
     return app

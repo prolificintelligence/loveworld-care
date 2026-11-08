@@ -9,7 +9,7 @@ import unicodedata
 from datetime import UTC, datetime
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
-from sqlalchemy import select, text, update
+from sqlalchemy import func, select, text, update
 
 from .. import db
 from ..domain import require
@@ -116,6 +116,39 @@ async def site_for(session, cfg, facility_id, *, write=False):
             "This record belongs to another facility authority",
             409,
         )
+        schema_version = await session.scalar(select(func.max(db.schema_versions.c.version)))
+        session.info["platform_schema_version"] = schema_version
+        if schema_version and schema_version >= 4:
+            session.info["active_activation_package"] = None
+            from ..control import tables as controls
+            from ..control.service import ControlService, load
+
+            link = (
+                (
+                    await session.execute(
+                        select(controls.site_packages).where(
+                            controls.site_packages.c.facility_id == facility_id,
+                            controls.site_packages.c.site_version == row["version"],
+                        )
+                    )
+                )
+                .mappings()
+                .first()
+            )
+            if link:
+                package = await load(session, controls.packages, link["package_id"])
+                session.info["active_activation_package"] = package
+                require(
+                    (
+                        await ControlService(
+                            session, cfg, None, None, "clinical-policy-check"
+                        ).package_state(package)
+                    )["state"]
+                    == "ADOPTED",
+                    "ACTIVATION_PACKAGE_UNAVAILABLE",
+                    "The adopted activation package is expired, withdrawn or unavailable",
+                    403,
+                )
     return dict(row)
 
 
@@ -237,6 +270,14 @@ async def guard(
     relationship=True,
 ):
     site = await site_for(session, cfg, facility_id, write=write)
+    package = session.info.get("active_activation_package")
+    if write and capability in {"FINANCE", "CASHIER"} and package:
+        require(
+            package["payload"].get("financial_policy_reference"),
+            "FINANCIAL_ACTIVATION_REQUIRED",
+            "Care finance requires the separately reviewed financial policy scope",
+            403,
+        )
     encounter = None
     if encounter_id:
         encounter = await fetch(session, facility_id, encounter_id, "encounter", lock=write)
@@ -379,6 +420,10 @@ async def record_event(
             attempts=0,
         )
     )
+    if row["kind"] == "task":
+        from ..control.jobs import index_task
+
+        await index_task(session, row, content)
 
 
 async def create(
