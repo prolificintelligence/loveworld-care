@@ -4,11 +4,11 @@ Review date: **8 November 2026**, Africa/Lagos. This is a delivery assessment an
 
 ## Subsequent scope decision
 
-The project lead clarified that offline care remains core and that only deployments outside the existing cloud stack must be deferred. Facility-local installation and additional worker/scanner hosts are therefore deferred. Cloud-compatible engineering continues in the recommended sequence. The historical review findings below describe the pre-Phase-4A runtime; subsequent delivery is recorded in [the controls release](2026-11-08-control-release.md).
+The project lead clarified that offline care remains core and that only deployments outside the existing cloud stack must be deferred. Facility-local installation and additional worker/scanner hosts are therefore deferred. Cloud-compatible engineering continues in the recommended sequence. The historical review findings below describe the pre-Phase-4A runtime; subsequent delivery is recorded in [the controls release](2026-11-08-control-release.md) and [cloud recovery/reconciliation release](2026-11-08-cloud-recovery-release.md).
 
 ## Subsequent scope decision
 
-The project lead clarified that offline care remains core and that only deployments outside the existing cloud stack must be deferred. Facility-local installation and additional worker/scanner hosts are therefore deferred. Cloud-compatible engineering continues in the recommended sequence. The historical review findings below describe the pre-Phase-4A runtime; subsequent delivery is recorded in [the controls release](2026-11-08-control-release.md).
+The project lead clarified that offline care remains core and that only deployments outside the existing cloud stack must be deferred. Facility-local installation and additional worker/scanner hosts are therefore deferred. Cloud-compatible engineering continues in the recommended sequence. The historical review findings below describe the pre-Phase-4A runtime; subsequent delivery is recorded in [the controls release](2026-11-08-control-release.md) and [cloud recovery/reconciliation release](2026-11-08-cloud-recovery-release.md).
 
 ## Recommendation
 

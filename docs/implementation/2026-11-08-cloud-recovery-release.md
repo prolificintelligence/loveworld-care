@@ -1,6 +1,6 @@
 # Cloud recovery and reconciliation release
 
-Date: 8 November 2026, Africa/Lagos. Verification/deployment is in progress. This record will be updated with executed evidence and actual deployment identifiers. Scope is the next cloud-compatible Phase 4A increment, not full-platform acceptance.
+Date: 8 November 2026, Africa/Lagos. The release is deployed and externally verified. Actual evidence and deployment identifiers follow. Scope is the next cloud-compatible Phase 4A increment, not full-platform acceptance.
 
 ## Delivered implementation
 
@@ -13,7 +13,26 @@ Components: `control/assurance.py`, `control/continuity.py`, current control rou
 
 ## Executed evidence
 
-The first focused control/reliability run passed **32 tests** in 171.49 seconds. It covers scoped authority, revocation before receipt replay, one observation per idempotency key, actual injected stock/ledger/index exceptions, preservation of care state, independent-key requirements, authenticated archive identity/path binding, tamper/wrong-key rejection and scale-preserving numeric round trips. Disk-backed transport is a disposable engineering harness; the production implementation uses the configured private object store without a success fallback. Final-source affected tests, CI, actual Neon/object-store drill, migration, source hashes and live checks remain to be recorded after execution.
+The first focused control/reliability run passed **32 tests** in 171.49 seconds. It covers scoped authority, revocation before receipt replay, one observation per idempotency key, actual injected stock/ledger/index exceptions, preservation of care state, independent-key requirements, authenticated archive identity/path binding, tamper/wrong-key rejection and scale-preserving numeric round trips. Disk-backed transport is a disposable engineering harness; the production implementation uses the configured private object store without a success fallback. The affected streamed-archive check also passed after its final chunking change (1 passed, 14.65 seconds). The frontend type check and production build passed. The first synthetic cloud attempt exposed an overlong fixture label; it was corrected. Final verification also exercised the actual operating-evidence write with a sufficiently sized status column and explicit deferred foreign-key validation.
+
+Exact runtime source: `2014a0ed913bce41126dda0ab7a9694f8af4cab0`. [CI run 42444515399](https://github.com/prolificintelligence/loveworld-care/actions/runs/42444515399) passed Python, frontend and secrets scanning; Python job `128620517531` reports **148 passed, 1 warning in 50.39 seconds**. Engineering results do not change the archived suite's 111 NOT_RUN acceptance specifications.
+
+The final-source real Neon/private-object drill passed with **72 tables, one private file, 26 verified encrypted fields and five valid clinical signatures**. The original application key was deliberately replaced in the supplied runtime settings; recovery still succeeded from the independently encrypted manifest. Wrong recovery keys and actually corrupted stored ciphertext were rejected. Open care, precise stock/movements and balanced ledger entries reconciled; all 38 history protections were installed. The drill wrote its synthetic fixtures only into a disposable namespace and owned private prefixes, then removed them. No email, payment or running replacement service was invoked.
+
+Vercel deployment identifiers:
+
+- Backend: `dpl_4vVVMWTx3MKkGuSzQz5oQKtdiBPy`
+- Frontend: `dpl_2kUh7vPtszVPn1vFudjXCdPXHAmS`
+
+Both are READY. The live verifier matched **40 uploaded backend source hashes** and **16 frontend source hashes**, confirmed schema 5 and reporting readiness through both origins, denied unauthenticated clinical/reporting/reliability/history access with no-store responses, and verified the public workspace pages. The staged API remained ready on schema 4 and gated the new evidence routes with HTTP 503 before migration. Migration 5 completed with zero seeded domain records. Post-migration institutional concurrency/idempotency and immutable-history checks passed, with **38 protected history tables / 76 trigger event entries**, plus the separate signed clinical record protection.
+
+The actual production archive contains **72 tables / 54 rows / 0 evidence files**, captured at **2026-11-08T04:03:16.682338+00:00**, in 48.139 seconds. The archive was restored in a new temporary Neon schema, reconciled and removed in 118.2 seconds. It verified 1 encrypted fields and retained all 38 history protections. Actual current production has no clinical records or evidence files; the nonempty clinical/file/stock/ledger proof above is separate and synthetic. These measured small-population times are not adopted RPO/RTO or representative-load performance.
+
+Archive reference: `6543789e-67d3-4b21-bf51-6345cff0e37b`.
+
+Production reconciliation recorded **NO_EXCEPTIONS_IN_EXECUTED_CHECKS**, with explicit population counts and no clinical fulfilment/service approval inferred. Metadata-only inspection at **2026-11-08T04:15:39.326849+00:00** confirmed the actual backup, restore and reconciliation records, zero residual recovery-test schemas and zero seeded synthetic clinical/facility/policy domain records. The encrypted production archive is retained in the configured private store; temporary restored copies were removed. The independent recovery key is only in the ignored, operator-restricted `.toolchain/continuity/recovery.env`; it was neither printed nor deployed to Vercel. Independent custody remains an owner action.
+
+All 78 controlled document hashes remain unchanged; the 200-requirement phase/evidence registers and all baseline acceptance statuses are preserved. No Playwright, new host or browser package was installed.
 
 ## Operator execution
 
