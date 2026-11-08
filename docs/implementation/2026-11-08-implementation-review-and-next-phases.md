@@ -1,5 +1,7 @@
 # Implementation review and recommended next phases
 
+**Phase 5 update:** The cloud clinical teamwork/specialty/resource increment is deployed in schema 7 with 30 workflow forms. [Exact release evidence](2026-11-08-phase5-clinical-release.md) records 182 passing CI tests, real Neon concurrency and encrypted-object recovery proofs, cloud deployment verification and remaining clinical/operating acceptance. The next recommended capability sequence is **Phase 6: My LW Health Care and family authority**. The matrix remains 21 Partial, 2 Not delivered (013/023), 1 infrastructure-only (014), 1 optional/deferred (025). Historical findings and prior release counts below retain their original context.
+
 **Phase 4B update:** The requested hierarchy/site, affiliation lifecycle and approved publication increment is implemented in schema 6, with `/governance` and `/learn`. See [current release evidence](2026-11-08-institutional-publication-release.md) for the exact verification/deployment state. PRD-010 moves to Partial: the updated matrix has 21 Partial, 2 Not delivered (013/023), 1 infrastructure-only (014), and 1 deferred/optional (025). No percentage is asserted. Full Phase 4B reporting/template/operating acceptance is still outstanding; Phase 5 is the next clinical capability sequence. Historical review findings and release counts below retain their original context.
 
 Review date: **8 November 2026**, Africa/Lagos. This is a delivery assessment and proposed implementation sequence. It preserves the authored baseline and the project lead's decisions to defer offline installation and avoid Playwright installation. No application implementation, migration or deployment was performed during this review.
@@ -14,7 +16,7 @@ The project lead clarified that offline care remains core and that only deployme
 
 ## Recommendation
 
-**Start Phase 4A: shared production controls and activation readiness.** Complete the controls on which every further clinical, patient and financial workflow relies. Follow with Phase 4B to close the remaining institutional lifecycle and approved-information gaps. Clinical completion can progress alongside Phase 4B once the relevant shared controls are available.
+**Proceed with Phase 6: My LW Health Care and family authority.** The recorded cloud increments for 4A, 4B and 5 are deployed; their remaining adoption, full variant and operating qualification continue alongside patient/family implementation. The original priority findings and exit criteria below remain the qualification baseline, rather than assertions that those phases are fully accepted.
 
 Keep the programme directed toward the full documented platform. Patient/family care, full clinical departments, existing-EMR integration and migration, care finance, governed assistance, and full facility-local offline care remain core scope. The current cloud releases are substantial deployed increments; full-suite acceptance is still outstanding. Accounting, procurement, HR and payroll remain a separately scoped optional extension.
 

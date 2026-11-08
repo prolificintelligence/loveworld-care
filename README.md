@@ -27,3 +27,5 @@ docs/implementation/                   Exact release evidence and overall suite 
 ```
 
 The other application/package directories retain earlier development work. Production release packaging selects the institutional runtime, clinical, reporting and control modules, and platform-web. The progress report describes the actual delivered scope and operating dependencies.
+
+The [Phase 5 clinical release](docs/implementation/2026-11-08-phase5-clinical-release.md) adds actual capacity/shift/teamwork, nursing receipt and special dispositions, maternal/child facts, medicine/stock stewardship, procedure monitoring/trace/recall and patient instructions in `/care`. Clinical activation and current professional authority remain required. The next capability sequence is patient/family authority and self-service.
