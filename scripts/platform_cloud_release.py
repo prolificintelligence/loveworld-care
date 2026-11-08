@@ -10,6 +10,7 @@ import argparse
 import asyncio
 import base64
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -33,7 +34,7 @@ API = "lw-health-intelligence-api"
 
 
 def vercel_credential():
-    return vercel_token()
+    return os.environ.get("LWH_VERCEL_DEPLOY_TOKEN") or vercel_token()
 
 
 def http_client(credential):

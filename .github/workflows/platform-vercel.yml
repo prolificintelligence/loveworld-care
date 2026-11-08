@@ -1,0 +1,56 @@
+name: platform-vercel
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        type: choice
+        required: true
+        options: [api, web, verify]
+      schema_version:
+        type: choice
+        required: true
+        options: ['6', '7']
+      api_deployment_id:
+        type: string
+        required: false
+      web_deployment_id:
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: platform-vercel-${{ inputs.target }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - run: uv python install 3.12
+      - run: uv sync --frozen
+      - name: Deploy or verify exact committed sources
+        env:
+          LWH_VERCEL_DEPLOY_TOKEN: ${{ secrets.LWH_VERCEL_DEPLOY_TOKEN }}
+          RELEASE_TARGET: ${{ inputs.target }}
+          EXPECTED_SCHEMA: ${{ inputs.schema_version }}
+          API_DEPLOYMENT: ${{ inputs.api_deployment_id }}
+          WEB_DEPLOYMENT: ${{ inputs.web_deployment_id }}
+        run: >-
+          uv run python scripts/platform_vercel_runner.py
+          --target "$RELEASE_TARGET" --schema-version "$EXPECTED_SCHEMA"
+          --api-deployment "$API_DEPLOYMENT" --web-deployment "$WEB_DEPLOYMENT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: platform-vercel-${{ inputs.target }}-${{ github.run_id }}
+          path: .release-evidence/*.json
+          retention-days: 14
