@@ -415,11 +415,24 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     async def ready():
         version = await database.version()
         require(
-            version in (2, 3, 4, 5, 6), "AUTHORITY_UNAVAILABLE", "Database migration required", 503
+            version in (2, 3, 4, 5, 6, 7),
+            "AUTHORITY_UNAVAILABLE",
+            "Database migration required",
+            503,
         )
+        if version == 7:
+            require(
+                await database.ready(),
+                "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
+                "Clinical work index reconciliation required",
+                503,
+            )
         return {
             "status": "READY",
             "schema_version": version,
+            "advanced_clinical": "READY"
+            if version >= 7 and cfg.advanced_clinical_enabled
+            else "PAUSED_OR_AWAITING_MIGRATION",
             "reporting": "READY"
             if version >= 3 and cfg.reporting_enabled
             else "PAUSED_OR_AWAITING_MIGRATION",

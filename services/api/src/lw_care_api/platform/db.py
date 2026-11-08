@@ -310,7 +310,10 @@ async def protect_history(connection, schema=SCHEMA, schema_version=6):
         CREATE OR REPLACE FUNCTION {schema}.protect_clinical_records()
         RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
         IF TG_OP = 'DELETE' THEN RAISE EXCEPTION 'Clinical source records cannot be deleted'; END IF;
-        IF OLD.kind = 'note' AND OLD.status = 'SIGNED' THEN
+        IF (OLD.kind = 'note' AND OLD.status = 'SIGNED') OR
+           (OLD.kind IN ('nursing_assessment','fluid_entry','birth','birth_link','labour_observation',
+            'child_measurement','immunisation','medicine_reconciliation','anaesthesia_observation',
+            'device_use','care_instructions','infusion_event','infusion_witness') AND OLD.status = 'RECORDED') THEN
             RAISE EXCEPTION 'Signed clinical content is immutable; append an addendum'; END IF;
         RETURN NEW; END; $$
     """)
@@ -350,6 +353,7 @@ class Database:
             yield session
 
     async def migrate(self):
+        from .clinical import flow_index  # noqa: F401
         from .clinical import tables as clinical_tables  # noqa: F401 -- register metadata
         from .control import tables as control_tables  # noqa: F401
         from .institutional import tables as institutional_tables  # noqa: F401
@@ -387,6 +391,10 @@ class Database:
                 await connection.execute(
                     schema_versions.insert().values(version=6, applied_at=now())
                 )
+            if present is None or present < 7:
+                await connection.execute(
+                    schema_versions.insert().values(version=7, applied_at=now())
+                )
             if self.postgres:
                 await protect_history(connection)
 
@@ -398,4 +406,10 @@ class Database:
 
     async def ready(self) -> bool:
         # Version 2 remains supported during the staged reporting rollout.
-        return await self.version() in (2, 3, 4, 5, 6)
+        version = await self.version()
+        if version == 7:
+            from .clinical.flow_index import ready
+
+            async with self.transaction() as session:
+                return await ready(session)
+        return version in (2, 3, 4, 5, 6)

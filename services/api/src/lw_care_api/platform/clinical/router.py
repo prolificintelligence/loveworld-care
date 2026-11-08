@@ -6,14 +6,16 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Request
-from sqlalchemy import select, update
+from sqlalchemy import exists, func, or_, select, update
 
 from .. import db
 from ..domain import RuleError, require, valid_interval
+from . import advanced_contracts as ac
 from . import contracts as c
+from . import flow_index as fi
 from . import store as s
 from . import tables as t
-from .continuity import EMRService
+from .specialties import Phase5Service as EMRService
 
 PREFIX = "/v1/clinical/{facility_id}"
 KIND_CAPABILITIES = {
@@ -24,7 +26,7 @@ KIND_CAPABILITIES = {
     "problem": ("CARE", "NURSING"),
     "allergy": ("CARE", "NURSING", "PHARMACY"),
     "consent": ("CARE",),
-    "task": ("CARE",),
+    "task": ("CARE", "NURSING"),
     "order": ("CARE", "DIAGNOSTICS"),
     "specimen": ("DIAGNOSTICS",),
     "result": ("CARE", "DIAGNOSTICS"),
@@ -45,6 +47,59 @@ KIND_CAPABILITIES = {
     "tariff": ("FINANCE", "CASHIER"),
     "invoice": ("FINANCE", "CASHIER"),
     "cash_receipt": ("FINANCE", "CASHIER"),
+    "service_capacity": ("CARE", "NURSING", "DIAGNOSTICS", "PHARMACY", "PROCEDURE"),
+    "duty_shift": ("CARE", "NURSING", "DIAGNOSTICS", "PHARMACY", "PROCEDURE"),
+    "team_handover": ("CARE", "NURSING"),
+    "admission_order": ("CARE", "NURSING"),
+    "bed_hold": ("CARE", "NURSING"),
+    "nursing_assessment": ("NURSING", "CARE"),
+    "fluid_entry": ("NURSING", "CARE"),
+    "labour_observation": ("CARE",),
+    "birth": ("CARE",),
+    "birth_link": ("CARE",),
+    "child_measurement": ("CARE",),
+    "immunisation": ("NURSING", "CARE"),
+    "medicine_reconciliation": ("CARE", "PRESCRIBE", "PHARMACY"),
+    "stock_hold": ("PHARMACY",),
+    "stock_adjustment": ("PHARMACY",),
+    "stock_return": ("PHARMACY",),
+    "substitution": ("PHARMACY", "PRESCRIBE"),
+    "anaesthesia_observation": ("PROCEDURE",),
+    "device_use": ("PROCEDURE",),
+    "clinical_recall": ("PROCEDURE", "CARE"),
+    "care_instructions": ("CARE", "NURSING"),
+    "infusion_event": ("NURSING", "CARE"),
+    "infusion_witness": ("NURSING", "CARE"),
+}
+ADVANCED_KINDS = set(KIND_CAPABILITIES) - {
+    "patient",
+    "encounter",
+    "note",
+    "observation",
+    "problem",
+    "allergy",
+    "consent",
+    "task",
+    "order",
+    "specimen",
+    "result",
+    "product",
+    "medication",
+    "dispense",
+    "administration",
+    "stay",
+    "programme",
+    "procedure",
+    "transfusion",
+    "referral",
+    "record_error",
+    "sharing_grant",
+    "disclosure",
+    "appointment",
+    "identity_link",
+    "tariff",
+    "invoice",
+    "cash_receipt",
 }
 
 
@@ -73,19 +128,35 @@ async def any_privilege(session, actor, facility_id, capabilities, service=None)
 
 async def readable(session, cfg, actor, row, box):
     await s.site_for(session, cfg, row["facility_id"])
+    if row["kind"] in {"service_capacity", "duty_shift"} and governor(actor, row["facility_id"]):
+        return
     capability, _ = await any_privilege(
         session,
         actor,
         row["facility_id"],
         KIND_CAPABILITIES[row["kind"]],
         None
-        if row["kind"] in {"patient", "product", "tariff", "invoice", "cash_receipt"}
+        if row["kind"]
+        in {"patient", "product", "tariff", "invoice", "cash_receipt", "stock_adjustment"}
         else row["service"],
     )
     data = s.opened(box, row)["data"] if row["kind"] == "encounter" else {}
     awaiting_acceptance = row["kind"] == "encounter" and (
         data.get("owner_id") is None or actor["id"] in data.get("proposed_team_ids", [])
     )
+    if row["kind"] in {"team_handover", "substitution"}:
+        content = s.opened(box, row)["data"]
+        awaiting_acceptance = content.get("recipient_id") == actor["id"]
+    if row["kind"] == "stay":
+        content = s.opened(box, row)["data"]
+        if (
+            content.get("responsible_nurse_id") == actor["id"]
+            and content.get("nursing_responsibility_state") != "ACCEPTED"
+        ):
+            await s.privilege_for(
+                session, actor["id"], row["facility_id"], "NURSING", row["service"]
+            )
+            awaiting_acceptance = True
     if capability == "REGISTER" and row["kind"] == "encounter":
         require(
             data.get("owner_id") is None and row["status"] == "ARRIVED",
@@ -115,6 +186,14 @@ def install(app, cfg, database, box, actor_for):
 
     async def presented(session, row):
         resource = s.opened(box, row)
+        if row["kind"] in {"bed_hold", "stock_hold", "duty_shift", "service_capacity"}:
+            end = resource["data"].get("expires_at") or resource["data"].get("ends_at")
+            if (
+                end
+                and end <= db.now()
+                and row["status"] in {"HELD", "OFFERED", "ACCEPTED", "CONFIGURED"}
+            ):
+                resource["availability_state"] = "EXPIRED"
         if row["patient_id"]:
             markers = (
                 await session.execute(
@@ -136,9 +215,48 @@ def install(app, cfg, database, box, actor_for):
             }
         return resource
 
+    def listed(resource):
+        if len(json.dumps(resource, default=str).encode()) > 48000:
+            resource["data"] = {
+                key: value
+                for key, value in resource["data"].items()
+                if key
+                in {
+                    "title",
+                    "owner_id",
+                    "owner_capability",
+                    "source_id",
+                    "due_at",
+                    "code",
+                    "note_type",
+                    "programme_type",
+                    "order_type",
+                    "result_owner_id",
+                    "account_id",
+                    "recipient_id",
+                }
+            }
+            resource["detail_required"] = True
+        return resource
+
     async def command(request, facility_id, payload, method, identifier=None, *, governance=False):
         body = payload.model_dump(mode="json")
         actor = None
+        if request.url.path.split("/")[4:5] == ["workflows"]:
+            require(
+                cfg.advanced_clinical_enabled,
+                "ADVANCED_CLINICAL_PAUSED",
+                "Advanced clinical commands are paused; existing records remain available",
+                503,
+            )
+            require(
+                (await database.version() or 0) >= 7,
+                "CLINICAL_WORKFLOW_MIGRATION_REQUIRED",
+                "This workflow awaits migration 7",
+                503,
+            )
+            if body.get("occurred_at"):
+                s.event_time(body["occurred_at"])
         try:
             async with database.transaction() as session:
                 actor = await actor_for(session, request)
@@ -649,11 +767,11 @@ def install(app, cfg, database, box, actor_for):
                     t.records.c.id > after,
                 )
                 .order_by(t.records.c.id)
-                .limit(201)
+                .limit(26)
             )
             candidates = list((await session.execute(query)).mappings())
             visible, withheld = [], 0
-            for row in candidates[:200]:
+            for row in candidates[:25]:
                 try:
                     await readable(session, cfg, actor, row, box)
                 except RuleError as exc:
@@ -661,8 +779,22 @@ def install(app, cfg, database, box, actor_for):
                         raise
                     withheld += 1
                 else:
-                    visible.append(await presented(session, row))
-            allergy_rows = [r for r in visible if r["kind"] == "allergy"]
+                    visible.append(listed(await presented(session, row)))
+            allergy_rows = []
+            for row in (
+                await session.execute(
+                    select(t.records)
+                    .where(
+                        t.records.c.facility_id == facility,
+                        t.records.c.patient_id == patient,
+                        t.records.c.kind == "allergy",
+                    )
+                    .order_by(t.records.c.updated_at.desc(), t.records.c.id)
+                    .limit(21)
+                )
+            ).mappings():
+                await readable(session, cfg, actor, row, box)
+                allergy_rows.append(await presented(session, row))
             await s.audit(
                 session,
                 actor,
@@ -677,14 +809,18 @@ def install(app, cfg, database, box, actor_for):
                 "allergy_assessment": "UNKNOWN"
                 if not allergy_rows
                 else "SEE_ATTRIBUTED_ASSESSMENTS",
+                "allergy_assessments": allergy_rows[:20],
+                "additional_allergy_history": len(allergy_rows) > 20,
                 "withheld_records": withheld,
                 "as_of": db.now(),
-                "next_cursor": candidates[199]["id"] if len(candidates) > 200 else None,
+                "next_cursor": candidates[24]["id"] if len(candidates) > 25 else None,
                 "automated_medication_checking": "UNAVAILABLE_MANUAL_CLINICAL_REVIEW_REQUIRED",
             }
 
     @router.get(PREFIX + "/worklist")
-    async def worklist(facility_id: UUID, request: Request, kind: str = "task", after: str = ""):
+    async def worklist(
+        facility_id: UUID, request: Request, kind: str = "task", after: str = "", trace: str = ""
+    ):
         facility = str(facility_id)
         allowed = {
             "sharing_grant",
@@ -706,31 +842,196 @@ def install(app, cfg, database, box, actor_for):
             "referral",
             "product",
         }
+        allowed |= ADVANCED_KINDS
+        allowed |= {"dispense", "administration", "transfusion"}
         require(kind in allowed, "VALIDATION_FAILED", "Choose a supported clinical worklist", 422)
         async with database.transaction() as session:
             actor = await actor_for(session, request)
+            version = await session.scalar(select(func.max(db.schema_versions.c.version)))
+            if kind in ADVANCED_KINDS:
+                require(
+                    version >= 7,
+                    "CLINICAL_WORKFLOW_MIGRATION_REQUIRED",
+                    "This workflow awaits migration 7",
+                    503,
+                )
             await s.site_for(session, cfg, facility)
-            await any_privilege(session, actor, facility, KIND_CAPABILITIES[kind])
+            governing = kind in {"service_capacity", "duty_shift"} and governor(actor, facility)
+            if not governing:
+                await any_privilege(session, actor, facility, KIND_CAPABILITIES[kind])
             query = (
                 select(t.records)
                 .where(
                     t.records.c.facility_id == facility,
                     t.records.c.kind == kind,
-                    t.records.c.id > after,
+                    t.records.c.id > ("" if kind == "task" and after.startswith("due.") else after),
                 )
                 .order_by(t.records.c.id)
-                .limit(201)
+                .limit(26)
             )
+            if version >= 7:
+                require(
+                    await fi.ready(session),
+                    "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
+                    "Reconcile the clinical work index from current sources",
+                    503,
+                )
+                query = query.join(fi.index, fi.index.c.record_id == t.records.c.id)
+                if trace:
+                    require(
+                        kind in {"device_use", "transfusion"} and len(trace) <= 160,
+                        "INVALID_TRACE_QUERY",
+                        "Search the exact local component identifier or device serial/lot",
+                        422,
+                    )
+                    query = query.where(
+                        fi.index.c.trace_hash == s.keyed_hash(cfg, "trace", trace.strip())
+                    )
+                if kind == "task" and (not after or after.startswith("due.")):
+                    query = query.order_by(None).order_by(fi.index.c.due_at, t.records.c.id)
+                    if after:
+                        try:
+                            cursor_due, cursor_id = json.loads(
+                                base64.urlsafe_b64decode(after[4:] + "=" * (-len(after[4:]) % 4))
+                            )
+                            require(
+                                isinstance(cursor_due, str)
+                                and len(cursor_due) <= 40
+                                and str(UUID(cursor_id)) == cursor_id
+                            )
+                        except (ValueError, TypeError):
+                            require(
+                                False,
+                                "INVALID_CURSOR",
+                                "Refresh the current clinical worklist",
+                                422,
+                            )
+                        query = query.where(
+                            or_(
+                                fi.index.c.due_at > cursor_due,
+                                (fi.index.c.due_at == cursor_due) & (t.records.c.id > cursor_id),
+                            )
+                        )
+                if kind == "task":
+                    query = query.where(
+                        or_(
+                            fi.index.c.accountable_id == actor["id"],
+                            fi.index.c.recipient_id == actor["id"],
+                        )
+                    )
+                if not governing:
+                    grants = (
+                        (
+                            await session.execute(
+                                select(t.privileges).where(
+                                    t.privileges.c.facility_id == facility,
+                                    t.privileges.c.account_id == actor["id"],
+                                    t.privileges.c.revoked.is_(False),
+                                    t.privileges.c.valid_from <= db.now(),
+                                    t.privileges.c.valid_until > db.now(),
+                                )
+                            )
+                        )
+                        .mappings()
+                        .all()
+                    )
+                    services = {
+                        service
+                        for privilege in grants
+                        if set(privilege["capabilities"]) & set(KIND_CAPABILITIES[kind])
+                        for service in privilege["services"]
+                    }
+                    if kind not in {
+                        "product",
+                        "stock_adjustment",
+                        "tariff",
+                        "invoice",
+                        "cash_receipt",
+                    }:
+                        query = query.where(t.records.c.service.in_(services))
+                    if kind not in {
+                        "product",
+                        "stock_adjustment",
+                        "tariff",
+                        "invoice",
+                        "cash_receipt",
+                    }:
+                        relationship = exists(
+                            select(t.memberships.c.id).where(
+                                t.memberships.c.facility_id == facility,
+                                t.memberships.c.patient_id == t.records.c.patient_id,
+                                t.memberships.c.account_id == actor["id"],
+                                t.memberships.c.active.is_(True),
+                                t.memberships.c.valid_until > db.now(),
+                            )
+                        )
+                        predicates, preferred_services = [], set()
+                        for capability in KIND_CAPABILITIES[kind]:
+                            eligible_services = {
+                                service
+                                for grant in grants
+                                if capability in grant["capabilities"]
+                                for service in grant["services"]
+                            }
+                            selected_services = eligible_services - preferred_services
+                            preferred_services |= eligible_services
+                            if not selected_services:
+                                continue
+                            permitted = t.records.c.service.in_(selected_services)
+                            if capability not in {
+                                "DIAGNOSTICS",
+                                "PHARMACY",
+                                "RECORDS",
+                                "REGISTER",
+                                "FINANCE",
+                                "CASHIER",
+                            }:
+                                permitted &= or_(
+                                    t.records.c.patient_id.is_(None),
+                                    relationship,
+                                    fi.index.c.recipient_id == actor["id"],
+                                    (t.records.c.kind == "encounter")
+                                    & fi.index.c.accountable_id.is_(None),
+                                )
+                            elif capability == "REGISTER" and kind == "encounter":
+                                permitted &= fi.index.c.accountable_id.is_(None) & (
+                                    t.records.c.status == "ARRIVED"
+                                )
+                            predicates.append(permitted)
+                        query = query.where(or_(*predicates) if predicates else False)
+                if kind in ADVANCED_KINDS:
+                    query = query.limit(26)
             candidates = list((await session.execute(query)).mappings())
+            limit = 25
             visible = []
-            for row in candidates[:200]:
+            for row in candidates[:limit]:
                 try:
                     await readable(session, cfg, actor, row, box)
                 except RuleError as exc:
                     if exc.status not in {403, 404}:
                         raise
                     continue
-                opened = await presented(session, row)
+                opened = listed(await presented(session, row))
+                if kind in ADVANCED_KINDS:
+                    opened["data"] = {
+                        key: value
+                        for key, value in opened["data"].items()
+                        if key
+                        in {
+                            "title",
+                            "owner_id",
+                            "account_id",
+                            "recipient_id",
+                            "source_id",
+                            "capability",
+                            "starts_at",
+                            "ends_at",
+                            "due_at",
+                            "expires_at",
+                            "service",
+                        }
+                    }
+                    opened["detail_required"] = True
                 if kind == "task" and actor["id"] not in {
                     opened["data"]["owner_id"],
                     opened["data"].get("handover_to"),
@@ -748,47 +1049,155 @@ def install(app, cfg, database, box, actor_for):
             return {
                 "items": visible,
                 "as_of": db.now(),
-                "next_cursor": candidates[199]["id"] if len(candidates) > 200 else None,
+                "next_cursor": (
+                    "due."
+                    + base64.urlsafe_b64encode(
+                        json.dumps(
+                            [
+                                s.opened(box, candidates[limit - 1])["data"]["due_at"],
+                                candidates[limit - 1]["id"],
+                            ]
+                        ).encode()
+                    )
+                    .decode()
+                    .rstrip("=")
+                )
+                if len(candidates) > limit
+                and version >= 7
+                and kind == "task"
+                and (not after or after.startswith("due."))
+                else candidates[limit - 1]["id"]
+                if len(candidates) > limit
+                else None,
+                "ordering": "ACTUAL_DUE_TIME"
+                if version >= 7 and kind == "task"
+                else "STABLE_SOURCE_IDENTIFIER",
             }
 
     @router.get(PREFIX + "/beds")
-    async def beds(facility_id: UUID, request: Request):
+    async def beds(facility_id: UUID, request: Request, after: str = ""):
         async with database.transaction() as session:
             actor = await actor_for(session, request)
             await s.site_for(session, cfg, str(facility_id))
             await any_privilege(session, actor, str(facility_id), ("REGISTER", "CARE", "NURSING"))
+            rows = list(
+                (
+                    await session.execute(
+                        select(t.beds)
+                        .where(t.beds.c.facility_id == str(facility_id), t.beds.c.id > after)
+                        .order_by(t.beds.c.id)
+                        .limit(501)
+                    )
+                ).mappings()
+            )
+            reservations = {}
+            if (await session.scalar(select(func.max(db.schema_versions.c.version))) or 0) >= 7:
+                require(
+                    await fi.ready(session),
+                    "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
+                    "Reconcile current reservations before confirming resource availability",
+                    503,
+                )
+                reservations = dict(
+                    (
+                        await session.execute(
+                            select(fi.index.c.source_id, func.max(fi.index.c.ends_at))
+                            .where(
+                                fi.index.c.facility_id == str(facility_id),
+                                fi.index.c.kind == "bed_hold",
+                                fi.index.c.status == "HELD",
+                                fi.index.c.ends_at > db.now(),
+                                fi.index.c.source_id.in_([row["id"] for row in rows[:500]]),
+                            )
+                            .group_by(fi.index.c.source_id)
+                        )
+                    ).all()
+                )
+            await s.audit(
+                session,
+                actor,
+                str(facility_id),
+                None,
+                "inpatient.bed_board_read",
+                request.state.correlation_id,
+            )
             return {
                 "items": [
-                    dict(r)
-                    for r in (
-                        await session.execute(
-                            select(t.beds)
-                            .where(t.beds.c.facility_id == str(facility_id))
-                            .limit(500)
-                        )
-                    ).mappings()
-                ]
+                    {
+                        **dict(row),
+                        "reservation_status": "HELD" if row["id"] in reservations else "NOT_HELD",
+                        "reserved_until": reservations.get(row["id"]),
+                    }
+                    for row in rows[:500]
+                ],
+                "next_cursor": rows[499]["id"] if len(rows) > 500 else None,
+                "as_of": db.now(),
             }
 
     @router.get(PREFIX + "/stock")
-    async def stock(facility_id: UUID, request: Request):
+    async def stock(facility_id: UUID, request: Request, after: str = ""):
         async with database.transaction() as session:
             actor = await actor_for(session, request)
             await s.site_for(session, cfg, str(facility_id))
             await any_privilege(
                 session, actor, str(facility_id), ("PHARMACY", "PRESCRIBE", "NURSING")
             )
+            rows = list(
+                (
+                    await session.execute(
+                        select(t.lots)
+                        .where(t.lots.c.facility_id == str(facility_id), t.lots.c.id > after)
+                        .order_by(t.lots.c.id)
+                        .limit(501)
+                    )
+                ).mappings()
+            )
+            reserved = {}
+            if (await session.scalar(select(func.max(db.schema_versions.c.version))) or 0) >= 7:
+                require(
+                    await fi.ready(session),
+                    "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
+                    "Reconcile current reservations before confirming resource availability",
+                    503,
+                )
+                reserved = dict(
+                    (
+                        await session.execute(
+                            select(fi.index.c.source_id, func.sum(fi.index.c.quantity))
+                            .where(
+                                fi.index.c.facility_id == str(facility_id),
+                                fi.index.c.kind == "stock_hold",
+                                fi.index.c.status == "HELD",
+                                fi.index.c.ends_at > db.now(),
+                                fi.index.c.source_id.in_([row["id"] for row in rows[:500]]),
+                            )
+                            .group_by(fi.index.c.source_id)
+                        )
+                    ).all()
+                )
+            await s.audit(
+                session,
+                actor,
+                str(facility_id),
+                None,
+                "medicines.stock_board_read",
+                request.state.correlation_id,
+            )
             return {
                 "items": [
-                    {**dict(r), "quantity": str(r["quantity"])}
-                    for r in (
-                        await session.execute(
-                            select(t.lots)
-                            .where(t.lots.c.facility_id == str(facility_id))
-                            .limit(500)
-                        )
-                    ).mappings()
-                ]
+                    {
+                        **dict(row),
+                        "quantity": str(row["quantity"]),
+                        "reserved_quantity": str(reserved.get(row["id"], 0)),
+                        "unreserved_quantity": str(row["quantity"] - reserved.get(row["id"], 0)),
+                        "supply_eligibility": "AVAILABLE"
+                        if row["status"] == "AVAILABLE" and row["expires_at"] > db.now()
+                        else "RESTRICTED",
+                    }
+                    for row in rows[:500]
+                ],
+                "next_cursor": rows[499]["id"] if len(rows) > 500 else None,
+                "as_of": db.now(),
             }
 
     @router.get(PREFIX + "/audit")
@@ -948,6 +1357,43 @@ def install(app, cfg, database, box, actor_for):
         ("cash-receipts", c.CashReceipt, "cash_receipt"),
     ]:
         create_route(path, model, method)
+
+    for path, model, method in [
+        ("capacity", ac.Capacity, "capacity"),
+        ("shifts", ac.Shift, "shift"),
+        ("handovers", ac.Handover, "team_handover"),
+        ("admission-orders", ac.AdmissionOrder, "admission_order"),
+        ("bed-holds", ac.BedHold, "bed_hold"),
+        ("nursing-assessments", ac.Nursing, "nursing"),
+        ("fluids", ac.Fluid, "fluid"),
+        ("labour", ac.Labour, "labour"),
+        ("births", ac.Birth, "birth"),
+        ("growth", ac.Growth, "growth"),
+        ("immunisations", ac.Immunisation, "immunisation"),
+        ("reconciliations", ac.Reconciliation, "reconciliation"),
+        ("stock-holds", ac.StockHold, "stock_hold"),
+        ("stock-adjustments", ac.Adjustment, "stock_adjustment"),
+        ("stock-returns", ac.StockReturn, "stock_return"),
+        ("substitutions", ac.Substitution, "substitution"),
+        ("anaesthesia", ac.Anaesthesia, "anaesthesia"),
+        ("devices", ac.Device, "device"),
+        ("recalls", ac.Recall, "recall"),
+        ("instructions", ac.Instructions, "instructions"),
+        ("infusions", ac.Infusion, "infusion"),
+    ]:
+        create_route("workflows/" + path, model, method)
+
+    for path, model, method in [
+        ("shifts/{id}/actions", ac.Action, "shift_action"),
+        ("capacity/{id}/revisions", ac.CapacityRevision, "capacity_revision"),
+        ("handovers/{id}/actions", ac.Action, "handover_action"),
+        ("stays/{id}/events", ac.WardEvent, "ward_event"),
+        ("commitments/{id}/cancel", ac.Action, "cancel_hold"),
+        ("stock-movements/{id}/witness", ac.Action, "witness_stock"),
+        ("substitutions/{id}/decision", ac.SubstituteDecision, "substitution_decision"),
+        ("infusions/{id}/witness", ac.Action, "infusion_witness"),
+    ]:
+        action_route("workflows/" + path, model, method)
 
     for path, model, kind in [
         ("observations", c.Observation, "observation"),

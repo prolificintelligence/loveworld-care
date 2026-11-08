@@ -79,6 +79,20 @@ async def observe(session):
         "unprocessed_jobs": await count(t.jobs, t.jobs.c.state.in_(["READY", "RETRY", "RUNNING"])),
         "open_indexed_tasks": await count(t.obligations, t.obligations.c.is_open.is_(True)),
     }
+    version = await session.scalar(select(func.max(db.schema_versions.c.version)))
+    if version and version >= 7:
+        from ..clinical.flow_index import index
+
+        checks["clinical_work_projection_mismatches"] = await count(
+            clinical.records.outerjoin(index, clinical.records.c.id == index.c.record_id),
+            or_(
+                index.c.record_id.is_(None),
+                index.c.indexed_version != clinical.records.c.version,
+                index.c.facility_id != clinical.records.c.facility_id,
+                index.c.kind != clinical.records.c.kind,
+                index.c.status != clinical.records.c.status,
+            ),
+        )
     return {
         "checks": checks,
         "population": context,

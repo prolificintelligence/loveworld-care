@@ -739,7 +739,7 @@ def test_sensitive_notes_and_entered_error_preserve_source(journey):
     note = j.note(patient, encounter, confidentiality="RESTRICTED", note_type="MENTAL_HEALTH")
     admission_note = j.note(patient, encounter)
     bed = j.create("/beds", {"ward": "Synthetic ward", "label": "Sensitive-test"})
-    j.create(
+    stay = j.create(
         "/admissions",
         {
             **j.context(patient, encounter),
@@ -750,6 +750,21 @@ def test_sensitive_notes_and_entered_error_preserve_source(journey):
             "indication": "Synthetic admission",
             "signed_admission_note_id": admission_note["id"],
         },
+    )
+    assert j.get(f"/patients/{patient['id']}/chart", "nurse").status_code == 403
+    j.create(
+        f"/workflows/stays/{stay['id']}/events",
+        {
+            "patient_id": patient["id"],
+            "expected_version": stay["version"],
+            "action": "ACCEPT_NURSING",
+            "occurred_at": stamp(-1),
+            "policy_reference": "Synthetic actual nursing receipt policy",
+            "actual_evidence": "Synthetic personal patient and ward receipt",
+            "reason": "Synthetic personal acceptance",
+            "intent_confirmed": True,
+        },
+        "nurse",
     )
     chart = j.get(f"/patients/{patient['id']}/chart", "nurse").json()
     assert chart["withheld_records"] >= 1 and note["id"] not in {r["id"] for r in chart["items"]}

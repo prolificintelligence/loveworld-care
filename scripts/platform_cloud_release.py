@@ -314,7 +314,20 @@ def migrate():
         database = Database(settings.database_url)
         try:
             await database.migrate()
-            print(json.dumps({"migration": "APPLIED", "schema_version": 6, "seeded_records": 0}))
+            from lw_care_api.platform.clinical.flow_index import rebuild
+            from lw_care_api.platform.security import SecretBox
+
+            indexed = await rebuild(database, SecretBox(settings.data_key_hex), settings)
+            print(
+                json.dumps(
+                    {
+                        "migration": "APPLIED",
+                        "schema_version": 7,
+                        "seeded_records": 0,
+                        "existing_records_indexed": indexed,
+                    }
+                )
+            )
         finally:
             await database.engine.dispose()
 

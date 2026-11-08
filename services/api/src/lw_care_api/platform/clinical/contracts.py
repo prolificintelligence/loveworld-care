@@ -229,6 +229,7 @@ class Consent(Context):
 
 
 class Task(Context):
+    owner_capability: Literal["CARE", "NURSING"] = "CARE"
     title: Short
     instructions: Text
     owner_id: UUID
@@ -362,6 +363,7 @@ class LotAction(Versioned):
 
 
 class Dispense(Context):
+    reservation_id: UUID | None = None
     medication_id: UUID
     expected_order_version: int = Field(ge=1)
     lot_id: UUID
@@ -398,6 +400,7 @@ class Bed(StrictModel):
 
 
 class Admission(Context):
+    admission_order_id: UUID | None = None
     bed_id: UUID
     expected_bed_version: int = Field(ge=1)
     responsible_clinician_id: UUID

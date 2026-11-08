@@ -75,7 +75,7 @@ async def verify():
     app.state.database.engine = mapped
     app.state.database.session = async_sessionmaker(mapped, expire_on_commit=False)
     try:
-        assert await database.version() in {4, 5, 6}
+        assert await database.version() in {4, 5, 6, 7}
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             translated = await connection.execution_options(
@@ -85,7 +85,7 @@ async def verify():
             await db.protect_history(translated, namespace)
         async with app.state.database.transaction() as session:
             await session.execute(
-                db.schema_versions.insert().values(version=6, applied_at=db.now())
+                db.schema_versions.insert().values(version=7, applied_at=db.now())
             )
         actors, facility = await seed_controls(app)
         async with httpx.AsyncClient(
@@ -155,6 +155,19 @@ async def verify():
                     "instructions": "Synthetic restore fixture",
                     "owner_id": actors["target"][0],
                     "due_at": stamp(1),
+                },
+            )
+            await created(
+                "/workflows/nursing-assessments",
+                {
+                    "patient_id": patient["id"],
+                    "encounter_id": encounter["id"],
+                    "occurred_at": stamp(-1),
+                    "assessment": "Synthetic actual recovery observation",
+                    "plan": "Synthetic retained bedside plan",
+                    "escalation": "Synthetic actual unresolved review",
+                    "source": "Synthetic engineering recovery proof",
+                    "intent_confirmed": True,
                 },
             )
             observed = await client.post(

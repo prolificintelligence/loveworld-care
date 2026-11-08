@@ -85,14 +85,16 @@ def object_name(backup_id, relative):
     return prefix(backup_id) + relative
 
 
-def archive_tables(version=6):
+def archive_tables(version=7):
+    from ..clinical import flow_index  # noqa: F401
     from ..institutional import tables as institutional_tables  # noqa: F401
     from ..reporting import tables as reporting_tables  # noqa: F401
 
     return [
         table
         for table in db.metadata.sorted_tables
-        if version >= 6 or not table.name.startswith("institutional_")
+        if (version >= 6 or not table.name.startswith("institutional_"))
+        and (version >= 7 or not table.name.startswith("clinical_flow_"))
     ]
 
 
@@ -102,7 +104,7 @@ def file_tables():
     return {db.evidence.name: db.evidence, case_files.name: case_files}
 
 
-def shape(version=6):
+def shape(version=7):
     from ..reporting import tables as reporting_tables  # noqa: F401 -- register metadata
 
     return {
@@ -210,7 +212,7 @@ async def create_archive(
                     .order_by(db.schema_versions.c.version.desc())
                     .limit(1)
                 )
-                if version not in {5, 6}:
+                if version not in {5, 6, 7}:
                     raise ArchiveError("Archive requires supported schema 5 or 6")
                 manifest["shape"] = shape(version)
                 if database.postgres and set(actual) != set(manifest["shape"]):
@@ -368,6 +370,25 @@ async def verify_lineage(connection, manifest, recovered_box, cfg):
     )
     async for row in result.mappings():
         current = clinical_store.opened(recovered_box, row)
+        if manifest["schema_version"] >= 7:
+            from ..clinical.flow_index import index, project
+
+            expected = await project(
+                connection,
+                row,
+                current["data"],
+                cfg.model_copy(update={"data_key_hex": manifest["data_key_hex"]}),
+                write=False,
+            )
+            actual = (
+                (await connection.execute(select(index).where(index.c.record_id == row["id"])))
+                .mappings()
+                .first()
+            )
+            if not actual or any(actual[key] != value for key, value in expected.items()):
+                raise ArchiveError(
+                    "Restored clinical work/resource projection differs from signed source"
+                )
         if not row["last_event"]:
             raise ArchiveError("Clinical current version has no source event")
         last = json.loads(recovered_box.decrypt(row["last_event"]))
@@ -420,7 +441,7 @@ async def rehearse_restore(
         if (
             manifest["format"] != FORMAT
             or manifest["id"] != backup_id
-            or manifest["schema_version"] not in {5, 6}
+            or manifest["schema_version"] not in {5, 6, 7}
             or manifest["shape"] != shape(manifest["schema_version"])
         ):
             raise ArchiveError("Incompatible archive")

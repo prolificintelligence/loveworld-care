@@ -424,6 +424,9 @@ async def record_event(
         from ..control.jobs import index_task
 
         await index_task(session, row, content)
+    from .flow_index import project
+
+    await project(session, row, content, cfg)
 
 
 async def create(

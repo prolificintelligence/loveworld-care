@@ -46,11 +46,11 @@ async def enqueue(session, box, kind, effect_key, payload, *, owner_id=None, fac
     return identifier
 
 
-async def eligible(session, account_id, facility_id, service):
+async def eligible(session, account_id, facility_id, service, capability="CARE"):
     if not account_id:
         return False
     try:
-        await privilege_for(session, account_id, facility_id, "CARE", service)
+        await privilege_for(session, account_id, facility_id, capability, service)
     except RuleError as exc:
         if exc.code not in {"ACCESS_DENIED", "CLINICAL_PRIVILEGE_REQUIRED"}:
             raise
@@ -213,7 +213,13 @@ async def clinical_reconciliation(session, cfg, box):
             continue
         owner = (
             data.get("owner_id")
-            if await eligible(session, data.get("owner_id"), row["facility_id"], row["service"])
+            if await eligible(
+                session,
+                data.get("owner_id"),
+                row["facility_id"],
+                row["service"],
+                data.get("owner_capability", "CARE"),
+            )
             else None
         )
         fallback = None
@@ -234,7 +240,11 @@ async def clinical_reconciliation(session, cfg, box):
                 window["account_id"] != owner
                 and row["service"] in window["services"]
                 and await eligible(
-                    session, window["account_id"], row["facility_id"], row["service"]
+                    session,
+                    window["account_id"],
+                    row["facility_id"],
+                    row["service"],
+                    data.get("owner_capability", "CARE"),
                 )
             ):
                 fallback = window["account_id"]
@@ -505,7 +515,15 @@ async def dispatch(database, cfg, box, job):
             source = await load(session, clinical.records, alert["source_id"])
             if source["version"] != alert["source_version"]:
                 return "CANCELLED_SOURCE_CHANGED", None
-            if not await eligible(session, account["id"], alert["facility_id"], source["service"]):
+            if not await eligible(
+                session,
+                account["id"],
+                alert["facility_id"],
+                source["service"],
+                json.loads(box.decrypt(source["content_ciphertext"]))["content"].get(
+                    "owner_capability", "CARE"
+                ),
+            ):
                 return "CANCELLED_AUTHORITY", None
             if account["id"] not in {alert["owner_id"], alert["fallback_id"]}:
                 return "CANCELLED_AUTHORITY", None
@@ -712,7 +730,15 @@ class OperationsService(ControlService):
             409,
         )
         require(
-            await eligible(self.session, self.actor["id"], row["facility_id"], source["service"])
+            await eligible(
+                self.session,
+                self.actor["id"],
+                row["facility_id"],
+                source["service"],
+                json.loads(self.box.decrypt(source["content_ciphertext"]))["content"].get(
+                    "owner_capability", "CARE"
+                ),
+            )
         )
         require(
             not row["acknowledged_at"] and not row["source_resolved_at"],

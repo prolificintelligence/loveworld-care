@@ -22,6 +22,14 @@ FIELDS = {
 }
 
 
+def source_capability(box, source, field):
+    if source["kind"] == "task" and field == "owner_id":
+        return json.loads(box.decrypt(source["content_ciphertext"]))["content"].get(
+            "owner_capability", "CARE"
+        )
+    return FIELDS[field]
+
+
 class OffboardingService(ControlService):
     async def offboard(self, body):
         require(has(self.actor, {"PLATFORM_ADMIN"}))
@@ -189,7 +197,7 @@ class OffboardingService(ControlService):
             self.session,
             body["successor_id"],
             row["facility_id"],
-            FIELDS[row["owner_field"]],
+            source_capability(self.box, source, row["owner_field"]),
             source["service"],
         )
         await self.session.execute(
@@ -252,7 +260,7 @@ class OffboardingService(ControlService):
             self.cfg,
             self.actor,
             row["facility_id"],
-            FIELDS[row["owner_field"]],
+            source_capability(self.box, source, row["owner_field"]),
             patient_id=source["patient_id"],
             service=source["service"],
             write=True,
@@ -296,7 +304,7 @@ class OffboardingService(ControlService):
                 self.cfg,
                 self.actor["id"],
                 encounter,
-                capability=FIELDS[row["owner_field"]],
+                capability=source_capability(self.box, source, row["owner_field"]),
             )
         elif source["kind"] == "encounter":
             await clinical_store.add_member(
@@ -304,7 +312,7 @@ class OffboardingService(ControlService):
                 self.cfg,
                 self.actor["id"],
                 source,
-                capability=FIELDS[row["owner_field"]],
+                capability=source_capability(self.box, source, row["owner_field"]),
             )
         status = "ACCEPTED" if source["kind"] == "task" else source["status"]
         await clinical_store.change(
@@ -347,7 +355,7 @@ class OffboardingService(ControlService):
             self.session,
             self.actor["id"],
             row["facility_id"],
-            FIELDS[row["owner_field"]],
+            source_capability(self.box, source, row["owner_field"]),
             source["service"],
         )
         require(

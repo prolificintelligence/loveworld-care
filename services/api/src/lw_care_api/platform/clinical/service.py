@@ -27,7 +27,15 @@ class ClinicalService:
         return s.opened(self.box, row)["data"]
 
     async def create(self, kind, content, *, site=None, **kwargs):
-        if kind in {"patient", "encounter", "stay", "appointment", "programme"}:
+        if kind in {
+            "patient",
+            "encounter",
+            "stay",
+            "appointment",
+            "programme",
+            "admission_order",
+            "bed_hold",
+        }:
             from ..institutional.master import accepting_new_care
 
             await accepting_new_care(self.session, self.facility_id)
@@ -117,9 +125,11 @@ class ClinicalService:
             409,
         )
 
-    async def task(self, encounter, title, instructions, owner_id, due_at, source_id=None):
+    async def task(
+        self, encounter, title, instructions, owner_id, due_at, source_id=None, capability="CARE"
+    ):
         await s.privilege_for(
-            self.session, owner_id, self.facility_id, "CARE", encounter["service"]
+            self.session, owner_id, self.facility_id, capability, encounter["service"]
         )
         await s.member_for(self.session, owner_id, self.facility_id, encounter["patient_id"])
         return await self.create(
@@ -128,6 +138,7 @@ class ClinicalService:
                 "title": title,
                 "instructions": instructions,
                 "owner_id": owner_id,
+                "owner_capability": capability,
                 "due_at": due_at,
                 "source_id": source_id,
                 "handover_to": None,
@@ -323,7 +334,7 @@ class ClinicalService:
                         select(t.records.c.id).where(
                             t.records.c.encounter_id == identifier,
                             t.records.c.kind == "stay",
-                            t.records.c.status.in_(["ADMITTED", "TRANSFER_PENDING"]),
+                            t.records.c.status.in_(["ADMITTED", "TRANSFER_PENDING", "ON_LEAVE"]),
                         )
                     )
                 ).first()
@@ -370,7 +381,11 @@ class ClinicalService:
             data = self.content(task)
             try:
                 await s.privilege_for(
-                    self.session, data["owner_id"], self.facility_id, "CARE", task["service"]
+                    self.session,
+                    data["owner_id"],
+                    self.facility_id,
+                    data.get("owner_capability", "CARE"),
+                    task["service"],
                 )
             except RuleError:
                 require(
@@ -531,7 +546,9 @@ class ClinicalService:
         return row
 
     async def create_task(self, body):
-        _, _, encounter = await self.context(body, allow_closed=True)
+        _, _, encounter = await self.context(
+            body, body.get("owner_capability", "CARE"), allow_closed=True
+        )
         if body.get("source_id"):
             await self.linked(body["source_id"], None, body["patient_id"])
         return await self.task(
@@ -541,12 +558,16 @@ class ClinicalService:
             body["owner_id"],
             body["due_at"],
             body.get("source_id"),
+            body.get("owner_capability", "CARE"),
         )
 
     async def task_action(self, identifier, body):
         row = await self.linked(identifier, "task", body["patient_id"])
         await self.guard(
-            "CARE", patient_id=row["patient_id"], encounter_id=row["encounter_id"], write=True
+            self.content(row).get("owner_capability", "CARE"),
+            patient_id=row["patient_id"],
+            encounter_id=row["encounter_id"],
+            write=True,
         )
         data, action, status = self.content(row), body["action"], row["status"]
         if action == "ACCEPT_HANDOVER":
@@ -578,7 +599,11 @@ class ClinicalService:
                     409,
                 )
                 await s.privilege_for(
-                    self.session, body.get("successor_id"), self.facility_id, "CARE", row["service"]
+                    self.session,
+                    body.get("successor_id"),
+                    self.facility_id,
+                    data.get("owner_capability", "CARE"),
+                    row["service"],
                 )
                 await s.member_for(
                     self.session, body["successor_id"], self.facility_id, row["patient_id"]
@@ -1296,7 +1321,7 @@ class ClinicalService:
                 t.records.c.kind == "stay",
                 t.records.c.patient_id == body["patient_id"],
                 t.records.c.facility_id == self.facility_id,
-                t.records.c.status.in_(["ADMITTED", "TRANSFER_PENDING"]),
+                t.records.c.status.in_(["ADMITTED", "TRANSFER_PENDING", "ON_LEAVE"]),
             )
         )
         require(
@@ -1324,9 +1349,10 @@ class ClinicalService:
         require(
             changed.rowcount == 1, "BED_UNAVAILABLE", "Another admission occupied this bed", 409
         )
-        await s.add_member(
-            self.session, self.cfg, body["responsible_nurse_id"], encounter, "NURSING"
-        )
+        if (self.session.info.get("platform_schema_version") or 0) < 7:
+            await s.add_member(
+                self.session, self.cfg, body["responsible_nurse_id"], encounter, "NURSING"
+            )
         return result
 
     async def stay_action(self, identifier, body):
@@ -1427,9 +1453,12 @@ class ClinicalService:
             )
             encounter = await self.row(row["encounter_id"], "encounter")
             await s.add_member(self.session, self.cfg, self.actor["id"], encounter)
-            await s.add_member(
-                self.session, self.cfg, offer["receiving_nurse_id"], encounter, "NURSING"
-            )
+            if (self.session.info.get("platform_schema_version") or 0) < 7:
+                await s.add_member(
+                    self.session, self.cfg, offer["receiving_nurse_id"], encounter, "NURSING"
+                )
+            else:
+                data["nursing_responsibility_state"] = "AWAITING_ACCEPTANCE"
             data["transfer_offer"] = None
             status = "ADMITTED"
         elif action == "DISCHARGE":

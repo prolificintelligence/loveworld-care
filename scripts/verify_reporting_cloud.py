@@ -96,8 +96,8 @@ def verify(api_deployment, web_deployment):
                     "cache_control": response.headers.get("cache-control"),
                 }
                 if path.endswith("/ready"):
-                    assert response.json()["schema_version"] == 6
-                    record["schema_version"] = 6
+                    assert response.json()["schema_version"] == 7
+                    record["schema_version"] = 7
                     record["reporting"] = response.json().get("reporting")
                 print(json.dumps(record))
         for path in (
