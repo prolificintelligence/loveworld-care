@@ -681,6 +681,21 @@ def test_admission_bed_collision_and_discharge(journey):
         "signed_admission_note_id": summary["id"],
     }
     stay = j.create("/admissions", body)
+    assert j.get(f"/patients/{patient['id']}/chart", "nurse").status_code == 403
+    accepted = j.create(
+        f"/workflows/stays/{stay['id']}/events",
+        {
+            "patient_id": patient["id"],
+            "expected_version": stay["version"],
+            "action": "ACCEPT_NURSING",
+            "occurred_at": stamp(-1),
+            "policy_reference": "Synthetic actual nursing receipt policy",
+            "actual_evidence": "Synthetic personal patient and ward receipt",
+            "reason": "Synthetic personal acceptance",
+            "intent_confirmed": True,
+        },
+        "nurse",
+    )
     assert j.get("/beds").json()["items"][0]["stay_id"] == stay["id"]
     other_patient, other_encounter = j.encounter()
     other_summary = j.note(other_patient, other_encounter)
@@ -699,7 +714,7 @@ def test_admission_bed_collision_and_discharge(journey):
         f"/stays/{stay['id']}/actions",
         {
             "patient_id": patient["id"],
-            "expected_version": 1,
+            "expected_version": accepted["version"],
             "action": "DISCHARGE",
             "reason": "Synthetic actual discharge",
             "signed_summary_id": summary["id"],
