@@ -44,7 +44,7 @@ async def verify():
     app.state.database.engine = mapped
     app.state.database.session = async_sessionmaker(mapped, expire_on_commit=False)
     try:
-        assert await database.version() in {3, 4}
+        assert await database.version() in {3, 4, 5}
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             translated = await connection.execution_options(

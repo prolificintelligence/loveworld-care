@@ -38,6 +38,7 @@ async def verify():
                 (version == 2 and triggers == 20)
                 or (version == 3 and triggers == 56)
                 or (version == 4 and triggers == 74)
+                or (version == 5 and triggers == 76)
             )  # UPDATE and DELETE entries for the protected history tables.
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))

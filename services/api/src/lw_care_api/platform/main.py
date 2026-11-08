@@ -384,7 +384,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     @app.get("/v1/ready")
     async def ready():
         version = await database.version()
-        require(version in (2, 3, 4), "AUTHORITY_UNAVAILABLE", "Database migration required", 503)
+        require(version in (2, 3, 4, 5), "AUTHORITY_UNAVAILABLE", "Database migration required", 503)
         return {
             "status": "READY",
             "schema_version": version,

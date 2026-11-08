@@ -40,7 +40,7 @@ async def verify():
     facility, region, zone, operator = (db.uid() for _ in range(4))
     actors = {}
     try:
-        assert await database.version() in {2, 3, 4}
+        assert await database.version() in {2, 3, 4, 5}
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             mapped = await connection.execution_options(schema_translate_map={db.SCHEMA: namespace})

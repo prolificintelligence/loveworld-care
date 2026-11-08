@@ -1,5 +1,6 @@
 """Transactional storage. Schema installation is an explicit release operation."""
 
+import re
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from uuid import uuid4
@@ -267,6 +268,62 @@ schema_versions = Table(
 )
 
 
+async def protect_history(connection, schema=SCHEMA):
+    """Install the same protections in production and a newly created restore schema."""
+    from .clinical import tables as clinical_tables
+    from .control import tables as control_tables
+    from .reporting import tables as reporting_tables
+
+    if not re.fullmatch(r"[a-z][a-z0-9_]{0,62}", schema):
+        raise ValueError("Invalid history schema")
+    await connection.execute(
+        text(f"""
+        CREATE OR REPLACE FUNCTION {schema}.reject_history_mutation()
+        RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
+        RAISE EXCEPTION 'Append-only institutional history'; END; $$
+    """)
+    )
+    for table in (
+        audit,
+        revisions,
+        decisions,
+        inspections,
+        criteria,
+        evidence,
+        *clinical_tables.IMMUTABLE,
+        *reporting_tables.IMMUTABLE,
+        *control_tables.IMMUTABLE,
+    ):
+        await connection.execute(
+            text(f"DROP TRIGGER IF EXISTS immutable_history ON {schema}.{table.name}")
+        )
+        await connection.execute(
+            text(
+                f"CREATE TRIGGER immutable_history BEFORE UPDATE OR DELETE ON {schema}.{table.name} "
+                f"FOR EACH ROW EXECUTE FUNCTION {schema}.reject_history_mutation()"
+            )
+        )
+    await connection.execute(
+        text(f"""
+        CREATE OR REPLACE FUNCTION {schema}.protect_clinical_records()
+        RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
+        IF TG_OP = 'DELETE' THEN RAISE EXCEPTION 'Clinical source records cannot be deleted'; END IF;
+        IF OLD.kind = 'note' AND OLD.status = 'SIGNED' THEN
+            RAISE EXCEPTION 'Signed clinical content is immutable; append an addendum'; END IF;
+        RETURN NEW; END; $$
+    """)
+    )
+    await connection.execute(
+        text(f"DROP TRIGGER IF EXISTS protect_clinical_records ON {schema}.clinical_records")
+    )
+    await connection.execute(
+        text(
+            f"CREATE TRIGGER protect_clinical_records BEFORE UPDATE OR DELETE ON {schema}.clinical_records "
+            f"FOR EACH ROW EXECUTE FUNCTION {schema}.protect_clinical_records()"
+        )
+    )
+
+
 class Database:
     def __init__(self, url: str):
         normalized, connect_args = normalize_async_database_url(url)
@@ -291,9 +348,9 @@ class Database:
             yield session
 
     async def migrate(self):
-        from .clinical import tables as clinical_tables
-        from .control import tables as control_tables
-        from .reporting import tables as reporting_tables
+        from .clinical import tables as clinical_tables  # noqa: F401 -- register metadata
+        from .control import tables as control_tables  # noqa: F401
+        from .reporting import tables as reporting_tables  # noqa: F401
 
         async with self.engine.begin() as connection:
             if self.postgres:
@@ -319,58 +376,12 @@ class Database:
                 await connection.execute(
                     schema_versions.insert().values(version=4, applied_at=now())
                 )
+            if present is None or present < 5:
+                await connection.execute(
+                    schema_versions.insert().values(version=5, applied_at=now())
+                )
             if self.postgres:
-                await connection.execute(
-                    text(f"""
-                    CREATE OR REPLACE FUNCTION {SCHEMA}.reject_history_mutation()
-                    RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
-                    RAISE EXCEPTION 'Append-only institutional history'; END; $$
-                """)
-                )
-                for table in (
-                    audit,
-                    revisions,
-                    decisions,
-                    inspections,
-                    criteria,
-                    evidence,
-                    *clinical_tables.IMMUTABLE,
-                    *reporting_tables.IMMUTABLE,
-                    *control_tables.IMMUTABLE,
-                ):
-                    await connection.execute(
-                        text(f"DROP TRIGGER IF EXISTS immutable_history ON {SCHEMA}.{table.name}")
-                    )
-                    await connection.execute(
-                        text(
-                            f"CREATE TRIGGER immutable_history BEFORE UPDATE OR DELETE "
-                            f"ON {SCHEMA}.{table.name} FOR EACH ROW "
-                            f"EXECUTE FUNCTION {SCHEMA}.reject_history_mutation()"
-                        )
-                    )
-                await connection.execute(
-                    text(f"""
-                    CREATE OR REPLACE FUNCTION {SCHEMA}.protect_clinical_records()
-                    RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
-                    IF TG_OP = 'DELETE' THEN
-                        RAISE EXCEPTION 'Clinical source records cannot be deleted';
-                    END IF;
-                    IF OLD.kind = 'note' AND OLD.status = 'SIGNED' THEN
-                        RAISE EXCEPTION 'Signed clinical content is immutable; append an addendum';
-                    END IF;
-                    RETURN NEW; END; $$
-                """)
-                )
-                await connection.execute(
-                    text(
-                        f"DROP TRIGGER IF EXISTS protect_clinical_records ON {SCHEMA}.clinical_records"
-                    )
-                )
-                await connection.execute(
-                    text(
-                        f"CREATE TRIGGER protect_clinical_records BEFORE UPDATE OR DELETE ON {SCHEMA}.clinical_records FOR EACH ROW EXECUTE FUNCTION {SCHEMA}.protect_clinical_records()"
-                    )
-                )
+                await protect_history(connection)
 
     async def version(self) -> int | None:
         async with self.transaction() as session:
@@ -380,4 +391,4 @@ class Database:
 
     async def ready(self) -> bool:
         # Version 2 remains supported during the staged reporting rollout.
-        return await self.version() in (2, 3, 4)
+        return await self.version() in (2, 3, 4, 5)

@@ -501,6 +501,72 @@ def install(app, cfg, database, box, actor_for, throttle, set_cookie):
                 "next_cursor": rows[99]["id"] if len(rows) > 100 else None,
             }
 
+    async def assurance_available():
+        await available()
+        require(
+            (await database.version() or 0) >= 5,
+            "ASSURANCE_MIGRATION_REQUIRED",
+            "Recovery evidence awaits migration 5",
+            503,
+        )
+
+    @router.get("/v1/operations/reliability")
+    async def reliability(request: Request):
+        await assurance_available()
+        from .assurance import status
+
+        async with database.transaction() as session:
+            actor = await actor_for(session, request)
+            require(has(actor, {"PLATFORM_ADMIN"}))
+            await ControlService(session, cfg, box, actor, request.state.correlation_id).audit(
+                "operations.reliability_read"
+            )
+            return await status(session, cfg)
+
+    @router.get("/v1/operations/assurance-runs")
+    async def assurance_runs(request: Request, after: str = ""):
+        await assurance_available()
+        async with database.transaction() as session:
+            actor = await actor_for(session, request)
+            require(has(actor, {"PLATFORM_ADMIN"}))
+            await ControlService(session, cfg, box, actor, request.state.correlation_id).audit(
+                "operations.assurance_history_read"
+            )
+            rows = list(
+                (
+                    await session.execute(
+                        select(t.assurance_runs)
+                        .where(t.assurance_runs.c.id > after)
+                        .order_by(t.assurance_runs.c.id)
+                        .limit(101)
+                    )
+                ).mappings()
+            )
+            return {
+                "items": [
+                    {key: value for key, value in row.items() if key != "evidence_ciphertext"}
+                    for row in rows[:100]
+                ],
+                "next_cursor": rows[99]["id"] if len(rows) > 100 else None,
+            }
+
+    @router.post("/v1/operations/reconciliation")
+    async def reconciliation(payload: c.Evidence, request: Request):
+        from .assurance import AssuranceService
+
+        async def guard(service, body):
+            require(has(service.actor, {"PLATFORM_ADMIN"}))
+            require(
+                (await database.version() or 0) >= 5,
+                "ASSURANCE_MIGRATION_REQUIRED",
+                "Recovery evidence awaits migration 5",
+                503,
+            )
+
+        return await command(
+            request, payload, AssuranceService, lambda service, body: service.reconcile(body), guard
+        )
+
     @router.post("/v1/operations/jobs/process")
     async def process(payload: c.Evidence, request: Request):
         await available()

@@ -261,6 +261,19 @@ worker_state = Table(
     Column("updated_at", String(40), nullable=False),
 )
 Index("ix_control_obligations_due", obligations.c.is_open, obligations.c.due_at)
+assurance_runs = Table(
+    "control_assurance_runs",
+    metadata,
+    identifier(),
+    Column("kind", String(30), nullable=False),
+    Column("outcome", String(80), nullable=False),
+    Column("source_id", String(36)),
+    Column("actor_id", String(80), nullable=False),
+    Column("started_at", String(40), nullable=False),
+    Column("completed_at", String(40), nullable=False),
+    Column("summary", JSON, nullable=False),
+    Column("evidence_ciphertext", Text, nullable=False),
+)
 IMMUTABLE = (
     recovery_reviews,
     job_attempts,
@@ -271,4 +284,5 @@ IMMUTABLE = (
     audit,
     alert_receipts,
     site_packages,
+    assurance_runs,
 )
