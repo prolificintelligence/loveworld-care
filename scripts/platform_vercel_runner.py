@@ -27,10 +27,13 @@ def execute(args):
         if args.target == "web":
             ready = httpx.get("https://lw-health-intelligence-api.vercel.app/v1/ready", timeout=60)
             assert ready.status_code == 200 and ready.json()["schema_version"] == 7
-        output = io.StringIO()
-        with contextlib.redirect_stdout(output):
-            deploy(args.target)
-        deployment = json.loads(output.getvalue())
+        if args.target == "api" and args.api_deployment:
+            deployment = {"deployment_id": args.api_deployment, "state": "CHECKING_EXISTING"}
+        else:
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                deploy(args.target)
+            deployment = json.loads(output.getvalue())
         result.update(deployment)
         print(json.dumps(result), flush=True)
         with http_client(vercel_credential()) as client:
@@ -51,12 +54,14 @@ def execute(args):
         with httpx.Client(timeout=60, follow_redirects=True) as client:
             base = "https://lw-health-intelligence-api.vercel.app"
             ready = client.get(base + "/v1/ready")
+            print(json.dumps({"readiness_http": ready.status_code}), flush=True)
             assert ready.status_code == 200
             assert ready.json()["schema_version"] == args.schema_version
             assert client.get(base + "/v1/operations/context").status_code == 401
             if args.target == "api" and args.schema_version == 6:
                 response = client.post(
                     base + "/v1/clinical/00000000-0000-0000-0000-000000000001/workflows/capacity",
+                    headers={"Origin": "https://lw-health-intelligence.vercel.app"},
                     json={
                         "service": "READ_ONLY_DEPLOYMENT_GATE_PROBE",
                         "max_open_encounters": 0,
@@ -69,6 +74,7 @@ def execute(args):
                         "intent_confirmed": True,
                     },
                 )
+                print(json.dumps({"new_command_migration_gate": response.status_code}), flush=True)
                 assert response.status_code == 503
                 result["new_command_migration_gate"] = 503
             if args.target == "web":
