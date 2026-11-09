@@ -74,7 +74,6 @@ async def verify():
             prefix="/clinical/"+facility
             patient=await create(prefix+"/patients",{"display_name":"Synthetic personal patient","provisional":False,"sex":"UNKNOWN","identity_evidence":"Synthetic independently confirmed identity"})
             encounter=await create(prefix+"/encounters",{"patient_id":patient["id"],"service":"GENERAL","encounter_type":"AMBULATORY","arrival":"WALK_IN","complaint":"Synthetic proof only","occurred_at":stamp(-1)})
-            encounter=await create(prefix+"/encounters/"+encounter["id"]+"/accept",{"patient_id":patient["id"],"expected_version":encounter["version"],"reason":"Synthetic personal clinical acceptance","intent_confirmed":True})
             note=await create(prefix+"/notes",{"patient_id":patient["id"],"encounter_id":encounter["id"],"occurred_at":stamp(-1),"note_type":"CONSULTATION","narrative":"Synthetic private clinical source","source":"Synthetic verifier"})
             note=await create(prefix+"/notes/"+note["id"]+"/sign",{"patient_id":patient["id"],"expected_version":1,"reason":"Synthetic signing intent","intent_confirmed":True})
             link=await create("/personal/links",{"facility_id":facility,"relationship":"SELF","patient_reference":"Synthetic registration reference","relationship_basis":"Synthetic verified personal identity"},"person")
