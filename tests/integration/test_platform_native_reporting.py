@@ -575,6 +575,8 @@ def test_period_index_bounds_dependencies_events_and_recovers_projection(reporti
         async with j.app.state.database.transaction() as session:
             await session.execute(source_index.index.delete().where(source_index.index.c.record_id == source["death"]))
     run(missing())
+    assert j.client.get("/v1/ready").status_code == 503
     assert j.post(f"/obligations/{obligation['id']}/extract", {}).status_code == 503
     assert run(source_index.rebuild(j.app.state.database, j.app.state.box)) > 25
+    assert j.client.get("/v1/ready").json()["schema_version"] == 9
     assert j.create(f"/obligations/{obligation['id']}/extract", {})["source_hash"] == extract["source_hash"]

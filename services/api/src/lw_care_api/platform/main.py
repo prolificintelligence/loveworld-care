@@ -455,7 +455,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     async def ready():
         version = await database.version()
         require(
-            version in (2, 3, 4, 5, 6, 7, 8),
+            version in (2, 3, 4, 5, 6, 7, 8, 9),
             "AUTHORITY_UNAVAILABLE",
             "Database migration required",
             503,
@@ -463,8 +463,8 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
         if version >= 7:
             require(
                 await database.ready(),
-                "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
-                "Clinical work index reconciliation required",
+                "SOURCE_INDEX_RECONCILIATION_REQUIRED",
+                "Clinical work or reporting source index reconciliation required",
                 503,
             )
         return {

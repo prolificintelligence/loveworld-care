@@ -1,7 +1,9 @@
 """Synthetic Phase A qualification in a disposable Neon schema, never production data.
 
-ASGI request timings include real Neon I/O and local Python execution. They are
-not Vercel function memory/duration or institutional latency acceptance.
+ASGI request timings include pooled real Neon I/O and local Python execution.
+The reusable qualification pool avoids repeated local Windows TLS handshakes;
+production retains its existing NullPool. These are not Vercel function
+memory/duration or institutional latency acceptance.
 """
 
 import asyncio
@@ -348,13 +350,13 @@ async def qualify(
         "missing_summaries_accounted_as_unknown": cap - selected,
         "period_selected_records_over_bound": cap + 1,
         "overflow": "BLOCKED_NO_TRUNCATED_TOTAL",
-        "measurement_boundary": "LOCAL_ASGI_WITH_REAL_NEON_NOT_VERCEL_FUNCTION_CAPACITY_ACCEPTANCE",
+        "measurement_boundary": "LOCAL_ASGI_POOLED_NEON_NOT_PRODUCTION_NULLPOOL_OR_VERCEL_CAPACITY_ACCEPTANCE",
     }
 
 
 if __name__ == "__main__":
     try:
-        asyncio.run(verify(qualify))
+        asyncio.run(verify(qualify, pooled_harness=True))
     except Exception as exc:  # noqa: BLE001 -- keep credentials and provider payloads out of errors
         frame = traceback.extract_tb(exc.__traceback__)[-1]
         print(

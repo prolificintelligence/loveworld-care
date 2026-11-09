@@ -10,7 +10,8 @@ from pathlib import Path
 import httpx
 from sqlalchemy import func, select, text, update
 from sqlalchemy.exc import DBAPIError
-from sqlalchemy.ext.asyncio import async_sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.pool import AsyncAdaptedQueuePool
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "services/api/src"))
@@ -26,7 +27,7 @@ from lw_care_api.platform.clinical import store as cs
 from lw_care_api.platform.clinical import tables as ct
 
 
-async def verify(qualification=None):
+async def verify(qualification=None, *, pooled_harness=False):
     cfg = PlatformSettings(_env_file=ROOT / ".env.platform.local")
     database = db.Database(cfg.database_url)
     namespace = "lwh_native_verify_" + db.uid().replace("-", "")
@@ -42,7 +43,14 @@ async def verify(qualification=None):
     )
     app = create_platform_app(settings)
     await app.state.database.engine.dispose()
-    mapped = database.engine.execution_options(schema_translate_map={db.SCHEMA: namespace})
+    harness = database.engine
+    if pooled_harness:
+        from lw_care_api.db.connection import normalize_async_database_url
+
+        url, arguments = normalize_async_database_url(cfg.database_url)
+        harness = create_async_engine(url, connect_args=arguments, poolclass=AsyncAdaptedQueuePool,
+                                      pool_pre_ping=True, pool_size=5, max_overflow=5)
+    mapped = harness.execution_options(schema_translate_map={db.SCHEMA: namespace})
     app.state.database.engine = mapped
     app.state.database.session = async_sessionmaker(mapped, expire_on_commit=False)
     result = {"native_postgres": "RUNNING", "schema_version": 9}
@@ -304,6 +312,8 @@ async def verify(qualification=None):
         async with database.engine.begin() as connection:
             await connection.execute(text(f'DROP SCHEMA IF EXISTS "{namespace}" CASCADE'))
         await database.engine.dispose()
+        if harness is not database.engine:
+            await harness.dispose()
         result["disposable_schema_removed"] = True
         print(json.dumps(result), flush=True)
 
