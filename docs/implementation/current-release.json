@@ -1,0 +1,141 @@
+{
+  "release": "2026-11-09-readiness",
+  "recorded_at": "2026-11-09T05:47:21.751068+00:00",
+  "runtime_commit": "f525920ea1888394e2e2c5a2e1c01c208551c375",
+  "schema_version": 7,
+  "migration_required": false,
+  "api": {
+    "deployment_id": "dpl_HocsoRxoLyFMFE8rC3a2QLb6WhW1",
+    "origin": "https://lw-health-intelligence-api.vercel.app",
+    "verified_source_files": 54
+  },
+  "web": {
+    "deployment_id": "dpl_YQcx1AUGPe4AEnyLBmUfH2gm7SAk",
+    "origin": "https://lw-health-intelligence.vercel.app",
+    "verified_source_files": 19
+  },
+  "ci": {
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42568511736",
+    "status": "SUCCESS",
+    "python_tests": 188,
+    "client_tests": 8,
+    "typecheck": "PASSED",
+    "build": "PASSED",
+    "secret_scan": "PASSED"
+  },
+  "postgres": {
+    "eligible_cases": 230,
+    "candidate_cases": 450,
+    "recipient_grants": 1100,
+    "late_recipient_found": true,
+    "facility_readiness_ms_2500_records": 1243.01,
+    "stale_projection_isolated_global_assurance_red": true,
+    "outcome": "PASSED",
+    "schema_version": 7,
+    "production_care_records_written": 0,
+    "disposable_schema_removed": true
+  },
+  "live": {
+    "observed_at": "2026-11-09T05:44:12.306962+00:00",
+    "runtime_commit": "f525920ea1888394e2e2c5a2e1c01c208551c375",
+    "schema_version": 7,
+    "production_counts": {
+      "facilities": 0,
+      "criteria": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_stock_lots": 0,
+      "clinical_ledger": 0,
+      "control_policy_packages": 0,
+      "reporting_safety_cases": 0
+    },
+    "residual_readiness_test_schemas": 0,
+    "built_bundles": [
+      {
+        "page": "/care",
+        "bundle": "/_next/static/chunks/app/care/page-532281e45a0968b2.js",
+        "sha256": "ceaee3e931d0ce70667592fe082692222bc787e6f1b39a18c74bca9f8a89da56",
+        "feature_markers_present": true
+      },
+      {
+        "page": "/directorate",
+        "bundle": "/_next/static/chunks/app/directorate/page-6963be249b60db95.js",
+        "sha256": "078fc7ad698debe758900fdf5e530ddc6d7cce8b571b3b8a0cbde97d9165efc8",
+        "feature_markers_present": true
+      }
+    ],
+    "protected_routes": [
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/people",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/quality",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/actions",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/exceptions",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/clinical/00000000-0000-0000-0000-000000000001/staff",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/people",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/quality",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/actions",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/exceptions",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/clinical/00000000-0000-0000-0000-000000000001/staff",
+        "http": 401,
+        "no_store": true
+      }
+    ]
+  },
+  "invalid_login_probes": {
+    "api_http": 401,
+    "web_http": 401,
+    "api_seconds": 2.869,
+    "web_seconds": 2.847,
+    "sessions_created": 0
+  },
+  "canonical_documents_verified": 78,
+  "operating_acceptance": "INCOMPLETE",
+  "next_capability_phase": "6A patient and caregiver authority",
+  "report": "2026-11-09-readiness-release.md"
+}
