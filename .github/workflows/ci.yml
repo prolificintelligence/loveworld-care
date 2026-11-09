@@ -53,4 +53,5 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm --filter @loveworld-care/platform-web test:api
+      - run: pnpm --filter @loveworld-care/platform-web test:pwa
       - run: pnpm build --concurrency=2

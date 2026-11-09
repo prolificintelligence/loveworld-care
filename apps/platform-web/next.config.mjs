@@ -7,7 +7,7 @@ const config = {
     return [{ source: "/v1/:path*", destination: `${origin}/v1/:path*` }];
   },
   async headers() {
-    return [{ source: "/:path*", headers: [
+    return [{source:"/my-health-sw.js",headers:[{key:"Cache-Control",value:"no-store"},{key:"Service-Worker-Allowed",value:"/my-health"}]},{ source: "/:path*", headers: [
       { key: "X-Content-Type-Options", value: "nosniff" },
       { key: "Referrer-Policy", value: "no-referrer" },
       { key: "X-Frame-Options", value: "DENY" },

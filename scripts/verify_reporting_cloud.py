@@ -41,7 +41,7 @@ def verify(api_deployment, web_deployment, expected_schema=8):
             for source in sources:
                 path = source["file"]
                 if not (
-                    path.startswith(("services/api/src/lw_care_api/platform/", "src/app/"))
+                    path.startswith(("services/api/src/lw_care_api/platform/", "src/app/", "public/"))
                     or path == "api/index.py"
                 ):
                     continue
@@ -146,7 +146,7 @@ def verify(api_deployment, web_deployment, expected_schema=8):
         ):
             response = client.get("https://lw-health-intelligence.vercel.app" + path)
             assert (
-                response.status_code == 200 and "LW Health Intelligence Platform" in response.text
+                response.status_code == 200 and ("LW Health Intelligence Platform" in response.text or (path == "/my-health" and "My LW Health Care" in response.text))
             )
             print(json.dumps({"frontend_page": path, "http": 200, "platform_title_verified": True}))
 

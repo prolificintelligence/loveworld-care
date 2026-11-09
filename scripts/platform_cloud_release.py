@@ -251,7 +251,7 @@ def source_files(target):
                 part in path.parts for part in ("node_modules", ".next", ".vercel")
             ):
                 continue
-            if path.suffix in (".ts", ".tsx", ".css", ".mjs", ".json"):
+            if path.suffix in (".ts", ".tsx", ".css", ".mjs", ".json") or ("public" in path.relative_to(web_root).parts and path.suffix in (".js", ".png", ".svg", ".webmanifest")):
                 files[path.relative_to(web_root).as_posix()] = path.read_bytes()
         # Preserve the verified pnpm graph while producing a self-contained
         # deployment root for this independently hosted workspace.

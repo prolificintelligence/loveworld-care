@@ -1,0 +1,9 @@
+/* Public connection guidance only. No records, API responses or request drafts are cached. */
+self.addEventListener("install",()=>self.skipWaiting());
+self.addEventListener("activate",event=>event.waitUntil(self.clients.claim()));
+self.addEventListener("fetch",event=>{
+  const request=event.request,url=new URL(request.url);
+  if(request.method!=="GET"||request.mode!=="navigate"||url.origin!==self.location.origin||
+    !(url.pathname==="/my-health"||url.pathname.startsWith("/my-health/")))return;
+  event.respondWith(fetch(request).catch(()=>new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My LW Health Care — connection needed</title><style>body{font:18px system-ui,sans-serif;margin:0;background:#edf5f2;color:#173c36}main{max-width:640px;margin:12vh auto;padding:32px;background:white;border-radius:18px}a{display:inline-block;padding:12px 18px;background:#0a574e;color:white;border-radius:8px}p{line-height:1.65}</style></head><body><main><p>MY LW HEALTH CARE</p><h1>A connection is needed.</h1><p>Reconnect to verify your current permissions and read care information. Requests cannot be sent from this offline screen.</p><p>If a previous submission was interrupted, reconnect and check its request history before submitting again. No care-team review is confirmed by this screen.</p><p>For immediate danger, use your local emergency service or your facility’s established emergency route.</p><a href="/my-health">Try connecting again</a></main></body></html>`,{status:503,headers:{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","Content-Security-Policy":"default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"}})));
+});

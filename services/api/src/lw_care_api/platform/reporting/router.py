@@ -1,5 +1,6 @@
 """Directorate reporting HTTP boundary; no clinical or confidential-case drill-through."""
 
+from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Request, Response
@@ -166,6 +167,26 @@ def install(app, cfg, database, box, actor_for):
             "truncated": len(units) > 200 or len(facilities) > 200,
             "recovery": "Search the exact unit name to narrow results",
         }
+
+    @router.get("/coverage")
+    async def reporting_coverage(
+        request: Request, period_start: datetime | None = None, period_end: datetime | None = None
+    ):
+        from .coverage import coverage
+
+        async with database.transaction() as session:
+            service = await service_for(session, request)
+            result = await coverage(session, service.actor, period_start, period_end)
+            await s.audit(
+                session,
+                service.actor,
+                "reporting.coverage_read",
+                None,
+                None,
+                request.state.correlation_id,
+                purpose="ADMINISTRATIVE_REPORTING_COMPLETENESS",
+            )
+            return result
 
     @router.get("/context")
     async def context(request: Request, query: str = ""):
