@@ -26,7 +26,7 @@ from lw_care_api.platform.clinical import store as cs
 from lw_care_api.platform.clinical import tables as ct
 
 
-async def verify():
+async def verify(qualification=None):
     cfg = PlatformSettings(_env_file=ROOT / ".env.platform.local")
     database = db.Database(cfg.database_url)
     namespace = "lwh_native_verify_" + db.uid().replace("-", "")
@@ -45,9 +45,9 @@ async def verify():
     mapped = database.engine.execution_options(schema_translate_map={db.SCHEMA: namespace})
     app.state.database.engine = mapped
     app.state.database.session = async_sessionmaker(mapped, expire_on_commit=False)
-    result = {"native_postgres": "RUNNING", "schema_version": 8}
+    result = {"native_postgres": "RUNNING", "schema_version": 9}
     try:
-        assert await database.version() == 8
+        assert await database.version() in (8, 9)
         async with database.transaction() as session:
             before = [
                 await session.scalar(select(func.count()).select_from(table))
@@ -65,10 +65,10 @@ async def verify():
                 schema_translate_map={db.SCHEMA: namespace}
             )
             await translated.run_sync(db.metadata.create_all)
-            await db.protect_history(translated, namespace, schema_version=8)
+            await db.protect_history(translated, namespace, schema_version=9)
         async with app.state.database.transaction() as session:
             await session.execute(
-                db.schema_versions.insert().values(version=8, applied_at=db.now())
+                db.schema_versions.insert().values(version=9, applied_at=db.now())
             )
         actors, facility = await seed_controls(app)
         async with app.state.database.transaction() as session:
@@ -262,7 +262,7 @@ async def verify():
                 assert await session.scalar(select(func.count()).select_from(t.extracts)) == 2
                 signatures, hashes = await verify_lineage(
                     session,
-                    {"schema_version": 8, "data_key_hex": cfg.data_key_hex},
+                    {"schema_version": 9, "data_key_hex": cfg.data_key_hex},
                     app.state.box,
                     settings,
                 )
@@ -274,6 +274,9 @@ async def verify():
             except DBAPIError as exc:
                 blocked = getattr(exc.orig, "sqlstate", None) == "P0001"
             assert blocked
+            if qualification:
+                await qualification(app, actors, facility, client, post, create, get,
+                                    obligation, fresh, source_ids, namespace, result)
         async with database.transaction() as session:
             after = [
                 await session.scalar(select(func.count()).select_from(table))

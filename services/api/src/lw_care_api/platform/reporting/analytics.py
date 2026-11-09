@@ -220,12 +220,26 @@ class AnalyticsService(ReportingService):
                 return False
         return True
 
+    async def snapshot_source_health(self, payload):
+        from .native import health
+
+        return await health(lambda: self.snapshot_native_current(payload))
+
+    async def lock_native_sites(self, obligations):
+        from ..clinical.tables import sites
+
+        # Multi-facility release commands take source locks in a stable order.
+        await self.session.execute(select(sites).where(sites.c.facility_id.in_(
+            sorted({row["facility_id"] for row in obligations if row["facility_id"]})
+        )).order_by(sites.c.facility_id).with_for_update())
+
     async def build_snapshot(self, cohort_id):
         cohort = await self.cohort_for(cohort_id, s.ANALYSTS)
         await self.active_policy(cohort["policy_id"])
         obligations = [
             await self.obligation(identifier, s.ANALYSTS) for identifier in cohort["obligation_ids"]
         ]
+        await self.lock_native_sites(obligations)
         definitions = await self.adopted_definitions(obligations[0])
         inputs, statuses, values = [], [], {identifier: [] for identifier in definitions}
         for obligation in obligations:
@@ -499,6 +513,10 @@ class AnalyticsService(ReportingService):
             409,
         )
         payload = self.data(row)
+        await self.lock_native_sites([
+            await s.load(self.session, t.obligations, source["obligation_id"])
+            for source in payload["sources"]
+        ])
         for source in payload["sources"]:
             current_return = (
                 (
@@ -583,7 +601,12 @@ class AnalyticsService(ReportingService):
             "STALE_SOURCE_CORRECTION" if invalidated else "RELEASED_AS_OF_RECORDED_TIME"
         )
         payload["current_eligible"] = not bool(invalidated)
-        if not await self.snapshot_native_current(self.data(row)):
+        source_health = await self.snapshot_source_health(self.data(row))
+        payload["native_source_health"] = source_health
+        if source_health["status"] == "UNAVAILABLE":
+            payload["freshness"] = "CURRENT_SOURCE_CHECK_UNAVAILABLE"
+            payload["current_eligible"] = False
+        elif source_health["status"] == "STALE":
             payload["freshness"] = "STALE_CLINICAL_SOURCE_CHANGE"
             payload["current_eligible"] = False
         await s.audit(

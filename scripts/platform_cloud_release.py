@@ -319,13 +319,17 @@ def migrate():
             from lw_care_api.platform.security import SecretBox
 
             indexed = await rebuild(database, SecretBox(settings.data_key_hex), settings)
+            from lw_care_api.platform.reporting.source_index import rebuild as rebuild_sources
+
+            source_indexed = await rebuild_sources(database, SecretBox(settings.data_key_hex))
             print(
                 json.dumps(
                     {
                         "migration": "APPLIED",
-                        "schema_version": 8,
+                        "schema_version": await database.version(),
                         "seeded_records": 0,
                         "existing_records_indexed": indexed,
+                        "existing_reporting_sources_indexed": source_indexed,
                     }
                 )
             )

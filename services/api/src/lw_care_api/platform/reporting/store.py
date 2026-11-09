@@ -333,7 +333,7 @@ async def amend(session, table, row, values, expected_version):
     return {**row, **values, "version": expected_version + 1}
 
 
-async def idempotent(session, database, box, actor, operation, key, payload, callback):
+async def idempotent(session, database, box, actor, operation, key, payload, callback, *, extraction=False):
     require(
         key and 8 <= len(key) <= 160,
         "VALIDATION_FAILED",
@@ -343,7 +343,16 @@ async def idempotent(session, database, box, actor, operation, key, payload, cal
     # Low-volume institutional commands are serialised across reporting resources,
     # so correction/invalidation and simultaneous disclosure releases cannot race.
     if database.postgres:
-        await session.execute(text("SELECT pg_advisory_xact_lock(782025011)"))
+        if extraction:
+            # Exact receipt replay serialises only this actor/operation/key.
+            # Source consistency uses the clinical site's existing row lock.
+            import hashlib
+
+            lock = hashlib.sha256(f"reporting:{actor['id']}:{operation}:{key}".encode()).digest()[:8]
+            await session.execute(text("SELECT pg_advisory_xact_lock(:key)"),
+                                  {"key": int.from_bytes(lock, signed=True)})
+        else:
+            await session.execute(text("SELECT pg_advisory_xact_lock(782025011)"))
     request_hash = digest(payload)
     previous = (
         (

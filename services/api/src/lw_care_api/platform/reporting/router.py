@@ -38,7 +38,7 @@ def install(app, cfg, database, box, actor_for):
         actor = await actor_for(session, request)
         return DirectorateService(session, cfg, box, actor, request.state.correlation_id)
 
-    async def command(request, payload, callback, authorize):
+    async def command(request, payload, callback, authorize, *, extraction=False):
         body = payload.model_dump(mode="json")
         if isinstance(payload, c.Obligation) and body.get("template_id") is None:
             # Preserve canonical receipts for in-flight pre-template requests.
@@ -48,7 +48,8 @@ def install(app, cfg, database, box, actor_for):
         try:
             async with database.transaction() as session:
                 service = await service_for(session, request)
-                if database.postgres:
+                service.native_source_write = True
+                if database.postgres and not extraction:
                     await session.execute(text("SELECT pg_advisory_xact_lock(782025011)"))
                     service.actor = await actor_for(session, request)
                 actor = service.actor
@@ -66,6 +67,7 @@ def install(app, cfg, database, box, actor_for):
                     request.headers.get("Idempotency-Key"),
                     body,
                     apply,
+                    extraction=extraction,
                 )
         except RuleError:
             if getattr(request.state, "reporting_ready", False):
@@ -566,9 +568,7 @@ def install(app, cfg, database, box, actor_for):
                 "obligation": obligation,
                 "validation": validation,
                 "template_binding": await TemplateService(service).binding(obligation["id"]),
-                "native_source_current": await service_native_current(
-                    service, service.data(row), obligation
-                ),
+                **await service_native_health(service, service.data(row), obligation),
             }
 
     @router.get("/returns/{identifier}/history")
@@ -696,6 +696,13 @@ def install(app, cfg, database, box, actor_for):
             ).mappings()
             items = []
             for row in rows:
+                cohort = await service.cohort_for(row["cohort_id"])
+                try:
+                    await service.active_policy(cohort["policy_id"])
+                except RuleError as exc:
+                    if exc.code != "DISCLOSURE_POLICY_UNAVAILABLE":
+                        raise
+                    continue
                 review = (
                     await session.execute(
                         select(t.snapshot_reviews.c.decision).where(
@@ -714,12 +721,14 @@ def install(app, cfg, database, box, actor_for):
                     await s.load(session, t.cohorts, row["cohort_id"]),
                 ):
                     continue
+                source_health = await service.snapshot_source_health(service.data(row))
                 items.append(
                     {key: value for key, value in row.items() if key != "payload_ciphertext"}
                     | {
                         "state": review or "PREPARED",
-                        "stale": bool(stale)
-                        or not await service.snapshot_native_current(service.data(row)),
+                        "stale": bool(stale) or source_health["status"] != "CURRENT",
+                        "native_source_health": source_health,
+                        "current_eligible": review == "RELEASE" and not stale and source_health["status"] == "CURRENT",
                     }
                 )
             return {"items": items, "as_of": db.now()}
@@ -1013,7 +1022,7 @@ def install(app, cfg, database, box, actor_for):
     ]:
         resource_route(path, model, method, guard)
 
-    from .native import current as service_native_current
+    from .native import read_health as service_native_health
 
     @router.get("/extracts/{identifier}")
     async def extract_detail(identifier: UUID, request: Request):
@@ -1021,7 +1030,7 @@ def install(app, cfg, database, box, actor_for):
             service = await service_for(session, request)
             row = await s.load(session, t.extracts, identifier)
             obligation = await service.obligation(row["obligation_id"])
-            fresh = await service_native_current(
+            health = await service_native_health(
                 service, {"values": [{"extract_id": str(identifier)}]}, obligation
             )
             await s.audit(
@@ -1033,7 +1042,7 @@ def install(app, cfg, database, box, actor_for):
                 request.state.correlation_id,
                 purpose="AGGREGATE_SOURCE_REVIEW",
             )
-            return s.opened(box, row) | {"native_source_current": fresh}
+            return s.opened(box, row) | health
 
     @router.post("/obligations/{identifier}/extract")
     async def extract(identifier: UUID, payload: c.StrictModel, request: Request):
@@ -1041,9 +1050,15 @@ def install(app, cfg, database, box, actor_for):
             await service.obligation(str(identifier), s.REPORTERS)
 
         async def apply(service, body):
+            obligation = await service.obligation(str(identifier), s.REPORTERS)
+            from ..clinical import tables as clinical
+
+            await service.session.execute(select(clinical.sites).where(
+                clinical.sites.c.facility_id == obligation["facility_id"]
+            ).with_for_update())
             return await service.extract(str(identifier))
 
-        return await command(request, payload, apply, guard)
+        return await command(request, payload, apply, guard, extraction=True)
 
     @router.post("/reconcile")
     async def reconcile(payload: c.StrictModel, request: Request):

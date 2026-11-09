@@ -360,6 +360,7 @@ class Database:
         from .control import tables as control_tables  # noqa: F401
         from .institutional import tables as institutional_tables  # noqa: F401
         from .personal import tables as personal_tables  # noqa: F401
+        from .reporting import source_index  # noqa: F401
         from .reporting import tables as reporting_tables  # noqa: F401
 
         async with self.engine.begin() as connection:
@@ -400,6 +401,8 @@ class Database:
                 )
             if present is None or present < 8:
                 await connection.execute(schema_versions.insert().values(version=8, applied_at=now()))
+            if present is None or present < 9:
+                await connection.execute(schema_versions.insert().values(version=9, applied_at=now()))
             if self.postgres:
                 await protect_history(connection)
 
@@ -412,9 +415,10 @@ class Database:
     async def ready(self) -> bool:
         # Version 2 remains supported during the staged reporting rollout.
         version = await self.version()
-        if version in (7, 8):
+        if version in (7, 8, 9):
             from .clinical.flow_index import ready
+            from .reporting.source_index import ready as source_ready
 
             async with self.transaction() as session:
-                return await ready(session)
+                return await ready(session) and (version < 9 or await source_ready(session))
         return version in (2, 3, 4, 5, 6)

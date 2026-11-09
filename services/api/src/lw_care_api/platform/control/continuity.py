@@ -85,10 +85,11 @@ def object_name(backup_id, relative):
     return prefix(backup_id) + relative
 
 
-def archive_tables(version=8):
+def archive_tables(version=9):
     from ..clinical import flow_index  # noqa: F401
     from ..institutional import tables as institutional_tables  # noqa: F401
     from ..personal import tables as personal_tables  # noqa: F401
+    from ..reporting import source_index  # noqa: F401
     from ..reporting import tables as reporting_tables  # noqa: F401
 
     return [
@@ -97,6 +98,7 @@ def archive_tables(version=8):
         if (version >= 6 or not table.name.startswith("institutional_"))
         and (version >= 7 or not table.name.startswith("clinical_flow_"))
         and (version >= 8 or not table.name.startswith("personal_"))
+        and (version >= 9 or table.name != "reporting_source_index")
     ]
 
 
@@ -106,7 +108,7 @@ def file_tables():
     return {db.evidence.name: db.evidence, case_files.name: case_files}
 
 
-def shape(version=8):
+def shape(version=9):
     from ..reporting import tables as reporting_tables  # noqa: F401 -- register metadata
 
     return {
@@ -214,8 +216,8 @@ async def create_archive(
                     .order_by(db.schema_versions.c.version.desc())
                     .limit(1)
                 )
-                if version not in {5, 6, 7, 8}:
-                    raise ArchiveError("Archive requires supported schema 5 or 6")
+                if version not in {5, 6, 7, 8, 9}:
+                    raise ArchiveError("Archive requires a supported schema from 5 through 9")
                 manifest["shape"] = shape(version)
                 if database.postgres and set(actual) != set(manifest["shape"]):
                     raise ArchiveError("Database and archive schema differ")
@@ -372,6 +374,16 @@ async def verify_lineage(connection, manifest, recovered_box, cfg):
     )
     async for row in result.mappings():
         current = clinical_store.opened(recovered_box, row)
+        if manifest["schema_version"] >= 9 and row["kind"] in {"encounter", "stay", "referral", "note", "record_error"}:
+            from ..reporting.source_index import index as source_index
+            from ..reporting.source_index import projection
+
+            expected_source = projection(row, current["data"])
+            actual_source = (await connection.execute(select(source_index).where(
+                source_index.c.record_id == row["id"]
+            ))).mappings().first()
+            if not actual_source or any(actual_source[key] != value for key, value in expected_source.items()):
+                raise ArchiveError("Restored reporting source projection differs from signed source")
         if manifest["schema_version"] >= 7:
             from ..clinical.flow_index import index, project
 
@@ -459,7 +471,7 @@ async def rehearse_restore(
         if (
             manifest["format"] != FORMAT
             or manifest["id"] != backup_id
-            or manifest["schema_version"] not in {5, 6, 7, 8}
+            or manifest["schema_version"] not in {5, 6, 7, 8, 9}
             or manifest["shape"] != shape(manifest["schema_version"])
         ):
             raise ArchiveError("Incompatible archive")

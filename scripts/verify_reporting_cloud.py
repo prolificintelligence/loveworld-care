@@ -19,7 +19,7 @@ def walk(nodes, parent=""):
             yield from walk(node["children"], path + "/")
 
 
-def verify(api_deployment, web_deployment, expected_schema=8):
+def verify(api_deployment, web_deployment, expected_schema=9):
     with httpx.Client(
         headers={"Authorization": "Bearer " + vercel_credential()},
         transport=httpx.HTTPTransport(retries=1),

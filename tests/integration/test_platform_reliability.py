@@ -212,7 +212,9 @@ def test_streamed_archive_preserves_keys_without_plaintext_provider_objects(cont
     assert j.app.state.settings.data_key_hex.encode() not in manifest_bytes
     manifest = json.loads(unseal(key, manifest_bytes, result["id"], "manifest.enc"))
     assert manifest["data_key_hex"] == j.app.state.settings.data_key_hex
-    assert manifest["schema_version"] == 8
+    assert manifest["schema_version"] == 9
+    assert "reporting_source_index" in manifest["shape"]
+    assert "reporting_source_index" not in shape(8)
     records = next(entry for entry in manifest["tables"] if entry["name"] == clinical.records.name)
     chunk = records["chunks"][0]
     assert b"SYNTHETIC_PRIVATE" not in objects.get(object_name(result["id"], chunk["object"]))

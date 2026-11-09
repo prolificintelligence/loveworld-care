@@ -467,3 +467,114 @@ def test_released_native_snapshot_keeps_history_but_loses_current_eligibility_af
     assert exported.status_code == 200 and "STALE_CLINICAL_SOURCE_CHANGE" in exported.text
     assert j.post("/snapshots", {"cohort_id": cohort["id"]}, "analyst").status_code == 409
     assert j.get(f"/returns/{draft['id']}").json()["native_source_current"] is False
+
+
+@pytest.mark.parametrize("unavailable", ["record_limit", "missing_index"])
+def test_retained_native_reports_survive_unavailable_accounting_but_new_release_is_blocked(
+    reporting, monkeypatch, unavailable,
+):
+    from lw_care_api.platform.reporting import source_index
+
+    j = reporting
+    obligation, definitions = setup_native(j)
+    source = run(seed_sources(j.app, j.facilities[0], j.actors["reporter"][0]))
+    extract = j.create(f"/obligations/{obligation['id']}/extract", {})
+    draft = save(j, obligation, [row | {"completeness": "VALUE"} for row in declared_values(extract)])
+    submitted = j.create(f"/returns/{draft['id']}/submit", {
+        "expected_version": draft["version"], "reason": "Synthetic source attestation", "intent_confirmed": True,
+    })
+    j.create(f"/returns/{draft['id']}/review", {
+        "expected_version": submitted["version"], "decision": "VERIFY", "reason": "Synthetic independent review",
+        "evidence_examined": "Synthetic signed source cohort", "method": "Synthetic reconciliation",
+        "verification_scope": "Isolated fixture only", "warning_overrides": {}, "intent_confirmed": True,
+    }, "reviewer")
+    policy = j.policy(allowed_metric_ids=[row["metric_id"] for row in definitions])
+    cohort = j.cohort([obligation], policy)
+    released = j.released(cohort)
+    pending = j.create("/snapshots", {"cohort_id": cohort["id"]}, "analyst")
+    if unavailable == "record_limit":
+        monkeypatch.setattr(native, "MAX_RECORDS", 1)
+        expected, denied = "SOURCE_BATCH_REQUIRED", 409
+    else:
+        async def remove_index():
+            async with j.app.state.database.transaction() as session:
+                await session.execute(source_index.index.delete().where(source_index.index.c.record_id == source["death"]))
+        run(remove_index())
+        expected, denied = "SOURCE_INDEX_UNAVAILABLE", 503
+    path = f"/snapshots/{released['snapshot_id']}"
+    retained = j.get(path, "executive")
+    assert retained.status_code == 200
+    payload = retained.json()
+    assert payload["cells"] == released["cells"] and payload["source_hash"] == released["source_hash"]
+    assert payload["freshness"] == "CURRENT_SOURCE_CHECK_UNAVAILABLE" and payload["current_eligible"] is False
+    assert payload["native_source_health"] == {"status": "UNAVAILABLE", "reason": expected}
+    exported = j.get(path + "/export.csv", "executive")
+    assert exported.status_code == 200 and "CURRENT_SOURCE_CHECK_UNAVAILABLE" in exported.text
+    listing = j.get("/snapshots", "executive")
+    assert listing.status_code == 200
+    item = next(row for row in listing.json()["items"] if row["id"] == released["snapshot_id"])
+    assert item["stale"] and item["current_eligible"] is False and item["native_source_health"]["reason"] == expected
+    detail = j.get(f"/extracts/{extract['id']}", "reviewer").json()
+    assert detail["native_source_current"] is None and detail["native_source_health"]["status"] == "UNAVAILABLE"
+    assert j.get(f"/returns/{draft['id']}").json()["native_source_current"] is None
+    assert j.post("/snapshots", {"cohort_id": cohort["id"]}, "analyst").status_code == denied
+    assert j.post(f"/snapshots/{pending['id']}/review", {
+        "decision": "RELEASE", "reason": "Synthetic unavailable source must block release", "intent_confirmed": True,
+    }, "reviewer").status_code == denied
+    assert j.get(path, "outsider").status_code == 404
+    assert j.get(path + "/export.csv", "outsider").status_code == 404
+    j.create(f"/policies/{policy['id']}/revoke", {"evidence": "Synthetic disclosure revocation"}, "governor")
+    assert j.get(path, "executive").status_code == 403
+    assert j.get(path + "/export.csv", "executive").status_code == 403
+    assert j.get("/snapshots", "executive").json()["items"] == []
+
+
+def test_period_index_bounds_dependencies_events_and_recovers_projection(reporting, monkeypatch):
+    from lw_care_api.platform.reporting import source_index
+
+    j = reporting
+    obligation, _ = setup_native(j)
+    source = run(seed_sources(j.app, j.facilities[0], j.actors["reporter"][0]))
+    extract = j.create(f"/obligations/{obligation['id']}/extract", {})
+    async def add_future():
+        async with j.app.state.database.transaction() as session:
+            site = (await session.execute(select(ct.sites).where(ct.sites.c.facility_id == j.facilities[0]))).mappings().one()
+            for _ in range(25):
+                await cs.create(session, j.app.state.settings, j.app.state.box, {"id": j.actors["reporter"][0]},
+                                site, "encounter", {"disposition": {"occurred_at": stamp(-1)}}, "SYNTHETIC",
+                                patient_id=source["patient"], status="COMPLETED")
+    run(add_future())
+    # Relevant selection includes eight primary/dependency records, independent
+    # of 25 later-period records; signed events are bounded on that same set.
+    async def count_selected():
+        from lw_care_api.platform.reporting.operations import DirectorateService
+        from lw_care_api.platform.reporting.store import digest
+        async with j.app.state.database.transaction() as session:
+            service = DirectorateService(session, j.app.state.settings, j.app.state.box, {"id": j.actors["reporter"][0]}, "SYNTHETIC")
+            # Pre-Phase-A fingerprints used this all-period inventory. Preserve
+            # compatibility with retained extracts without rewriting evidence.
+            all_records = list((await session.execute(select(ct.records).where(
+                ct.records.c.facility_id == j.facilities[0], ct.records.c.kind.in_(native.KINDS)
+            ).order_by(ct.records.c.id))).mappings())
+            policy = (await session.execute(select(ct.sites).where(ct.sites.c.facility_id == j.facilities[0]))).mappings().one()
+            assert digest({"records": native.contributing_inventory(service, all_records, obligation),
+                           "policy": dict(policy)}) == extract["source_hash"]
+            return len((await native.inventory(service, j.facilities[0], obligation))[0])
+    size = run(count_selected())
+    monkeypatch.setattr(native, "MAX_RECORDS", size)
+    fresh = j.create(f"/obligations/{obligation['id']}/extract", {})
+    assert fresh["source_hash"] == extract["source_hash"]
+    assert values_by_metric(fresh) == values_by_metric(extract)
+    monkeypatch.setattr(native, "MAX_RECORDS", size - 1)
+    assert j.post(f"/obligations/{obligation['id']}/extract", {}).status_code == 409
+    monkeypatch.setattr(native, "MAX_RECORDS", size)
+    monkeypatch.setattr(native, "MAX_EVENTS", 1)
+    assert j.post(f"/obligations/{obligation['id']}/extract", {}).status_code == 409
+    monkeypatch.setattr(native, "MAX_EVENTS", 20000)
+    async def missing():
+        async with j.app.state.database.transaction() as session:
+            await session.execute(source_index.index.delete().where(source_index.index.c.record_id == source["death"]))
+    run(missing())
+    assert j.post(f"/obligations/{obligation['id']}/extract", {}).status_code == 503
+    assert run(source_index.rebuild(j.app.state.database, j.app.state.box)) > 25
+    assert j.create(f"/obligations/{obligation['id']}/extract", {})["source_hash"] == extract["source_hash"]

@@ -2,18 +2,18 @@
 
 import base64
 import json
-from datetime import UTC, datetime
 
 from cryptography.exceptions import InvalidSignature
-from sqlalchemy import select
+from sqlalchemy import or_, select
 
 from .. import db
 from ..clinical import store as clinical_store
 from ..clinical import tables as clinical
-from ..domain import require
+from ..domain import RuleError, require
 from . import store as s
 from . import tables as t
 from .proposals import catalogue as working_catalogue
+from .source_index import instant
 
 EDITION = "LWH-NATIVE-2026.1"
 SELECTORS = {
@@ -205,13 +205,32 @@ def contributing_inventory(service, records, obligation):
 
 
 async def inventory(service, facility, obligation):
+    from .source_index import index, ready
+
+    # Clinical commands lock this same site before changing any source. Hold it
+    # through extraction/freshness decisions to prevent mixed source versions.
+    query = select(clinical.sites).where(clinical.sites.c.facility_id == facility)
+    if getattr(service, "native_source_write", False):
+        query = query.with_for_update()
+    policy = (await service.session.execute(query)).mappings().first()
+    require(
+        (await service.session.scalar(select(db.schema_versions.c.version).order_by(
+            db.schema_versions.c.version.desc()).limit(1)) or 0) >= 9
+        and await ready(service.session, facility),
+        "SOURCE_INDEX_UNAVAILABLE",
+        "Native source accounting awaits projection reconciliation; no partial aggregate is returned",
+        503,
+    )
+    start, end = instant(obligation["period_start"]), instant(obligation["period_end"])
     records = list(
         (
             await service.session.execute(
                 select(clinical.records)
-                .where(
-                    clinical.records.c.facility_id == facility, clinical.records.c.kind.in_(KINDS)
-                )
+                .join(index, index.c.record_id == clinical.records.c.id)
+                .where(index.c.facility_id == facility, or_(
+                    index.c.uncertain.is_(True),
+                    (index.c.first_at < end.isoformat()) & (index.c.last_at >= start.isoformat()),
+                ))
                 .order_by(clinical.records.c.id)
                 .limit(MAX_RECORDS + 1)
             )
@@ -223,15 +242,31 @@ async def inventory(service, facility, obligation):
         "Source volume exceeds this qualified synchronous batch; no truncated aggregate is returned",
         409,
     )
-    policy = (
-        (
-            await service.session.execute(
-                select(clinical.sites).where(clinical.sites.c.facility_id == facility)
-            )
-        )
-        .mappings()
-        .first()
-    )
+    # Include only direct encounter/summary dependencies and their error markers.
+    # Bound the combined set, not each query independently. Never truncate totals.
+    selected = {row["id"]: row for row in records}
+    dependencies = set()
+    for row in records:
+        content = clinical_store.opened(service.box, row)["data"]
+        dependencies.update((row["encounter_id"], content.get("summary_note_id"),
+                             content.get("disposition", {}).get("signed_summary_id")))
+        dependencies.update(event.get("signed_summary_id") for event in content.get("history", []))
+    dependencies.discard(None)
+    if dependencies:
+        related = (await service.session.execute(select(clinical.records).where(
+            clinical.records.c.facility_id == facility, clinical.records.c.kind.in_(KINDS),
+            clinical.records.c.id.in_(dependencies),
+        ).limit(MAX_RECORDS + 1))).mappings()
+        selected.update((row["id"], row) for row in related)
+    if selected:
+        errors = (await service.session.execute(select(clinical.records).join(
+            index, index.c.record_id == clinical.records.c.id,
+        ).where(index.c.facility_id == facility, index.c.kind == "record_error",
+                index.c.target_id.in_(selected)).limit(MAX_RECORDS + 1))).mappings()
+        selected.update((row["id"], row) for row in errors)
+    require(len(selected) <= MAX_RECORDS, "SOURCE_BATCH_REQUIRED",
+            "Period sources and dependencies exceed this synchronous batch; no truncated aggregate is returned", 409)
+    records = sorted(selected.values(), key=lambda row: row["id"])
     fingerprint = s.digest(
         {
             "records": contributing_inventory(service, records, obligation),
@@ -263,6 +298,26 @@ async def current(service, data, obligation):
     return True
 
 
+async def health(check):
+    """Read-only degradation is limited to known accounting availability errors.
+
+    Integrity, policy and permission failures must still propagate. Commands use
+    current() directly, so an unknown source can never authorise current use.
+    """
+    try:
+        return {"status": "CURRENT" if await check() else "STALE", "reason": None}
+    except RuleError as exc:
+        if exc.code not in {"SOURCE_BATCH_REQUIRED", "SOURCE_INDEX_UNAVAILABLE"}:
+            raise
+        return {"status": "UNAVAILABLE", "reason": exc.code}
+
+
+async def read_health(service, data, obligation):
+    result = await health(lambda: current(service, data, obligation))
+    return {"native_source_health": result,
+            "native_source_current": None if result["status"] == "UNAVAILABLE" else result["status"] == "CURRENT"}
+
+
 async def verified_sources(service, obligation):
     records, policy, state_hash = await inventory(service, obligation["facility_id"], obligation)
     indexed = {row["id"]: row for row in records}
@@ -270,10 +325,9 @@ async def verified_sources(service, obligation):
         (
             await service.session.execute(
                 select(clinical.events)
-                .join(clinical.records, clinical.records.c.id == clinical.events.c.record_id)
                 .where(
-                    clinical.records.c.facility_id == obligation["facility_id"],
-                    clinical.records.c.kind.in_(KINDS),
+                    clinical.events.c.facility_id == obligation["facility_id"],
+                    clinical.events.c.record_id.in_(indexed),
                 )
                 .order_by(clinical.events.c.record_id, clinical.events.c.version)
                 .limit(MAX_EVENTS + 1)
@@ -356,14 +410,6 @@ async def verified_sources(service, obligation):
         manifest,
         len(rows),
     )
-
-
-def instant(value):
-    try:
-        result = datetime.fromisoformat(value)
-        return result.astimezone(UTC) if result.tzinfo else None
-    except (AttributeError, TypeError, ValueError):
-        return None
 
 
 def calculate(records, contents, policy, obligation):
