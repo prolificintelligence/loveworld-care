@@ -550,7 +550,7 @@ async def rehearse_restore(
                 ),
                 {"schema": namespace},
             )
-            if protected != (38 if version == 5 else 48):
+            if protected != (38 if version == 5 else 53 if version >= 8 else 48):
                 raise ArchiveError("Restored history protection incomplete")
             # Probe append-only protection using a savepoint; no original row is changed.
             from sqlalchemy.exc import DBAPIError

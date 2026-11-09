@@ -480,3 +480,25 @@ def test_named_fallback_can_personally_accept_after_owner_is_restricted(personal
         "outsider",
     )
     assert request["owner_name"] == "Synthetic outsider" and request["state"] == "ACCEPTED"
+
+
+def test_personal_recovery_lineage_rejects_permission_projection_tampering(personal):
+    from lw_care_api.platform.control.continuity import ArchiveError, verify_lineage
+
+    j = personal
+    link = j.link(j.patient())
+
+    async def qualify():
+        async with j.app.state.database.transaction() as session:
+            manifest = {"schema_version": 8, "data_key_hex": j.app.state.settings.data_key_hex}
+            signatures, histories = await verify_lineage(
+                session, manifest, j.app.state.box, j.app.state.settings
+            )
+            assert signatures > 0 and histories >= 2
+            await session.execute(
+                update(t.links).where(t.links.c.id == link["id"]).values(permissions=["READ"])
+            )
+            with pytest.raises(ArchiveError, match="Personal current authority differs"):
+                await verify_lineage(session, manifest, j.app.state.box, j.app.state.settings)
+
+    run(qualify())
