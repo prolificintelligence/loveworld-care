@@ -1,5 +1,7 @@
 # LW Health Intelligence Platform
 
+Native reporting: [qualified source mappings and officer workflow](docs/implementation/native-reporting-source-guide.md), with signed provenance and explicit coverage/freshness. [Current release evidence](docs/implementation/current-release.json) records the live cloud increment.
+
 Reporting officers: [template review and adoption](https://lw-health-intelligence.vercel.app/reporting-templates). Director review: [researched working forms and proposed calendar](docs/implementation/reporting-forms/README.md). These proposed forms use retained review/adoption; deployment does not represent institutional approval.
 
 Current production entry points: [Directorate reporting](https://lw-health-intelligence.vercel.app/directorate), [My LW Health Care PWA](https://lw-health-intelligence.vercel.app/my-health), [LW Care staff EMR](https://lw-health-intelligence.vercel.app/care) and [patient access/receiving teams](https://lw-health-intelligence.vercel.app/patient-access). These share the current platform API; personal and professional permissions remain independently enforced. See the [current release](docs/implementation/current-release.json), [interaction guide](docs/implementation/personal-family-care-interaction-guide.md) and [Director-first sequence](docs/implementation/2026-11-09-director-vision-alignment.md).
