@@ -1,5 +1,7 @@
 # Implementation audit and recommended next phases
 
+Subsequent delivery: [Phase 6 release](2026-11-09-phase6-personal-care-release.md). The [Director-first alignment review](2026-11-09-director-vision-alignment.md) supersedes the prospective sequence below; the original audit findings and dated evidence remain historical.
+
 Assessment: 9 November 2026, Africa/Lagos. Repository HEAD: `331fe1c9d8f8f0dc3c0b09bce73d42a6671c7bcb`. Latest frontend runtime change: `c500275e8ba2a0ee6a5a21535fd6849f6707cc9e`.
 
 ## Assessment
