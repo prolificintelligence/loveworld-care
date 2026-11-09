@@ -91,6 +91,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                     "/v1/operations/",
                     "/v1/auth/recovery",
                     "/v1/institutional/",
+                    "/v1/personal/",
                 )
             )
             and request.method == "POST"
@@ -185,6 +186,12 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
 
     @app.exception_handler(RuleError)
     async def rule_error(request, exc):
+        if request.url.path.startswith("/v1/personal/") and (await database.version() or 0) >= 8:
+            from .personal.service import PersonalService
+            async with database.transaction() as session:
+                identity = getattr(request.state, "actor_id", None)
+                await PersonalService(session, cfg, box, {"id":identity} if identity else None,
+                                      request.state.correlation_id).audit("personal.request_denied", outcome="DENIED")
         if (
             request.url.path.startswith(("/v1/operations/", "/v1/institutional/"))
             and (await database.version() or 0) >= 4
@@ -448,12 +455,12 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     async def ready():
         version = await database.version()
         require(
-            version in (2, 3, 4, 5, 6, 7),
+            version in (2, 3, 4, 5, 6, 7, 8),
             "AUTHORITY_UNAVAILABLE",
             "Database migration required",
             503,
         )
-        if version == 7:
+        if version >= 7:
             require(
                 await database.ready(),
                 "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
@@ -463,6 +470,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
         return {
             "status": "READY",
             "schema_version": version,
+            "personal_care": "READY" if version >= 8 and cfg.personal_enabled else "PAUSED_OR_AWAITING_MIGRATION",
             "advanced_clinical": "READY"
             if version >= 7 and cfg.advanced_clinical_enabled
             else "PAUSED_OR_AWAITING_MIGRATION",
@@ -1819,4 +1827,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     from .institutional.router import install as install_institutional
 
     install_institutional(app, cfg, database, box, actor_for)
+    from .personal.router import install as install_personal
+
+    install_personal(app, cfg, database, box, actor_for, throttle)
     return app

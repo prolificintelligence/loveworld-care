@@ -18,15 +18,15 @@ def execute(args):
         raise ValueError("A protected deployment secret is required")
     result = {"target": args.target, "source_commit": os.environ.get("GITHUB_SHA")}
     if args.target == "verify":
-        if args.schema_version != 7 or not args.api_deployment or not args.web_deployment:
+        if args.schema_version not in (7, 8) or not args.api_deployment or not args.web_deployment:
             raise ValueError("Verification requires both actual deployments and schema 7")
-        verify(args.api_deployment, args.web_deployment)
+        verify(args.api_deployment, args.web_deployment, args.schema_version)
         result["verification"] = "PASSED"
     else:
         # Refuse the UI rollout before the operator has migrated the cloud authority.
         if args.target == "web":
             ready = httpx.get("https://lw-health-intelligence-api.vercel.app/v1/ready", timeout=60)
-            assert ready.status_code == 200 and ready.json()["schema_version"] == 7
+            assert ready.status_code == 200 and ready.json()["schema_version"] == args.schema_version
         if args.target == "api" and args.api_deployment:
             deployment = {"deployment_id": args.api_deployment, "state": "CHECKING_EXISTING"}
         else:
@@ -93,7 +93,7 @@ def execute(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target", choices=("api", "web", "verify"), required=True)
-    parser.add_argument("--schema-version", type=int, choices=(6, 7), required=True)
+    parser.add_argument("--schema-version", type=int, choices=(6, 7, 8), required=True)
     parser.add_argument("--api-deployment", default="")
     parser.add_argument("--web-deployment", default="")
     try:

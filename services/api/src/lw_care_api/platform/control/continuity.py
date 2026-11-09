@@ -85,9 +85,10 @@ def object_name(backup_id, relative):
     return prefix(backup_id) + relative
 
 
-def archive_tables(version=7):
+def archive_tables(version=8):
     from ..clinical import flow_index  # noqa: F401
     from ..institutional import tables as institutional_tables  # noqa: F401
+    from ..personal import tables as personal_tables  # noqa: F401
     from ..reporting import tables as reporting_tables  # noqa: F401
 
     return [
@@ -95,6 +96,7 @@ def archive_tables(version=7):
         for table in db.metadata.sorted_tables
         if (version >= 6 or not table.name.startswith("institutional_"))
         and (version >= 7 or not table.name.startswith("clinical_flow_"))
+        and (version >= 8 or not table.name.startswith("personal_"))
     ]
 
 
@@ -104,7 +106,7 @@ def file_tables():
     return {db.evidence.name: db.evidence, case_files.name: case_files}
 
 
-def shape(version=7):
+def shape(version=8):
     from ..reporting import tables as reporting_tables  # noqa: F401 -- register metadata
 
     return {
@@ -212,7 +214,7 @@ async def create_archive(
                     .order_by(db.schema_versions.c.version.desc())
                     .limit(1)
                 )
-                if version not in {5, 6, 7}:
+                if version not in {5, 6, 7, 8}:
                     raise ArchiveError("Archive requires supported schema 5 or 6")
                 manifest["shape"] = shape(version)
                 if database.postgres and set(actual) != set(manifest["shape"]):
@@ -410,6 +412,22 @@ async def verify_lineage(connection, manifest, recovered_box, cfg):
         if hashlib.sha256(canonical(payload)).hexdigest() != row["payload_hash"]:
             raise ArchiveError("Reporting payload hash did not verify")
         histories += 1
+    if manifest["schema_version"] >= 8:
+        from ..personal import tables as personal
+        mutable = {table.name:table for table in (personal.links, personal.services, personal.requests, personal.preferences)}
+        result = await connection.stream(select(personal.events))
+        async for row in result.mappings():
+            payload = json.loads(recovered_box.decrypt(row["payload_ciphertext"]))
+            if hashlib.sha256(canonical(payload)).hexdigest() != row["payload_hash"]:
+                raise ArchiveError("Personal permission/request history did not verify")
+            if row["resource_type"] in mutable:
+                table = mutable[row["resource_type"]]
+                current = (await connection.execute(select(table).where(table.c.id == row["resource_id"]))).mappings().first()
+                if not current:
+                    raise ArchiveError("Personal history has no current source")
+                if current["version"] == row["version"] and any(current[key] != value for key,value in payload["resource"].items()):
+                    raise ArchiveError("Personal current authority differs from history")
+            histories += 1
     return signatures, histories
 
 
@@ -441,7 +459,7 @@ async def rehearse_restore(
         if (
             manifest["format"] != FORMAT
             or manifest["id"] != backup_id
-            or manifest["schema_version"] not in {5, 6, 7}
+            or manifest["schema_version"] not in {5, 6, 7, 8}
             or manifest["shape"] != shape(manifest["schema_version"])
         ):
             raise ArchiveError("Incompatible archive")

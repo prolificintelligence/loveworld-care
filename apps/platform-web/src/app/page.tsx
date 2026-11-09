@@ -107,7 +107,7 @@ export default function Platform() {
     } catch (e) { setError((e as Error).message); }
   }
 
-  if (checking) return <main id="main" className="auth"><p role="status">Checking your session…</p></main>;
+  if (checking) return <main id="main" className="auth"><p><a href="/my-health">My LW Health Care</a> · <a href="/patient-access">Patient access and receiving teams</a></p><p role="status">Checking your session…</p></main>;
   if (!actor) return <main id="main" className="auth"><div className="wordmark">LW <span>HEALTH INTELLIGENCE PLATFORM</span></div><div className="panel"><p className="eyebrow">HEALTH SERVICES DIRECTORATE</p><h1>Welcome back.</h1><p className="muted">Sign in to your authorised workspace.</p>{error && <p className="error" role="alert">{error}</p>}<form onSubmit={submit(async data => {
     setBusy(true); setError("");
     try { await api("/auth/login", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({email: get(data,"email"), password: String(data.get("password")), otp: get(data,"otp")})}); setActor(await api<Actor>("/auth/me")); }

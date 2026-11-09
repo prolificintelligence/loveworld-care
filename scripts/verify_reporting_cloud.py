@@ -19,7 +19,7 @@ def walk(nodes, parent=""):
             yield from walk(node["children"], path + "/")
 
 
-def verify(api_deployment, web_deployment):
+def verify(api_deployment, web_deployment, expected_schema=8):
     with httpx.Client(
         headers={"Authorization": "Bearer " + vercel_credential()},
         transport=httpx.HTTPTransport(retries=1),
@@ -98,8 +98,8 @@ def verify(api_deployment, web_deployment):
                     "cache_control": response.headers.get("cache-control"),
                 }
                 if path.endswith("/ready"):
-                    assert response.json()["schema_version"] == 7
-                    record["schema_version"] = 7
+                    assert response.json()["schema_version"] == expected_schema
+                    record["schema_version"] = expected_schema
                     record["reporting"] = response.json().get("reporting")
                 print(json.dumps(record))
             # Validate the actual POST path and proxy, not only signed-out GETs.
@@ -141,6 +141,8 @@ def verify(api_deployment, web_deployment):
             "/learn",
             "/activate",
             "/directory",
+            "/my-health",
+            "/patient-access",
         ):
             response = client.get("https://lw-health-intelligence.vercel.app" + path)
             assert (

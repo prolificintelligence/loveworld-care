@@ -142,7 +142,7 @@ async def create_invitation(session, cfg, box, payload, grantor, correlation_id)
     return {"account_id": account_id, "status": "INVITATION_QUEUED", "expires_in_hours": 24}
 
 
-async def deliver_invitations(database, cfg, box, *, limit=2, timeout=20):
+async def deliver_invitations(database, cfg, box, *, limit=2, timeout=20, account_id=None):
     require(
         cfg.resend_api_key and cfg.email_from,
         "AUTHORITY_UNAVAILABLE",
@@ -160,6 +160,7 @@ async def deliver_invitations(database, cfg, box, *, limit=2, timeout=20):
                         db.outbox.c.event_type == "account.invitation",
                         db.outbox.c.delivered_at.is_(None),
                         db.outbox.c.attempts < 20,
+                        db.outbox.c.resource_id == account_id if account_id else True,
                     )
                     .order_by(db.outbox.c.created_at)
                     .limit(limit)
@@ -202,7 +203,7 @@ async def deliver_invitations(database, cfg, box, *, limit=2, timeout=20):
                     continue
                 url = (
                     cfg.web_origin.rstrip("/")
-                    + "/activate#"
+                    + ("/activate?next=my-health#" if item["payload"].get("purpose") == "PERSONAL_ENROLMENT" else "/activate#")
                     + box.decrypt(item["payload"]["token_ciphertext"])
                 )
                 try:
@@ -219,7 +220,7 @@ async def deliver_invitations(database, cfg, box, *, limit=2, timeout=20):
                             "text": f"Hello {account['name']},\n\nYou have been invited to LW Health Intelligence Platform. "
                             f"Set your password and register your authenticator using this private link:\n\n{url}\n\n"
                             "This link expires in 24 hours. Do not forward it. If you did not expect this invitation, "
-                            "contact your Directorate administrator.\n",
+                            "contact your care team or account administrator.\n",
                         },
                     )
                     receipt = (

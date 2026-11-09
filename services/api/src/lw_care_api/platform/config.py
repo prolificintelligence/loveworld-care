@@ -35,6 +35,7 @@ class PlatformSettings(BaseSettings):
     dispatch_recovery_after_commit: bool = True
     institutional_enabled: bool = True
     advanced_clinical_enabled: bool = True
+    personal_enabled: bool = True
 
     @property
     def production(self) -> bool:

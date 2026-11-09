@@ -664,7 +664,7 @@ def test_current_stack_and_offline_scope_are_truthful(controls):
         and data["offline_care"]["current_cloud_requires_wan"] is True
     )
     assert data["delivery"]["continuous_worker_deployment"] == "DEFERRED_OUTSIDE_CURRENT_STACK"
-    assert j.client.get("/v1/ready").json()["schema_version"] == 7
+    assert j.client.get("/v1/ready").json()["schema_version"] == 8
     assert j.client.get("/v1/operations/context").status_code == 401
 
 

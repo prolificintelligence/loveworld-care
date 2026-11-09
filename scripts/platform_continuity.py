@@ -70,7 +70,7 @@ async def operate(args):
         raise ValueError("This command requires explicit production cloud settings")
     database = Database(cfg.database_url)
     try:
-        if await database.version() not in {5, 6, 7}:
+        if await database.version() not in {5, 6, 7, 8}:
             raise ValueError("Supported schema 5 or 6 must be installed first")
         if args.command == "reconcile":
             started = db.now()

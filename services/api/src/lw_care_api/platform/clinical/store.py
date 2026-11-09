@@ -427,6 +427,9 @@ async def record_event(
     from .flow_index import project
 
     await project(session, row, content, cfg)
+    if (session.info.get("platform_schema_version") or 0) >= 8:
+        from ..personal.care import invalidate_amended_source
+        await invalidate_amended_source(session, box, actor, row, content)
 
 
 async def create(

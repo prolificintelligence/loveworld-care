@@ -10,7 +10,7 @@ on:
       schema_version:
         type: choice
         required: true
-        options: ['6', '7']
+        options: ['6', '7', '8']
       api_deployment_id:
         type: string
         required: false

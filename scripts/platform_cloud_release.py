@@ -323,7 +323,7 @@ def migrate():
                 json.dumps(
                     {
                         "migration": "APPLIED",
-                        "schema_version": 7,
+                        "schema_version": 8,
                         "seeded_records": 0,
                         "existing_records_indexed": indexed,
                     }
