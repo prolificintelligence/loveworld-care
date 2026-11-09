@@ -1,5 +1,7 @@
 # LW Health Intelligence Platform
 
+Latest assessment: [comprehensive suite audit and production-readiness sequence](docs/implementation/2026-11-09-comprehensive-audit-and-production-readiness.md). Scope remains aligned; full clinical/operating acceptance is incomplete. A confirmed historical reporting view/export limit defect is the first remediation priority. See the [readiness backlog](docs/implementation/2026-11-09-production-readiness-backlog.csv) and [next-session handoff](docs/implementation/NEXT_SESSION_HANDOFF.md).
+
 Native reporting: [qualified source mappings and officer workflow](docs/implementation/native-reporting-source-guide.md), with signed provenance and explicit coverage/freshness. [Current release evidence](docs/implementation/current-release.json) records the live cloud increment.
 
 Reporting officers: [template review and adoption](https://lw-health-intelligence.vercel.app/reporting-templates). Director review: [researched working forms and proposed calendar](docs/implementation/reporting-forms/README.md). These proposed forms use retained review/adoption; deployment does not represent institutional approval.
@@ -34,4 +36,4 @@ docs/implementation/                   Exact release evidence and overall suite 
 
 The other application/package directories retain earlier development work. Production release packaging selects the institutional runtime, clinical, reporting and control modules, and platform-web. The progress report describes the actual delivered scope and operating dependencies.
 
-The [Phase 5 clinical release](docs/implementation/2026-11-08-phase5-clinical-release.md) adds actual capacity/shift/teamwork, nursing receipt and special dispositions, maternal/child facts, medicine/stock stewardship, procedure monitoring/trace/recall and patient instructions in `/care`. Clinical activation and current professional authority remain required. The next capability sequence is patient/family authority and self-service.
+The [Phase 5 clinical release](docs/implementation/2026-11-08-phase5-clinical-release.md) adds actual capacity/shift/teamwork, nursing receipt and special dispositions, maternal/child facts, medicine/stock stewardship, procedure monitoring/trace/recall and patient instructions in `/care`. Clinical activation and current professional authority remain required. Phase 6 personal/family access is recorded in the current release inventory; the comprehensive audit now governs the readiness and implementation sequence.
