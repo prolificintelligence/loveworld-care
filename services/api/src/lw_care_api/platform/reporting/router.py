@@ -192,6 +192,30 @@ def install(app, cfg, database, box, actor_for):
             )
             return result
 
+    @router.get("/source-profiles")
+    async def native_source_profiles(request: Request):
+        from .native import catalogue as source_catalogue
+        from .templates import EDITORS, GLOBAL
+
+        async with database.transaction() as session:
+            service = await service_for(session, request)
+            s.require_role(service.actor, EDITORS, GLOBAL)
+            await s.audit(
+                session,
+                service.actor,
+                "reporting.native_profiles_read",
+                GLOBAL,
+                None,
+                request.state.correlation_id,
+            )
+            return source_catalogue()
+
+    @router.post("/source-profiles/prepare")
+    async def native_source_prepare(request: Request, payload: c.NativePrepare):
+        from .native import prepare
+
+        return await command(request, payload, prepare, governor)
+
     @router.get("/template-proposals")
     async def template_proposals(request: Request):
         from .proposals import catalogue as proposed_catalogue
@@ -542,6 +566,9 @@ def install(app, cfg, database, box, actor_for):
                 "obligation": obligation,
                 "validation": validation,
                 "template_binding": await TemplateService(service).binding(obligation["id"]),
+                "native_source_current": await service_native_current(
+                    service, service.data(row), obligation
+                ),
             }
 
     @router.get("/returns/{identifier}/history")
@@ -689,7 +716,11 @@ def install(app, cfg, database, box, actor_for):
                     continue
                 items.append(
                     {key: value for key, value in row.items() if key != "payload_ciphertext"}
-                    | {"state": review or "PREPARED", "stale": bool(stale)}
+                    | {
+                        "state": review or "PREPARED",
+                        "stale": bool(stale)
+                        or not await service.snapshot_native_current(service.data(row)),
+                    }
                 )
             return {"items": items, "as_of": db.now()}
 
@@ -981,6 +1012,28 @@ def install(app, cfg, database, box, actor_for):
         ("exceptions/{id}/acknowledge", c.Evidence, "acknowledge_exception", "exception"),
     ]:
         resource_route(path, model, method, guard)
+
+    from .native import current as service_native_current
+
+    @router.get("/extracts/{identifier}")
+    async def extract_detail(identifier: UUID, request: Request):
+        async with database.transaction() as session:
+            service = await service_for(session, request)
+            row = await s.load(session, t.extracts, identifier)
+            obligation = await service.obligation(row["obligation_id"])
+            fresh = await service_native_current(
+                service, {"values": [{"extract_id": str(identifier)}]}, obligation
+            )
+            await s.audit(
+                session,
+                service.actor,
+                "reporting.clinical_extract_read",
+                obligation,
+                str(identifier),
+                request.state.correlation_id,
+                purpose="AGGREGATE_SOURCE_REVIEW",
+            )
+            return s.opened(box, row) | {"native_source_current": fresh}
 
     @router.post("/obligations/{identifier}/extract")
     async def extract(identifier: UUID, payload: c.StrictModel, request: Request):

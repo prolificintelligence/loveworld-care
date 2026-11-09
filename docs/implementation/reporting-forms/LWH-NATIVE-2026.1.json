@@ -1,0 +1,86 @@
+{
+  "edition": "LWH-NATIVE-2026.1",
+  "status": "PROPOSED_NATIVE_MAPPING_REQUIRES_REVIEW_AND_ADOPTION",
+  "name": "Proposed native EMR contacts, inpatient outcomes and referral acceptance",
+  "stream": "FACILITY_ACTIVITY",
+  "measures": [
+    {
+      "metric_id": "LWH-MET-010",
+      "name": "Completed service contacts",
+      "formula": "COUNT",
+      "aggregation": "SUM",
+      "unit": "events",
+      "scale": "1",
+      "numerator_is_subset": false,
+      "source_selector": "EMR_SERVICE_CONTACTS_V2",
+      "numerator_definition": "Distinct completed encounter identifiers with an actual signed service/disposition in this period.",
+      "denominator_definition": "Not applicable: count, not a population rate.",
+      "population_definition": "Native LW Care records for the exact facility and half-open occurrence period. The clinical policy must cover the period. External/manual records are not added. The officer must independently establish full-source coverage before declaring a complete return.",
+      "inclusion_exclusion": "Exclude drafts, cancellations, appointments and duplicate copies. Remote contacts require actual completed care. This is not unique people; reconcile manual and EMR sources rather than adding them. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references. Native profile LWH-NATIVE-2026.1: verify signed event chains and current projections. Contacts require the same-patient/encounter signed disposition summary. Inpatient final outcomes use one signed DEATH, DISCHARGE or SELF_DISCHARGE per stay; ward transfer, leave, open stays and bed release are not final outcomes. Referral cohort uses REQUEST occurrence; actual named receiving acceptance must occur on or after request and before period end. Cancellation before acceptance is excluded and counted separately; cancellation after acceptance remains an accepted request. Entered-in-error records and invalidated summaries are excluded with counts. Missing required source fields or contradictory histories make the affected measure UNKNOWN. Usable native totals start PARTIAL until source coverage is reviewed.",
+      "dimensions": [
+        "reporting_unit",
+        "occurrence_period"
+      ]
+    },
+    {
+      "metric_id": "LWH-MET-013",
+      "name": "Inpatient deaths by occurrence",
+      "formula": "COUNT",
+      "aggregation": "SUM",
+      "unit": "events",
+      "scale": "1",
+      "numerator_is_subset": false,
+      "source_selector": "EMR_INPATIENT_DEATHS_V1",
+      "numerator_definition": "Distinct verified inpatient death dispositions occurring in the period.",
+      "denominator_definition": "Not applicable: count, not a population rate.",
+      "population_definition": "Native LW Care records for the exact facility and half-open occurrence period. The clinical policy must cover the period. External/manual records are not added. The officer must independently establish full-source coverage before declaring a complete return.",
+      "inclusion_exclusion": "Exclude community deaths, unconfirmed reports, arrival-dead and duplicate notifications. Not deaths among community residents. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references. Native profile LWH-NATIVE-2026.1: verify signed event chains and current projections. Contacts require the same-patient/encounter signed disposition summary. Inpatient final outcomes use one signed DEATH, DISCHARGE or SELF_DISCHARGE per stay; ward transfer, leave, open stays and bed release are not final outcomes. Referral cohort uses REQUEST occurrence; actual named receiving acceptance must occur on or after request and before period end. Cancellation before acceptance is excluded and counted separately; cancellation after acceptance remains an accepted request. Entered-in-error records and invalidated summaries are excluded with counts. Missing required source fields or contradictory histories make the affected measure UNKNOWN. Usable native totals start PARTIAL until source coverage is reviewed.",
+      "dimensions": [
+        "reporting_unit",
+        "occurrence_period"
+      ]
+    },
+    {
+      "metric_id": "LWH-MET-014",
+      "name": "Institutional inpatient mortality proportion",
+      "formula": "RATIO",
+      "aggregation": "RATIO_OF_SUMS",
+      "unit": "percent",
+      "scale": "100",
+      "numerator_is_subset": true,
+      "source_selector": "EMR_INPATIENT_MORTALITY_V1",
+      "numerator_definition": "Verified inpatient deaths among stays with final death/discharge disposition in the period.",
+      "denominator_definition": "All eligible final inpatient discharge dispositions including deaths in the same period.",
+      "population_definition": "Native LW Care records for the exact facility and half-open occurrence period. The clinical policy must cover the period. External/manual records are not added. The officer must independently establish full-source coverage before declaring a complete return.",
+      "inclusion_exclusion": "Exclude transfers out without a final local discharge/death, arrival-dead and open stays from both components. Show case mix and incomplete dispositions in explanation. Not population mortality; no facility ranking from this alone. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references. Native profile LWH-NATIVE-2026.1: verify signed event chains and current projections. Contacts require the same-patient/encounter signed disposition summary. Inpatient final outcomes use one signed DEATH, DISCHARGE or SELF_DISCHARGE per stay; ward transfer, leave, open stays and bed release are not final outcomes. Referral cohort uses REQUEST occurrence; actual named receiving acceptance must occur on or after request and before period end. Cancellation before acceptance is excluded and counted separately; cancellation after acceptance remains an accepted request. Entered-in-error records and invalidated summaries are excluded with counts. Missing required source fields or contradictory histories make the affected measure UNKNOWN. Usable native totals start PARTIAL until source coverage is reviewed.",
+      "dimensions": [
+        "reporting_unit",
+        "occurrence_period"
+      ]
+    },
+    {
+      "metric_id": "LWH-MET-025",
+      "name": "Referral requests receiving actual acceptance",
+      "formula": "RATIO",
+      "aggregation": "RATIO_OF_SUMS",
+      "unit": "percent",
+      "scale": "100",
+      "numerator_is_subset": true,
+      "source_selector": "EMR_REFERRAL_ACCEPTANCE_V1",
+      "numerator_definition": "Eligible referral requests created in the period with recorded receiving-team acceptance by the period-end cut-off.",
+      "denominator_definition": "All eligible referral requests created in the period, including declined, unreachable and pending requests.",
+      "population_definition": "Native LW Care records for the exact facility and half-open occurrence period. The clinical policy must cover the period. External/manual records are not added. The officer must independently establish full-source coverage before declaring a complete return.",
+      "inclusion_exclusion": "A sent message, directory match or transport booking is not acceptance. Exclude documented duplicates or withdrawal before review and disclose them. Late acceptance corrects the same cohort. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references. Native profile LWH-NATIVE-2026.1: verify signed event chains and current projections. Contacts require the same-patient/encounter signed disposition summary. Inpatient final outcomes use one signed DEATH, DISCHARGE or SELF_DISCHARGE per stay; ward transfer, leave, open stays and bed release are not final outcomes. Referral cohort uses REQUEST occurrence; actual named receiving acceptance must occur on or after request and before period end. Cancellation before acceptance is excluded and counted separately; cancellation after acceptance remains an accepted request. Entered-in-error records and invalidated summaries are excluded with counts. Missing required source fields or contradictory histories make the affected measure UNKNOWN. Usable native totals start PARTIAL until source coverage is reviewed.",
+      "dimensions": [
+        "reporting_unit",
+        "occurrence_period"
+      ]
+    }
+  ],
+  "limits": {
+    "records_per_facility": 5000,
+    "events_per_facility": 20000
+  },
+  "freshness": "Changes to period-relevant records, their summaries/error markers or facility activation invalidate current use; unrelated later-period care does not. Historical evidence is preserved.",
+  "limitations": "Native source only. No population incidence, certified cause of death, referral completion or full-facility coverage inferred. Manual definitions and the original working forms remain unchanged."
+}

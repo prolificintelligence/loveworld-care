@@ -99,6 +99,9 @@ class ReportingService:
 
     async def definition(self, body):
         self.governor()
+        from .native import validate_definition
+
+        validate_definition(body)
         require(
             body["metric_id"] in {metric["metric_id"] for metric in catalogue()},
             "UNKNOWN_METRIC",
@@ -358,11 +361,29 @@ class ReportingService:
                     "The extract does not support this indicator",
                     422,
                 )
-                if number is not None and number != decimal(extract_value["value"]):
+                if number is not None and (
+                    extract_value.get("value") is None
+                    or number != decimal(extract_value["value"])
+                    or (
+                        rule["formula"] == "RATIO"
+                        and any(
+                            decimal(value.get(part)) != decimal(extract_value.get(part))
+                            for part in ("numerator", "denominator")
+                        )
+                    )
+                ):
                     finding(
                         "EXTRACT_DISCREPANCY",
                         "WARNING",
                         "Declared and extracted values differ; independent reconciliation evidence is required",
+                    )
+                from .native import current as native_current
+
+                if not await native_current(self, {"values": [value]}, obligation):
+                    finding(
+                        "CLINICAL_EXTRACT_STALE",
+                        "BLOCKING",
+                        "Native clinical sources changed. Prepare a new extract and a retained correction before attestation or release.",
                     )
             if number is not None and rule.get("warning_change_fraction") is not None:
                 earlier = (
@@ -836,6 +857,20 @@ class ReportingService:
             422,
         )
         definitions = await self.adopted_definitions(obligation)
+        from .native import SELECTORS
+        from .native import extract as native_extract
+
+        if any(d["payload"]["source_selector"] in SELECTORS.values() for d in definitions.values()):
+            require(
+                not any(
+                    d["payload"]["source_selector"] == "EMR_COMPLETED_ENCOUNTERS"
+                    for d in definitions.values()
+                ),
+                "EXTRACT_PROFILE_MIXED",
+                "Use one qualified native extraction family per obligation",
+                422,
+            )
+            return await native_extract(self, obligation, definitions)
         eligible = [
             d
             for d in definitions.values()

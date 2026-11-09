@@ -1,0 +1,35 @@
+# Native EMR reporting source mappings
+
+Edition **LWH-NATIVE-2026.1**, proposed for independent review and adoption. This extends the earlier [working reporting forms](reporting-forms/README.md) without rewriting them or declaring institutional approval. The [machine-readable source contract](reporting-forms/LWH-NATIVE-2026.1.json) retains exact definitions. It uses the existing Vercel/Neon stack and requires no migration.
+
+| Metric | Native source | Cohort and counting rule |
+|---|---|---|
+| LWH-MET-010 | EMR_SERVICE_CONTACTS_V2 | Distinct completed native encounter IDs, using actual disposition time and a same-patient/encounter signed summary. Contacts are not unique people. |
+| LWH-MET-013 | EMR_INPATIENT_DEATHS_V1 | One actual signed DEATH final disposition per native inpatient stay in the period. Arrival-dead/community notifications and duplicate encounter death dispositions are not added. |
+| LWH-MET-014 | EMR_INPATIENT_MORTALITY_V1 | Native inpatient deaths divided by final native DISCHARGE, SELF_DISCHARGE and DEATH dispositions in the same occurrence period, multiplied by 100. Open stays, ward transfer, leave and bed release are not final discharges. |
+| LWH-MET-025 | EMR_REFERRAL_ACCEPTANCE_V1 | Actual evidenced named acceptance before period end divided by eligible native requests whose REQUEST occurred in the period. Late acceptance remains pending at the cut-off. Cancellation before acceptance is excluded and counted separately; cancellation after acceptance does not erase the actual acceptance. |
+
+Clinical/institutional owners must review these exact inclusion and cut-off rules. A different denominator or case definition requires manual capture or a newly qualified extractor, not relabelling the same selector. These mappings do not establish population mortality/incidence, certified cause of death, diagnostic accuracy, referral completion or whole-facility reporting coverage. The distinct-local-patient and disease-specific measures retain separate qualification/adoption dependencies.
+
+## Configure, prepare and review
+
+1. A currently authorised global Data Governor opens [reporting templates](https://lw-health-intelligence.vercel.app/reporting-templates), examines the four native profiles, records actual provisional configuration authority and validity, and prepares a DRAFT. The platform retains exact indicator versions and a source-contract hash. No production source or Director approval is fabricated.
+2. Submit for independent examination, then record explicit adoption. Existing contributor/reviewer separation and immutable template-binding rules apply. Create an actual facility/period obligation using the adopted edition; declare exact UTC boundaries and the real reporting timezone.
+3. The assigned Reporting Officer selects **Prepare adopted EMR extract**. The server verifies clinical Ed25519 event attestations, event/envelope hashes, version chains and current projection agreement for the bounded native source inventory. Source record/event references are retained in encrypted protected history, rather than returned to reporting or leadership users.
+4. Inspect the aggregate preview, coverage limitations and separate ratio components. **Use this extract in the draft** explicitly replaces mapped draft fields; it does not add them to manual totals. Unmapped manual values remain intact. Nothing is submitted or independently verified by extraction alone.
+5. Usable native results start **PARTIAL**. A valid zero count means zero qualifying native records in this subset; the officer must establish actual full-source coverage before declaring complete or NIL. Missing full-period activation, unusable denominator or incomplete qualifying evidence yields **UNKNOWN**, not a clinical zero. The native/manual overlap must be reconciled explicitly.
+6. Save, attest and submit. A different person examines actual sources, coverage, reconciliation and any discrepancies before verification. The same percentage with a different numerator/denominator is still a discrepancy. Separate snapshot preparation, disclosure assessment and independent leadership release remain required.
+
+## Corrections and freshness
+
+The extract retains its aggregate values and an encrypted manifest of signed source heads. Its current-use fingerprint binds period-relevant records, referenced summaries/error markers and facility activation. New late-arriving in-period sources or entered-in-error evidence invalidate current use; unrelated later-period care does not. Reference changes can conservatively require reconciliation even if the final aggregate remains numerically unchanged.
+
+Submission, independent verification and new snapshot preparation/release reject stale linked extracts. Released historical snapshots keep their original approved cells and are labelled **STALE_CLINICAL_SOURCE_CHANGE**, with `current_eligible=false`, including CSV export. Their values remain historical evidence. Prepare a new extract, open a retained return correction and repeat independent review/release; old source evidence is not overwritten. These checks run at read/decision time; this release does not add an external continuous worker or urgent notification service.
+
+Reporting staff can inspect retained aggregate extracts and their freshness through the workspace and scoped API. Executive-only accounts cannot retrieve these source extracts or raw clinical histories by seniority. Patient identifiers, clinical narrative and receiving-person identity are withheld from extract responses; leadership continues to receive only disclosure-controlled releases.
+
+## Qualified operating boundary
+
+Each synchronous source operation is bounded to **5,000 relevant-kind records and 20,000 clinical events per facility inventory**, including retained note/history dependencies. A larger inventory returns `SOURCE_BATCH_REQUIRED` rather than a truncated total. Wider-volume batch processing remains to be qualified. A mismatch between current clinical projection and signed history fails closed with `SOURCE_INTEGRITY_FAILURE`.
+
+The older completed-encounter extractor and manual definitions retain their original contracts. A single obligation cannot mix the old completed-contact extractor with the new native extraction family. The original **LWH-WORKING-2026.1** package stays unchanged; new profiles are a separate reviewable edition, not a silent upgrade of earlier obligations.

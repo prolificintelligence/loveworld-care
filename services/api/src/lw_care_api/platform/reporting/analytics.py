@@ -183,7 +183,42 @@ class AnalyticsService(ReportingService):
             "Verified sources require independent retained review",
             503,
         )
+        obligation = await s.load(self.session, t.obligations, row["obligation_id"])
+        from .native import current as native_current
+
+        require(
+            await native_current(self, source["data"], obligation),
+            "CLINICAL_EXTRACT_STALE",
+            "Native source evidence changed; reconcile through a new extract and retained return correction",
+            409,
+        )
         return source["data"]
+
+    async def snapshot_native_current(self, payload):
+        from .native import current as native_current
+
+        for source in payload["sources"]:
+            if not source.get("return_id"):
+                continue
+            version = (
+                (
+                    await self.session.execute(
+                        select(t.versions).where(
+                            t.versions.c.return_id == source["return_id"],
+                            t.versions.c.version == source["return_version"],
+                        )
+                    )
+                )
+                .mappings()
+                .first()
+            )
+            require(
+                version, "SOURCE_INTEGRITY_FAILURE", "Retained snapshot source unavailable", 503
+            )
+            retained = self.data(version)
+            if not await native_current(self, retained["data"], retained["obligation"]):
+                return False
+        return True
 
     async def build_snapshot(self, cohort_id):
         cohort = await self.cohort_for(cohort_id, s.ANALYSTS)
@@ -548,6 +583,9 @@ class AnalyticsService(ReportingService):
             "STALE_SOURCE_CORRECTION" if invalidated else "RELEASED_AS_OF_RECORDED_TIME"
         )
         payload["current_eligible"] = not bool(invalidated)
+        if not await self.snapshot_native_current(self.data(row)):
+            payload["freshness"] = "STALE_CLINICAL_SOURCE_CHANGE"
+            payload["current_eligible"] = False
         await s.audit(
             self.session,
             self.actor,

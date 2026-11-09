@@ -38,7 +38,14 @@ class Definition(StrictModel):
     aggregation: Literal["SUM", "RATIO_OF_SUMS", "NONE"]
     numerator_is_subset: bool = Field(default=False, strict=True)
     scale: Decimal = Field(default=Decimal(1), gt=0, max_digits=12, decimal_places=6)
-    source_selector: Literal["MANUAL", "EMR_COMPLETED_ENCOUNTERS"]
+    source_selector: Literal[
+        "MANUAL",
+        "EMR_COMPLETED_ENCOUNTERS",
+        "EMR_SERVICE_CONTACTS_V2",
+        "EMR_INPATIENT_DEATHS_V1",
+        "EMR_INPATIENT_MORTALITY_V1",
+        "EMR_REFERRAL_ACCEPTANCE_V1",
+    ]
     numerator_definition: Text
     denominator_definition: Text
     population_definition: Text
@@ -75,6 +82,20 @@ class Definition(StrictModel):
             raise ValueError(
                 "The completed-encounter extractor applies only to the facility service-contact definition"
             )
+        return self
+
+
+class NativePrepare(StrictModel):
+    edition: Literal["LWH-NATIVE-2026.1"]
+    valid_from: datetime
+    valid_until: datetime
+    authority_reference: Text
+    intent_confirmed: Literal[True]
+
+    @model_validator(mode="after")
+    def ordered(self):
+        if self.valid_until <= self.valid_from:
+            raise ValueError("Native mapping validity must be ordered")
         return self
 
 
