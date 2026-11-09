@@ -1,210 +1,107 @@
 {
-  "release": "2026-11-09-phase6",
-  "recorded_at": "2026-11-09T16:35:32.723128+00:00",
-  "runtime_commit": "04fba3864f67e31e000b3a259d8d7142e5f917f3",
+  "release": "2026-11-09-coverage-and-personal-pwa",
+  "recorded_at": "2026-11-09T17:08:37.227881+00:00",
+  "runtime_commit": "b54b05400616b0700c4a0754642de4282af3396b",
   "schema_version": 8,
+  "migration_required": false,
   "api": {
-    "deployment_id": "dpl_65nkkkvE576Q4tkzQ7pZpreSSA37",
+    "deployment_id": "dpl_3ZzHDwss4PBjzvXkfyo7wA1nur1p",
     "origin": "https://lw-health-intelligence-api.vercel.app",
-    "source_commit": "04fba3864f67e31e000b3a259d8d7142e5f917f3",
-    "verified_source_files": 60
+    "source_commit": "b54b05400616b0700c4a0754642de4282af3396b",
+    "verified_source_files": 61
   },
   "web": {
-    "deployment_id": "dpl_5k5bBZuExSYLXEfrj2fTzPo9GCoM",
+    "deployment_id": "dpl_8jbzeeXbpDC9NJfUrXX5xUVXVTPL",
     "origin": "https://lw-health-intelligence.vercel.app",
-    "source_commit": "b66d779d4e394c4ac5bd93f9c6b459cb3426710b",
-    "verified_source_files": 22
+    "source_commit": "b54b05400616b0700c4a0754642de4282af3396b",
+    "verified_source_files": 29
   },
   "ci": {
-    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42655187421",
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42659587015",
     "status": "SUCCESS",
-    "python_tests": 197,
-    "client_tests": 8,
+    "python_tests": 200,
+    "api_client_tests": 8,
+    "pwa_tests": 4,
     "typecheck": "PASSED",
     "build": "PASSED",
     "secret_scan": "PASSED"
   },
-  "migration": {
-    "version": 8,
-    "tables": 101,
-    "protected_history_tables": 53,
-    "production_clinical_records_seeded": 0
-  },
-  "isolated_neon": {
+  "postgres_coverage": {
     "outcome": "PASSED",
-    "concurrent_requests": "ONE_COMMITTED_RECEIPT",
-    "revoked_replay": "DENIED",
-    "accepted_work_retained": true,
-    "raw_source_withheld": true,
-    "history_mutation": "REJECTED",
-    "production_patient_records_seeded": 0
-  },
-  "pre_migration_recovery": {
-    "backup": {
-      "id": "83dc1ab6-64e8-4026-9a3a-04c22a21ffbe",
-      "tables": 91,
-      "rows": 208,
-      "files": 0,
-      "snapshot_at": "2026-11-09T16:14:07.687639+00:00",
-      "elapsed_seconds": 72.137,
-      "key_fingerprint": "42755733f164e97c",
-      "restore_verified": false
-    },
-    "rehearse": {
-      "tables": 91,
-      "rows": 208,
-      "files": 0,
-      "decrypted_fields_verified": 14,
-      "clinical_signatures_verified": 0,
-      "reporting_payload_hashes_verified": 0,
-      "protected_history_tables": 48,
-      "elapsed_seconds": 221.785,
-      "integrity": {
-        "checks": {
-          "unbalanced_ledger_groups": 0,
-          "stock_movement_mismatches": 0,
-          "negative_stock_lots": 0,
-          "stale_task_indexes": 0,
-          "missing_task_indexes": 0,
-          "unowned_active_alerts": 0,
-          "delivery_reconciliation_required": 0,
-          "expired_job_leases": 0,
-          "incomplete_staff_handovers": 0,
-          "clinical_work_projection_mismatches": 0
-        },
-        "population": {
-          "clinical_records": 0,
-          "stock_lots": 0,
-          "ledger_entries": 0,
-          "unprocessed_jobs": 0,
-          "open_indexed_tasks": 0
-        },
-        "integrity_outcome": "NO_EXCEPTIONS_IN_EXECUTED_CHECKS",
-        "clinical_fulfilment_inferred": false,
-        "service_approval_inferred": false,
-        "scope": "CENTRAL_DATABASE_AGGREGATE",
-        "as_of": "2026-11-09T16:18:04.787522+00:00",
-        "observation_consistency": "PER_STATEMENT_NOT_SIMULTANEOUS_FULL_AUDIT"
-      },
-      "activation_state": "ISOLATED_VERIFIED_NOT_ACTIVATED",
-      "snapshot_at": "2026-11-09T16:14:07.687639+00:00",
-      "temporary_schema_and_files_removed": true
-    },
-    "reconcile": {
-      "checks": {
-        "unbalanced_ledger_groups": 0,
-        "stock_movement_mismatches": 0,
-        "negative_stock_lots": 0,
-        "stale_task_indexes": 0,
-        "missing_task_indexes": 0,
-        "unowned_active_alerts": 0,
-        "delivery_reconciliation_required": 0,
-        "expired_job_leases": 0,
-        "incomplete_staff_handovers": 0,
-        "clinical_work_projection_mismatches": 0
-      },
-      "population": {
-        "clinical_records": 0,
-        "stock_lots": 0,
-        "ledger_entries": 0,
-        "unprocessed_jobs": 0,
-        "open_indexed_tasks": 0
-      },
-      "integrity_outcome": "NO_EXCEPTIONS_IN_EXECUTED_CHECKS",
-      "clinical_fulfilment_inferred": false,
-      "service_approval_inferred": false,
-      "scope": "CENTRAL_DATABASE_AGGREGATE",
-      "as_of": "2026-11-09T16:19:29.850549+00:00",
-      "observation_consistency": "PER_STATEMENT_NOT_SIMULTANEOUS_FULL_AUDIT"
-    }
-  },
-  "post_migration_recovery": {
-    "backup_id": "d17cf40d-e42a-45b2-8609-0d17a435046c",
-    "result": {
-      "tables": 101,
-      "rows": 212,
-      "files": 0,
-      "decrypted_fields_verified": 17,
-      "clinical_signatures_verified": 0,
-      "reporting_payload_hashes_verified": 0,
-      "protected_history_tables": 53,
-      "elapsed_seconds": 241.129,
-      "integrity": {
-        "checks": {
-          "unbalanced_ledger_groups": 0,
-          "stock_movement_mismatches": 0,
-          "negative_stock_lots": 0,
-          "stale_task_indexes": 0,
-          "missing_task_indexes": 0,
-          "unowned_active_alerts": 0,
-          "delivery_reconciliation_required": 0,
-          "expired_job_leases": 0,
-          "incomplete_staff_handovers": 0,
-          "clinical_work_projection_mismatches": 0,
-          "personal_requests_with_inactive_owner": 0
-        },
-        "population": {
-          "clinical_records": 0,
-          "stock_lots": 0,
-          "ledger_entries": 0,
-          "unprocessed_jobs": 0,
-          "open_indexed_tasks": 0,
-          "open_personal_requests": 0
-        },
-        "integrity_outcome": "NO_EXCEPTIONS_IN_EXECUTED_CHECKS",
-        "clinical_fulfilment_inferred": false,
-        "service_approval_inferred": false,
-        "scope": "CENTRAL_DATABASE_AGGREGATE",
-        "as_of": "2026-11-09T16:31:45.850238+00:00",
-        "observation_consistency": "PER_STATEMENT_NOT_SIMULTANEOUS_FULL_AUDIT"
-      },
-      "activation_state": "ISOLATED_VERIFIED_NOT_ACTIVATED",
-      "snapshot_at": "2026-11-09T16:22:38.278689+00:00",
-      "temporary_schema_and_files_removed": true
-    },
-    "initial_schema7_count_verifier_failure_retained": true
+    "synthetic_obligations": 420,
+    "scoped_expected": 210,
+    "duplicate_grants_do_not_duplicate": true,
+    "empty_denominator": "NOT_ESTABLISHED",
+    "production_reporting_records_seeded": 0,
+    "disposable_schema_removed": true
   },
   "live": {
-    "observed_at": "2026-11-09T16:33:05.741111+00:00",
-    "runtime_commit": "04fba3864f67e31e000b3a259d8d7142e5f917f3",
-    "schema_version": 8,
-    "production_counts": {
-      "personal_audit": 8,
-      "personal_events": 0,
-      "personal_operations": 0,
-      "personal_preferences": 0,
-      "personal_services": 0,
-      "personal_links": 0,
-      "personal_releases": 0,
-      "personal_requests": 0,
-      "personal_messages": 0,
-      "personal_withdrawals": 0,
-      "facilities": 0,
-      "criteria": 0,
-      "clinical_sites": 0,
-      "clinical_records": 0,
-      "clinical_stock_lots": 0,
-      "clinical_ledger": 0,
-      "control_policy_packages": 0,
-      "reporting_safety_cases": 0
-    },
-    "residual_readiness_test_schemas": 0,
-    "protected_history_tables": 53,
-    "built_bundles": [
+    "runtime_commit": "b54b05400616b0700c4a0754642de4282af3396b",
+    "public_assets": [
       {
-        "page": "/my-health",
-        "bundle": "/_next/static/chunks/app/my-health/page-d024fae8167e748a.js",
-        "sha256": "2df0fb9e7522bc879bcde7d9194b6fb8b14cf75f63b21d360685d2319bde658f",
-        "feature_markers_present": true
+        "path": "/my-health.webmanifest",
+        "http": 200,
+        "content_type": "application/manifest+json; charset=utf-8",
+        "sha256": "544be4c3631fe9ff3cd09b630544bcf56726e9cbc0fc86c2cde58142644c9a4a"
       },
       {
-        "page": "/patient-access",
-        "bundle": "/_next/static/chunks/app/patient-access/page-1472aaf2077d0059.js",
-        "sha256": "e76176ff7e4487b79334e012c06c66cea0735a5945905a40bea3e150198121b6",
-        "feature_markers_present": true
+        "path": "/my-health-sw.js",
+        "http": 200,
+        "content_type": "application/javascript; charset=utf-8",
+        "sha256": "565eec504bf498481094d01c55959c9260089be28177794ea36e32b0654299e5",
+        "service_worker_allowed": "/my-health",
+        "cache_control": "no-store"
+      },
+      {
+        "path": "/health-icon-180.png",
+        "http": 200,
+        "content_type": "image/png",
+        "sha256": "75ef5e98053ccc13deb92abab2d0fde395c7272b874376b906f4a377bd984045",
+        "dimensions": [
+          180,
+          180
+        ]
+      },
+      {
+        "path": "/health-icon-192.png",
+        "http": 200,
+        "content_type": "image/png",
+        "sha256": "2972528edfa12dbd64e2fcf187ffc1a7d5a8d8a58a4c367f5b8f6b9f1184a5f8",
+        "dimensions": [
+          192,
+          192
+        ]
+      },
+      {
+        "path": "/health-icon-512.png",
+        "http": 200,
+        "content_type": "image/png",
+        "sha256": "a7961b6b7b874bedbfa67db104a5d264b07f282602b465b9f9934cc99608dc46",
+        "dimensions": [
+          512,
+          512
+        ]
       }
     ],
-    "protected_routes": [
+    "bundles": [
+      {
+        "page": "/my-health",
+        "bundle": "/_next/static/chunks/app/my-health/layout-13a7e5af831373fb.js",
+        "sha256": "134bceeec26dc4d6f8b459b09acb33401988da373547bf8f30e601f01a0587ea"
+      },
+      {
+        "page": "/directorate",
+        "bundle": "/_next/static/chunks/app/directorate/page-cfaf1157493ba26b.js",
+        "sha256": "e3af908d92fb77f6af2516395967d83acc3b8107ce66d5766aa9fffe947205ce"
+      }
+    ],
+    "auth_boundaries": [
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/coverage",
+        "http": 401,
+        "no_store": true
+      },
       {
         "origin": "https://lw-health-intelligence.vercel.app",
         "path": "/v1/personal/context",
@@ -212,53 +109,52 @@
         "no_store": true
       },
       {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/personal/facilities",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/personal/links/00000000-0000-0000-0000-000000000001/care",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/personal/staff/00000000-0000-0000-0000-000000000001/links",
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/coverage",
         "http": 401,
         "no_store": true
       },
       {
         "origin": "https://lw-health-intelligence-api.vercel.app",
         "path": "/v1/personal/context",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/personal/facilities",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/personal/links/00000000-0000-0000-0000-000000000001/care",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/personal/staff/00000000-0000-0000-0000-000000000001/links",
         "http": 401,
         "no_store": true
       }
-    ]
+    ],
+    "manifest": {
+      "id": "/my-health",
+      "name": "My LW Health Care",
+      "short_name": "My LW Health",
+      "description": "Verified personal and family care with your care team.",
+      "start_url": "/my-health?source=installed",
+      "scope": "/my-health",
+      "display": "standalone",
+      "background_color": "#ffffff",
+      "theme_color": "#0a574e",
+      "lang": "en",
+      "icons": [
+        {
+          "src": "/health-icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "/health-icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any maskable"
+        }
+      ]
+    },
+    "device_installation_observed": false,
+    "offline_chart_or_submission_cache": false
   },
   "canonical_documents_verified": 78,
   "operating_acceptance": "INCOMPLETE",
-  "next_phase": "Directorate reporting completion, institutional adoption and controlled facility rollout",
-  "equipment_connections": "AFTER_FACILITY_REGISTRATION_AND_APPROVAL",
-  "alignment_report": "2026-11-09-director-vision-alignment.md",
-  "report": "2026-11-09-phase6-personal-care-release.md"
+  "recovery_reference": "2026-11-09-phase6-evidence.json",
+  "report": "2026-11-09-coverage-and-personal-pwa-release.md",
+  "interaction_guide": "personal-family-care-interaction-guide.md",
+  "next_phase": "Actual Directorate template/roster adoption and qualified reporting mappings; controlled officer/leadership acceptance",
+  "equipment_connections": "AFTER_FACILITY_REGISTRATION_AND_APPROVAL"
 }

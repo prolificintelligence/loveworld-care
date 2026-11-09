@@ -1,0 +1,160 @@
+{
+  "release": "2026-11-09-coverage-and-personal-pwa",
+  "recorded_at": "2026-11-09T17:08:37.227881+00:00",
+  "runtime_commit": "b54b05400616b0700c4a0754642de4282af3396b",
+  "schema_version": 8,
+  "migration_required": false,
+  "api": {
+    "deployment_id": "dpl_3ZzHDwss4PBjzvXkfyo7wA1nur1p",
+    "origin": "https://lw-health-intelligence-api.vercel.app",
+    "source_commit": "b54b05400616b0700c4a0754642de4282af3396b",
+    "verified_source_files": 61
+  },
+  "web": {
+    "deployment_id": "dpl_8jbzeeXbpDC9NJfUrXX5xUVXVTPL",
+    "origin": "https://lw-health-intelligence.vercel.app",
+    "source_commit": "b54b05400616b0700c4a0754642de4282af3396b",
+    "verified_source_files": 29
+  },
+  "ci": {
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42659587015",
+    "status": "SUCCESS",
+    "python_tests": 200,
+    "api_client_tests": 8,
+    "pwa_tests": 4,
+    "typecheck": "PASSED",
+    "build": "PASSED",
+    "secret_scan": "PASSED"
+  },
+  "postgres_coverage": {
+    "outcome": "PASSED",
+    "synthetic_obligations": 420,
+    "scoped_expected": 210,
+    "duplicate_grants_do_not_duplicate": true,
+    "empty_denominator": "NOT_ESTABLISHED",
+    "production_reporting_records_seeded": 0,
+    "disposable_schema_removed": true
+  },
+  "live": {
+    "runtime_commit": "b54b05400616b0700c4a0754642de4282af3396b",
+    "public_assets": [
+      {
+        "path": "/my-health.webmanifest",
+        "http": 200,
+        "content_type": "application/manifest+json; charset=utf-8",
+        "sha256": "544be4c3631fe9ff3cd09b630544bcf56726e9cbc0fc86c2cde58142644c9a4a"
+      },
+      {
+        "path": "/my-health-sw.js",
+        "http": 200,
+        "content_type": "application/javascript; charset=utf-8",
+        "sha256": "565eec504bf498481094d01c55959c9260089be28177794ea36e32b0654299e5",
+        "service_worker_allowed": "/my-health",
+        "cache_control": "no-store"
+      },
+      {
+        "path": "/health-icon-180.png",
+        "http": 200,
+        "content_type": "image/png",
+        "sha256": "75ef5e98053ccc13deb92abab2d0fde395c7272b874376b906f4a377bd984045",
+        "dimensions": [
+          180,
+          180
+        ]
+      },
+      {
+        "path": "/health-icon-192.png",
+        "http": 200,
+        "content_type": "image/png",
+        "sha256": "2972528edfa12dbd64e2fcf187ffc1a7d5a8d8a58a4c367f5b8f6b9f1184a5f8",
+        "dimensions": [
+          192,
+          192
+        ]
+      },
+      {
+        "path": "/health-icon-512.png",
+        "http": 200,
+        "content_type": "image/png",
+        "sha256": "a7961b6b7b874bedbfa67db104a5d264b07f282602b465b9f9934cc99608dc46",
+        "dimensions": [
+          512,
+          512
+        ]
+      }
+    ],
+    "bundles": [
+      {
+        "page": "/my-health",
+        "bundle": "/_next/static/chunks/app/my-health/layout-13a7e5af831373fb.js",
+        "sha256": "134bceeec26dc4d6f8b459b09acb33401988da373547bf8f30e601f01a0587ea"
+      },
+      {
+        "page": "/directorate",
+        "bundle": "/_next/static/chunks/app/directorate/page-cfaf1157493ba26b.js",
+        "sha256": "e3af908d92fb77f6af2516395967d83acc3b8107ce66d5766aa9fffe947205ce"
+      }
+    ],
+    "auth_boundaries": [
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/coverage",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/personal/context",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/coverage",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/personal/context",
+        "http": 401,
+        "no_store": true
+      }
+    ],
+    "manifest": {
+      "id": "/my-health",
+      "name": "My LW Health Care",
+      "short_name": "My LW Health",
+      "description": "Verified personal and family care with your care team.",
+      "start_url": "/my-health?source=installed",
+      "scope": "/my-health",
+      "display": "standalone",
+      "background_color": "#ffffff",
+      "theme_color": "#0a574e",
+      "lang": "en",
+      "icons": [
+        {
+          "src": "/health-icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "/health-icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any maskable"
+        }
+      ]
+    },
+    "device_installation_observed": false,
+    "offline_chart_or_submission_cache": false
+  },
+  "canonical_documents_verified": 78,
+  "operating_acceptance": "INCOMPLETE",
+  "recovery_reference": "2026-11-09-phase6-evidence.json",
+  "report": "2026-11-09-coverage-and-personal-pwa-release.md",
+  "interaction_guide": "personal-family-care-interaction-guide.md",
+  "next_phase": "Actual Directorate template/roster adoption and qualified reporting mappings; controlled officer/leadership acceptance",
+  "equipment_connections": "AFTER_FACILITY_REGISTRATION_AND_APPROVAL"
+}
