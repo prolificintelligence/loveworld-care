@@ -79,6 +79,8 @@ class Definition(StrictModel):
 
 
 class Obligation(Scope):
+    template_id: UUID | None = None
+    template_version: int | None = Field(default=None, ge=1)
     stream: Stream
     period_start: datetime
     period_end: datetime
@@ -104,6 +106,8 @@ class Obligation(Scope):
 
     @model_validator(mode="after")
     def period(self):
+        if (self.template_id is None) != (self.template_version is None):
+            raise ValueError("Supply both template identifier and adopted version")
         if self.period_end <= self.period_start or self.due_at < self.period_end:
             raise ValueError("Reporting period and deadline must be ordered")
         if self.scope_type == "GLOBAL" or self.scope_id is None:

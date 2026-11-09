@@ -40,6 +40,10 @@ def install(app, cfg, database, box, actor_for):
 
     async def command(request, payload, callback, authorize):
         body = payload.model_dump(mode="json")
+        if isinstance(payload, c.Obligation) and body.get("template_id") is None:
+            # Preserve canonical receipts for in-flight pre-template requests.
+            body.pop("template_id", None)
+            body.pop("template_version", None)
         actor = None
         try:
             async with database.transaction() as session:
@@ -188,6 +192,166 @@ def install(app, cfg, database, box, actor_for):
             )
             return result
 
+    @router.get("/template-proposals")
+    async def template_proposals(request: Request):
+        from .proposals import catalogue as proposed_catalogue
+        from .templates import EDITORS, GLOBAL
+
+        async with database.transaction() as session:
+            service = await service_for(session, request)
+            s.require_role(service.actor, EDITORS, GLOBAL)
+            await s.audit(
+                session,
+                service.actor,
+                "reporting.template_proposals_read",
+                GLOBAL,
+                None,
+                request.state.correlation_id,
+            )
+            return proposed_catalogue()
+
+    from .proposals import Prepare
+
+    @router.post("/template-proposals/prepare")
+    async def prepare_template_proposal(request: Request, payload: Prepare):
+        from .proposals import prepare
+
+        return await command(request, payload, prepare, governor)
+
+    @router.get("/templates")
+    async def templates(request: Request, after: str = ""):
+        from .templates import TemplateService
+
+        async with database.transaction() as session:
+            service = await service_for(session, request)
+            result = await TemplateService(service).listing(after)
+            await s.audit(
+                session,
+                service.actor,
+                "reporting.templates_read",
+                None,
+                None,
+                request.state.correlation_id,
+            )
+            return result
+
+    @router.get("/templates/{identifier}")
+    async def template_detail(identifier: UUID, request: Request):
+        from .templates import GLOBAL, READERS, TemplateService
+
+        async with database.transaction() as session:
+            service = await service_for(session, request)
+            require(
+                any(g["role"] in READERS for g in service.actor["grants"]),
+                "ACCESS_DENIED",
+                "Reporting assignment required",
+                403,
+            )
+            manager = TemplateService(service)
+            row = await manager.get(identifier)
+            require(
+                manager.editor() or row["state"] in {"ADOPTED", "WITHDRAWN"},
+                "NOT_FOUND_OR_NOT_PERMITTED",
+                "Template unavailable",
+                404,
+            )
+            await s.audit(
+                session,
+                service.actor,
+                "reporting.template_read",
+                GLOBAL,
+                str(identifier),
+                request.state.correlation_id,
+            )
+            return row | {
+                "definitions": [
+                    dict(await s.load(session, t.definitions, item))
+                    for item in row["definition_ids"]
+                ]
+            }
+
+    @router.get("/templates/{identifier}/history")
+    async def template_history(identifier: UUID, request: Request, after: str = ""):
+        from .templates import EDITORS, GLOBAL, KIND, TemplateService
+
+        async with database.transaction() as session:
+            service = await service_for(session, request)
+            s.require_role(service.actor, EDITORS, GLOBAL)
+            await TemplateService(service).get(identifier)
+            rows, cursor = await page(
+                session,
+                select(t.history).where(
+                    t.history.c.resource_type == KIND, t.history.c.resource_id == str(identifier)
+                ),
+                after,
+                t.history.c.version,
+                t.history.c.id,
+            )
+            items = []
+            for row in rows:
+                payload = service.data(row)
+                require(
+                    s.digest(payload) == row["payload_hash"],
+                    "INTEGRITY_FAILURE",
+                    "Template history failed verification",
+                    503,
+                )
+                items.append(
+                    {
+                        "id": row["id"],
+                        "version": row["version"],
+                        "action": row["action"],
+                        "actor_id": row["actor_id"],
+                        "created_at": row["created_at"],
+                        "resource": payload["resource"],
+                        "evidence": payload["content"],
+                    }
+                )
+            await s.audit(
+                session,
+                service.actor,
+                "reporting.template_history_read",
+                GLOBAL,
+                str(identifier),
+                request.state.correlation_id,
+            )
+            return {"items": items, "next_cursor": cursor}
+
+    from .templates import Edit as TemplateEdit
+    from .templates import Template, TemplateService, Transition
+
+    @router.post("/templates")
+    async def template_create(payload: Template, request: Request):
+        return await command(
+            request, payload, lambda service, body: TemplateService(service).create(body), governor
+        )
+
+    @router.post("/templates/{identifier}/edit")
+    async def template_edit(identifier: UUID, payload: TemplateEdit, request: Request):
+        return await command(
+            request,
+            payload,
+            lambda service, body: TemplateService(service).edit(identifier, body),
+            governor,
+        )
+
+    @router.post("/templates/{identifier}/actions")
+    async def template_action(identifier: UUID, payload: Transition, request: Request):
+        async def guard(service, body):
+            from .templates import GLOBAL
+
+            if body["action"] in {"REVIEW_ACCEPT", "RETURN_FOR_CORRECTION"}:
+                s.require_role(service.actor, s.REVIEWERS, GLOBAL)
+            else:
+                service.governor()
+
+        return await command(
+            request,
+            payload,
+            lambda service, body: TemplateService(service).transition(identifier, body),
+            guard,
+        )
+
     @router.get("/context")
     async def context(request: Request, query: str = ""):
         async with database.transaction() as session:
@@ -236,20 +400,24 @@ def install(app, cfg, database, box, actor_for):
             return {"items": list(grouped.values()), "next_cursor": cursor}
 
     @router.get("/definitions")
-    async def definitions(request: Request):
+    async def definitions(request: Request, after: str = "", query: str = ""):
         async with database.transaction() as session:
             service = await service_for(session, request)
             await active_member(service)
-            return {
-                "items": [
-                    dict(row)
-                    for row in (
-                        await session.execute(
-                            select(t.definitions).order_by(t.definitions.c.metric_id).limit(500)
-                        )
-                    ).mappings()
-                ]
-            }
+            rows, cursor = await page(
+                session,
+                select(t.definitions).where(
+                    or_(
+                        t.definitions.c.name.icontains(query[:160], autoescape=True),
+                        t.definitions.c.metric_id.icontains(query[:160], autoescape=True),
+                    )
+                ),
+                after,
+                t.definitions.c.metric_id,
+                t.definitions.c.id,
+                size=500,
+            )
+            return {"items": [dict(row) for row in rows], "next_cursor": cursor}
 
     @router.get("/policies")
     async def policies(request: Request):
@@ -325,6 +493,30 @@ def install(app, cfg, database, box, actor_for):
                 "as_of": db.now(),
             }
 
+    @router.get("/obligations/{identifier}/template")
+    async def obligation_template(identifier: UUID, request: Request):
+        from .templates import TemplateService
+
+        async with database.transaction() as session:
+            service = await service_for(session, request)
+            await service.obligation(str(identifier), s.SOURCE_READERS | s.PROGRAMMES)
+            binding = await TemplateService(service).binding(str(identifier))
+            await s.audit(
+                session,
+                service.actor,
+                "reporting.frozen_template_read",
+                None,
+                str(identifier),
+                request.state.correlation_id,
+            )
+            return {
+                "obligation_id": str(identifier),
+                "template_binding": binding,
+                "state": "FROZEN_TEMPLATE"
+                if binding
+                else "DEFINITION_BASED_WITHOUT_TEMPLATE_BINDING",
+            }
+
     @router.get("/returns/{identifier}")
     async def return_detail(identifier: UUID, request: Request):
         async with database.transaction() as session:
@@ -343,7 +535,14 @@ def install(app, cfg, database, box, actor_for):
                 str(identifier),
                 request.state.correlation_id,
             )
-            return {**s.opened(box, row), "obligation": obligation, "validation": validation}
+            from .templates import TemplateService
+
+            return {
+                **s.opened(box, row),
+                "obligation": obligation,
+                "validation": validation,
+                "template_binding": await TemplateService(service).binding(obligation["id"]),
+            }
 
     @router.get("/returns/{identifier}/history")
     async def return_history(identifier: UUID, request: Request, after: str = ""):

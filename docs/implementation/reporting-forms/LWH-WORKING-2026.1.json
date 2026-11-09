@@ -1,0 +1,490 @@
+{
+  "edition": "LWH-WORKING-2026.1",
+  "status": "PROPOSED_FOR_DIRECTOR_REVIEW",
+  "researched_on": "2026-11-09",
+  "authority": "Implementation proposal authorised by the project owner; not represented as a Directorate-approved form, national submission, WHO endorsement or clinical protocol.",
+  "sources": [
+    {
+      "title": "WHO RHIS general principles (2023)",
+      "url": "https://www.who.int/publications/i/item/9789240063938"
+    },
+    {
+      "title": "WHO community health data quality review (2023)",
+      "url": "https://www.who.int/publications/m/item/module-4--data-quality-review-for-community-health-data"
+    },
+    {
+      "title": "WHO routine data quality review (2019)",
+      "url": "https://www.who.int/docs/default-source/documents/ddi/facilityanalysisguidance-integratedhealthsservices.pdf"
+    },
+    {
+      "title": "Nigeria CHPRBN standing orders: NHMIS routine reporting forms (2024)",
+      "url": "https://chprbn.gov.ng/wp-content/uploads/2024/12/CHO-Section-1-8-TEXT.pdf"
+    },
+    {
+      "title": "WHO SARA reference manual (2015)",
+      "url": "https://www.who.int/publications/i/item/WHO-HIS-HSI-2014.5-Rev.1"
+    },
+    {
+      "title": "WHO patient safety reporting guidance (2020)",
+      "url": "https://www.who.int/publications/i/item/9789240010338"
+    }
+  ],
+  "calendar": {
+    "status": "PROPOSED_CONFIGURE_EXACT_OBLIGATIONS_AFTER_ADOPTION",
+    "frequency": "CALENDAR_MONTH",
+    "period": "Local month start inclusive through next local month start exclusive; officer records UTC boundaries and an actual IANA timezone for each obligation.",
+    "submission": "23:59 local time on the fifth day of the following month",
+    "independent_review": "Target tenth day of the following month; unresolved returns remain unverified.",
+    "leadership_review": "Target fifteenth day; release only under the adopted disclosure policy with actual coverage and missingness.",
+    "exceptions": "No automatic deadlines, public-holiday extensions or emergency-response service levels are adopted. Urgent safety matters use the actual covered escalation route immediately, not the monthly return."
+  },
+  "return_rules": [
+    "Source counts and ratio components must be nonnegative. Subset numerators cannot exceed denominators. Zero or absent denominators produce an unavailable rate, never fabricated zero.",
+    "VALUE, NIL, PARTIAL, UNKNOWN, MISSING and NOT_APPLICABLE remain distinct; non-applicability and unavailable values require explanation. A lack of service is not automatically a nil outcome.",
+    "SUM applies only to disjoint reporting units and periods. RATIO_OF_SUMS recomputes from compatible components. NONE forbids arithmetic roll-up. Do not add zone/community activity to facility clinical contacts.",
+    "Maintain source reference, reconciliation, officer attestation and independent examination evidence. Confidential cases stay in their protected workflow; no names, patient IDs or credential-bearing links in aggregate returns.",
+    "Governors may configure provisional indicator versions and a DRAFT mapping. Independent review and explicit adoption remain required before template-bound obligations. Director changes create a new edition; existing obligations retain their old definitions and mappings."
+  ],
+  "forms": [
+    {
+      "code": "FACILITY-MONTHLY",
+      "name": "Proposed monthly facility health-service return",
+      "stream": "FACILITY_ACTIVITY",
+      "measures": [
+        {
+          "metric_id": "LWH-MET-010",
+          "name": "Completed service contacts",
+          "formula": "COUNT",
+          "aggregation": "SUM",
+          "unit": "events",
+          "scale": "1",
+          "numerator_is_subset": false,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Distinct completed encounter identifiers with an actual signed service/disposition in this period.",
+          "denominator_definition": "Not applicable: count, not a population rate.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Exclude drafts, cancellations, appointments and duplicate copies. Remote contacts require actual completed care. This is not unique people; reconcile manual and EMR sources rather than adding them. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Completed encounter register or verified equivalent"
+        },
+        {
+          "metric_id": "LWH-MET-011",
+          "name": "Distinct patients served within this facility",
+          "formula": "COUNT",
+          "aggregation": "NONE",
+          "unit": "people within facility only",
+          "scale": "1",
+          "numerator_is_subset": false,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Distinct custodian-reviewed local patient links among the qualifying completed contacts.",
+          "denominator_definition": "Not applicable: count, not a population rate.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Exclude unresolved links. No addition across facilities, zones or periods without reviewed identity reconciliation. Declare unresolved-link counts in the explanation. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Reviewed patient identity crosswalk and encounter register"
+        },
+        {
+          "metric_id": "LWH-MET-012",
+          "name": "Completed contacts with a coded clinical condition",
+          "formula": "COUNT",
+          "aggregation": "SUM",
+          "unit": "events",
+          "scale": "1",
+          "numerator_is_subset": false,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Distinct qualifying completed encounters with at least one clinician-signed condition code from the facility's recorded coding-system/version; count each encounter once.",
+          "denominator_definition": "Not applicable: count, not a population rate.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "This initial profile selects any valid signed condition code and does not classify a specific disease. Suspected/confirmed status remains in the protected source. Exclude uncoded, voided and draft diagnoses. If the coding system or source is unavailable, report UNKNOWN. This is not disease incidence, prevalence, unique people or diagnostic accuracy. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Signed assessment/diagnosis register, coding-system version and completed encounter register",
+          "less_or_equal_metric": "LWH-MET-010"
+        },
+        {
+          "metric_id": "LWH-MET-013",
+          "name": "Inpatient deaths by occurrence",
+          "formula": "COUNT",
+          "aggregation": "SUM",
+          "unit": "events",
+          "scale": "1",
+          "numerator_is_subset": false,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Distinct verified inpatient death dispositions occurring in the period.",
+          "denominator_definition": "Not applicable: count, not a population rate.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Exclude community deaths, unconfirmed reports, arrival-dead and duplicate notifications. Not deaths among community residents. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Signed inpatient disposition and death register"
+        },
+        {
+          "metric_id": "LWH-MET-014",
+          "name": "Institutional inpatient mortality proportion",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Verified inpatient deaths among stays with final death/discharge disposition in the period.",
+          "denominator_definition": "All eligible final inpatient discharge dispositions including deaths in the same period.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Exclude transfers out without a final local discharge/death, arrival-dead and open stays from both components. Show case mix and incomplete dispositions in explanation. Not population mortality; no facility ranking from this alone. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Inpatient final disposition register"
+        },
+        {
+          "metric_id": "LWH-MET-016",
+          "name": "Care access fulfilment",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Eligible care requests received in this period with the suitable requested service actually delivered by the period-end cut-off.",
+          "denominator_definition": "All eligible care requests received in this period, including pending or unavailable services at cut-off.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Exclude duplicates, explicitly ineligible and withdrawn requests, declaring those counts in explanation. Automated acknowledgement is not care. Late outcomes enter a corrected version of this cohort. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Care request and delivered-service receipts"
+        },
+        {
+          "metric_id": "LWH-MET-018",
+          "name": "Unmet suitable-care requests",
+          "formula": "COUNT",
+          "aggregation": "SUM",
+          "unit": "events",
+          "scale": "1",
+          "numerator_is_subset": false,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Distinct eligible requests received in this period still unfulfilled at cut-off because suitable capacity or capability was unavailable.",
+          "denominator_definition": "Not applicable: count, not a population rate.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Deduplicate repeated attempts within one request episode. Exclude patient withdrawal, ineligibility and requests merely awaiting review; disclose pending separately. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Care request and capacity/decline evidence"
+        },
+        {
+          "metric_id": "LWH-MET-020",
+          "name": "Continuity tasks completed by deadline",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Required follow-up or result tasks due in the period with independently evidenced completion no later than their recorded deadline.",
+          "denominator_definition": "All required follow-up or result tasks whose recorded deadline falls in the period, including overdue and nonresponding cases.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Reminder delivery, message opening and patient nonresponse do not establish completion. Exclude a task only with documented cancellation authority, disclosed in explanation. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Clinical task due-times and completion evidence"
+        },
+        {
+          "metric_id": "LWH-MET-023",
+          "name": "Planned service windows actually covered",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Approved service windows in the period covered throughout by the required privileged team.",
+          "denominator_definition": "All approved planned service windows in the period, including uncovered windows.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Count each scheduled service window once; partial staffing is not full coverage. Account count, nominal employment and a directory listing do not demonstrate coverage. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Approved operating windows, duty roster and privilege evidence"
+        },
+        {
+          "metric_id": "LWH-MET-024",
+          "name": "Current readiness evidence for operating capabilities",
+          "formula": "RATIO",
+          "aggregation": "NONE",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Expected operating capabilities whose required readiness evidence is unexpired at period end.",
+          "denominator_definition": "All capabilities expected to operate at the period-end review, including those with absent or expired evidence.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "An as-of measure: do not sum across months. Readiness is not licence, guaranteed future availability, accepted referral or quality certification. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Capability catalogue and time-bounded readiness assertions"
+        },
+        {
+          "metric_id": "LWH-MET-025",
+          "name": "Referral requests receiving actual acceptance",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Eligible referral requests created in the period with recorded receiving-team acceptance by the period-end cut-off.",
+          "denominator_definition": "All eligible referral requests created in the period, including declined, unreachable and pending requests.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "A sent message, directory match or transport booking is not acceptance. Exclude documented duplicates or withdrawal before review and disclose them. Late acceptance corrects the same cohort. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Referral requests and receiving acceptance receipts"
+        },
+        {
+          "metric_id": "LWH-MET-026",
+          "name": "Referral outcomes verified by due date",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Referrals due for outcome in the period with verified receiving outcome recorded by their due date.",
+          "denominator_definition": "All referrals whose recorded outcome deadline falls in the period, including overdue and lost-to-follow-up cases.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Acceptance, transport and travel are not completed care. Keep unknown, declined and pending outcomes visible; no patient-identifying narrative in returns. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Accepted handover, receiving outcome and due-date register"
+        },
+        {
+          "metric_id": "LWH-MET-029",
+          "name": "Critical results with required human follow-through",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Critical results with required acknowledgement and action completed by their policy-derived deadline falling in the period.",
+          "denominator_definition": "All critical results whose required action deadline falls in the period under the actual local critical-result policy.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Delivery receipt is not clinical acknowledgement. Include overdue and missing actions; if no approved flag/deadline policy exists report UNKNOWN, not zero. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Critical flags, approved local policy and acknowledgement/action receipts"
+        },
+        {
+          "metric_id": "LWH-MET-032",
+          "name": "Essential product-days with confirmed stockout",
+          "formula": "COUNT",
+          "aggregation": "SUM",
+          "unit": "events",
+          "scale": "1",
+          "numerator_is_subset": false,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Distinct required essential-product and operating-day pairs during the period with verified usable stock unavailable for any required service interval.",
+          "denominator_definition": "Not applicable: count, not a population rate.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "One product-day once regardless of repeated attempts. Quarantined or uncertain stock is not usable; disclose uncertainty separately. Not number of patients harmed or a population rate. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Locally approved essential-product list, stock ledger and physical checks"
+        },
+        {
+          "metric_id": "LWH-MET-033",
+          "name": "Staffed qualified bed occupancy",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Occupied minutes in eligible staffed qualified beds during the period.",
+          "denominator_definition": "Available staffed qualified bed-minutes during the same period.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Exclude closed/unqualified beds from both components and document closures. Reservations are not occupancy. Do not use licensed bed count as staffed capacity; unknown capacity means unavailable ratio. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Timestamped occupancy and staffed-bed capacity ledger"
+        }
+      ]
+    },
+    {
+      "code": "ZONE-MONTHLY",
+      "name": "Proposed monthly zone community-health return",
+      "stream": "ZONE_COMMUNITY",
+      "measures": [
+        {
+          "metric_id": "LWH-MET-035",
+          "name": "Approved health education sessions delivered",
+          "formula": "COUNT",
+          "aggregation": "SUM",
+          "unit": "events",
+          "scale": "1",
+          "numerator_is_subset": false,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Distinct approved health education sessions actually delivered in the period with content-version and delivery evidence.",
+          "denominator_definition": "Not applicable: count, not a population rate.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Exclude plans, duplicate broadcasts counted as the same session and unapproved messages. Sessions are not recipients, comprehension, clinical contacts or improved health outcomes. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Approved education content and session delivery register"
+        },
+        {
+          "metric_id": "LWH-MET-036",
+          "name": "Community interventions completed by deadline",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Accepted community interventions due in the period with evidence independently accepted complete by deadline.",
+          "denominator_definition": "All accepted community interventions due in the period, including blocked and overdue work.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "A proposed, unowned or merely funded activity is not accepted completion. Exclusions and cancelled commitments require authority and remain disclosed. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Intervention commitments, due dates and independent completion reviews"
+        },
+        {
+          "metric_id": "LWH-MET-027",
+          "name": "Required demand areas with evidenced serviceability",
+          "formula": "RATIO",
+          "aggregation": "NONE",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Required demand areas meeting the adopted serviceability standard at period end with reviewed capability and access evidence.",
+          "denominator_definition": "All demand areas in the actual approved required-area inventory at period end.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "If the inventory or access standard is absent, report UNKNOWN. Facility counts or self-selected attendance cannot establish geographic reach. Do not sum as-of percentages over periods. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Approved area inventory, access standard and serviceability assessment"
+        }
+      ]
+    },
+    {
+      "code": "REGION-MONTHLY",
+      "name": "Proposed monthly regional coordination return",
+      "stream": "REGIONAL_COORDINATION",
+      "measures": [
+        {
+          "metric_id": "LWH-MET-001",
+          "name": "Verified active registry coverage",
+          "formula": "RATIO",
+          "aggregation": "NONE",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Expected in-scope sites with a verified active registry record at period end.",
+          "denominator_definition": "All sites in the approved expected-site inventory at period end, including sites not registered.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "No approved expected-site inventory means UNKNOWN. Registered sites alone cannot form both components. Count facility sites, not owners; do not sum across months. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Expected-site inventory and verified registry records"
+        },
+        {
+          "metric_id": "LWH-MET-003",
+          "name": "Corrective actions completed by deadline",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Corrective actions due in the period with independently accepted completion no later than deadline.",
+          "denominator_definition": "All corrective actions due in the period, including overdue and nonresponding sites.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Keep severity and criteria versions in the supporting evidence. Self-attested completion and an expired obligation are not accepted corrective closure. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Affiliation corrective-action due dates and independent acceptance"
+        },
+        {
+          "metric_id": "LWH-MET-004",
+          "name": "Affiliation renewal decisions made in time",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Prior affiliation decisions expiring in the period with the renewal decision recorded before the prior expiry.",
+          "denominator_definition": "All prior affiliation decisions due to expire in the period, including expired and nonresponding sites.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Do not infer renewal from registration or a pending application; do not remove expired sites to improve the proportion. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Prior decision expiry and actual renewal-decision timestamps"
+        },
+        {
+          "metric_id": "LWH-MET-036",
+          "name": "Regional interventions completed by deadline",
+          "formula": "RATIO",
+          "aggregation": "RATIO_OF_SUMS",
+          "unit": "percent",
+          "scale": "100",
+          "numerator_is_subset": true,
+          "source_selector": "MANUAL",
+          "numerator_definition": "Accepted regional coordination interventions due in the period with independently accepted completion by deadline.",
+          "denominator_definition": "All accepted regional coordination interventions due in the period, including blocked and overdue work.",
+          "population_definition": "The selected reporting unit and half-open occurrence period [start, end), using its recorded reporting timezone. Each underlying event is included once in this stream.",
+          "inclusion_exclusion": "Exclude zone-delivered interventions already counted in the zone stream. Completion requires evidence and independent acceptance; funding alone is not fulfilment. Missing or unreliable sources are UNKNOWN/MISSING/PARTIAL with explanation; zero is explicit NIL only after source review. No patient identifiers in aggregate references.",
+          "dimensions": [
+            "reporting_unit",
+            "occurrence_period"
+          ],
+          "source_register": "Regional commitments, due dates and independent completion reviews"
+        }
+      ]
+    }
+  ]
+}

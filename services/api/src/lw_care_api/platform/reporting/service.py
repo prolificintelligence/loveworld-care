@@ -124,6 +124,11 @@ class ReportingService:
         scope = await s.scope_for(
             self.session, body["scope_type"], body["scope_id"], at=body["period_start"]
         )
+        binding = None
+        if body.get("template_id"):
+            from .templates import TemplateService
+
+            binding = await TemplateService(self).bind(body, scope)
         expected_scope = {
             "FACILITY_ACTIVITY": "FACILITY",
             "ZONE_COMMUNITY": "ZONE",
@@ -222,6 +227,13 @@ class ReportingService:
             "created_at": db.now(),
         }
         await self.session.execute(t.obligations.insert().values(**row))
+        if binding:
+            await self.log(
+                "OBLIGATION_TEMPLATE",
+                {"id": row["id"], "version": 1, "template": binding},
+                "reporting.obligation_template_bound",
+                scope,
+            )
         await self.log("OBLIGATION", row, "reporting.obligation_opened", scope)
         return row
 
