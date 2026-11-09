@@ -448,3 +448,35 @@ def test_expiry_and_staff_revocation_take_effect_without_changing_clinical_sourc
 
     run(revoke())
     assert j.get(f"/staff/{j.care.facility}/links", "records").status_code == 403
+
+
+def test_named_fallback_can_personally_accept_after_owner_is_restricted(personal):
+    j = personal
+    link = j.link(j.patient())
+    service = j.routing()
+    request = j.create(
+        f"/links/{link['id']}/requests",
+        {"service_id": service["id"], "kind": "CARE", "text": "Synthetic actual care request"},
+    )
+    body = {
+        "expected_version": request["version"],
+        "action": "ACCEPT",
+        "reason": "Synthetic personal acceptance",
+    }
+    request = j.create(f"/staff/requests/{request['id']}/actions", body, "clinician")
+
+    async def restrict():
+        async with j.app.state.database.transaction() as session:
+            await session.execute(
+                update(db.accounts)
+                .where(db.accounts.c.id == j.actors["clinician"][0])
+                .values(active=False)
+            )
+
+    run(restrict())
+    request = j.create(
+        f"/staff/requests/{request['id']}/actions",
+        body | {"expected_version": request["version"]},
+        "outsider",
+    )
+    assert request["owner_name"] == "Synthetic outsider" and request["state"] == "ACCEPTED"

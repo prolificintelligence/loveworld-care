@@ -286,11 +286,29 @@ class CareService(PersonalService):
         action = body["action"]
         values = {}
         if action == "ACCEPT":
+            from ..domain import RuleError
+
+            owner_eligible = True
+            try:
+                await cs.privilege_for(self.session, row["owner_id"], row["facility_id"], "CARE")
+            except RuleError:
+                owner_eligible = False
             require(
-                row["state"] == "SUBMITTED"
-                and self.actor["id"] in {row["owner_id"], row["fallback_id"]}
+                (
+                    row["state"] == "SUBMITTED"
+                    and self.actor["id"] in {row["owner_id"], row["fallback_id"]}
+                )
+                or (not owner_eligible and self.actor["id"] == row["fallback_id"]),
+                "PERSONAL_ACCEPTANCE_REQUIRED",
+                "The named fallback may personally accept when the owner is no longer eligible",
+                403,
             )
-            values = {"state": "ACCEPTED", "owner_id": self.actor["id"], "accepted_at": db.now()}
+            values = {
+                "state": "ACCEPTED",
+                "owner_id": self.actor["id"],
+                "accepted_at": db.now(),
+                "handover_to": None,
+            }
             if self.actor["id"] == row["fallback_id"]:
                 values["fallback_id"] = row["owner_id"]
         elif action == "ACCEPT_HANDOVER":
