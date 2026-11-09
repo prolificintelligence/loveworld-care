@@ -2,6 +2,10 @@
 
 Assessment: 9 November 2026. This plan incorporates the user's clarification that the native EMR is the clinical system already being delivered, and that equipment connections follow facility registration and approval.
 
+## Updated template instruction
+
+On 9 November the project owner authorised creating researched working forms because the Directorate’s originals are unavailable. The [proposed review pack](reporting-forms/README.md), `LWH-WORKING-2026.1`, supplies three forms with 22 indicator configurations and a proposed monthly calendar. It can be configured, independently reviewed and adopted through the versioned template workflow. This replaces waiting for an original form as an engineering prerequisite. Actual Director review and operating adoption remain distinct from software delivery, and later replacements preserve historical obligation meaning. No original controlled directives are altered.
+
 ## Conclusion
 
 The principal product remains the **LW Health Intelligence Platform for the LoveWorld Health Services Directorate**: central registration, reporting, standards oversight, leadership intelligence and accountable intervention. The comprehensive native LW Care EMR and My LW Health Care experience support that purpose and the subsequently confirmed core scope. They must not displace the Directorate reporting outcome or make equipment integration a prerequisite for the reporting portal.

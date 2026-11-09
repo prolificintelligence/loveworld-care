@@ -1,0 +1,19 @@
+# ADR-0017: Versioned reporting templates and proposed working forms
+
+Date: 9 November 2026. Decision: implement on the existing Vercel/Neon stack.
+
+The Directorate's original forms are unavailable. The project owner explicitly requested a researched, workable initial template for later Director review, modification or replacement. This supersedes the earlier plan to leave the template catalogue empty pending an original document. It does not authorise representing a proposal as an institutionally adopted original.
+
+Ship the original `LWH-WORKING-2026.1` package in the API and officer workspace: facility, zone community and regional coordination forms, 22 indicator configurations, source dictionaries, missingness rules and a proposed monthly calendar. Primary WHO and Nigerian professional-council references and design distinctions are retained in the [review pack](../implementation/reporting-forms/README.md). The form package has a canonical SHA-256. No sample clinical values or adopted production obligations are seeded.
+
+A global Data Governor explicitly prepares provisional immutable indicator definitions and a DRAFT mapping, recording actual configuration authority and validity. The whole operation uses the existing transaction, current-authority check and idempotent receipt. Different keys intentionally create separate editions; retries of the same operation return its original result. These definitions use the existing governor-adoption authority; preparing the form does not independently review or adopt the template or configure a recurring reporting calendar.
+
+Each source field has a unique code and an explicit measure component, context, justified exclusion or unresolved gap. Review blocks gaps, missing ratio components, duplicate metric versions and absent comparison totals. A reviewer cannot be any contributor to the mapping; a governor cannot adopt their own review. Submission and adoption freeze the mapping; later replacement uses a new edition. Withdrawal stops new template-bound obligations.
+
+Store template versions and obligation bindings as distinct resource types in the existing encrypted, hashed, append-only reporting journal. Reads verify the hash and resource identity. Existing database immutability protections and recovery hash verification cover these resource types. No schema migration or additional host is required. Source fingerprints for external originals remain author-attested; file scanning/import automation is not implied.
+
+An obligation freezes the exact adopted template version, indicator versions, inventory fingerprint and reviewed field mapping. Validate period, stream, jurisdiction and exact indicator set at creation. Subsequent withdrawal cannot rewrite existing obligations or return meaning. Existing definition-based obligations remain supported and explicitly display the absence of a template binding; removing absent optional keys before canonicalisation preserves their existing receipt hashes. No retrospective synthetic binding is added.
+
+The workspace supports paginated template/history reads, searchable indicator versions, review decisions and exact mapping inspection. Individual template reads include their exact immutable definitions even when the general definition listing spans more than 500 versions. Operational reporters see adopted/withdrawn forms; raw template governance is not an executive chart-access route. Clinical leadership still consumes separately reviewed, disclosure-controlled releases.
+
+The next automation increment qualifies native EMR mappings against adopted definitions. Broader programme-specific disease definitions, dimensional breakdowns, source import automation and observed institutional acceptance remain separate work. Offline care remains core scope; facility-local installation and additional persistent hosting remain deferred.
