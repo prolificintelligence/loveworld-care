@@ -1,0 +1,3 @@
+ticket,code_delivery,engineering_evidence,operating_adoption,full_suite_acceptance,remaining_gate,release_evidence
+LWH-AUD-20261109-001,DEPLOYED,BOUNDED_HISTORICAL_ACCESS_REGRESSIONS_AND_NEON_PASSED,INCOMPLETE,NOT_RUN,Actual-role/formal operating acceptance,2026-11-10-phase-a-reporting-evidence.json
+LWH-AUD-20261109-002,ENGINEERING_INCREMENT_DEPLOYED,PERIOD_INDEX_LOCK_SCOPE_AND_5000_BOUND_NEON_PASSED,INCOMPLETE,NOT_RUN,"Representative Vercel duration/memory, larger event histories, sustained contention/correction/replay/load and adopted targets",2026-11-10-phase-a-reporting-evidence.json

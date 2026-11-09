@@ -1,73 +1,41 @@
 # Next implementation session handoff
 
-Prepared 9 November 2026 after the comprehensive audit. Read this file, the [audit report](2026-11-09-comprehensive-audit-and-production-readiness.md), [20-ticket backlog](2026-11-09-production-readiness-backlog.csv) and [current release](current-release.json) before changes. The audit supersedes older prospective sequences; preserve historical release evidence.
+Prepared after the 10 November Phase A reporting release. Read the [comprehensive audit](2026-11-09-comprehensive-audit-and-production-readiness.md), [original 20-ticket readiness backlog](2026-11-09-production-readiness-backlog.csv), [Phase A release](2026-11-10-phase-a-reporting-release.md), [ticket status](2026-11-10-phase-a-ticket-status.csv) and [current release](current-release.json) before changes. Preserve historical audit/release evidence.
 
 ## Start here
 
-Scope remains aligned, but **full-suite production/clinical acceptance is incomplete**. Start Phase A with **LWH-AUD-20261109-001 and 002**. Released historical snapshot/CSV access fails with `409 SOURCE_BATCH_REQUIRED` when current native source inventory exceeds its cap. The local probe reduces that cap to 1 to exercise the guard; this is not maximum-volume production qualification. Retained cells recover unchanged after resetting the cap. Preserve permitted historical access and active disclosure controls, expose truthful stale/unavailable current-use status, and fix bounded source accounting/lock scoping with meaningful regression and PostgreSQL/cloud qualification.
+Start with `git status`, `git log` and `current-release.json`; do not reset to an older runtime or audit HEAD. The untracked `docs/New Recording 20.m4a` must remain untouched and unstaged (SHA-256 `4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf`). Stage explicit intended paths only. The later evidence commit may be newer than runtime `d16b2549f77e5532348f4659b97e5135aac1c24d`.
 
-Reproduce using existing dependencies:
+**001's engineering fix is deployed.** Historical permitted snapshot/list/CSV access survives bounded/unavailable current source checks with unchanged retained cells, explicit unavailable/stale current-use status and active scope/disclosure/integrity controls. New use fails closed. Do not reintroduce the old audit probe's 409 as a passing historical-read expectation: `scripts/audit_reporting_readiness.py` is historical reproduction/observation, while regression tests now require retained 200 access and ineligible current use.
 
-```powershell
-. .\scripts\env-d-drive.ps1
-$env:PYTHONUTF8='1'
-.\.venv\Scripts\python.exe scripts/audit_reporting_readiness.py
-```
+**002 has a deployed engineering increment; capacity acceptance remains OPEN.** Schema-9 occurrence indexing selects the half-open period and source dependencies before the unchanged 5,000-record /20,000-event bounds. Extraction uses receipt and clinical-site locks rather than the global reporting lock. Governance/disclosure/correction serialization remains. Metadata completeness checking is still facility-wide. Isolated Neon verified 5,001 later-period contacts without changing the old period hash, an exact 5,000 selected-record fixture, and refusal of 5,001 selected records. Timings were local ASGI with a reusable Neon qualification pool; production NullPool is unchanged. These are not Vercel memory/duration, sustained load, larger-event-history or adopted latency acceptance.
 
-This is an audit probe, not a passing regression test. It uses isolated synthetic local SQLite fixtures and writes ignored `.toolchain` output. Convert the confirmed behaviour into an appropriate regression expectation while fixing it. Its lowered-cap reproduction does not prove throughput.
+Continue Phase A with 002's remaining capacity gates, scanner boundary (003), backup cadence/custody/targets and representative recovery (004), canonical form/field/screen/state conformance (014), and qualified staging/artifact promotion/data-preserving rollback (019). Preserve the Director-first sequence. Actual roster/facility/affiliation/independent officers/forms/calendar/disclosure/service-authority inputs support the next observed Director loop; additional module count does not establish acceptance.
 
-Then close scanner/recovery/conformance/release qualification gaps. Demonstrate the Director's actual operating loop with independent officers: registered facility → affiliation → return → independent verification → permitted leadership release → accepted intervention/outcome review. Additional module count is not acceptance.
+## Verified release
 
-## Baseline to recheck
+- Runtime `d16b2549f77e5532348f4659b97e5135aac1c24d`; API `dpl_4G2tZ7c44hyqqwke5RoBbiDZcBCa` at https://lw-health-intelligence-api.vercel.app; web `dpl_C94r5peG4PcrCEgRr5UoSWgb5t45` at https://lw-health-intelligence.vercel.app.
+- [CI 42721693149](https://github.com/prolificintelligence/loveworld-care/actions/runs/42721693149): all three jobs successful; **224 Python /11 client /4 PWA tests**, typecheck, builds, secret scan. Local native/recovery/readiness cases and workspace checks also passed. The partial complete local Python run was stopped in favour of full CI, not claimed passing.
+- All **69 API /36 web submitted source files** matched Vercel source UIDs; established core verification matched **65 API /31 web-public files**. Both origins' health/readiness, signed-out denials, invalid sign-in rejection, 12 frontend pages, changed Directorate bundle and five retained PWA assets passed. These were not authenticated human/device acceptance tests.
+- Neon `health_platform`: schema **9**, **102 tables /53 protected history tables**. Migration added/rebuilt only derived projections; zero existing clinical/reporting sources were indexed. Aggregate production business counts were unchanged: one account and zero units/facilities/clinical sites/records/events/reporting definitions/obligations/returns/snapshots. Every synthetic qualification schema was removed; no production approvals or operating records were seeded.
+- Archive/lineage support recognises schema 9 and preserves older archive shapes. Full representative schema-9 restore/resumption and new-data rollback qualification remain open. The schema-8 runtime is not a qualified schema-9 rollback artifact; prefer a preserving forward correction or separately qualified compatibility build. Never overwrite new care/stock/finance events, erase failed evidence or improvise schema-marker deletion.
+- **78 controlled document hashes** and the native mapping contract remain unchanged. **200 requirements /111 specified cases remain NOT_RUN**. Code delivery, engineering evidence, operating adoption and full-suite acceptance are separate states; the last two remain incomplete.
 
-- Workspace `D:\Projects\LoveWorld Care`; repository `prolificintelligence/loveworld-care`, branch `main`.
-- Audited repository HEAD before this documentation commit: `f8ef5ba392a12401382740025f066c045d731efe`. Read `git log` for the later audit commit; do not reset to the earlier HEAD.
-- Runtime: `2aac16a5b72e2dc1388d5a36e014a24c859e3eb5`.
-- API `https://lw-health-intelligence-api.vercel.app`, deployment `dpl_3kMLz4bn2nfnXS1JLviU8U9c9E41`.
-- Web `https://lw-health-intelligence.vercel.app`, deployment `dpl_AnQ8XM7eds5ZNxZmkuteEQuR1yow`.
-- Fresh audit verification matched **64 API /31 web-public files**, both origins' health/readiness and signed-out denials, invalid sign-in rejection and 12 frontend pages. These were not authenticated human acceptance tests.
-- [Runtime CI 42681186207](https://github.com/prolificintelligence/loveworld-care/actions/runs/42681186207): all three jobs successful; 221 Python, 11 client, four PWA tests, builds/type checking/secret scan. Recheck subsequent work before relying on it.
-- Neon `health_platform`: schema **8**, **101 tables /53 protected history tables**. Audit required/issued no migration.
-- Production snapshot: one account with current `PLATFORM_ADMIN`/`REGISTRY_STEWARD` grants; zero hierarchy/facilities/clinical data/reporting definitions/returns/activation packages. Aggregate inspection only; no clinical payload copied.
-- Daily API cron `0 0 * * *`; continuous worker and automatic backup cadence not established. Missing `LWH_CLAMAV_HOST` makes scanning fail closed. Provider environment entry presence does not prove an integration; encrypted secret values were not compared.
-- Successful isolated restores and a retained failure exist. Automatic cadence, independent copy/key custody, adopted targets and representative service resumption remain open. Never erase failed evidence.
-- Original 78 documents match their manifest. Formal **200 PRD requirements /111 specified cases** remain `NOT_RUN`. Engineering tests do not replace operating acceptance.
+Full evidence, source manifest, corrected failed checks and measured fixture timings are linked from the Phase A release. The runbook is [here](2026-11-10-phase-a-deployment-runbook.md). The prior [schema-8 recovery evidence](2026-11-09-phase6-evidence.json) remains historical; it is not silently recertified for schema 9.
 
-## Binding scope and constraints
+## Binding constraints
 
-- The Director's registry/reporting/standards/intelligence/intervention outcome is first. Native EMR and personal/family care were explicitly authorised and support it.
-- Native LW Care is the platform EMR; do not request a second EMR as a prerequisite. Equipment/imaging/LIS/PACS connections require registration/approval and a selected facility's documented counterpart.
-- Offline **care remains core**. Facility-local installation and deployments beyond Vercel/Neon/R2/Upstash/Resend/free OpenRouter are deferred. Do not add persistent worker/scanner hosts without changed instructions. Scripts/contracts can be prepared; PWA installation is not full offline clinical runtime.
-- My LW Health Care is an installable patient PWA on the **current deployment/origin**, sharing the API with independently verified personal/family permissions. Do not cache charts or clinical drafts in its service worker. Current remote care is human asynchronous requests/reviewed releases; full remote consultation and referral tracking remain partial.
-- **No Playwright installation.** Use existing tests, HTTP/source checks and properly recorded manual device/accessibility UAT.
-- Activate `scripts/env-d-drive.ps1` before pnpm/uv/pytest/turbo; caches stay on D:. Use existing dependencies/tools. Do not recreate providers/reset the repository to restart work.
-- Initial real administrator: Emmanuel Patrick, `epatrick@prolificintelligence.co`. Do not resend invitations unnecessarily or invent other role holders. Actual reviewers, deciders and operators need real nominations and separation of duties.
-- Source data was confirmed test/demo only; production is currently business-empty. Keep synthetic engineering fixtures isolated and labelled. Never create fake production facilities, staff, accepted policies/criteria, returns, clinical events, payment successes or approvals.
-- Original Directorate forms are unavailable. User-authorised researched proposals can be reviewed/replaced: `LWH-WORKING-2026.1` (3 forms, 22 configurations/21 distinct metrics), separate `LWH-NATIVE-2026.1` (4 profiles). None automatically adopted. Actual roster, criteria/calendar/disclosure/content/service decisions are still operating inputs.
-- AI remains free-model only, currently infrastructure; no autonomous consequential action. Optional ERP is separate; billing, stock and sponsorship remain core.
-- Preserve the controlled suite and **untracked `docs/New Recording 20.m4a`**. Stage explicit intended paths only. Never print/commit decrypted credentials. Rollback must preserve newly committed care/finance events.
-- Do not casually invoke authenticated `/v1/internal/jobs`: it can send email. Read-only audits should not trigger operations.
-- Implementation, GitHub pushes, necessary migrations, tests and deployment within the existing cloud stack were authorised. Complete reviewable work/checks before asking for genuinely missing inputs. This audit issued no runtime fix, migration or deployment command.
+- Director's registry/reporting/standards/intelligence/intervention outcome is first. The actual loop is registered facility ? affiliation ? return ? independent verification ? permitted leadership release ? accepted intervention/outcome review. Native LW Care is the platform EMR; no second EMR prerequisite. Equipment/imaging/LIS/PACS follows selected-facility registration/approval and documented counterpart decisions.
+- Offline clinical care remains **core**, but facility-local installation and hosts beyond Vercel/Neon/R2/Upstash/Resend/free OpenRouter remain deferred. Do not add worker/scanner hosts. Scanner acceptance remains fail closed; daily API cron `0 0 * * *` is not continuous clinical response or backup cadence. Do not invoke authenticated `/v1/internal/jobs` for read-only audits: it can send email.
+- **No Playwright installation.** Use existing tests, HTTP/source checks and properly recorded actual manual device/accessibility UAT. Activate `scripts/env-d-drive.ps1` before pnpm/uv/pytest/turbo; caches stay on D:. Process-local execution-policy bypass was needed in this Administrator shell; do not change machine policy.
+- Production frontend is `apps/platform-web`; backend is `services/api/src/lw_care_api/platform`, entrypoint `api/platform.py`. Legacy applications are not current capability or operating acceptance evidence. Do not recreate providers or reset the repository.
+- Initial real administrator remains Emmanuel Patrick, `epatrick@prolificintelligence.co`. Do not resend invitations unnecessarily or invent role holders. Real nominations, deputies, independent reviewers/deciders, service/processing/content/financial authority and funded support must come from actual owners.
+- Synthetic engineering fixtures stay isolated and labelled. Never fabricate production facilities, staff, criteria, forms adoption, coverage, returns, clinical events, payment success or approvals. Original Directorate forms remain unavailable; proposed `LWH-WORKING-2026.1` and separate `LWH-NATIVE-2026.1` packs remain unadopted until actual independent decisions.
+- The installable patient PWA stays on the existing origin with independently checked personal/family permissions. Do not cache charts or clinical drafts in its service worker. Remote care remains human asynchronous requests/reviewed releases; wider remote consultation/referral tracking remains partial. AI is free-model infrastructure only, with no autonomous consequential actions; optional ERP remains separate while billing/stock/sponsorship remain core.
+- Implementation, GitHub pushes, necessary migrations, tests and deployment within the existing cloud stack remain authorised. Never print/commit decrypted credentials or compare provider ciphertexts as secret values. Complete concrete reviewable engineering work before asking for genuinely missing operating inputs.
 
-## Credential locations and tooling
+## Existing tools and credential references
 
-Use existing helpers/ignored configuration; these are file references, never content to paste:
+Use existing `scripts/cloud_credentials.py`, ignored `.env.platform.local`, `.toolchain` helpers, `scripts/platform_cloud_release.py`, `scripts/verify_reporting_cloud.py`, and `scripts/verify_phase_a_postgres.py`. The latter uses a disposable schema and an explicitly labelled pooled qualification harness; production connection behavior is unchanged. No authenticated production business workflow was exercised in the signed-out cloud checks.
 
-```text
-D:\Projects\secrets\Prolific-Intelligence-GitHub.md
-D:\Projects\secrets\Prolific-Intelligence-Vercel.md
-D:\Projects\secrets\lw-health-neondb-connection-string.md
-D:\Projects\secrets\lw-health-upstash.md
-D:\Projects\secrets\lw-health-resend.md
-D:\Projects\secrets\prolific-engines- openrouter-kk.md
-```
-
-`scripts/cloud_credentials.py`, ignored `.env.platform.local`, existing `.toolchain` helpers and `scripts/verify_reporting_cloud.py` support established releases. The older `prolific-mailsending-resend.md` key was rejected; the replacement is `lw-health-resend.md`. Preserve current private-object/encryption settings. Vercel environment listing returned encrypted values during the audit; never compare ciphertexts as secret values or print them as configuration.
-
-Production frontend: `apps/platform-web`. Backend: `services/api/src/lw_care_api/platform`, entrypoint `api/platform.py`. Legacy directories are not current capability evidence. Packaging/source verification must select the intended runtime explicitly.
-
-## Starter prompt for the new session
-
-> Continue LoveWorld Care from `docs/implementation/NEXT_SESSION_HANDOFF.md`. Read the comprehensive audit and readiness backlog first. Start Phase A with tickets LWH-AUD-20261109-001 and 002, preserving the Director-first sequence and deployment constraints. Implement and meaningfully test fixes, then deploy and verify within the existing cloud stack. Do not install Playwright, add deferred hosts or invent operating approvals. Report exact release evidence and remaining acceptance gates.
-
-Start with `git status`, `git log` and `current-release.json` to detect intervening changes. Preserve the recording and unrelated work. State code delivery, engineering evidence, operating adoption and full-suite acceptance separately.
+Credential files remain under `D:/Projects/secrets`: `Prolific-Intelligence-GitHub.md`, `Prolific-Intelligence-Vercel.md`, `lw-health-neondb-connection-string.md`, `lw-health-upstash.md`, `lw-health-resend.md`, and `prolific-engines- openrouter-kk.md`. These are references, never contents to paste. Preserve private-object/encryption settings and do not use the rejected older Resend key.

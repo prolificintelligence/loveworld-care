@@ -254,6 +254,9 @@ async def qualify(
             .scalars()
             .first()
         )
+        # seed_controls already creates the second synthetic site's policy;
+        # seed_sources supplies its full-period policy and signed cohort.
+        await session.execute(ct.sites.delete().where(ct.sites.c.facility_id == other))
     await seed_sources(app, other, actor)
     second = await create(
         "/obligations",

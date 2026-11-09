@@ -1,0 +1,742 @@
+{
+  "release": "2026-11-10-phase-a-reporting",
+  "recorded_at": "2026-11-09T23:54:09.252668+00:00",
+  "runtime_commit": "d16b2549f77e5532348f4659b97e5135aac1c24d",
+  "code_delivery": "DEPLOYED",
+  "engineering_evidence": "BOUNDED_INCREMENT_VERIFIED",
+  "operating_adoption": "INCOMPLETE",
+  "full_suite_acceptance": "INCOMPLETE_NOT_RUN",
+  "schema_version": 9,
+  "migration_required": true,
+  "migration": {
+    "migration": "APPLIED",
+    "schema_version": 9,
+    "seeded_records": 0,
+    "existing_records_indexed": 0,
+    "existing_reporting_sources_indexed": 0
+  },
+  "api": {
+    "deployment_id": "dpl_4G2tZ7c44hyqqwke5RoBbiDZcBCa",
+    "origin": "https://lw-health-intelligence-api.vercel.app",
+    "source_commit": "d16b2549f77e5532348f4659b97e5135aac1c24d",
+    "verified_source_files": 65,
+    "submitted_source_files_verified": 69
+  },
+  "web": {
+    "deployment_id": "dpl_C94r5peG4PcrCEgRr5UoSWgb5t45",
+    "origin": "https://lw-health-intelligence.vercel.app",
+    "source_commit": "d16b2549f77e5532348f4659b97e5135aac1c24d",
+    "verified_source_files": 31,
+    "submitted_source_files_verified": 36
+  },
+  "ci": {
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42721693149",
+    "run_id": 42721693149,
+    "status": "SUCCESS",
+    "python_tests": 224,
+    "api_client_tests": 11,
+    "pwa_tests": 4,
+    "typecheck": "PASSED",
+    "build": "PASSED",
+    "secret_scan": "PASSED",
+    "jobs": [
+      {
+        "id": 129516952567,
+        "name": "secrets-scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129516952618,
+        "name": "web",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129516952759,
+        "name": "python",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "local_checks": {
+    "native_reporting_tests": 13,
+    "recovery_tests": 12,
+    "readiness_reconciliation_tests": 4,
+    "api_client_tests": 11,
+    "pwa_tests": 4,
+    "workspace_typecheck": "PASSED",
+    "workspace_build": "PASSED",
+    "complete_local_python_suite": "STOPPED_SUPERSEDED_BY_COMPLETE_CI"
+  },
+  "postgres_phase_a": {
+    "native_postgres": "PASSED",
+    "schema_version": 9,
+    "phase_a": {
+      "historical_view_list_csv": "PASSED_UNCHANGED_CELLS_UNAVAILABLE_CURRENT_USE",
+      "uncheckable_release": "BLOCKED",
+      "global_lock_extraction_independent": true,
+      "simultaneous_facilities": "UNBLOCKED_OTHER_FACILITY_WHILE_FIRST_WAITS",
+      "duplicate_extract": "IDENTICAL_RECEIPT",
+      "later_period_added_records": 5001,
+      "later_period_source_hash_unchanged": true,
+      "later_period_extract_seconds": 6.742,
+      "period_selected_records_at_bound": 5000,
+      "period_bound_extract_seconds": 54.254,
+      "missing_summaries_accounted_as_unknown": 4990,
+      "period_selected_records_over_bound": 5001,
+      "overflow": "BLOCKED_NO_TRUNCATED_TOTAL",
+      "measurement_boundary": "LOCAL_ASGI_POOLED_NEON_NOT_PRODUCTION_NULLPOOL_OR_VERCEL_CAPACITY_ACCEPTANCE"
+    },
+    "native_profiles": 4,
+    "signed_clinical_events_verified": 12,
+    "reporting_history_hashes_verified": 13,
+    "duplicate_extract": "ONE_RECEIPT_AND_ONE_EXTRACT",
+    "mortality_components": "1/3",
+    "referral_acceptance_components": "2/3",
+    "default_coverage": "PARTIAL_NATIVE_SUBSET",
+    "stale_submission": "BLOCKED",
+    "old_extract": "RETAINED_NOT_CURRENT",
+    "fresh_death_count": "0_NATIVE_SUBSET",
+    "protected_extract_delete": "REJECTED",
+    "production_records_unchanged": true,
+    "production_records_seeded": 0,
+    "disposable_schema_removed": true
+  },
+  "postgres_harness": "LOCAL_ASGI_POOLED_NEON; production NullPool unchanged; not Vercel function capacity acceptance",
+  "production_before": {
+    "observed_at": "2026-11-09T23:17:10.770159+00:00",
+    "phase": "before",
+    "aggregate_only": true,
+    "schema_version": 8,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 101,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_3kMLz4bn2nfnXS1JLviU8U9c9E41",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_AnQ8XM7eds5ZNxZmkuteEQuR1yow",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  },
+  "production_after": {
+    "observed_at": "2026-11-09T23:51:44.731243+00:00",
+    "phase": "after",
+    "aggregate_only": true,
+    "schema_version": 9,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 102,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_4G2tZ7c44hyqqwke5RoBbiDZcBCa",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_C94r5peG4PcrCEgRr5UoSWgb5t45",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  },
+  "production_records_seeded": 0,
+  "notification_dispatch_invoked": false,
+  "live": {
+    "runtime_commit": "d16b2549f77e5532348f4659b97e5135aac1c24d",
+    "bundles": [
+      {
+        "page": "/reporting-templates",
+        "bundle": "/_next/static/chunks/app/reporting-templates/page-c282a5c87cc5160b.js",
+        "sha256": "628ce931a8a24dcab3bbbb855c1f08ec811269232ae07ebfe4c5de9a939e5f5c"
+      },
+      {
+        "page": "/directorate",
+        "bundle": "/_next/static/chunks/app/directorate/page-38d429e0a4d6cd28.js",
+        "sha256": "4d7e5b7fe70c2835a2366805923af1ac6e1f7f41c21123b90bfecc6aaa331a2b"
+      }
+    ],
+    "auth_boundaries": [
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/source-profiles",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/extracts/00000000-0000-4000-8000-000000000000",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/snapshots/00000000-0000-4000-8000-000000000000/export.csv",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/reporting/source-profiles/prepare",
+        "method": "POST",
+        "http": 401
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/source-profiles",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/extracts/00000000-0000-4000-8000-000000000000",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/snapshots/00000000-0000-4000-8000-000000000000/export.csv",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/reporting/source-profiles/prepare",
+        "method": "POST",
+        "http": 401
+      }
+    ],
+    "pwa_assets_retained": [
+      {
+        "path": "/my-health.webmanifest",
+        "http": 200,
+        "sha256": "544be4c3631fe9ff3cd09b630544bcf56726e9cbc0fc86c2cde58142644c9a4a"
+      },
+      {
+        "path": "/my-health-sw.js",
+        "http": 200,
+        "sha256": "565eec504bf498481094d01c55959c9260089be28177794ea36e32b0654299e5"
+      },
+      {
+        "path": "/health-icon-180.png",
+        "http": 200,
+        "sha256": "75ef5e98053ccc13deb92abab2d0fde395c7272b874376b906f4a377bd984045"
+      },
+      {
+        "path": "/health-icon-192.png",
+        "http": 200,
+        "sha256": "2972528edfa12dbd64e2fcf187ffc1a7d5a8d8a58a4c367f5b8f6b9f1184a5f8"
+      },
+      {
+        "path": "/health-icon-512.png",
+        "http": 200,
+        "sha256": "a7961b6b7b874bedbfa67db104a5d264b07f282602b465b9f9934cc99608dc46"
+      }
+    ]
+  },
+  "cloud_route_checks": [
+    {
+      "target": "api",
+      "deployment_id": "dpl_4G2tZ7c44hyqqwke5RoBbiDZcBCa",
+      "state": "READY",
+      "actual_source_hashes_verified": 65
+    },
+    {
+      "target": "web",
+      "deployment_id": "dpl_C94r5peG4PcrCEgRr5UoSWgb5t45",
+      "state": "READY",
+      "actual_source_hashes_verified": 31
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/health",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/ready",
+      "http": 200,
+      "cache_control": "no-store",
+      "schema_version": 9,
+      "reporting": "READY"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/auth/me",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/clinical/sites",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/templates",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/template-proposals",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/jobs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/reliability",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/assurance-runs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/articles",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/knowledge",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/safety-cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/snapshots",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/auth/login",
+      "method": "POST",
+      "http": 401,
+      "elapsed_seconds": 2.819,
+      "invalid_credentials_rejected": true,
+      "session_created": false
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/health",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/ready",
+      "http": 200,
+      "cache_control": "no-store",
+      "schema_version": 9,
+      "reporting": "READY"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/auth/me",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/clinical/sites",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/templates",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/template-proposals",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/jobs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/reliability",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/assurance-runs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/articles",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/knowledge",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/safety-cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/snapshots",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/auth/login",
+      "method": "POST",
+      "http": 401,
+      "elapsed_seconds": 2.828,
+      "invalid_credentials_rejected": true,
+      "session_created": false
+    },
+    {
+      "frontend_page": "/",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/care",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/directorate",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/reporting-templates",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/operations",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/recover",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/governance",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/learn",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/activate",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/directory",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/my-health",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/patient-access",
+      "http": 200,
+      "platform_title_verified": true
+    }
+  ],
+  "submitted_source_inventory": [
+    {
+      "target": "api",
+      "deployment_id": "dpl_4G2tZ7c44hyqqwke5RoBbiDZcBCa",
+      "submitted_source_files_verified": 69,
+      "manifest_sha256": "59af6fef8164af30daf56f5bc9bb6a3872b89e4d74d18fef859b9aae586b18c9"
+    },
+    {
+      "target": "web",
+      "deployment_id": "dpl_C94r5peG4PcrCEgRr5UoSWgb5t45",
+      "submitted_source_files_verified": 36,
+      "manifest_sha256": "a7ae42e61e842a59f7273db627072f17c7fa8f4f5a8d896871d56540afdc2dd1"
+    }
+  ],
+  "source_manifest": "2026-11-10-phase-a-source-manifest.json",
+  "preservation": {
+    "controlled_documents_unchanged": 78,
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf",
+    "native_mapping_sha256": "46f10416b6640999033caf1f8bd44ce5dc617223f7402650aa43236965155778",
+    "2026-11-09-audit-requirements.csv": {
+      "rows": 200,
+      "status_fields": {
+        "formal_verification_status": {
+          "NOT_RUN": 200
+        }
+      }
+    },
+    "2026-11-09-audit-acceptance-cases.csv": {
+      "rows": 111,
+      "status_fields": {
+        "canonical_execution_status": {
+          "NOT_RUN": 111
+        },
+        "audit_execution_status": {
+          "NOT_EXECUTED_AS_FORMAL_ACCEPTANCE": 111
+        }
+      }
+    }
+  },
+  "native_source_package": {
+    "edition": "LWH-NATIVE-2026.1",
+    "status": "PROPOSED_NATIVE_MAPPING_REQUIRES_REVIEW_AND_ADOPTION",
+    "profiles": 4,
+    "canonical_sha256": "46f10416b6640999033caf1f8bd44ce5dc617223f7402650aa43236965155778",
+    "source_guide": "native-reporting-source-guide.md",
+    "production_templates_auto_adopted": 0
+  },
+  "canonical_documents_verified": 78,
+  "preserved_failures": {
+    "local_archive_guard": {
+      "outcome": "1_FAILED_1_PASSED",
+      "resolution": "schema-9 archive guard corrected; 12 recovery tests passed"
+    },
+    "initial_ci": {
+      "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42720534610",
+      "python_passed": 221,
+      "readiness_failed": 3,
+      "resolution": "schema-9 readiness guard corrected; current CI 224 passed"
+    },
+    "neon_attempts": [
+      {
+        "log": ".toolchain/phase-a-postgres-attempt1.log",
+        "sha256": "728b88b5ef8d218d9a423bc0b60538d1fe3b4bfdff2bc29b7d20e0f675ce1eeb",
+        "error_type": "OSError",
+        "source": "windows_events.py",
+        "line": 463,
+        "winerror": null,
+        "disposable_schema_removed": true
+      },
+      {
+        "log": ".toolchain/phase-a-postgres.log",
+        "sha256": "0d2f4ca307cd02b6cb939d41c55341898985a9db23ffeced8c305a7dbad48147",
+        "error_type": "OSError",
+        "source": "windows_events.py",
+        "line": 463,
+        "winerror": 121,
+        "disposable_schema_removed": true
+      },
+      {
+        "log": ".toolchain/phase-a-postgres-attempt3-fixture.log",
+        "sha256": "76c2d1d64241512cf5e4e21261021dd1f9b7b862d5ff8a356b51f7b27754711d",
+        "error_type": "IntegrityError",
+        "source": "asyncpg.py",
+        "line": 840,
+        "winerror": null,
+        "disposable_schema_removed": true
+      }
+    ]
+  },
+  "qualification_helpers": {
+    "scripts/verify_native_reporting_postgres.py": "690e00230febd54ff012dab22c451bdc517dd911a8e75bec253dd478436e0e12",
+    "scripts/verify_phase_a_postgres.py": "a16f341edaebdda079ce8f35cb1f297f5df969b502eecab806f503e2f8bdd10d"
+  },
+  "tickets": {
+    "LWH-AUD-20261109-001": "ENGINEERING_FIX_DEPLOYED_FORMAL_OPERATING_ACCEPTANCE_NOT_RUN",
+    "LWH-AUD-20261109-002": "ENGINEERING_INCREMENT_DEPLOYED_CAPACITY_ACCEPTANCE_OPEN"
+  },
+  "remaining_acceptance_gates": [
+    "Representative Vercel function memory/duration, larger event histories, sustained correction/replay/contention/load, adopted latency targets (002)",
+    "Fail-closed scanner workflow, assured backup cadence/custody/targets and representative recovery (003/004)",
+    "Canonical form/field/screen/state conformance and qualified staging/artifact promotion/data-preserving rollback (014/019)",
+    "Actual roster/facility/affiliation, independent officers, adopted forms/calendar/disclosure/service authority and accepted intervention/outcome loop (005/006/008/020)",
+    "Independent security/privacy and actual-role/device/accessibility/low-bandwidth qualification; 200 requirements and 111 cases remain NOT_RUN (009/010/013)",
+    "Remaining core clinical/referral/personal/finance/sponsorship/assistance workflows and full offline clinical runtime; extra/local hosting remains deferred"
+  ],
+  "schema9_recovery_boundary": "Archive/lineage support tested; representative full schema-9 restore and new-data rollback qualification remain open",
+  "operating_acceptance": "INCOMPLETE",
+  "report": "2026-11-10-phase-a-reporting-release.md",
+  "recovery_reference": "2026-11-09-phase6-evidence.json",
+  "next_phase": "Finish Phase A capacity/scanner/recovery/conformance/release gates, then the actual Director-first registry/affiliation/reporting/review/leadership/intervention loop",
+  "equipment_connections": "AFTER_FACILITY_REGISTRATION_AND_APPROVAL",
+  "local_log_evidence": [
+    {
+      "path": ".toolchain/phase-a-native-tests.log",
+      "sha256": "2b02341f9519e3bc93410a37a919e16129cc3d26989a134f688543c1060e6962"
+    },
+    {
+      "path": ".toolchain/phase-a-recovery-tests.log",
+      "sha256": "668846eab44aba9c85e8b6653994d4b10757addc9ef93dba6f10f50ab499f8d3"
+    },
+    {
+      "path": ".toolchain/phase-a-readiness-tests.log",
+      "sha256": "3f6ab2c0eb606f0cfeb9875815af5707f2475c49279cd2015c5152d00980da58"
+    },
+    {
+      "path": ".toolchain/phase-a-compatibility-tests.log",
+      "sha256": "2679f015ae6e730bab619d69159a04ddb6c9955ace38e808d0fc3c1dfeefad69"
+    },
+    {
+      "path": ".toolchain/phase-a-web-checks.log",
+      "sha256": "6d0c0762976dabf13a0345268237cfc093a0d9abccd811a2a96f0990979f7e50"
+    },
+    {
+      "path": ".toolchain/phase-a-ci-python-attempt1.log",
+      "sha256": "578eabb1959db92e135c26be7016448c5703013468d1755f542c541c92b80cb4"
+    },
+    {
+      "path": ".toolchain/phase-a-postgres-pooled.log",
+      "sha256": "994d214a5f4015fd9c7ceccbb60f70088e790f684047d0fe56ef5d1a22838683"
+    }
+  ],
+  "production_pre_deploy": {
+    "observed_at": "2026-11-09T23:47:34.041435+00:00",
+    "phase": "pre_deploy",
+    "aggregate_only": true,
+    "schema_version": 8,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 101,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_3kMLz4bn2nfnXS1JLviU8U9c9E41",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_AnQ8XM7eds5ZNxZmkuteEQuR1yow",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  }
+}
