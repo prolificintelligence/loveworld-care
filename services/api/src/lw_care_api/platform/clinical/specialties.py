@@ -210,7 +210,7 @@ class Phase5Service(AdvancedService):
         if not await self.advanced_ready():
             return Decimal(0)
         require(
-            await f.ready(self.session),
+            await f.ready(self.session, self.facility_id),
             "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
             "Reconcile actual stock reservations before new supply",
             503,

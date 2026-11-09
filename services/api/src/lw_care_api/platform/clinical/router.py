@@ -625,7 +625,7 @@ def install(app, cfg, database, box, actor_for):
         return await command(request, str(facility_id), payload, apply, governance=True)
 
     @router.get(PREFIX + "/staff")
-    async def staff(facility_id: UUID, request: Request):
+    async def staff(facility_id: UUID, request: Request, query: str = "", after: str = ""):
         async with database.transaction() as session:
             actor = await actor_for(session, request)
             is_governor = governor(actor, str(facility_id))
@@ -646,50 +646,47 @@ def install(app, cfg, database, box, actor_for):
                         "CASHIER",
                     ),
                 )
-            rows = (
-                await session.execute(
-                    select(
-                        db.accounts.c.id,
-                        db.accounts.c.name,
-                        t.privileges.c.capabilities,
-                        t.privileges.c.services,
-                    )
-                    .join(t.privileges, t.privileges.c.account_id == db.accounts.c.id)
-                    .where(
-                        t.privileges.c.facility_id == str(facility_id),
-                        t.privileges.c.revoked.is_(False),
-                        t.privileges.c.valid_from <= db.now(),
-                        t.privileges.c.valid_until > db.now(),
-                        db.accounts.c.active.is_(True),
-                    )
-                    .limit(200)
-                )
-            ).mappings()
-            result = [dict(r) for r in rows]
+            from ..paging import page
+
+            current = (
+                (t.privileges.c.facility_id == str(facility_id))
+                & (t.privileges.c.revoked.is_(False))
+                & (t.privileges.c.valid_from <= db.now())
+                & (t.privileges.c.valid_until > db.now())
+            )
+            eligible = db.accounts.c.id.in_(select(t.privileges.c.account_id).where(current))
             if is_governor:
-                # Eligible invitation recipients carry no chart authority until separately privileged.
-                invited = (
+                # Invitations are discoverable for privileging, not clinical authority.
+                invitations = select(db.grants.c.account_id).where(
+                    db.grants.c.role == "CLINICAL_STAFF",
+                    db.grants.c.scope_type == "FACILITY",
+                    db.grants.c.scope_id == str(facility_id),
+                    db.grants.c.revoked.is_(False),
+                    db.grants.c.valid_from <= db.now(),
+                    db.grants.c.valid_until > db.now(),
+                )
+                eligible = eligible | db.accounts.c.id.in_(invitations)
+            candidates = select(db.accounts.c.id, db.accounts.c.name).where(
+                db.accounts.c.active.is_(True),
+                eligible,
+                db.accounts.c.name.icontains(query[:160], autoescape=True),
+            )
+            rows, cursor = await page(
+                session, candidates, after, db.accounts.c.name, db.accounts.c.id
+            )
+            grouped = {r["id"]: dict(r) | {"capabilities": [], "services": []} for r in rows}
+            if grouped:
+                grants = (
                     await session.execute(
-                        select(db.accounts.c.id, db.accounts.c.name)
-                        .join(db.grants)
-                        .where(
-                            db.grants.c.role == "CLINICAL_STAFF",
-                            db.grants.c.scope_type == "FACILITY",
-                            db.grants.c.scope_id == str(facility_id),
-                            db.grants.c.revoked.is_(False),
-                            db.grants.c.valid_until > db.now(),
-                            db.accounts.c.active.is_(True),
-                        )
-                        .limit(200)
+                        select(t.privileges).where(current, t.privileges.c.account_id.in_(grouped))
                     )
                 ).mappings()
-                known = {r["id"] for r in result}
-                result.extend(
-                    {**dict(r), "capabilities": [], "services": []}
-                    for r in invited
-                    if r["id"] not in known
-                )
-            return {"items": result}
+                for grant in grants:
+                    for key in ("capabilities", "services"):
+                        grouped[grant["account_id"]][key] = sorted(
+                            set(grouped[grant["account_id"]][key]) | set(grant[key])
+                        )
+            return {"items": list(grouped.values()), "next_cursor": cursor}
 
     @router.post(PREFIX + "/patient-search")
     async def search(facility_id: UUID, payload: c.Search, request: Request):
@@ -871,7 +868,7 @@ def install(app, cfg, database, box, actor_for):
             )
             if version >= 7:
                 require(
-                    await fi.ready(session),
+                    await fi.ready(session, str(facility_id)),
                     "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
                     "Reconcile the clinical work index from current sources",
                     503,
@@ -1093,7 +1090,7 @@ def install(app, cfg, database, box, actor_for):
             reservations = {}
             if (await session.scalar(select(func.max(db.schema_versions.c.version))) or 0) >= 7:
                 require(
-                    await fi.ready(session),
+                    await fi.ready(session, str(facility_id)),
                     "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
                     "Reconcile current reservations before confirming resource availability",
                     503,
@@ -1155,7 +1152,7 @@ def install(app, cfg, database, box, actor_for):
             reserved = {}
             if (await session.scalar(select(func.max(db.schema_versions.c.version))) or 0) >= 7:
                 require(
-                    await fi.ready(session),
+                    await fi.ready(session, str(facility_id)),
                     "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
                     "Reconcile current reservations before confirming resource availability",
                     503,

@@ -6,6 +6,7 @@ import json
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from time import perf_counter
 from uuid import UUID
 
 import pyotp
@@ -149,6 +150,38 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             }
         )
         return response
+
+    @app.middleware("http")
+    async def authentication_observation(request: Request, call_next):
+        # Fixed route labels only: never log query strings, identity, request bodies,
+        # headers, exception messages or credentials. Vercel retains stdout events.
+        observed = request.url.path in {
+            "/v1/auth/login",
+            "/v1/auth/me",
+            "/v1/auth/enrol",
+            "/v1/auth/activate",
+            "/v1/auth/logout",
+        }
+        if not observed:
+            return await call_next(request)
+        started, status = perf_counter(), 500
+        try:
+            response = await call_next(request)
+            status = response.status_code
+            return response
+        finally:
+            print(
+                json.dumps(
+                    {
+                        "event": "authentication_request",
+                        "route": request.url.path,
+                        "status": status,
+                        "elapsed_ms": round((perf_counter() - started) * 1000, 2),
+                        "correlation_id": getattr(request.state, "correlation_id", None),
+                    }
+                ),
+                flush=True,
+            )
 
     @app.exception_handler(RuleError)
     async def rule_error(request, exc):

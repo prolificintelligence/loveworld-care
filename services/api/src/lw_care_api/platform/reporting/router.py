@@ -7,6 +7,7 @@ from sqlalchemy import and_, false, func, or_, select, text
 
 from .. import db
 from ..domain import RuleError, require
+from ..paging import page
 from . import contracts as c
 from . import store as s
 from . import tables as t
@@ -183,48 +184,35 @@ def install(app, cfg, database, box, actor_for):
             }
 
     @router.get("/people")
-    async def people(request: Request):
+    async def people(request: Request, query: str = "", after: str = ""):
+        from .recipients import eligible_grants
+
         async with database.transaction() as session:
             service = await service_for(session, request)
             await active_member(service)
-            rows = (
-                await session.execute(
-                    select(
-                        db.accounts.c.id,
-                        db.accounts.c.name,
-                        db.grants.c.role,
-                        db.grants.c.scope_type,
-                        db.grants.c.scope_id,
+            eligible = await eligible_grants(session, service.actor)
+            candidates = select(db.accounts.c.id, db.accounts.c.name).where(
+                db.accounts.c.active.is_(True),
+                db.accounts.c.id.in_(select(db.grants.c.account_id).where(eligible)),
+                db.accounts.c.name.icontains(query[:160], autoescape=True),
+            )
+            rows, cursor = await page(
+                session, candidates, after, db.accounts.c.name, db.accounts.c.id
+            )
+            grouped = {row["id"]: dict(row) | {"roles": []} for row in rows}
+            if grouped:
+                assignments = (
+                    await session.execute(
+                        select(db.grants.c.account_id, db.grants.c.role).where(
+                            eligible, db.grants.c.account_id.in_(grouped)
+                        )
                     )
-                    .join(db.grants, db.grants.c.account_id == db.accounts.c.id)
-                    .where(
-                        db.accounts.c.active.is_(True),
-                        db.grants.c.role.in_(s.ALL_ROLES),
-                        db.grants.c.revoked.is_(False),
-                        db.grants.c.valid_from <= db.now(),
-                        db.grants.c.valid_until > db.now(),
-                    )
-                    .limit(1000)
-                )
-            ).mappings()
-            permitted_scopes = (await scopes(session, service.actor))["items"]
-            grouped = {}
-            for row in rows:
-                candidate = {
-                    "grants": [
-                        {
-                            "role": row["role"],
-                            "scope_type": row["scope_type"],
-                            "scope_id": row["scope_id"],
-                        }
-                    ]
-                }
-                if not any(s.permits(candidate, s.ALL_ROLES, scope) for scope in permitted_scopes):
-                    continue
-                grouped.setdefault(row["id"], {"id": row["id"], "name": row["name"], "roles": []})[
-                    "roles"
-                ].append(row["role"])
-            return {"items": list(grouped.values())}
+                ).mappings()
+                for grant in assignments:
+                    roles = grouped[grant["account_id"]]["roles"]
+                    if grant["role"] not in roles:
+                        roles.append(grant["role"])
+            return {"items": list(grouped.values()), "next_cursor": cursor}
 
     @router.get("/definitions")
     async def definitions(request: Request):
@@ -337,21 +325,18 @@ def install(app, cfg, database, box, actor_for):
             return {**s.opened(box, row), "obligation": obligation, "validation": validation}
 
     @router.get("/returns/{identifier}/history")
-    async def return_history(identifier: UUID, request: Request):
+    async def return_history(identifier: UUID, request: Request, after: str = ""):
         async with database.transaction() as session:
             service = await service_for(session, request)
             _, obligation = await service.return_for(str(identifier))
-            items = [
-                dict(row) | {"data": service.data(row)}
-                for row in (
-                    await session.execute(
-                        select(t.versions)
-                        .where(t.versions.c.return_id == str(identifier))
-                        .order_by(t.versions.c.version)
-                        .limit(500)
-                    )
-                ).mappings()
-            ]
+            rows, cursor = await page(
+                session,
+                select(t.versions).where(t.versions.c.return_id == str(identifier)),
+                after,
+                t.versions.c.version,
+                t.versions.c.id,
+            )
+            items = [dict(row) | {"data": service.data(row)} for row in rows]
             for item in items:
                 item.pop("payload_ciphertext", None)
             await s.audit(
@@ -362,31 +347,31 @@ def install(app, cfg, database, box, actor_for):
                 str(identifier),
                 request.state.correlation_id,
             )
-            return {"items": items}
+            return {"items": items, "next_cursor": cursor}
 
     @router.get("/quality")
-    async def quality(request: Request):
+    async def quality(request: Request, after: str = ""):
         async with database.transaction() as session:
             service = await service_for(session, request)
-            rows = (
-                await session.execute(
-                    select(
-                        t.returns,
-                        t.obligations.c.scope_type,
-                        t.obligations.c.scope_id,
-                        t.obligations.c.region_id,
-                        t.obligations.c.zone_id,
-                        t.obligations.c.facility_id,
-                    )
-                    .join(t.obligations)
-                    .where(
-                        s.visibility(service.actor, s.SOURCE_READERS | s.PROGRAMMES, t.obligations),
-                        t.returns.c.state.in_(["DRAFT", "SUBMITTED", "RETURNED_FOR_CORRECTION"]),
-                    )
-                    .order_by(t.returns.c.updated_at)
-                    .limit(200)
+            rows, cursor = await page(
+                session,
+                select(
+                    t.returns,
+                    t.obligations.c.scope_type,
+                    t.obligations.c.scope_id,
+                    t.obligations.c.region_id,
+                    t.obligations.c.zone_id,
+                    t.obligations.c.facility_id,
                 )
-            ).mappings()
+                .join(t.obligations)
+                .where(
+                    s.visibility(service.actor, s.SOURCE_READERS | s.PROGRAMMES, t.obligations),
+                    t.returns.c.state.in_(["DRAFT", "SUBMITTED", "RETURNED_FOR_CORRECTION"]),
+                ),
+                after,
+                t.returns.c.updated_at,
+                t.returns.c.id,
+            )
             items = []
             for row in rows:
                 run = await s.load(session, t.validation_runs, row["validation_id"])
@@ -401,7 +386,7 @@ def install(app, cfg, database, box, actor_for):
                         "source_hash": row["source_hash"],
                     }
                 )
-            return {"items": items, "as_of": db.now()}
+            return {"items": items, "as_of": db.now(), "next_cursor": cursor}
 
     @router.get("/imports/{identifier}")
     async def import_detail(identifier: UUID, request: Request):
@@ -559,29 +544,28 @@ def install(app, cfg, database, box, actor_for):
             }
 
     @router.get("/safety-cases")
-    async def safety_cases(request: Request):
+    async def safety_cases(request: Request, after: str = ""):
         async with database.transaction() as session:
             service = await service_for(session, request)
-            rows = (
-                await session.execute(
-                    select(t.cases)
-                    .where(
-                        s.visibility(service.actor, s.CASE_REPORTERS | s.CASE_REVIEWERS, t.cases)
-                    )
-                    .order_by(t.cases.c.acknowledge_by)
-                    .limit(200)
-                )
-            ).mappings()
+            rows, cursor = await page(
+                session,
+                select(t.cases).where(
+                    s.visibility(service.actor, s.CASE_REPORTERS | s.CASE_REVIEWERS, t.cases),
+                    or_(
+                        t.cases.c.created_by == service.actor["id"],
+                        s.visibility(service.actor, s.CASE_REVIEWERS, t.cases),
+                    ),
+                ),
+                after,
+                t.cases.c.acknowledge_by,
+                t.cases.c.id,
+            )
             result = []
             for row in rows:
-                if row["created_by"] != service.actor["id"] and not s.permits(
-                    service.actor, s.CASE_REVIEWERS, row
-                ):
-                    continue
                 result.append(
                     {key: value for key, value in row.items() if key != "payload_ciphertext"}
                 )
-            return {"items": result, "as_of": db.now()}
+            return {"items": result, "as_of": db.now(), "next_cursor": cursor}
 
     @router.get("/safety-cases/{identifier}")
     async def safety_detail(identifier: UUID, request: Request):
@@ -600,7 +584,7 @@ def install(app, cfg, database, box, actor_for):
             return service.case_view(row)
 
     @router.get("/actions")
-    async def actions(request: Request):
+    async def actions(request: Request, after: str = ""):
         async with database.transaction() as session:
             service = await service_for(session, request)
             query = select(t.actions).where(
@@ -610,6 +594,10 @@ def install(app, cfg, database, box, actor_for):
                     t.actions,
                 ),
                 or_(
+                    t.actions.c.protected.is_(False),
+                    s.visibility(service.actor, s.CASE_REVIEWERS, t.actions),
+                ),
+                or_(
                     t.actions.c.created_by == service.actor["id"],
                     t.actions.c.owner_id == service.actor["id"],
                     t.actions.c.fallback_id == service.actor["id"],
@@ -617,17 +605,14 @@ def install(app, cfg, database, box, actor_for):
                     t.actions.c.handover_to == service.actor["id"],
                 ),
             )
+            rows, cursor = await page(session, query, after, t.actions.c.due_at, t.actions.c.id)
             result = []
-            for row in (
-                await session.execute(query.order_by(t.actions.c.due_at).limit(200))
-            ).mappings():
-                if row["protected"] and not s.permits(service.actor, s.CASE_REVIEWERS, row):
-                    continue
+            for row in rows:
                 result.append(
                     s.opened(box, row)
                     | {"overdue": row["due_at"] < db.now() and row["state"] != "REVIEWED_COMPLETE"}
                 )
-            return {"items": result, "as_of": db.now()}
+            return {"items": result, "as_of": db.now(), "next_cursor": cursor}
 
     @router.get("/actions/{identifier}")
     async def action_detail(identifier: UUID, request: Request):
@@ -637,35 +622,34 @@ def install(app, cfg, database, box, actor_for):
             return s.opened(box, row)
 
     @router.get("/exceptions")
-    async def exceptions(request: Request):
+    async def exceptions(request: Request, after: str = ""):
         async with database.transaction() as session:
             service = await service_for(session, request)
             roles = s.GOVERNORS | s.PROGRAMMES | s.CASE_REVIEWERS | s.REPORTERS
-            rows = (
-                await session.execute(
-                    select(
-                        t.escalations, t.escalation_receipts.c.created_at.label("acknowledged_at")
-                    )
-                    .outerjoin(
-                        t.escalation_receipts,
-                        t.escalation_receipts.c.escalation_id == t.escalations.c.id,
-                    )
-                    .where(
-                        or_(
-                            s.visibility(service.actor, roles, t.escalations),
-                            and_(
-                                t.escalations.c.owner_id == service.actor["id"],
-                                s.visibility(service.actor, s.ALL_ROLES, t.escalations),
-                            ),
-                        )
-                    )
-                    .order_by(t.escalations.c.due_at)
-                    .limit(200)
+            rows, cursor = await page(
+                session,
+                select(t.escalations, t.escalation_receipts.c.created_at.label("acknowledged_at"))
+                .outerjoin(
+                    t.escalation_receipts,
+                    t.escalation_receipts.c.escalation_id == t.escalations.c.id,
                 )
-            ).mappings()
+                .where(
+                    or_(
+                        s.visibility(service.actor, roles, t.escalations),
+                        and_(
+                            t.escalations.c.owner_id == service.actor["id"],
+                            s.visibility(service.actor, s.ALL_ROLES, t.escalations),
+                        ),
+                    )
+                ),
+                after,
+                t.escalations.c.due_at,
+                t.escalations.c.id,
+            )
             return {
                 "items": [dict(row) for row in rows],
                 "as_of": db.now(),
+                "next_cursor": cursor,
                 "scheduled_job_frequency": "DAILY_PLUS_AUTHENTICATED_MANUAL_RECONCILIATION",
             }
 

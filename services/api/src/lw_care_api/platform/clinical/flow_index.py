@@ -146,7 +146,12 @@ async def rebuild(database, box, cfg=None):
         after = rows[-1]["id"]
 
 
-async def ready(session):
+async def ready(session, facility_id=None):
+    """Contain projection failure to its source and claimed facility.
+
+    Omitting facility_id retains global reconciliation for operating assurance.
+    A wrongly assigned row blocks both facilities until repaired from its source.
+    """
     from .tables import records
 
     mismatch = await session.scalar(
@@ -160,6 +165,11 @@ async def ready(session):
                 index.c.kind != records.c.kind,
                 index.c.facility_id != records.c.facility_id,
             )
+        )
+        .where(
+            or_(records.c.facility_id == facility_id, index.c.facility_id == facility_id)
+            if facility_id
+            else True
         )
         .limit(1)
     )

@@ -25,7 +25,7 @@ class AdvancedService(EMRService):
             503,
         )
         require(
-            await f.ready(self.session),
+            await f.ready(self.session, self.facility_id),
             "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
             "Rebuild the clinical work index from current source records before this workflow can proceed",
             503,
@@ -122,7 +122,7 @@ class AdvancedService(EMRService):
         if not await self.advanced_ready():
             return "NOT_CONFIGURED"
         require(
-            await f.ready(self.session),
+            await f.ready(self.session, self.facility_id),
             "CLINICAL_WORK_INDEX_RECONCILIATION_REQUIRED",
             "Reconcile the current workload before accepting new care",
             503,

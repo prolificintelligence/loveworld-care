@@ -59,6 +59,7 @@ export default function CareWorkspace() {
   const [sites,setSites]=useState<Site[]>([]), [facility,setFacility]=useState(""), [group,setGroup]=useState("Patients");
   const [rows,setRows]=useState<ClinicalRow[]>([]), [patients,setPatients]=useState<ClinicalRow[]>([]), [patient,setPatient]=useState<ClinicalRow|null>(null);
   const [encounter,setEncounter]=useState(""), [selected,setSelected]=useState<ClinicalRow|null>(null), [formId,setFormId]=useState("");
+  const [staffQuery,setStaffQuery]=useState("");
   const [staff,setStaff]=useState<Staff[]>([]), [beds,setBeds]=useState<Physical[]>([]), [lots,setLots]=useState<Physical[]>([]);
   const [privileges,setPrivileges]=useState<Physical[]>([]), [history,setHistory]=useState<Value|undefined>();
   const [error,setError]=useState(""), [success,setSuccess]=useState(""), [busy,setBusy]=useState(false), [loading,setLoading]=useState(false);
@@ -78,7 +79,7 @@ export default function CareWorkspace() {
 
   const fail=useCallback((e:unknown)=> {
     const failure=e as ApiFailure;
-    if(failure.status===401){setActor(null);setRows([]);setPatients([]);setSites([]);setFacility("");setStaff([]);setBeds([]);setLots([]);setAllergyRows([]);setAllergyReadAt("");setPatient(null);setSelected(null);setHistory(undefined);pending.current.clear();}
+    if(failure.status===401){viewEpoch.current++;setCursors({});setBusy(false);setActor(null);setRows([]);setPatients([]);setSites([]);setFacility("");setStaff([]);setBeds([]);setLots([]);setAllergyRows([]);setAllergyReadAt("");setPatient(null);setSelected(null);setHistory(undefined);pending.current.clear();}
     setError(failure.message || "The clinical service could not be reached. The action is not confirmed.");
   },[]);
   const loadSites=useCallback(async()=> {
@@ -103,7 +104,7 @@ export default function CareWorkspace() {
         const values=await request<Items<Physical>>(`${prefix}/privileges`); if(epoch!==viewEpoch.current)return;setPrivileges(values.items);
       }
       if(available.length || activeSite?.governor) {
-        const result=await request<Items<Staff>>(`${prefix}/staff`); if(epoch!==viewEpoch.current)return;setStaff(result.items);
+        const result=await request<Items<Staff>>(`${prefix}/staff`); if(epoch!==viewEpoch.current)return;setStaff(result.items);setStaffQuery("");setCursors(old=>({...old,staff:result.next_cursor||null}));
       }
       const jobs:(()=>Promise<void>)[]=[];
       for(const kind of listKinds[group]||[])if(permits(kindCaps[kind]||[]))jobs.push(async()=> {
@@ -122,6 +123,14 @@ export default function CareWorkspace() {
   },[facility,actor,sites,prefix,group,patient,fail,traceFilter]);
   useEffect(()=>{void refresh();},[refresh]);
 
+  async function findStaff(more=false) {
+    const epoch=viewEpoch.current;setBusy(true);setError("");
+    try {const result=await request<Items<Staff>>(`${prefix}/staff?${new URLSearchParams({query:staffQuery,after:more?cursors.staff||"":""})}`);
+      if(epoch!==viewEpoch.current)return;
+      setStaff(old=>more?[...new Map([...old,...result.items].map(row=>[row.id,row])).values()]:result.items);
+      setCursors(old=>({...old,staff:result.next_cursor||null}));
+    }catch(error){if(epoch===viewEpoch.current)fail(error);}finally{if(epoch===viewEpoch.current)setBusy(false);}
+  }
   function changeFacility(value:string) {viewEpoch.current++;setFacility(value);setRows([]);setPatients([]);setAllergyRows([]);setAllergyReadAt("");setPatient(null);setSelected(null);setEncounter("");setStaff([]);setBeds([]);setLots([]);setPrivileges([]);setFormId("");setHistory(undefined);setReadAt("");setError("");setSuccess("");setCursors({});pending.current.clear();}
   async function openPatient(row:ClinicalRow) {
     const epoch=++viewEpoch.current;setLoading(true);setFormId("");setAllergyRows([]);setAllergyReadAt("");setPatient(row);setSelected(row);setHistory(undefined);setError("");setEncounter("");
@@ -234,6 +243,7 @@ export default function CareWorkspace() {
   return <>{hidden&&<main id="session-lock" className="auth"><h1>Clinical workspace locked.</h1><p>Your unsaved form remains in memory. Return to this window to verify your session.</p></main>}<div className="workspace care-workspace" hidden={hidden}><aside><a className="wordmark" href="/care">LW <span>CARE<br/>CLINICAL WORKSPACE</span></a><label>Facility<select disabled={busy} value={facility} onChange={event=>changeFacility(event.target.value)}><option value="">Select assigned facility</option>{sites.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label><nav aria-label="Clinical departments">{groups.filter(g=>forms.some(f=>f.group===g&&can(...f.capability))).map(g=><button key={g} aria-current={group===g?"page":undefined} onClick={()=>{viewEpoch.current++;setGroup(g);setFormId("");setHistory(undefined);}}>{g}</button>)}{site?.governor&&<button aria-current={group==="Clinical governance"?"page":undefined} onClick={()=>{setGroup("Clinical governance");setFormId("");}}>Clinical governance</button>}</nav><a href="/learn">Approved references and information</a><a href="/governance">My approved-content inbox</a><a href="/">Directorate workspace ↗</a><div className="account"><strong>{actor.name}</strong><small>{caps.map(human).join(" · ")||"No clinical chart privileges"}</small><button className="secondary" onClick={async()=>{try{await request("/auth/logout",{method:"POST"});viewEpoch.current++;setActor(null);setRows([]);setPatients([]);setAllergyRows([]);setAllergyReadAt("");setPatient(null);setSelected(null);setHistory(undefined);pending.current.clear();}catch(e){fail(e);}}}>Sign out</button></div></aside>
     <main id="main"><header><div><p className="eyebrow">LW CARE · FACILITY EMR</p><h1>{group}</h1><p className="muted">{site?.name||"Select an assigned facility"}{readAt&&` · Last read ${new Date(readAt).toLocaleString()}`}</p></div><button className="secondary" disabled={loading||busy} onClick={()=>void refresh()}>{loading?"Refreshing…":"Refresh from authority"}</button></header>
       {error&&<div className="error" role="alert">{error}<p>Entered work remains in this form. Review conflicts before retrying; an uncertain request retains its operation key.</p></div>}{success&&<p className="success" role="status">{success}</p>}
+      {site&&(site.governor||caps.length>0)&&<section className="panel"><details><summary>Find a staff member for an assignment</summary><label>Staff name<input value={staffQuery} maxLength={160} onChange={event=>{setStaffQuery(event.target.value);setCursors(old=>({...old,staff:null}));}}/></label><button className="secondary" disabled={busy} onClick={()=>void findStaff()}>Search staff</button>{cursors.staff&&<button className="secondary" disabled={busy} onClick={()=>void findStaff(true)}>Load more staff</button>}<p>Search results populate the staff selectors below. Current privileges are checked when an action is submitted.</p></details></section>}
       {!sites.length&&<section className="panel"><h2>No facility clinical assignment yet.</h2><p>Your Directorate administrator can invite the clinical governor and facility staff from Access. The governor records actual facility activation and verified professional privileges here.</p></section>}
       {site&&!active&&<section className="panel"><h2>Clinical activation is required.</h2><p>The clinical governor must record verified facility scope, current operating authority and validity before patient care records can be entered.</p></section>}
       {site&&active&&<div className="clinical-status"><span className="badge">Authoritative cloud service</span><span>WAN connection required for this deployment</span><span>Medication checking: adopted manual clinical review</span></div>}
