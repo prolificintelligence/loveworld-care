@@ -93,6 +93,12 @@ async def observe(session):
                 index.c.status != clinical.records.c.status,
             ),
         )
+    if version and version >= 8:
+        from ..personal import tables as personal
+        checks["personal_requests_with_inactive_owner"] = await count(
+            personal.requests.join(db.accounts, db.accounts.c.id == personal.requests.c.owner_id),
+            personal.requests.c.state != "CLOSED", db.accounts.c.active.is_(False))
+        context["open_personal_requests"] = await count(personal.requests, personal.requests.c.state != "CLOSED")
     return {
         "checks": checks,
         "population": context,
