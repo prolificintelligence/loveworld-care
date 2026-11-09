@@ -113,6 +113,8 @@ def test_case_and_action_pages_filter_before_limits_and_recheck_revocation(repor
     assert j.get("/safety-cases?after=not-a-cursor", "safety_backup").status_code == 422
     bad = base64.urlsafe_b64encode(json.dumps([[], "x"]).encode()).decode()
     assert j.get("/actions?after=" + bad, "owner").status_code == 422
+    poisoned = base64.urlsafe_b64encode(json.dumps(["\u0000", db.uid()]).encode()).decode()
+    assert j.get("/actions?after=" + poisoned, "owner").status_code == 422
 
 
 def test_recipient_pages_deduplicate_and_search_beyond_thousand_grants(reporting):
@@ -373,3 +375,5 @@ def test_quality_exceptions_and_retained_history_have_complete_continuation(repo
     ]:
         identifiers = collect(j, path, "reporter")
         assert len(identifiers) == len(set(identifiers)) == count
+    oversized = base64.urlsafe_b64encode(json.dumps([10**60, db.uid()]).encode()).decode()
+    assert j.get(f"/returns/{draft['id']}/history?after={oversized}").status_code == 422

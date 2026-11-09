@@ -2,6 +2,7 @@
 
 import base64
 import json
+from uuid import UUID
 
 from sqlalchemy import and_, or_
 
@@ -20,6 +21,10 @@ def continuation(query, after, order, identifier):
             if not isinstance(value, order.type.python_type) or isinstance(value, bool):
                 raise TypeError()
             if len(str(value)) > 512 or not isinstance(key, str) or len(key) > 80:
+                raise ValueError()
+            if str(UUID(key)) != key or (isinstance(value, str) and "\x00" in value):
+                raise ValueError()
+            if isinstance(value, int) and not 0 <= value <= 2_147_483_647:
                 raise ValueError()
         except (ValueError, TypeError, UnicodeError) as error:
             raise RuleError(
