@@ -298,18 +298,152 @@
       ],
       "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
       "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-010.F001",
+      "binding": "criterion_codes",
+      "meaning": "Initial criterion references are not canonical corrective finding IDs; equivalence remains open.",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+      "tests": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-010.F002",
+      "binding": "reason",
+      "meaning": "Actual reviewer request retained; no adopted deadline or institutional rule invented.",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+      "tests": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-010.F005",
+      "binding": "responses[].response",
+      "meaning": "Every requested criterion receives an attributed response; not a resolution.",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+      "tests": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-010.F006",
+      "binding": "responses[].evidence_ids",
+      "meaning": "Current CLEAN case/criterion references; upload scanner exclusion remains enforced.",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+      "tests": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-010.F007",
+      "binding": "fresh inspection and independent decision",
+      "meaning": "Review is distinct from response submission; historical reviewers cannot decide.",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+      "tests": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
     }
   ],
   "states": [
     {
       "id": "LWH-STM-002",
-      "covered": "DRAFT -> SUBMITTED -> INSPECTION -> EVIDENCE_REVIEW -> RECOMMENDED -> DECIDED; refused commands preserve states, versions, revisions, effects and receipts",
-      "exceptions": "SCREENING, CORRECTION_REQUIRED, WITHDRAWN and complete capture/offline/UAT semantics remain open."
+      "covered": "Correction request/response, fresh independent assignment/reinspection and withdrawal retain versions/history/affiliation; older timestamps do not select the attestation.",
+      "exceptions": "SCREENING, full corrective plans/deadlines/notices/appeals, offline capture and actual-role/device UAT remain open.",
+      "tests": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ]
+        }
+      ]
     },
     {
       "id": "LWH-STM-003",
-      "covered": "Only independent global Directorate decider grants ACTIVE/CONDITIONAL; required unmet findings cannot receive unrestricted recognition; adverse history retained",
-      "exceptions": "Complete renewal/noncompliance/appeal/notice/expiry and actual-role operating acceptance remain separate."
+      "covered": "Only independent global Directorate decider grants ACTIVE/CONDITIONAL; required unmet findings cannot receive unrestricted recognition; adverse history retained Independence includes applicants/respondents and historical inspectors/reviewers across correction cycles; withdrawal changes no prior affiliation.",
+      "exceptions": "Complete renewal/noncompliance/appeal/notice/expiry and actual-role operating acceptance remain separate.",
+      "tests": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -73,13 +73,21 @@ async def inspection_findings(session, application, criteria, findings):
 async def positive_disposition(session, application, criteria, disposition):
     if disposition not in {"APPROVE", "CONDITIONAL"}:
         return
+    source_version = application["version"] - (application["state"] == "RECOMMENDED")
+    attestation = await revision(session, application, source_version)
+    require(
+        attestation.get("state") == "EVIDENCE_REVIEW" and attestation.get("inspection_id"),
+        "CURRENT_INSPECTION_REQUIRED",
+        "A fresh version-bound inspection is required for this review cycle",
+        409,
+    )
     row = (
         (
             await session.execute(
-                select(db.inspections)
-                .where(db.inspections.c.application_id == application["id"])
-                .order_by(db.inspections.c.recorded_at.desc(), db.inspections.c.id.desc())
-                .limit(1)
+                select(db.inspections).where(
+                    db.inspections.c.application_id == application["id"],
+                    db.inspections.c.id == attestation["inspection_id"],
+                )
             )
         )
         .mappings()
@@ -111,3 +119,76 @@ async def positive_disposition(session, application, criteria, disposition):
             "Required unmet or unobserved findings prevent unrestricted recognition",
             409,
         )
+
+
+async def revision(session, application, version=None):
+    value = await session.scalar(
+        select(db.revisions.c.payload).where(
+            db.revisions.c.resource_type == "Application",
+            db.revisions.c.resource_id == application["id"],
+            db.revisions.c.version == (application["version"] if version is None else version),
+        )
+    )
+    require(
+        value,
+        "APPLICATION_HISTORY_REQUIRED",
+        "The authoritative application revision is unavailable",
+        409,
+    )
+    return value
+
+
+async def participants(session, application, facility):
+    applicants = {application["created_by"], facility["created_by"]}
+    inspectors, reviewers = set(), set()
+    for payload in (
+        await session.execute(
+            select(db.revisions.c.payload).where(
+                db.revisions.c.resource_type == "Application",
+                db.revisions.c.resource_id == application["id"],
+            )
+        )
+    ).scalars():
+        inspectors.add(payload.get("inspector_id"))
+        reviewers.add(payload.get("reviewer_id"))
+        reviewers.add(payload.get("correction_request", {}).get("requested_by"))
+        applicants.add(payload.get("correction_response", {}).get("submitted_by"))
+    applicants.update(
+        (
+            await session.execute(
+                select(db.evidence.c.uploaded_by).where(
+                    db.evidence.c.application_id == application["id"]
+                )
+            )
+        ).scalars()
+    )
+    inspectors.update(
+        (
+            await session.execute(
+                select(db.inspections.c.inspector_id).where(
+                    db.inspections.c.application_id == application["id"]
+                )
+            )
+        ).scalars()
+    )
+    return applicants - {None}, inspectors - {None}, reviewers - {None}
+
+
+async def independent_assignment(session, application, facility, inspector, reviewer):
+    applicants, inspectors, reviewers = await participants(session, application, facility)
+    require(
+        inspector != reviewer
+        and inspector not in applicants | reviewers
+        and reviewer not in applicants | inspectors,
+        "ACCESS_DENIED",
+        "Applicants and historical inspectors/reviewers cannot change sides in this case",
+    )
+
+
+async def independent_decider(session, application, facility, actor_id):
+    applicants, inspectors, reviewers = await participants(session, application, facility)
+    require(
+        actor_id not in applicants | inspectors | reviewers,
+        "ACCESS_DENIED",
+        "The final Directorate decider must be independent of every review cycle",
+    )

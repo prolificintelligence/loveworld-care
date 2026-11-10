@@ -86,7 +86,7 @@ async def actors(app):
     return values
 
 
-async def exercise(app, client, scenario):
+async def exercise(app, client, scenario, *, fixture_state=None):
     identity = await actors(app)
 
     async def post(path, body, actor="creator", key=None):
@@ -253,10 +253,25 @@ async def exercise(app, client, scenario):
                 )
             )
             proofs[code] = identifier
+    fixture = {
+        "actors": identity,
+        "facility": facility,
+        "application": application,
+        "path": path,
+        "post": post,
+        "create": create,
+        "refused": refused,
+        "effects": effects,
+        "proofs": proofs,
+    }
+    if fixture_state == "DRAFT":
+        return fixture
     if scenario == "unscanned_submit":
         await refused(path + "/submit", {"expected_version": 1}, "creator", 422)
         return {"scenario": scenario, "result": "REFUSED_WITHOUT_DOMAIN_EFFECTS"}
     await create(path + "/submit", {"expected_version": 1})
+    if fixture_state == "SUBMITTED":
+        return fixture
     await create(
         path + "/assignment",
         {
@@ -279,6 +294,8 @@ async def exercise(app, client, scenario):
             for c in proofs
         ],
     }
+    if fixture_state == "INSPECTION":
+        return fixture | {"finding": finding}
     if scenario in {"missing", "duplicate", "wrong_criterion", "expired_inspection"}:
         if scenario == "missing":
             finding["findings"].pop()

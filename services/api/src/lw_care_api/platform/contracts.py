@@ -193,3 +193,26 @@ class Decision(Recommendation):
 class Publication(Versioned):
     action: Literal["PUBLISH", "WITHDRAW"]
     reason: str = Field(min_length=5, max_length=3000)
+
+
+class ApplicationCorrection(Versioned):
+    reason: str = Field(min_length=5, max_length=5000)
+    criterion_codes: list[str] = Field(min_length=1, max_length=100)
+    intent_confirmed: Literal[True]
+
+
+class CorrectionResponse(StrictModel):
+    criterion: str = Field(min_length=2, max_length=120)
+    response: str = Field(min_length=5, max_length=5000)
+    evidence_ids: list[UUID] = Field(default_factory=list, max_length=40)
+
+
+class ApplicationResubmit(Versioned):
+    reason: str = Field(min_length=5, max_length=5000)
+    responses: list[CorrectionResponse] = Field(min_length=1, max_length=100)
+    intent_confirmed: Literal[True]
+
+
+class ApplicationWithdraw(Versioned):
+    reason: str = Field(min_length=5, max_length=5000)
+    intent_confirmed: Literal[True]

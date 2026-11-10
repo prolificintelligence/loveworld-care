@@ -145,6 +145,9 @@ async def record_change(session, actor, resource_type, row, action, correlation_
     event_contracts = {
         "facility.verified": ("LWH-EVT-002", "network.facility_verified"),
         "application.submitted": ("LWH-EVT-003", "standards.application_submitted"),
+        "application.resubmitted": ("LWH-EVT-003", "standards.application_submitted"),
+        "application.correction_requested": ("LWH-EXT-APPLICATION-001", "standards.application_correction_requested"),
+        "application.withdrawn": ("LWH-EXT-APPLICATION-001", "standards.application_withdrawn"),
         "affiliation.decided": ("LWH-EVT-005", "standards.decision_recorded"),
     }
     contract = event_contracts.get(action)

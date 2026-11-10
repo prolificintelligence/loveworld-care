@@ -13,7 +13,8 @@
       },
       "candidate_models": [
         "contracts.Facility",
-        "contracts.Application"
+        "contracts.Application",
+        "contracts.ApplicationWithdraw"
       ],
       "candidate_routes": [
         {
@@ -22,9 +23,9 @@
           "request_model": "contracts.Facility",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
           },
-          "handler_line": 884
+          "handler_line": 887
         },
         {
           "method": "POST",
@@ -32,19 +33,29 @@
           "request_model": "contracts.Application",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
           },
-          "handler_line": 1038
+          "handler_line": 1041
+        },
+        {
+          "method": "POST",
+          "path": "/v1/applications/{application_id}/withdraw",
+          "request_model": "contracts.ApplicationWithdraw",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/application_workflow.py",
+            "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+          },
+          "handler_line": 190
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -312,19 +323,19 @@
           "request_model": "contracts.Decision",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
           },
-          "handler_line": 1477
+          "handler_line": 1488
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -355,19 +366,19 @@
           "request_model": "contracts.Inspection",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
           },
-          "handler_line": 1379
+          "handler_line": 1389
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -432,9 +443,31 @@
         "sha256_lf": "87e083e8c943b3d4591c19f7af9b2f8df8eaf86bea8a3cce6231cc17b3ccb167"
       },
       "candidate_models": [
-        "institutional.contracts.Response"
+        "institutional.contracts.Response",
+        "contracts.ApplicationCorrection",
+        "contracts.ApplicationResubmit"
       ],
       "candidate_routes": [
+        {
+          "method": "POST",
+          "path": "/v1/applications/{application_id}/correction-request",
+          "request_model": "contracts.ApplicationCorrection",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/application_workflow.py",
+            "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+          },
+          "handler_line": 31
+        },
+        {
+          "method": "POST",
+          "path": "/v1/applications/{application_id}/resubmit",
+          "request_model": "contracts.ApplicationResubmit",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/application_workflow.py",
+            "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+          },
+          "handler_line": 98
+        },
         {
           "method": "POST",
           "path": "/v1/institutional/findings/{identifier}/respond",
@@ -797,9 +830,9 @@
           "request_model": "contracts.Invite",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
           },
-          "handler_line": 667
+          "handler_line": 670
         },
         {
           "method": "POST",
@@ -807,19 +840,19 @@
           "request_model": "contracts.Unit",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
           },
-          "handler_line": 773
+          "handler_line": 776
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -2301,7 +2334,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -2365,7 +2398,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -2433,7 +2466,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -2498,7 +2531,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -2585,7 +2618,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3496,7 +3529,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3608,7 +3641,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3679,7 +3712,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3750,7 +3783,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3820,7 +3853,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3890,7 +3923,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3985,7 +4018,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4054,7 +4087,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4150,7 +4183,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4345,14 +4378,52 @@
       "source": "PROJECT-003",
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
-      "status": "OPEN_EXPLICIT_FIELD_MAPPING_GAP",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ],
+          "source": {
+            "path": "tests/integration/test_application_corrections.py",
+            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-010.F001",
+        "binding": "criterion_codes",
+        "meaning": "Initial criterion references are not canonical corrective finding IDs; equivalence remains open.",
+        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+        "persistence": "Immutable Application revisions / inspections / decisions",
+        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "tests": [
+          {
+            "path": "tests/integration/test_application_corrections.py",
+            "symbol": "test_application_correction_and_withdrawal",
+            "scenarios": [
+              "round_trip",
+              "cycle_binding",
+              "historical_independence",
+              "response_validation"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-010.F002",
@@ -4364,14 +4435,52 @@
       "source": "PROJECT-003",
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
-      "status": "OPEN_EXPLICIT_FIELD_MAPPING_GAP",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ],
+          "source": {
+            "path": "tests/integration/test_application_corrections.py",
+            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-010.F002",
+        "binding": "reason",
+        "meaning": "Actual reviewer request retained; no adopted deadline or institutional rule invented.",
+        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+        "persistence": "Immutable Application revisions / inspections / decisions",
+        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "tests": [
+          {
+            "path": "tests/integration/test_application_corrections.py",
+            "symbol": "test_application_correction_and_withdrawal",
+            "scenarios": [
+              "round_trip",
+              "cycle_binding",
+              "historical_independence",
+              "response_validation"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-010.F003",
@@ -4421,14 +4530,52 @@
       "source": "PROJECT-003",
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
-      "status": "OPEN_EXPLICIT_FIELD_MAPPING_GAP",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ],
+          "source": {
+            "path": "tests/integration/test_application_corrections.py",
+            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-010.F005",
+        "binding": "responses[].response",
+        "meaning": "Every requested criterion receives an attributed response; not a resolution.",
+        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+        "persistence": "Immutable Application revisions / inspections / decisions",
+        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "tests": [
+          {
+            "path": "tests/integration/test_application_corrections.py",
+            "symbol": "test_application_correction_and_withdrawal",
+            "scenarios": [
+              "round_trip",
+              "cycle_binding",
+              "historical_independence",
+              "response_validation"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-010.F006",
@@ -4440,14 +4587,52 @@
       "source": "PROJECT-003",
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
-      "status": "OPEN_EXPLICIT_FIELD_MAPPING_GAP",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ],
+          "source": {
+            "path": "tests/integration/test_application_corrections.py",
+            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-010.F006",
+        "binding": "responses[].evidence_ids",
+        "meaning": "Current CLEAN case/criterion references; upload scanner exclusion remains enforced.",
+        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+        "persistence": "Immutable Application revisions / inspections / decisions",
+        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "tests": [
+          {
+            "path": "tests/integration/test_application_corrections.py",
+            "symbol": "test_application_correction_and_withdrawal",
+            "scenarios": [
+              "round_trip",
+              "cycle_binding",
+              "historical_independence",
+              "response_validation"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-010.F007",
@@ -4459,14 +4644,52 @@
       "source": "PROJECT-003",
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
-      "status": "OPEN_EXPLICIT_FIELD_MAPPING_GAP",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "Immutable Application revisions / inspections / decisions",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ],
+          "source": {
+            "path": "tests/integration/test_application_corrections.py",
+            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-010.F007",
+        "binding": "fresh inspection and independent decision",
+        "meaning": "Review is distinct from response submission; historical reviewers cannot decide.",
+        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+        "persistence": "Immutable Application revisions / inspections / decisions",
+        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "tests": [
+          {
+            "path": "tests/integration/test_application_corrections.py",
+            "symbol": "test_application_correction_and_withdrawal",
+            "scenarios": [
+              "round_trip",
+              "cycle_binding",
+              "historical_independence",
+              "response_validation"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-011.F001",
@@ -10384,11 +10607,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10403,7 +10626,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
+        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
       },
       "page_route": "/"
     },
@@ -10419,11 +10642,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10438,7 +10661,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
+        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
       },
       "page_route": "/"
     },
@@ -10454,11 +10677,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10473,7 +10696,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
+        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
       },
       "page_route": "/"
     },
@@ -10489,11 +10712,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10508,7 +10731,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
+        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
       },
       "page_route": "/"
     },
@@ -10524,11 +10747,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10543,7 +10766,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
+        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
       },
       "page_route": "/"
     },
@@ -10559,11 +10782,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10578,7 +10801,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
+        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
       },
       "page_route": "/"
     },
@@ -12907,11 +13130,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -12938,11 +13161,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -12953,12 +13176,40 @@
           "sha256_lf": "7485c92356e3dc7f2cbdcfda68a836a8a83fd3880431b59178395d975c4dcb88"
         }
       },
-      "test_evidence": [],
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ],
+          "source": {
+            "path": "tests/integration/test_application_corrections.py",
+            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence.",
       "engineering_proof": {
         "id": "LWH-STM-002",
-        "covered": "DRAFT -> SUBMITTED -> INSPECTION -> EVIDENCE_REVIEW -> RECOMMENDED -> DECIDED; refused commands preserve states, versions, revisions, effects and receipts",
-        "exceptions": "SCREENING, CORRECTION_REQUIRED, WITHDRAWN and complete capture/offline/UAT semantics remain open."
+        "covered": "Correction request/response, fresh independent assignment/reinspection and withdrawal retain versions/history/affiliation; older timestamps do not select the attestation.",
+        "exceptions": "SCREENING, full corrective plans/deadlines/notices/appeals, offline capture and actual-role/device UAT remain open.",
+        "tests": [
+          {
+            "path": "tests/integration/test_application_corrections.py",
+            "symbol": "test_application_correction_and_withdrawal",
+            "scenarios": [
+              "round_trip",
+              "cycle_binding",
+              "historical_independence",
+              "response_validation"
+            ]
+          }
+        ]
       }
     },
     {
@@ -12989,12 +13240,40 @@
           "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
         }
       },
-      "test_evidence": [],
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_application_corrections.py",
+          "symbol": "test_application_correction_and_withdrawal",
+          "scenarios": [
+            "round_trip",
+            "cycle_binding",
+            "historical_independence",
+            "response_validation"
+          ],
+          "source": {
+            "path": "tests/integration/test_application_corrections.py",
+            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence.",
       "engineering_proof": {
         "id": "LWH-STM-003",
-        "covered": "Only independent global Directorate decider grants ACTIVE/CONDITIONAL; required unmet findings cannot receive unrestricted recognition; adverse history retained",
-        "exceptions": "Complete renewal/noncompliance/appeal/notice/expiry and actual-role operating acceptance remain separate."
+        "covered": "Only independent global Directorate decider grants ACTIVE/CONDITIONAL; required unmet findings cannot receive unrestricted recognition; adverse history retained Independence includes applicants/respondents and historical inspectors/reviewers across correction cycles; withdrawal changes no prior affiliation.",
+        "exceptions": "Complete renewal/noncompliance/appeal/notice/expiry and actual-role operating acceptance remain separate.",
+        "tests": [
+          {
+            "path": "tests/integration/test_application_corrections.py",
+            "symbol": "test_application_correction_and_withdrawal",
+            "scenarios": [
+              "round_trip",
+              "cycle_binding",
+              "historical_independence",
+              "response_validation"
+            ]
+          }
+        ]
       }
     },
     {
@@ -13010,11 +13289,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -14373,9 +14652,9 @@
           "request_model": null,
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
           },
-          "handler_line": 1623
+          "handler_line": 1624
         }
       ],
       "status": "PARTIAL_PATH_MATCH_SEMANTICS_UNQUALIFIED",
@@ -15608,7 +15887,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
+        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
       },
       "line": 109
     },
@@ -15636,9 +15915,44 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
+        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
       },
       "line": 151
+    },
+    "contracts.ApplicationWithdraw": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 1,
+            "title": "Expected Version",
+            "type": "integer"
+          },
+          "reason": {
+            "maxLength": 5000,
+            "minLength": 5,
+            "title": "Reason",
+            "type": "string"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "expected_version",
+          "reason",
+          "intent_confirmed"
+        ],
+        "title": "ApplicationWithdraw",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/contracts.py",
+        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+      },
+      "line": 216
     },
     "clinical.contracts.Activation": {
       "schema": {
@@ -16340,7 +16654,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
+        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
       },
       "line": 185
     },
@@ -16427,7 +16741,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
+        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
       },
       "line": 174
     },
@@ -16567,6 +16881,130 @@
         "sha256_lf": "e762bb4da6738a51d8579c7eff69a239ffb8735b36aeeca3e3844510f78e937a"
       },
       "line": 66
+    },
+    "contracts.ApplicationCorrection": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 1,
+            "title": "Expected Version",
+            "type": "integer"
+          },
+          "reason": {
+            "maxLength": 5000,
+            "minLength": 5,
+            "title": "Reason",
+            "type": "string"
+          },
+          "criterion_codes": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Criterion Codes",
+            "type": "array"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "expected_version",
+          "reason",
+          "criterion_codes",
+          "intent_confirmed"
+        ],
+        "title": "ApplicationCorrection",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/contracts.py",
+        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+      },
+      "line": 198
+    },
+    "contracts.ApplicationResubmit": {
+      "schema": {
+        "$defs": {
+          "CorrectionResponse": {
+            "additionalProperties": false,
+            "properties": {
+              "criterion": {
+                "maxLength": 120,
+                "minLength": 2,
+                "title": "Criterion",
+                "type": "string"
+              },
+              "response": {
+                "maxLength": 5000,
+                "minLength": 5,
+                "title": "Response",
+                "type": "string"
+              },
+              "evidence_ids": {
+                "items": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "maxItems": 40,
+                "title": "Evidence Ids",
+                "type": "array"
+              }
+            },
+            "required": [
+              "criterion",
+              "response"
+            ],
+            "title": "CorrectionResponse",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 1,
+            "title": "Expected Version",
+            "type": "integer"
+          },
+          "reason": {
+            "maxLength": 5000,
+            "minLength": 5,
+            "title": "Reason",
+            "type": "string"
+          },
+          "responses": {
+            "items": {
+              "$ref": "#/$defs/CorrectionResponse"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Responses",
+            "type": "array"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "expected_version",
+          "reason",
+          "responses",
+          "intent_confirmed"
+        ],
+        "title": "ApplicationResubmit",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/contracts.py",
+        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+      },
+      "line": 210
     },
     "institutional.contracts.Decide": {
       "schema": {
@@ -17368,7 +17806,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
+        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
       },
       "line": 95
     },
@@ -17459,7 +17897,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
+        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
       },
       "line": 77
     },
@@ -21770,7 +22208,7 @@
   },
   "reviewed_proof_input": {
     "path": "docs/implementation/conformance/director-proofs.json",
-    "sha256_lf": "6cb426a4f36b3a7ba4baa0f8f78e330500ce777b396a9546f1d57735a09826fd"
+    "sha256_lf": "c0bac591609b93a9cdf6472a502695965aece337333076a297f1b661a921c9d0"
   },
   "actual_routes": [
     {
@@ -21779,9 +22217,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 450
+      "handler_line": 453
     },
     {
       "method": "GET",
@@ -21789,9 +22227,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 454
+      "handler_line": 457
     },
     {
       "method": "GET",
@@ -21799,9 +22237,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 462
+      "handler_line": 465
     },
     {
       "method": "POST",
@@ -21809,9 +22247,9 @@
       "request_model": "contracts.Login",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 493
+      "handler_line": 496
     },
     {
       "method": "POST",
@@ -21819,9 +22257,9 @@
       "request_model": "contracts.Enrol",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 533
+      "handler_line": 536
     },
     {
       "method": "POST",
@@ -21829,9 +22267,9 @@
       "request_model": "contracts.ConfirmEnrolment",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 587
+      "handler_line": 590
     },
     {
       "method": "GET",
@@ -21839,9 +22277,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 647
+      "handler_line": 650
     },
     {
       "method": "POST",
@@ -21849,9 +22287,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 652
+      "handler_line": 655
     },
     {
       "method": "POST",
@@ -21859,9 +22297,9 @@
       "request_model": "contracts.Invite",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 667
+      "handler_line": 670
     },
     {
       "method": "POST",
@@ -21869,9 +22307,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 684
+      "handler_line": 687
     },
     {
       "method": "GET",
@@ -21879,9 +22317,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 718
+      "handler_line": 721
     },
     {
       "method": "GET",
@@ -21889,9 +22327,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 737
+      "handler_line": 740
     },
     {
       "method": "GET",
@@ -21899,9 +22337,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 750
+      "handler_line": 753
     },
     {
       "method": "GET",
@@ -21909,9 +22347,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 765
+      "handler_line": 768
     },
     {
       "method": "POST",
@@ -21919,9 +22357,9 @@
       "request_model": "contracts.Unit",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 773
+      "handler_line": 776
     },
     {
       "method": "GET",
@@ -21929,9 +22367,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 826
+      "handler_line": 829
     },
     {
       "method": "POST",
@@ -21939,9 +22377,9 @@
       "request_model": "contracts.Operator",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 839
+      "handler_line": 842
     },
     {
       "method": "GET",
@@ -21949,9 +22387,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 857
+      "handler_line": 860
     },
     {
       "method": "GET",
@@ -21959,9 +22397,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 878
+      "handler_line": 881
     },
     {
       "method": "POST",
@@ -21969,9 +22407,9 @@
       "request_model": "contracts.Facility",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 884
+      "handler_line": 887
     },
     {
       "method": "POST",
@@ -21979,9 +22417,9 @@
       "request_model": "contracts.Verification",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 960
+      "handler_line": 963
     },
     {
       "method": "GET",
@@ -21989,9 +22427,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 996
+      "handler_line": 999
     },
     {
       "method": "POST",
@@ -21999,9 +22437,9 @@
       "request_model": "contracts.CriteriaSet",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1013
+      "handler_line": 1016
     },
     {
       "method": "POST",
@@ -22009,9 +22447,9 @@
       "request_model": "contracts.Application",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1038
+      "handler_line": 1041
     },
     {
       "method": "GET",
@@ -22019,9 +22457,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1084
+      "handler_line": 1087
     },
     {
       "method": "GET",
@@ -22029,9 +22467,39 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1102
+      "handler_line": 1105
+    },
+    {
+      "method": "POST",
+      "path": "/v1/applications/{application_id}/correction-request",
+      "request_model": "contracts.ApplicationCorrection",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/application_workflow.py",
+        "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+      },
+      "handler_line": 31
+    },
+    {
+      "method": "POST",
+      "path": "/v1/applications/{application_id}/resubmit",
+      "request_model": "contracts.ApplicationResubmit",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/application_workflow.py",
+        "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+      },
+      "handler_line": 98
+    },
+    {
+      "method": "POST",
+      "path": "/v1/applications/{application_id}/withdraw",
+      "request_model": "contracts.ApplicationWithdraw",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/application_workflow.py",
+        "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+      },
+      "handler_line": 190
     },
     {
       "method": "POST",
@@ -22039,9 +22507,9 @@
       "request_model": "contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1132
+      "handler_line": 1146
     },
     {
       "method": "POST",
@@ -22049,9 +22517,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1170
+      "handler_line": 1184
     },
     {
       "method": "GET",
@@ -22059,9 +22527,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1274
+      "handler_line": 1288
     },
     {
       "method": "POST",
@@ -22069,9 +22537,9 @@
       "request_model": "contracts.Assignment",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1315
+      "handler_line": 1329
     },
     {
       "method": "POST",
@@ -22079,9 +22547,9 @@
       "request_model": "contracts.Inspection",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1379
+      "handler_line": 1389
     },
     {
       "method": "POST",
@@ -22089,9 +22557,9 @@
       "request_model": "contracts.Recommendation",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1435
+      "handler_line": 1446
     },
     {
       "method": "POST",
@@ -22099,9 +22567,9 @@
       "request_model": "contracts.Decision",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1477
+      "handler_line": 1488
     },
     {
       "method": "POST",
@@ -22109,9 +22577,9 @@
       "request_model": "contracts.Publication",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1582
+      "handler_line": 1583
     },
     {
       "method": "GET",
@@ -22119,9 +22587,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1623
+      "handler_line": 1624
     },
     {
       "method": "GET",
@@ -22129,9 +22597,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1665
+      "handler_line": 1666
     },
     {
       "method": "GET",
@@ -22139,9 +22607,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1683
+      "handler_line": 1684
     },
     {
       "method": "GET",
@@ -22149,9 +22617,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1725
+      "handler_line": 1726
     },
     {
       "method": "POST",
@@ -22159,9 +22627,9 @@
       "request_model": "contracts.StrictModel",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1744
+      "handler_line": 1745
     },
     {
       "method": "POST",
@@ -22169,9 +22637,9 @@
       "request_model": "contracts.AiControl",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1771
+      "handler_line": 1772
     },
     {
       "method": "POST",
@@ -22179,9 +22647,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
+        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
       },
-      "handler_line": 1791
+      "handler_line": 1792
     },
     {
       "method": "GET",

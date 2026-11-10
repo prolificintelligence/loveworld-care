@@ -41,6 +41,7 @@ jobs:
           scripts/platform_vercel_runner.py scripts/verify_continuity_postgres.py
           scripts/build_conformance_register.py scripts/capacity_candidate.py scripts/verify_capacity_cloud.py
           scripts/verify_director_conformance_postgres.py
+          scripts/verify_application_workflow_postgres.py
       - name: Canonical conformance register integrity (not operating acceptance)
         run: uv run python scripts/build_conformance_register.py --check
       - name: Tests (adversarial + integration boundary)

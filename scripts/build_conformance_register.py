@@ -28,7 +28,7 @@ OUTPUT = ROOT / "docs/implementation/conformance"
 # Deliberate source associations, not equivalence assertions. Absent core modules
 # and deferred hosting stay visible rather than borrowing legacy/demo routes.
 FORM_MODELS = {
-    1: ["contracts.Facility", "contracts.Application"],
+    1: ["contracts.Facility", "contracts.Application", "contracts.ApplicationWithdraw"],
     2: ["clinical.contracts.Activation"],
     3: ["reporting.contracts.ReturnDraft", "reporting.contracts.Attest"],
     4: ["reporting.contracts.ReturnDraft", "reporting.contracts.Obligation"],
@@ -37,7 +37,11 @@ FORM_MODELS = {
     7: ["contracts.Decision"],
     8: ["contracts.Inspection"],
     9: ["institutional.contracts.CaseOpen"],
-    10: ["institutional.contracts.Response"],
+    10: [
+        "institutional.contracts.Response",
+        "contracts.ApplicationCorrection",
+        "contracts.ApplicationResubmit",
+    ],
     11: ["institutional.contracts.Decide"],
     12: ["reporting.contracts.Review"],
     13: ["institutional.contracts.Content"],
@@ -400,6 +404,8 @@ def build():
         by_state[proof["id"]].update(
             status="PARTIAL_ENGINEERING_TRANSITION_PROOF_EXCEPTION_OPEN", engineering_proof=proof
         )
+        if proof.get("tests"):
+            by_state[proof["id"]]["test_evidence"] = proof_references(proof)
     captures = load(SUITE / "contracts/openapi.capture.json")["paths"]
     interfaces = []
     for path, operations in captures.items():

@@ -20,8 +20,8 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from starlette.concurrency import run_in_threadpool
 
+from . import application_workflow, db, standards
 from . import contracts as c
-from . import db, standards
 from .config import PlatformSettings, get_platform_settings
 from .domain import (
     RuleError,
@@ -366,6 +366,9 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                         "directory.changed": {"REGISTRY_STEWARD"},
                         "application.created": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
                         "application.submitted": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
+                        "application.correction_requested": {"STANDARDS_REVIEWER"},
+                        "application.resubmitted": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
+                        "application.withdrawn": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
                         "evidence.stored": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
                         "inspection.assigned": {"REGISTRY_STEWARD", "STANDARDS_REVIEWER"},
                         "inspection.recorded": {"INSPECTOR"},
@@ -1100,11 +1103,20 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             return {"items": [dict(r) for r in rows]}
 
     @app.get("/v1/applications/{application_id}")
-    async def get_application(application_id: UUID, request: Request):
+    async def get_application(application_id: UUID, request: Request, history_before: int = 0):
         async with database.transaction() as session:
             actor = await actor_for(session, request)
             application, facility = await application_for(session, actor, str(application_id))
             result = {"application": application, "facility": facility}
+            require(history_before >= 0, "VALIDATION_FAILED", "Use a valid history cursor", 422)
+            history = list((await session.execute(select(db.revisions).where(
+                db.revisions.c.resource_type == "Application", db.revisions.c.resource_id == str(application_id),
+                db.revisions.c.version < history_before if history_before else True
+            ).order_by(db.revisions.c.version.desc()).limit(51))).mappings())
+            result["history"] = [dict(r) for r in history[:50]]
+            result["history_next_before"] = history[49]["version"] if len(history)>50 else None
+            result["correction_request"] = ((await standards.revision(session, application)).get("correction_request")
+                                            if application["state"] == "CORRECTION_REQUIRED" else None)
             for name, table in (
                 ("evidence", db.evidence),
                 ("inspections", db.inspections),
@@ -1128,6 +1140,8 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 .one()
             )
             return result
+
+    application_workflow.install(app, database, command, receipt)
 
     @app.post("/v1/applications/{application_id}/submit")
     async def submit_application(application_id: UUID, payload: c.Versioned, request: Request):
@@ -1220,9 +1234,9 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             row, facility = await application_for(session, actor, str(application_id), lock=True)
             require(scoped(actor, {"FACILITY_ADMIN", "REGISTRY_STEWARD"}, facility))
             require(
-                row["state"] == "DRAFT",
+                row["state"] in application_workflow.EDITABLE,
                 "INVALID_TRANSITION",
-                "Submitted evidence remains immutable",
+                "New evidence can only be added to a draft or correction request; originals remain immutable",
                 409,
             )
             rule = (
@@ -1324,11 +1338,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 "The application must be submitted",
                 409,
             )
-            require(
-                len({str(payload.inspector_id), str(payload.reviewer_id), row["created_by"]}) == 3,
-                "ACCESS_DENIED",
-                "Applicant, inspector and reviewer must be independent",
-            )
+            await standards.independent_assignment(session, row, facility, str(payload.inspector_id), str(payload.reviewer_id))
             for account_id, role in (
                 (str(payload.inspector_id), "INSPECTOR"),
                 (str(payload.reviewer_id), "STANDARDS_REVIEWER"),
@@ -1408,9 +1418,10 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             await standards.inspection_findings(
                 session, row, criterion, [f.model_dump(mode="json") for f in payload.findings]
             )
+            inspection_id = db.uid()
             await session.execute(
                 db.inspections.insert().values(
-                    id=db.uid(),
+                    id=inspection_id,
                     application_id=row["id"],
                     inspector_id=actor["id"],
                     findings=[f.model_dump(mode="json") for f in payload.findings],
@@ -1424,7 +1435,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 session,
                 actor,
                 "Application",
-                row,
+                row | {"inspection_id": inspection_id, "extension_contract": "LWH-EXT-APPLICATION-001"},
                 "inspection.recorded",
                 request.state.correlation_id,
             )
@@ -1479,17 +1490,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
         async def apply(session, actor):
             row, facility = await application_for(session, actor, str(application_id), lock=True)
             require(global_role(actor, "STANDARDS_DECIDER"))
-            require(
-                actor["id"]
-                not in (
-                    row["created_by"],
-                    row["inspector_id"],
-                    row["reviewer_id"],
-                    facility["created_by"],
-                ),
-                "ACCESS_DENIED",
-                "The final Directorate decider must be independent of this case",
-            )
+            await standards.independent_decider(session, row, facility, actor["id"])
             expected(row, payload.expected_version)
             require(
                 row["state"] == "RECOMMENDED",
