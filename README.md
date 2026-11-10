@@ -1,6 +1,6 @@
 # LW Health Intelligence Platform
 
-Latest assessment: [comprehensive suite audit and production-readiness sequence](docs/implementation/2026-11-09-comprehensive-audit-and-production-readiness.md). Scope remains aligned; full clinical/operating acceptance is incomplete. A confirmed historical reporting view/export limit defect is the first remediation priority. See the [readiness backlog](docs/implementation/2026-11-09-production-readiness-backlog.csv) and [next-session handoff](docs/implementation/NEXT_SESSION_HANDOFF.md).
+Latest assessment: [10 November comprehensive audit, milestones and production readiness](docs/implementation/2026-11-10-comprehensive-audit-and-production-readiness.md). The historical reporting defect has deployed engineering closure; correction/withdrawal, bounded capacity, recovery and release-control milestones are delivered. Operating adoption and full-suite acceptance remain incomplete. See the [current 20-ticket overlay](docs/implementation/2026-11-10-production-readiness-backlog.csv), [next-session handoff](docs/implementation/NEXT_SESSION_HANDOFF.md) and [copy-ready continuation prompt](docs/implementation/2026-11-10-new-session-prompt.md).
 
 Native reporting: [qualified source mappings and officer workflow](docs/implementation/native-reporting-source-guide.md), with signed provenance and explicit coverage/freshness. [Current release evidence](docs/implementation/current-release.json) records the live cloud increment.
 

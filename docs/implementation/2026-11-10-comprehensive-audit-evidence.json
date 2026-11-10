@@ -1,0 +1,1426 @@
+{
+  "audit": "COMPREHENSIVE_SCOPE_MILESTONES_AND_PRODUCTION_READINESS_REFRESH",
+  "recorded_at": "2026-11-10T18:49:52.453478+00:00",
+  "audited_repository_head": "8688429ef1763e4522bf156e65de754eb92d85fe",
+  "runtime_commit": "f2e29e3300433a095b154fce765273713222625f",
+  "readiness": {
+    "code_delivery": "DEPLOYED_PARTIAL_FULL_SCOPE",
+    "engineering_evidence": "BOUNDED_EXECUTED_EVIDENCE_WITH_RETAINED_FAILURES",
+    "operating_adoption": "INCOMPLETE",
+    "full_suite_acceptance": "INCOMPLETE_NOT_RUN"
+  },
+  "audit_actions": {
+    "runtime_source_changed": false,
+    "deployments_issued": 0,
+    "migrations_issued": 0,
+    "production_business_records_seeded": 0,
+    "provider_environment_values_inspected": false,
+    "authenticated_jobs_invoked": false,
+    "backup_or_restore_invoked": false,
+    "new_hosts": 0,
+    "dependencies_installed": 0,
+    "playwright_installed": false
+  },
+  "fresh_observation": {
+    "observed_at": "2026-11-10T18:42:19.816199+00:00",
+    "inspection": "READ_ONLY_AGGREGATES_AND_PROVIDER_METADATA_NO_CONTENT_OR_ENVIRONMENT_VALUES",
+    "controlled_documents": [
+      {
+        "path": "docs/00-control/LWH-DIR-001_directive_validation_source_dossier_and_decision_register.md",
+        "sha256": "e37d6aec2a8ad3ad51e5113ff0b377e4f0b3b1fb816ad4c90026c8e99db73426",
+        "baseline_match": true,
+        "title": "# Director directive dossier, confirmed decisions and unresolved inputs",
+        "bytes": 11201
+      },
+      {
+        "path": "docs/00-control/LWH-DOC-000_documentation_master_blueprint.md",
+        "sha256": "5cedd7b289c1635bc6c5476b0847c5ad2832e2df4f097e86ac3c05afd32f9fb4",
+        "baseline_match": true,
+        "title": "# Documentation master and product baseline",
+        "bytes": 8559
+      },
+      {
+        "path": "docs/00-control/LWH-DOC-001_documentation_control_terminology_and_traceability_handbook.md",
+        "sha256": "46d19d304bbebbb1c6a8bf9620e0e9077f5b9b7b2714f4333985a971bbc7b7e4",
+        "baseline_match": true,
+        "title": "# Documentation control, terminology and traceability",
+        "bytes": 5085
+      },
+      {
+        "path": "docs/01-programme/LWH-ARC-001_system_context_capability_architecture_and_integration_strategy.md",
+        "sha256": "5a783c9c4768b496079d06136dfa795991020b67895e7ce6ec5e6029517d9c16",
+        "baseline_match": true,
+        "title": "# Platform architecture, system context and integration strategy",
+        "bytes": 6783
+      },
+      {
+        "path": "docs/01-programme/LWH-BRD-001_business_requirements_and_institutional_service_model.md",
+        "sha256": "31f94b574ca73524b04d4d34c5ae1cb9ca4fae54b1655aa8991bc8555e328835",
+        "baseline_match": true,
+        "title": "# Business requirements and institutional service model",
+        "bytes": 4884
+      },
+      {
+        "path": "docs/01-programme/LWH-STR-001_programme_charter_and_executive_outcome_framework.md",
+        "sha256": "4b5e6a5f5b4ba0fc6698a12ca2089bb57912f69e2e728c6b121ab43581e9f930",
+        "baseline_match": true,
+        "title": "# Programme charter and executive outcome framework",
+        "bytes": 4560
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-001_organisation_identity_roles_and_delegated_administration.md",
+        "sha256": "91622308300e93f99c7c05feba002d14a19ee6d7417cb7cad4515c059636f925",
+        "baseline_match": true,
+        "title": "# Organisation identity, roles and delegated administration",
+        "bytes": 6846
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-002_facility_registry_service_directory_and_discovery.md",
+        "sha256": "e8f6ca3b10000d9c48ee85c50d07e44ccd288fa10b3d8766f8ff3ee511a63d82",
+        "baseline_match": true,
+        "title": "# Facility registry, service directory and discovery",
+        "bytes": 6706
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-003_affiliation_standards_inspection_renewal_and_noncompliance.md",
+        "sha256": "caf6f8a31a4ae01df0f514c3196c48a689c1b6e70b9c16faa81e4fcefe0fbe08",
+        "baseline_match": true,
+        "title": "# Affiliation, inspection, renewal and noncompliance",
+        "bytes": 7090
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-004_periodic_facility_and_zone_health_reporting.md",
+        "sha256": "e794ef70bc416317927b50c089467b85f97f5f7f747c32b98d8561aebbced7c6",
+        "baseline_match": true,
+        "title": "# Periodic facility, zone and regional health reporting",
+        "bytes": 6943
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-005_health_event_notification_safety_learning_and_review.md",
+        "sha256": "55e0684474df3b8344cd201da1c7cace6e02ed17173560e83d9b94da3b2716ed",
+        "baseline_match": true,
+        "title": "# Health events, safety reporting and review",
+        "bytes": 6804
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-006_data_validation_verification_and_stewardship.md",
+        "sha256": "98f89af0a812ee7613f9eae133dd29fc0249e3127e8fb6d08bdfff7436b2ebe6",
+        "baseline_match": true,
+        "title": "# Data validation, verification and stewardship",
+        "bytes": 6422
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-007_leadership_dashboards_and_institutional_intelligence.md",
+        "sha256": "40afc0b761ca3731f71b627912acfadaae60780e6db2cba516a0b2990e4449a7",
+        "baseline_match": true,
+        "title": "# Leadership dashboards and institutional intelligence",
+        "bytes": 6808
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-008_interventions_decisions_and_accountable_action_tracking.md",
+        "sha256": "5ddd29d4010516851de79f583687146546458ef15fbf87a92b5d5dd180898e7f",
+        "baseline_match": true,
+        "title": "# Interventions, decisions and accountable action",
+        "bytes": 6338
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-009_community_clinics_network_readiness_and_referral_coordination.md",
+        "sha256": "029049346abc683fa24182c2ed17e01fa41e8863d7e7204d760da3c111e39d15",
+        "baseline_match": true,
+        "title": "# Community clinics, readiness and referral coordination",
+        "bytes": 6800
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-010_health_education_approved_policy_and_rights_communication.md",
+        "sha256": "56950d9b6789e36669b9dd13d3fe81553b31280039283a67babb44446efe748b",
+        "baseline_match": true,
+        "title": "# Health education, approved policy and rights communication",
+        "bytes": 6594
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-011_loveworld_care_workspace_and_service_integration.md",
+        "sha256": "b1298f240870f2cae8aa1472c183b10ceea28be6c4cd0fdf2048a63e9db87460",
+        "baseline_match": true,
+        "title": "# LW Care service integration and remote care",
+        "bytes": 6824
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-012_patient_identity_record_continuity_and_controlled_exchange.md",
+        "sha256": "c8818fbdc3911d2dc5f1854e44569c41dad5956168393ea8a6a48e184e73bc38",
+        "baseline_match": true,
+        "title": "# Patient identity, record continuity and controlled exchange",
+        "bytes": 7166
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-013_sponsor_programmes_institutional_funding_and_programme_impact.md",
+        "sha256": "1a6a74cf892fc6354da65b61cc045ae2610307d44eade834fc9c6d9d72699ffd",
+        "baseline_match": true,
+        "title": "# Sponsored programmes, entitlements and funding",
+        "bytes": 6777
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-014_governed_intelligence_assistants_and_workflow_automation.md",
+        "sha256": "8abef26106bec49a337f2dd9b582311a8395031714b07ffdcdadeb3d35b85ad8",
+        "baseline_match": true,
+        "title": "# Governed assistants and workflow automation",
+        "bytes": 6719
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-015_patient_administration_and_longitudinal_clinical_chart.md",
+        "sha256": "cabf93b360c6be95dcfd0724872622e63bb5417db21b38da88d8ab9a9fd1a150",
+        "baseline_match": true,
+        "title": "# Patient administration and longitudinal clinical chart",
+        "bytes": 6946
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-016_ambulatory_emergency_triage_and_encounter_workflows.md",
+        "sha256": "685351094793bdaeb9a672f2903ffd5ebe32a1b50763e9529ae926edc1c8fe07",
+        "baseline_match": true,
+        "title": "# Ambulatory, emergency triage and encounter workflows",
+        "bytes": 6734
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-017_inpatient_admission_nursing_transfer_and_discharge.md",
+        "sha256": "cbeed8e60054320f6cc680fffa90e9bfa16659739e7fba7447992d7c16f02249",
+        "baseline_match": true,
+        "title": "# Inpatient admission, nursing, transfer and discharge",
+        "bytes": 6971
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-018_maternal_newborn_child_and_continuing_care_programmes.md",
+        "sha256": "08aaa989a71941fb131ed921ea3f051a2131cc2cbf9fea8dffd3ddbd7f9cc493",
+        "baseline_match": true,
+        "title": "# Maternal, newborn, child and continuing care programmes",
+        "bytes": 7140
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-019_clinical_orders_laboratory_imaging_and_results.md",
+        "sha256": "08b7e73fef226f08d487266603b19ea6678a9c61d3360d3c1417ddd31eaaa7f5",
+        "baseline_match": true,
+        "title": "# Clinical orders, laboratory, imaging and results",
+        "bytes": 6977
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-020_medicines_prescribing_dispensing_administration_and_clinical_stock.md",
+        "sha256": "681338263d79c95bf6c39f330cb22e4c09b3d989c00ad0634b49669307583ecf",
+        "baseline_match": true,
+        "title": "# Medicines, prescribing, dispensing, administration and stock",
+        "bytes": 7155
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-021_procedures_surgery_anaesthesia_and_transfusion.md",
+        "sha256": "ba9621efa50923c04db4f46532e1a9737d066fb33c581a370e5ea73f3aae953c",
+        "baseline_match": true,
+        "title": "# Procedures, surgery, anaesthesia and transfusion",
+        "bytes": 7395
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-022_patient_billing_payments_claims_and_care_financial_workflows.md",
+        "sha256": "9296d49295d5ce18cfe79e53f1a15e4bcc888257d37dfc01bc423981a2d4af76",
+        "baseline_match": true,
+        "title": "# Patient billing, payments, claims and care finance",
+        "bytes": 7030
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-023_my_lw_health_care_patient_and_family_experience.md",
+        "sha256": "8085a768bd094ab6d0e3e6045bb7baf1d9e6103d29573a24d77d2e63fc24af11",
+        "baseline_match": true,
+        "title": "# My LW Health Care: patient and family experience",
+        "bytes": 7084
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-024_lw_care_clinician_workspace_and_companion.md",
+        "sha256": "23cb85575e21b5adbb8de9f07a4eff8e2f252f9813a673bcaaca4d990368da5c",
+        "baseline_match": true,
+        "title": "# LW Care clinician workspace and companion",
+        "bytes": 6771
+      },
+      {
+        "path": "docs/02-prds/LWH-PRD-025_optional_accounting_procurement_hr_and_payroll_modules.md",
+        "sha256": "21673b726995847bc18913c8ce7549ea7084e25576a957e02db4cabe36934fac",
+        "baseline_match": true,
+        "title": "# Optional accounting, procurement, HR and payroll",
+        "bytes": 7092
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-001_information_architecture_design_system_and_role_specific_screens.md",
+        "sha256": "77ee7b8559b78e46b19124e59560fb7830aaa889e62cab738d8d128dfa2dcd03",
+        "baseline_match": true,
+        "title": "# Information architecture, design system and screen behaviour",
+        "bytes": 9765
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-002_user_journeys_and_service_blueprints.md",
+        "sha256": "a339c19eb7d69d5d4706e5c706aa76e788873f064bd6ba250677866be346f8ce",
+        "baseline_match": true,
+        "title": "# End-to-end user journeys and service blueprints",
+        "bytes": 11199
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-003_identity_authorisation_and_delegation_matrix.md",
+        "sha256": "d7db606a0e979e08feb8728a5e24d6344db51ba92554bcfcce0a329da5467cde",
+        "baseline_match": true,
+        "title": "# Identity, authorisation and delegation matrix",
+        "bytes": 7469
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-004_canonical_domain_model_data_dictionary_and_lineage.md",
+        "sha256": "8bccbb931eb3b65bb912729e3732c1954e19bc983a66b0c8dcd967fafa1b694f",
+        "baseline_match": true,
+        "title": "# Canonical domain model, data dictionary and lineage",
+        "bytes": 19827
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-005_facility_master_data_geography_and_service_readiness_contracts.md",
+        "sha256": "e581db6d14be11dc4b9c51dd36977ab1f74a00fcf8bcef99687a57e79ae53038",
+        "baseline_match": true,
+        "title": "# Facility master data, geography and service readiness",
+        "bytes": 4712
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-006_form_catalogue_field_dictionary_and_executable_schemas.md",
+        "sha256": "04e3607871887596eefc8f84a266b0adce70bbbefd351279c0dfa0a86487e213",
+        "baseline_match": true,
+        "title": "# Form catalogue, field dictionary and executable capture schemas",
+        "bytes": 68002
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-007_indicator_catalogue_and_reporting_measurement_framework.md",
+        "sha256": "9dc261cbd2ac441c61f707fc37de463c101b444ba686cd1bce9a3bedaa700a6f",
+        "baseline_match": true,
+        "title": "# Indicator catalogue and measurement framework",
+        "bytes": 14021
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-008_reporting_data_quality_and_reconciliation_specification.md",
+        "sha256": "f12ee7b4c6bdf772388d5a69a290069edf69b97f5e3faa274138b9bf3ea1fd02",
+        "baseline_match": true,
+        "title": "# Reporting, data quality and reconciliation rules",
+        "bytes": 5084
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-009_workflow_state_transition_and_business_rule_catalogue.md",
+        "sha256": "2c07b41f1030a9d88ff7a080cb58b6ef6c7bc667884082c2f345086a0bbc73c8",
+        "baseline_match": true,
+        "title": "# State transitions and business-rule catalogue",
+        "bytes": 11448
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-010_api_command_query_and_error_contracts.md",
+        "sha256": "2f78a2635a494920b50d61e213560c8a6958c22ba851e2c7f7012b74b90c1d1a",
+        "baseline_match": true,
+        "title": "# API commands, queries and error contracts",
+        "bytes": 15463
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-011_events_notifications_durable_jobs_and_integration_contracts.md",
+        "sha256": "da92d85b2370cf49f0317fe8ca03be88888f533c0be9d32d3f0a9dcbcd1edbf7",
+        "baseline_match": true,
+        "title": "# Events, notifications, durable jobs and integrations",
+        "bytes": 8409
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-012_interoperability_and_patient_record_exchange_specification.md",
+        "sha256": "c3262a0569c3c6fe26b297a953f71ddcd7d0474eee2448ccce008389f2a421ac",
+        "baseline_match": true,
+        "title": "# Interoperability and controlled patient-record exchange",
+        "bytes": 5313
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-013_intelligence_runtime_tools_memory_and_evaluation.md",
+        "sha256": "8033e51d6497f5d8e432726ae4461490640b33d0862f3f238777b76a8c46e0fe",
+        "baseline_match": true,
+        "title": "# Intelligence runtime, tools, memory and evaluation",
+        "bytes": 5649
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-014_analytics_disclosure_control_and_leadership_view_contracts.md",
+        "sha256": "f66215e8729c07be731680e8720d17b458030cb13fe3d39adf60777fae24d84c",
+        "baseline_match": true,
+        "title": "# Analytics, disclosure and leadership view contracts",
+        "bytes": 4742
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-015_nonfunctional_reliability_and_service_quality_specification.md",
+        "sha256": "cc306ee5dcaca4a529107c7da52f27f64a4a8ea1ac9bfb2a5e4bf3725ecee099",
+        "baseline_match": true,
+        "title": "# Reliability, performance and service-quality specification",
+        "bytes": 5528
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-016_security_architecture_and_threat_model.md",
+        "sha256": "14a672d6a749cf290257a54ccd2f734d849bf44043b76f703e75a1a133d72caf",
+        "baseline_match": true,
+        "title": "# Security architecture and threat model",
+        "bytes": 5587
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-017_facility_local_runtime_offline_operations_and_synchronisation.md",
+        "sha256": "e6113463f00790909e582ebfe0057781677c319d9e38bc1a56760af9f0cde89f",
+        "baseline_match": true,
+        "title": "# Facility local runtime, full offline care and synchronisation",
+        "bytes": 12638
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-018_clinical_record_orders_and_team_workflow_contracts.md",
+        "sha256": "edcb55ddc358195c3886d64448351bda11b380af7a37d55e8bcf5af6a8cf953b",
+        "baseline_match": true,
+        "title": "# Clinical record, order and team workflow contracts",
+        "bytes": 5483
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-019_clinical_terminology_medicines_and_specialty_data_contracts.md",
+        "sha256": "794d6706f7539fd3d9a82378c0d7e9116b2abf7b95e9067f04543c145bc8ef67",
+        "baseline_match": true,
+        "title": "# Clinical terminology, medicines and specialty data contracts",
+        "bytes": 5252
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-020_laboratory_imaging_devices_and_document_interfaces.md",
+        "sha256": "e7aca74197613a88413437880e24a164e07cb40f613e5f53b96930bc3420b351",
+        "baseline_match": true,
+        "title": "# Laboratory, imaging, device and document interfaces",
+        "bytes": 4113
+      },
+      {
+        "path": "docs/03-specifications/LWH-SPEC-021_global_jurisdiction_activation_and_policy_configuration.md",
+        "sha256": "1e1b0752d1327e288fed7b76e9f7fcd9385d84506b185fb6a6e782ffd10915b5",
+        "baseline_match": true,
+        "title": "# Global jurisdiction activation and policy configuration",
+        "bytes": 6081
+      },
+      {
+        "path": "docs/04-governance/LWH-GOV-001_operating_model_organisation_hierarchy_and_decision_rights.md",
+        "sha256": "85529f79d0dd70fce17ba6ea5f86ddc860f967aecc109a4a52e5c0f8b2760566",
+        "baseline_match": true,
+        "title": "# Operating model, ministry hierarchy and decision rights",
+        "bytes": 5942
+      },
+      {
+        "path": "docs/04-governance/LWH-GOV-002_clinical_scope_intended_use_and_safety_governance.md",
+        "sha256": "00cf013345ff0d5975ce5b5516227398228255406aab002c64ab7791205b807c",
+        "baseline_match": true,
+        "title": "# Clinical intended use, scope and safety governance",
+        "bytes": 6851
+      },
+      {
+        "path": "docs/04-governance/LWH-GOV-003_privacy_lawful_processing_and_jurisdictional_data_governance.md",
+        "sha256": "23530525eded867fdb70797537ef7088832d9eb94408e57c77894e1e182a0d7f",
+        "baseline_match": true,
+        "title": "# Privacy, processing purposes and jurisdictional governance",
+        "bytes": 5029
+      },
+      {
+        "path": "docs/04-governance/LWH-GOV-004_records_consent_sharing_retention_and_correction_policy.md",
+        "sha256": "78618aef8edff026f03dd549ab5d61bf524fe7d324d8c140d0b8efcff7e77e7a",
+        "baseline_match": true,
+        "title": "# Records, consent, sharing, retention and correction policy",
+        "bytes": 4542
+      },
+      {
+        "path": "docs/04-governance/LWH-GOV-005_affiliation_standards_inspections_and_institutional_compliance_policy.md",
+        "sha256": "37a31c577f79ec80043ac50d6339f4bccef92dcf60368f1fd1a0a5c92c8aa8a9",
+        "baseline_match": true,
+        "title": "# Affiliation, inspection and institutional standards policy",
+        "bytes": 5905
+      },
+      {
+        "path": "docs/04-governance/LWH-GOV-006_risk_incidents_escalation_and_complaints_governance.md",
+        "sha256": "c8298e80425b2d78bfe67eff6724623b64885f367c1a15d240f09068d28765ef",
+        "baseline_match": true,
+        "title": "# Risk, incidents, escalation and complaints governance",
+        "bytes": 4241
+      },
+      {
+        "path": "docs/04-governance/LWH-GOV-007_ai_knowledge_and_automation_governance_policy.md",
+        "sha256": "d7464d5e11c2e1c14732475a99234cc9f83bbf922e4df88509656581a2023296",
+        "baseline_match": true,
+        "title": "# AI, knowledge and automation governance",
+        "bytes": 3640
+      },
+      {
+        "path": "docs/04-governance/LWH-GOV-008_country_activation_facility_privileging_and_local_authority.md",
+        "sha256": "659606619a47dcaaa0e363cf582412da6faa816351943b72ae7d6a3b55a1bbdd",
+        "baseline_match": true,
+        "title": "# Country activation, facility privileges and local authority",
+        "bytes": 4410
+      },
+      {
+        "path": "docs/04-governance/LWH-STD-001_source_standards_adaptation_and_local_policy_register.md",
+        "sha256": "8681aacde7e78e121c37c4c911ac5e4be7ea427ca796b7e26c0a40bdd69e0ee3",
+        "baseline_match": true,
+        "title": "# Source standards, adaptation and policy register",
+        "bytes": 21825
+      },
+      {
+        "path": "docs/05-engineering/LWH-ENG-001_current_system_audit_reuse_integration_and_migration_plan.md",
+        "sha256": "3d6d024beb2e2645bce9b2536c8435616fbcd38d4224b09548cc8e2fab0f43cc",
+        "baseline_match": true,
+        "title": "# Existing-system audit, reuse and integration plan",
+        "bytes": 4662
+      },
+      {
+        "path": "docs/05-engineering/LWH-ENG-002_delivery_roadmap_epics_dependencies_and_build_contracts.md",
+        "sha256": "4771c8f743e7f1cf2ca93af9ca5780cead0d897654ae7e8d491da8cf1c2e3e82",
+        "baseline_match": true,
+        "title": "# Delivery roadmap, epics and implementation contracts",
+        "bytes": 5623
+      },
+      {
+        "path": "docs/05-engineering/LWH-ENG-003_quality_strategy_verification_and_test_specifications.md",
+        "sha256": "700e0db5a4a3e8d91b814e2047b728fadbe187a909e53a669e6b4a494adba7dc",
+        "baseline_match": true,
+        "title": "# Quality strategy and verification specifications",
+        "bytes": 4587
+      },
+      {
+        "path": "docs/05-engineering/LWH-ENG-004_role_based_uat_mandate_demonstration_and_acceptance_pack.md",
+        "sha256": "26171c3de23675f39ad436325cc18f23f0a21219ebc98f880bb31e2242dcc6f0",
+        "baseline_match": true,
+        "title": "# Role-based UAT, Director demonstration and acceptance pack",
+        "bytes": 9568
+      },
+      {
+        "path": "docs/05-engineering/LWH-ENG-005_environments_ci_cd_release_and_rollback_specification.md",
+        "sha256": "7d039de34575990ed001c09af38423938a5229d1692ff6dd166e2660e9de90f7",
+        "baseline_match": true,
+        "title": "# Environments, CI/CD, release and rollback",
+        "bytes": 3621
+      },
+      {
+        "path": "docs/05-engineering/LWH-ENG-006_observability_reconciliation_and_release_evidence_specification.md",
+        "sha256": "bb22d06ffca2e2352838b4f51fa809b1dfb87e202363cedf74ffffe0c35a8b9a",
+        "baseline_match": true,
+        "title": "# Observability, reconciliation and release evidence",
+        "bytes": 4188
+      },
+      {
+        "path": "docs/05-engineering/LWH-ENG-007_legacy_emr_integration_migration_and_cutover.md",
+        "sha256": "917488ff6a921cb9a95673c9f9f077964a2726682dc0be83ec62b8cc40af837e",
+        "baseline_match": true,
+        "title": "# Existing EMR integration, migration and cutover",
+        "bytes": 4321
+      },
+      {
+        "path": "docs/06-operations/LWH-OPS-001_facility_network_onboarding_and_directory_stewardship_sop.md",
+        "sha256": "bd2f63dd7cee4709e03225afb3c81a17191861bfc029425297d1446b1566e439",
+        "baseline_match": true,
+        "title": "# Facility/network onboarding and directory stewardship",
+        "bytes": 4511
+      },
+      {
+        "path": "docs/06-operations/LWH-OPS-002_facility_reporting_zone_coordination_and_data_quality_sop.md",
+        "sha256": "b724310403a02c22fe89640f6f331e17d47d675410d5bf48f0aa09a45607ad0b",
+        "baseline_match": true,
+        "title": "# Facility reporting, regional/zonal coordination and data quality",
+        "bytes": 4870
+      },
+      {
+        "path": "docs/06-operations/LWH-OPS-003_inspection_affiliation_renewal_and_noncompliance_casework_sop.md",
+        "sha256": "723bb00522e06d2e4856652d59638e03829b42943d9a92d6bbb2fc9663e5e010",
+        "baseline_match": true,
+        "title": "# Inspection, affiliation, renewal and noncompliance casework",
+        "bytes": 4689
+      },
+      {
+        "path": "docs/06-operations/LWH-OPS-004_clinic_referral_education_and_intervention_fulfilment_sop.md",
+        "sha256": "639d8ab4516864889297983a60594db7630d796dd5a19c2a153fcd276473a37f",
+        "baseline_match": true,
+        "title": "# Clinic, referral, education and intervention fulfilment",
+        "bytes": 4700
+      },
+      {
+        "path": "docs/06-operations/LWH-OPS-005_platform_support_continuity_recovery_and_service_runbooks.md",
+        "sha256": "879959eaaa7ad3ce6dea946662fef7b86b9e7dd9491359202c1133fe1bf990a8",
+        "baseline_match": true,
+        "title": "# Platform support, incidents, recovery and continuity",
+        "bytes": 4566
+      },
+      {
+        "path": "docs/06-operations/LWH-OPS-006_facility_clinical_operations_offline_care_and_sync_reconciliation.md",
+        "sha256": "0d819ccc2a4cd64478d73e1ad6e6bb1d7576f83b22347fb2e0274d683257c4c9",
+        "baseline_match": true,
+        "title": "# Facility clinical operation, downtime and synchronisation",
+        "bytes": 5229
+      },
+      {
+        "path": "docs/06-operations/LWH-OPS-007_emr_adoption_training_and_facility_activation.md",
+        "sha256": "57d0b35b2fae74252ef6c19317f7a2dc877a857a06718ff52a72fb098f90010c",
+        "baseline_match": true,
+        "title": "# EMR adoption, role training and facility activation",
+        "bytes": 4793
+      },
+      {
+        "path": "docs/07-commercial/LWH-COM-001_business_case_programme_economics_and_funding_model.md",
+        "sha256": "1b9bb850a125933e0cb6412d3a348a538a58f933236212a5ba035f86462d5487",
+        "baseline_match": true,
+        "title": "# Business case, funding and programme economics",
+        "bytes": 6389
+      },
+      {
+        "path": "docs/07-commercial/LWH-COM-002_scope_of_work_ownership_managed_service_and_change_control_framework.md",
+        "sha256": "0920bc6e6fc12e3e475aa0f937cae96604d01f0b3b01d8de617382c5a61d5123",
+        "baseline_match": true,
+        "title": "# Scope of work, ownership, managed service and change control",
+        "bytes": 5067
+      },
+      {
+        "path": "docs/07-commercial/LWH-COM-003_partner_data_sharing_procurement_and_service_agreement_templates.md",
+        "sha256": "2d78ccf9e93c5e45b992819385369399f93abc30de6596e2fd1f68da581951bb",
+        "baseline_match": true,
+        "title": "# Participation, service and data agreement templates",
+        "bytes": 10078
+      }
+    ],
+    "formal_registers": {
+      "2026-11-09-audit-requirements.csv": {
+        "rows": 200,
+        "status_fields": {
+          "formal_verification_status": {
+            "NOT_RUN": 200
+          }
+        }
+      },
+      "2026-11-09-audit-acceptance-cases.csv": {
+        "rows": 111,
+        "status_fields": {
+          "canonical_execution_status": {
+            "NOT_RUN": 111
+          },
+          "audit_execution_status": {
+            "NOT_EXECUTED_AS_FORMAL_ACCEPTANCE": 111
+          }
+        }
+      }
+    },
+    "conformance": {
+      "forms": {
+        "count": 51,
+        "status_counts": {
+          "PARTIAL_CANDIDATE_MAPPING": 47,
+          "OPEN_EXPLICIT_MAPPING_GAP": 4
+        }
+      },
+      "fields": {
+        "count": 355,
+        "status_counts": {
+          "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS": 19,
+          "OPEN_EXPLICIT_FIELD_MAPPING_GAP": 300,
+          "PARTIAL_NAME_OR_ALIAS_CANDIDATE": 36
+        }
+      },
+      "screens": {
+        "count": 75,
+        "status_counts": {
+          "OPEN_SEMANTIC_CONFORMANCE_GAP": 75
+        }
+      },
+      "state_families": {
+        "count": 30,
+        "status_counts": {
+          "OPEN_SEMANTIC_CONFORMANCE_GAP": 28,
+          "PARTIAL_ENGINEERING_TRANSITION_PROOF_EXCEPTION_OPEN": 2
+        }
+      },
+      "interfaces": {
+        "count": 82,
+        "status_counts": {
+          "OPEN_TYPED_EXTENSION_RECONCILIATION": 67,
+          "PARTIAL_PATH_MATCH_SEMANTICS_UNQUALIFIED": 1,
+          "OPEN_ROUTE_MAPPING_GAP": 14
+        }
+      }
+    },
+    "actual_route_count": 299,
+    "typed_model_count": 61,
+    "repository_head": "8688429ef1763e4522bf156e65de754eb92d85fe",
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf",
+    "native_pack_sha256": "4914adbb78620274f60eb8a68a3003eef3748777177f5cf0208d6989cfa193d0",
+    "table_counts": {
+      "accounts": 1,
+      "audit": 48,
+      "clinical_audit": 45,
+      "clinical_operations": 0,
+      "control_assurance_runs": 22,
+      "control_audit": 239,
+      "control_clinical_alerts": 0,
+      "control_jobs": 0,
+      "control_operation_receipts": 0,
+      "control_worker_state": 2,
+      "criteria": 0,
+      "institutional_articles": 0,
+      "institutional_changes": 0,
+      "institutional_custody": 0,
+      "institutional_journal": 0,
+      "institutional_receipts": 0,
+      "institutional_relationships": 0,
+      "operations": 0,
+      "operators": 0,
+      "outbox": 1,
+      "personal_audit": 19,
+      "personal_events": 0,
+      "personal_operations": 0,
+      "rate_limits": 32,
+      "reporting_actions": 0,
+      "reporting_audit": 197,
+      "reporting_definitions": 0,
+      "reporting_disclosure_policies": 0,
+      "reporting_escalations": 0,
+      "reporting_event_categories": 0,
+      "reporting_history": 0,
+      "reporting_obligations": 0,
+      "reporting_operations": 0,
+      "revisions": 0,
+      "schema_versions": 9,
+      "units": 0,
+      "control_account_security": 0,
+      "control_alert_receipts": 0,
+      "control_backup_codes": 0,
+      "control_job_attempts": 0,
+      "control_offboardings": 0,
+      "control_recoveries": 0,
+      "facilities": 0,
+      "grants": 2,
+      "institutional_content_deliveries": 0,
+      "institutional_content_revisions": 0,
+      "invitations": 1,
+      "personal_preferences": 0,
+      "reporting_cohorts": 0,
+      "reporting_duty_windows": 0,
+      "reporting_escalation_receipts": 0,
+      "reporting_extracts": 0,
+      "reporting_import_batches": 0,
+      "reporting_policy_revocations": 0,
+      "reporting_returns": 0,
+      "reporting_safety_cases": 0,
+      "sessions": 4,
+      "applications": 0,
+      "clinical_privileges": 0,
+      "clinical_records": 0,
+      "clinical_sites": 0,
+      "control_clinical_coverage": 0,
+      "control_handover_items": 0,
+      "control_policy_packages": 0,
+      "control_recovery_reviews": 0,
+      "institutional_cases": 0,
+      "institutional_content_receipts": 0,
+      "institutional_content_reviews": 0,
+      "institutional_content_states": 0,
+      "institutional_site_controls": 0,
+      "personal_services": 0,
+      "reporting_snapshots": 0,
+      "reporting_validation_runs": 0,
+      "reporting_versions": 0,
+      "clinical_beds": 0,
+      "clinical_events": 0,
+      "clinical_flow_index": 0,
+      "clinical_ledger": 0,
+      "clinical_memberships": 0,
+      "clinical_stock_lots": 0,
+      "control_clinical_obligations": 0,
+      "control_package_reviews": 0,
+      "control_package_revocations": 0,
+      "control_site_packages": 0,
+      "decisions": 0,
+      "evidence": 0,
+      "inspections": 0,
+      "institutional_case_files": 0,
+      "institutional_decisions": 0,
+      "institutional_findings": 0,
+      "institutional_notices": 0,
+      "personal_links": 0,
+      "reporting_snapshot_inputs": 0,
+      "reporting_snapshot_invalidations": 0,
+      "reporting_snapshot_reviews": 0,
+      "reporting_source_index": 0,
+      "clinical_stock_movements": 0,
+      "institutional_responses": 0,
+      "personal_releases": 0,
+      "personal_requests": 0,
+      "personal_messages": 0,
+      "personal_withdrawals": 0
+    },
+    "base_tables": 102,
+    "schema_version": 9,
+    "protected_history_tables": 53,
+    "current_grants_by_role": [
+      {
+        "role": "PLATFORM_ADMIN",
+        "count": 1
+      },
+      {
+        "role": "REGISTRY_STEWARD",
+        "count": 1
+      }
+    ],
+    "latest_assurance_outcomes": [
+      {
+        "kind": "RECONCILIATION",
+        "outcome": "NO_EXCEPTIONS_IN_EXECUTED_CHECKS",
+        "started_at": "2026-11-10T03:07:13.963604+00:00"
+      },
+      {
+        "kind": "RESTORE",
+        "outcome": "ISOLATED_VERIFIED",
+        "started_at": "2026-11-10T03:03:12.628238+00:00"
+      },
+      {
+        "kind": "BACKUP",
+        "outcome": "ARCHIVED_NOT_RESTORE_VERIFIED",
+        "started_at": "2026-11-10T03:01:44.676132+00:00"
+      },
+      {
+        "kind": "RESTORE",
+        "outcome": "ISOLATED_VERIFIED",
+        "started_at": "2026-11-09T16:28:55.956027+00:00"
+      },
+      {
+        "kind": "RESTORE",
+        "outcome": "FAILED",
+        "started_at": "2026-11-09T16:24:12.102865+00:00"
+      },
+      {
+        "kind": "BACKUP",
+        "outcome": "ARCHIVED_NOT_RESTORE_VERIFIED",
+        "started_at": "2026-11-09T16:22:38.278689+00:00"
+      },
+      {
+        "kind": "RECONCILIATION",
+        "outcome": "NO_EXCEPTIONS_IN_EXECUTED_CHECKS",
+        "started_at": "2026-11-09T16:19:23.667879+00:00"
+      },
+      {
+        "kind": "RESTORE",
+        "outcome": "ISOLATED_VERIFIED",
+        "started_at": "2026-11-09T16:15:29.473754+00:00"
+      }
+    ],
+    "disposable_correction_schemas_remaining": 0,
+    "projects": {
+      "api": {
+        "name": "lw-health-intelligence-api",
+        "active_deployment": "dpl_HQdm6DJm2tLEurnYCFpCFiNQ5kkt",
+        "matches_release_inventory": true,
+        "ready_state": "READY",
+        "source_commit": "f2e29e3300433a095b154fce765273713222625f",
+        "crons": [
+          {
+            "path": "/v1/internal/jobs",
+            "schedule": "0 0 * * *"
+          }
+        ],
+        "sso_protection": {
+          "deploymentType": "all_except_custom_domains"
+        },
+        "automation_tokens_remaining": 0
+      },
+      "web": {
+        "name": "lw-health-intelligence",
+        "active_deployment": "dpl_uuLQU1PFeW4TNJFW5ZUHzp5EDSYE",
+        "matches_release_inventory": true,
+        "ready_state": "READY",
+        "source_commit": "f2e29e3300433a095b154fce765273713222625f",
+        "crons": [],
+        "sso_protection": {
+          "deploymentType": "all_except_custom_domains"
+        },
+        "automation_tokens_remaining": 0
+      }
+    },
+    "scanner_host_environment_entry_present": false,
+    "provider_environment_entries_present": {
+      "LWH_DATABASE_URL": true,
+      "LWH_RESEND_API_KEY": true,
+      "LWH_S3_ACCESS_KEY": true,
+      "LWH_UPSTASH_REST_TOKEN": true,
+      "LWH_OPENROUTER_API_KEY": true,
+      "LWH_JOBS_SECRET": true,
+      "CRON_SECRET": true
+    },
+    "environment_values_inspected": false,
+    "runtime_ci": {
+      "id": 42864525902,
+      "head_sha": "f2e29e3300433a095b154fce765273713222625f",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42864525902"
+    },
+    "status": "PASSED"
+  },
+  "fresh_cloud_checks": [
+    {
+      "target": "api",
+      "deployment_id": "dpl_HQdm6DJm2tLEurnYCFpCFiNQ5kkt",
+      "state": "READY",
+      "actual_source_hashes_verified": 67
+    },
+    {
+      "target": "web",
+      "deployment_id": "dpl_uuLQU1PFeW4TNJFW5ZUHzp5EDSYE",
+      "state": "READY",
+      "actual_source_hashes_verified": 31
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/health",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/ready",
+      "http": 200,
+      "cache_control": "no-store",
+      "schema_version": 9,
+      "reporting": "READY"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/auth/me",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/service-capabilities",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/clinical/sites",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/templates",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/template-proposals",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/jobs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/reliability",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/assurance-runs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/articles",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/knowledge",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/safety-cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/snapshots",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/auth/login",
+      "method": "POST",
+      "http": 401,
+      "elapsed_seconds": 2.834,
+      "invalid_credentials_rejected": true,
+      "session_created": false
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/health",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/ready",
+      "http": 200,
+      "cache_control": "no-store",
+      "schema_version": 9,
+      "reporting": "READY"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/auth/me",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/service-capabilities",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/clinical/sites",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/templates",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/template-proposals",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/jobs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/reliability",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/assurance-runs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/articles",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/knowledge",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/safety-cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/snapshots",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/auth/login",
+      "method": "POST",
+      "http": 401,
+      "elapsed_seconds": 2.82,
+      "invalid_credentials_rejected": true,
+      "session_created": false
+    },
+    {
+      "frontend_page": "/",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/care",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/directorate",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/reporting-templates",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/operations",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/recover",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/governance",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/learn",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/activate",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/directory",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/my-health",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/patient-access",
+      "http": 200,
+      "platform_title_verified": true
+    }
+  ],
+  "fresh_local_checks": {
+    "reporting_regressions": {
+      "passed": 3,
+      "deselected": 10,
+      "full_suite_rerun": false,
+      "selectors": [
+        "retained_native_reports_survive_unavailable_accounting",
+        "period_index_bounds_dependencies_events_and_recovers_projection"
+      ],
+      "log": {
+        "path": ".toolchain/audit-20261110-reporting-tests.log",
+        "sha256": "cbe728a8cda1a1086307dda049616e13db3ac74c261a6816a6f1fd78a374c05b"
+      }
+    },
+    "conformance_register_check": "PASSED"
+  },
+  "runtime_ci_execution": "Previously executed exact-runtime CI rechecked SUCCESS; counts retained from runtime release, not newly rerun in this audit.",
+  "runtime_ci_counts": {
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42864525902",
+    "run_id": 42864525902,
+    "status": "SUCCESS",
+    "python_tests": 265,
+    "api_client_tests": 11,
+    "pwa_tests": 4,
+    "typecheck": "PASSED",
+    "build": "PASSED",
+    "secret_scan": "PASSED",
+    "jobs": [
+      {
+        "id": 129999185726,
+        "name": "secrets-scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129999186182,
+        "name": "web",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129999186448,
+        "name": "python",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "prior_correction_qualification": {
+    "scenarios": 13,
+    "attempts": 3,
+    "outcomes": [
+      "FAILED",
+      "FAILED",
+      "PASSED"
+    ],
+    "all_disposable_schemas_removed": true,
+    "evidence": "2026-11-10-application-correction-evidence.json",
+    "rerun_in_this_audit": false
+  },
+  "failed_audit_collector_attempts": [
+    {
+      "artifact": {
+        "path": ".toolchain/audit-20261110-metadata-attempt1.json",
+        "sha256": "beb6dc27f781b606fe64a143255b7fcd01b6d4746a911036c00cf908721fd1a5"
+      },
+      "status": "FAILED",
+      "failure": {
+        "type": "NoReferencedTableError",
+        "file": "schema.py",
+        "line": 3887
+      }
+    },
+    {
+      "artifact": {
+        "path": ".toolchain/audit-20261110-metadata-attempt2.json",
+        "sha256": "2128278f88f872a647ac4a3a8b8a942ac3ec3f31b4b0ac836404849e4621c556"
+      },
+      "status": "FAILED",
+      "failure": {
+        "type": "gaierror",
+        "file": "socket.py",
+        "line": 983
+      }
+    }
+  ],
+  "collector_failure_explanation": "First ignored collector omitted runtime table imports; corrected locally. Second attempt hit DNS resolution before database counts. Third fresh attempt passed. No runtime fix or production outage conclusion is asserted.",
+  "specific_contract_gap": {
+    "ticket": "LWH-AUD-20261109-014",
+    "canonical": "STM-002: SUBMITTED -> SCREENING -> EVIDENCE_REVIEW -> INSPECTION -> RECOMMENDED",
+    "implemented_initial": "SUBMITTED -> INSPECTION -> EVIDENCE_REVIEW -> RECOMMENDED",
+    "classification": "SOURCE_CONFIRMED_CANONICAL_RECONCILIATION_GAP_NOT_DEMONSTRATED_RUNTIME_FAILURE",
+    "canonical_source": "docs/LW_Health_Intelligence_Platform_Complete_Documentation_Suite_v1.0/LW_Health_Intelligence_Platform_Documentation_Suite_v1.0/docs/03-specifications/LWH-SPEC-009_workflow_state_transition_and_business_rule_catalogue.md:29",
+    "implementation_source": "services/api/src/lw_care_api/platform/main.py:1372,1433"
+  },
+  "source_references": [
+    {
+      "path": "services/api/src/lw_care_api/platform/main.py",
+      "sha256": "d8f32d1df3ec47e1f7b297fb12d0b90116515aaa03badef5a86478c9f34dbfa1"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/application_workflow.py",
+      "sha256": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/standards.py",
+      "sha256": "3209f58da0213c9d221412ebd4815ea06bcea84e8957f7749780a09c7310d53d"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/contracts.py",
+      "sha256": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/domain.py",
+      "sha256": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/security.py",
+      "sha256": "f3aedde1ec9e5b230a37830d6ff4478c15f95ed917b106e27a4220bb05182dfd"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/config.py",
+      "sha256": "22e43dfcb3de3c6f00aeb535a7eee8677675d72b7b9c0372535eabfc4ecaee3b"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/storage.py",
+      "sha256": "b622b3650d653962d3927dd09f399c1f3ea4418a64c27f0be6c080eca639a907"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/integrations.py",
+      "sha256": "7c3f49fea274c0973534f04072ecf5ca6f46fdeada16329ff4387df2a3156524"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/reporting/native.py",
+      "sha256": "2260c87f517c8f12814b72b05ae64ee4c6eb88f1ed1845bedc95cef507a3141d"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/reporting/source_index.py",
+      "sha256": "b72ed9c2a004e435d5c99cde871146e75acde4cb8d7f81c501d4a0c7229016a7"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/reporting/analytics.py",
+      "sha256": "b24f02d0e69d9b1fcdcdc184d6faabe86bb876c05269f52901f99f23609af9da"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/reporting/router.py",
+      "sha256": "37704e58b16622bd070ef51b88616147eb7f383fac46d59586193a7642e25e3d"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/reporting/store.py",
+      "sha256": "3875179b42b3362f197243efaa78c99380f8b95bd0bd92a808995f86c6b6c953"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/clinical/service.py",
+      "sha256": "edcf2bce9173ae162c8346b5fbfe311322e7fd4aef93f2ab512b0e1da811399c"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/clinical/contracts.py",
+      "sha256": "d4bf48539e61643fde5f2645a6fca41d4c0ea9f3461cb8aff1938a8275237c4d"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/control/jobs.py",
+      "sha256": "cbed9120400e85517704172838f075e9c4463b0e1b4f0a5bc147a6ad01a34fa5"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/control/continuity.py",
+      "sha256": "93af479fcb8b735f79581cacc7c461e68861b1e48a183b4a085727d5bb340fb7"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/control/assurance.py",
+      "sha256": "7fdde09d6ce237a83c6571cba4d68b2c7ac92e457ba275655cf7ab6c6ceb9849"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/personal/care.py",
+      "sha256": "63a6eb9a336785e455d866cc9860f0e834bf7d06f0e983a0aaa59b78f8208eff"
+    },
+    {
+      "path": "scripts/platform_cloud_release.py",
+      "sha256": "ad20487aa8347a81fe6d25d6af7f0be960e5c7a5c750421762056c6736d96999"
+    },
+    {
+      "path": "scripts/release_guard.py",
+      "sha256": "e597920a1a67b9c40db99e1813af6381dca4e59750487f61919712f21fad1b10"
+    },
+    {
+      "path": "scripts/verify_reporting_cloud.py",
+      "sha256": "9354be6d2ecf4873e371d4eb52f8edb05a567993fc239ca5b7a53efc4a5e5fe2"
+    },
+    {
+      "path": "scripts/verify_application_workflow_postgres.py",
+      "sha256": "b89f7c756116a0dcca72cbc5e19387cd7f3a580ae1df0c1bf644cf0335870c40"
+    },
+    {
+      "path": "scripts/build_conformance_register.py",
+      "sha256": "be5db4a99031546771a5cb5b029560ee467e564ddb52d76f01b112ebd0c1fe4f"
+    },
+    {
+      "path": "vercel.platform.json",
+      "sha256": "57d552192d6eef5836475d383d21ed29f06c97cd86e11eadfc29e2d6febcdf04"
+    },
+    {
+      "path": ".github/workflows/platform-vercel.yml",
+      "sha256": "11d878ebdba78a75d941f7ab59e1154d57c75edcf9fe979e7b152b086747828e"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "faf396d6d688ce3ef1a76878852d1a5a3d2e349875c15b5cdaa89aeb49a467b4"
+    }
+  ],
+  "retained_release_references": [
+    {
+      "path": "docs/implementation/2026-11-10-application-correction-evidence.json",
+      "sha256": "fbcb05a84ffe0b1c5cc46ff2863c552abf7a2090a00721370e21502b8fbec9e3"
+    },
+    {
+      "path": "docs/implementation/2026-11-10-director-affiliation-evidence.json",
+      "sha256": "76872db95f7756bc940e722408727bcd8e9f595693af7efd7e4d510a1bfbfb9c"
+    },
+    {
+      "path": "docs/implementation/2026-11-10-capacity-and-conformance-evidence.json",
+      "sha256": "5ce20b785edac585124dd0d1443666f99b58371845ab697e241e75ba40e4faaf"
+    },
+    {
+      "path": "docs/implementation/2026-11-10-service-release-assurance-evidence.json",
+      "sha256": "e405d566d420a75681ad5a3aaf741ec5d402005249d778aa916525b18a6258d9"
+    },
+    {
+      "path": "docs/implementation/2026-11-10-phase-a-reporting-evidence.json",
+      "sha256": "6c4d22b3bcc1edf3560157ebff74ffd13fe8385c0a3df26a955a6f273ed0ab0c"
+    },
+    {
+      "path": "docs/implementation/2026-11-09-comprehensive-audit-evidence.json",
+      "sha256": "f9f80d4db51b744ba7f1949322913321cec00a5797c17616f2c6a4b4e0b16f8f"
+    }
+  ],
+  "audit_artifacts": [
+    {
+      "path": "docs/implementation/2026-11-10-comprehensive-audit-and-production-readiness.md",
+      "sha256": "a94f718f6edb4cd25fa3d6440acd3b0149938afd3af611e4e12822280ee31af2"
+    },
+    {
+      "path": "docs/implementation/2026-11-10-production-readiness-backlog.csv",
+      "sha256": "ed65b70760ce82461fe3d6c9964ecfdd6fbb66f55c17b7a3926f7dfc54310255"
+    },
+    {
+      "path": "docs/implementation/2026-11-10-capability-audit.csv",
+      "sha256": "a11bf218ee2cfc67cc62dba70ca7c91882e645312b4849b2162f7c87cfb1efe1"
+    },
+    {
+      "path": "docs/implementation/2026-11-10-new-session-prompt.md",
+      "sha256": "28e3406be473a156c12b43f5e9d3afd78f73b03a8dc0b43c7bd1151dd5c1ac9e"
+    }
+  ],
+  "limitations": [
+    "Comprehensive scope/readiness refresh with selected code review; earlier complete document/requirement crosswalk retained. Not independent line-by-line certification.",
+    "No fresh actual-role clinical/Director UAT, penetration test, device/accessibility/low-bandwidth qualification, sustained-load/cold-start classification or full WAN-outage/resumption acceptance.",
+    "Provider environment metadata presence does not validate values or providers; deployment flag values were not decrypted.",
+    "Historical capacity/recovery results are bounded prior evidence and were not rerun or recertified for this runtime."
+  ],
+  "formal_requirements": 200,
+  "formal_cases": 111,
+  "formal_status": "NOT_RUN",
+  "baseline_backlog": "2026-11-09-production-readiness-backlog.csv",
+  "current_backlog": "2026-11-10-production-readiness-backlog.csv"
+}
