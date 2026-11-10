@@ -375,10 +375,15 @@ def promote(target, identifier, expected_current):
         # an intervening release. Provider promotion reuses this build ID.
         if active_deployment(client, name) != expected_current:
             raise ValueError("Production changed during candidate qualification")
-        checked(client.post(f"https://api.vercel.com/v10/projects/{project['id']}/promote/{identifier}"), "promote")
+        # Vercel accepts promotion with an empty 201/202 response (SDK: void),
+        # so success must not be parsed as JSON. Alias verification follows.
+        requested = client.post(f"https://api.vercel.com/v10/projects/{project['id']}/promote/{identifier}")
+        if not requested.is_success:
+            checked(requested, "promote")
         print(json.dumps({"project": name, "deployment_id": identifier, "source_commit": commit,
                           "ci": ci, "verified_source_files": count, "previous_deployment": expected_current,
                           "temporary_provider_probe_access": "REVOKED_BEFORE_PROMOTION",
+                          "promotion_http": requested.status_code,
                           "promotion": "REQUESTED_WITHOUT_REBUILD"}))
 
 
