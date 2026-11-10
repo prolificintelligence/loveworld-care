@@ -75,6 +75,7 @@ def verify(api_deployment, web_deployment, expected_schema=9):
                 ("/v1/health", 200),
                 ("/v1/ready", 200),
                 ("/v1/auth/me", 401),
+                ("/v1/service-capabilities", 401),
                 ("/v1/clinical/sites", 401),
                 ("/v1/reporting/context", 401),
                 ("/v1/reporting/templates", 401),

@@ -532,3 +532,31 @@ def test_revoked_grant_cannot_replay_cached_private_receipt(runtime):
 
     run(revoke())
     assert post(client, "/facilities", payload, headers, key).status_code == 404
+
+
+def test_unconfigured_upload_exclusion_cannot_create_evidence_or_approve_application(runtime):
+    app, client, _ = runtime
+    assert client.get("/v1/service-capabilities").status_code == 401
+    _, headers, _, _, body = registry(app, client)
+    capability = client.get("/v1/service-capabilities", headers=headers)
+    assert capability.status_code == 200
+    assert capability.json()["evidence_upload"]["upload_attempt_permitted"] is False
+    assert capability.json()["evidence_upload"]["state"] == "EXCLUDED_SCANNER_UNAVAILABLE"
+    assert "s3_secret" not in capability.text and "clamav_host" not in capability.text
+    facility = post(client, "/facilities", body, headers).json()["resource"]
+    _, _, decider = staff(app, "STANDARDS_DECIDER")
+    criteria = post(client, "/criteria", {
+        "name": "Synthetic file-gate criteria", "version": "TEST-ONLY", "jurisdiction": "TEST-ONLY",
+        "site_type": "COMMUNITY_PRIMARY", "requirements": [{"code": "FILE", "description": "Synthetic required file", "required": True}],
+        "adoption_reference": "SYNTHETIC FIXTURE ONLY", "valid_from": stamp(-1), "valid_until": stamp(10),
+    }, decider).json()["resource"]
+    application = post(client, "/applications", {"facility_id": facility["id"], "criteria_id": criteria["id"]}, headers).json()["resource"]
+    response = client.post(f"/v1/applications/{application['id']}/evidence", params={
+        "criterion": "FILE", "filename": "synthetic.pdf", "source": "Synthetic test fixture", "expires_at": stamp(1),
+    }, content=b"%PDF-1.7\nSYNTHETIC ONLY\n", headers={**headers, "Content-Type": "application/pdf", "Idempotency-Key": db.uid()})
+    assert response.status_code == 503
+    assert post(client, f"/applications/{application['id']}/submit", {"expected_version": 1}, headers).status_code == 422
+    async def count():
+        async with app.state.database.transaction() as session:
+            return await session.scalar(select(func.count()).select_from(db.evidence))
+    assert run(count()) == 0

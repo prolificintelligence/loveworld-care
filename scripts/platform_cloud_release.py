@@ -269,6 +269,10 @@ def source_files(target):
 
 
 def deploy(target):
+    from release_guard import committed_source, successful_ci
+
+    commit = committed_source(ROOT)
+    ci = successful_ci(commit)
     name = API if target == "api" else WEB
     with http_client(vercel_credential()) as client:
         result = checked(
@@ -278,6 +282,8 @@ def deploy(target):
                     "name": name,
                     "project": name,
                     "target": "production",
+                    "autoAssignCustomDomains": False,
+                    "meta": {"lwhSourceCommit": commit, "lwhCiRun": str(ci["run_id"])},
                     "files": source_files(target),
                 },
             ),
@@ -290,9 +296,59 @@ def deploy(target):
                     "deployment_id": result["id"],
                     "url": result.get("url"),
                     "state": result.get("readyState"),
+                    "source_commit": commit,
+                    "promotion": "STAGED_REQUIRES_VERIFICATION",
                 }
             )
         )
+
+
+def active_deployment(client, name):
+    alias = checked(client.get(f"https://api.vercel.com/v4/aliases/{name}.vercel.app"), "active_alias")
+    return alias["deploymentId"]
+
+
+def promote(target, identifier, expected_current):
+    from release_guard import committed_source, manifest, successful_ci, verify_source_tree
+
+    commit = committed_source(ROOT)
+    ci = successful_ci(commit)
+    name = API if target == "api" else WEB
+    with http_client(vercel_credential()) as client:
+        project = checked(client.get(f"https://api.vercel.com/v9/projects/{name}"), "project")
+        active = active_deployment(client, name)
+        if not expected_current or active != expected_current:
+            raise ValueError("Production deployment changed; reconcile before promotion")
+        deployment = checked(client.get(f"https://api.vercel.com/v13/deployments/{identifier}"), "candidate")
+        if (deployment.get("readyState") != "READY" or deployment.get("target") != "production"
+            or deployment.get("projectId") != project["id"]
+            or deployment.get("meta", {}).get("lwhSourceCommit") != commit):
+            raise ValueError("A READY staged production candidate from this commit/project is required")
+        tree = checked(client.get(f"https://api.vercel.com/v6/deployments/{identifier}/files"), "candidate_sources")
+        count = verify_source_tree(manifest(source_files(target)), tree)
+        # Only signed-out read probes run against a production-backed candidate.
+        origin = "https://" + deployment["url"]
+        with httpx.Client(timeout=60, follow_redirects=False) as probe:
+            if target == "api":
+                response = probe.get(origin + "/v1/ready")
+                if response.status_code != 200 or response.json().get("schema_version") != 9:
+                    raise ValueError("Staged candidate readiness did not verify")
+                for path in ("/v1/auth/me", "/v1/service-capabilities", "/v1/reporting/snapshots"):
+                    response = probe.get(origin + path)
+                    if response.status_code != 401 or "no-store" not in response.headers.get("cache-control", ""):
+                        raise ValueError("Staged candidate authentication did not verify")
+            else:
+                response = probe.get(origin + "/")
+                if response.status_code != 200 or "LW Health Intelligence Platform" not in response.text:
+                    raise ValueError("Staged frontend did not verify")
+        # Compare production again after source/HTTP checks; do not overwrite
+        # an intervening release. Provider promotion reuses this build ID.
+        if active_deployment(client, name) != expected_current:
+            raise ValueError("Production changed during candidate qualification")
+        checked(client.post(f"https://api.vercel.com/v10/projects/{project['id']}/promote/{identifier}"), "promote")
+        print(json.dumps({"project": name, "deployment_id": identifier, "source_commit": commit,
+                          "ci": ci, "verified_source_files": count, "previous_deployment": expected_current,
+                          "promotion": "REQUESTED_WITHOUT_REBUILD"}))
 
 
 def status(identifier):
@@ -341,9 +397,10 @@ def migrate():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("inspect", "configure", "migrate", "deploy", "status"))
+    parser.add_argument("command", choices=("inspect", "configure", "migrate", "deploy", "promote", "status"))
     parser.add_argument("--target", choices=("api", "web"))
     parser.add_argument("--deployment-id")
+    parser.add_argument("--expected-current")
     args = parser.parse_args()
     try:
         if args.command == "inspect":
@@ -356,6 +413,10 @@ def main():
             if not args.target:
                 parser.error("deploy requires --target")
             deploy(args.target)
+        elif args.command == "promote":
+            if not args.target or not args.deployment_id or not args.expected_current:
+                parser.error("promote requires target, deployment-id and expected-current")
+            promote(args.target, args.deployment_id, args.expected_current)
         elif args.command == "status":
             if not args.deployment_id:
                 parser.error("status requires --deployment-id")

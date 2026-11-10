@@ -12,6 +12,21 @@ from .domain import RuleError, require
 MAX_EVIDENCE_BYTES = 10 * 1024 * 1024
 
 
+def capability(cfg):
+    """Configuration permits an attempt; it never certifies an engine or file."""
+    scanner = bool(cfg.clamav_host)
+    private_storage = all((cfg.s3_endpoint, cfg.s3_access_key, cfg.s3_secret_key, cfg.s3_bucket))
+    return {
+        "upload_attempt_permitted": scanner and private_storage,
+        "state": "EXCLUDED_SCANNER_UNAVAILABLE" if not scanner else
+                 "EXCLUDED_PRIVATE_STORAGE_UNAVAILABLE" if not private_storage else
+                 "CONFIGURED_EACH_FILE_REQUIRES_SCAN",
+        "file_dependent_affiliation": "REQUIRES_CURRENT_ACCEPTED_SCANNED_EVIDENCE",
+        "scanner_qualification": "NOT_INFERRED_FROM_CONFIGURATION",
+        "scan_bypass_permitted": False,
+    }
+
+
 def client(cfg):
     require(
         all((cfg.s3_endpoint, cfg.s3_access_key, cfg.s3_secret_key, cfg.s3_bucket)),

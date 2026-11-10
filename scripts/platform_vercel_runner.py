@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 
 import httpx
-from platform_cloud_release import checked, deploy, http_client, vercel_credential
+from platform_cloud_release import checked, deploy, http_client, promote, vercel_credential
 from verify_reporting_cloud import verify
 
 
@@ -18,11 +18,21 @@ def execute(args):
         raise ValueError("A protected deployment secret is required")
     result = {"target": args.target, "source_commit": os.environ.get("GITHUB_SHA")}
     if args.target == "verify":
-        if args.schema_version not in (7, 8) or not args.api_deployment or not args.web_deployment:
-            raise ValueError("Verification requires both actual deployments and schema 7")
+        if args.schema_version != 9 or not args.api_deployment or not args.web_deployment:
+            raise ValueError("Verification requires both actual deployments and a supported schema")
         verify(args.api_deployment, args.web_deployment, args.schema_version)
         result["verification"] = "PASSED"
     else:
+        if args.action == "promote":
+            identifier = args.api_deployment if args.target == "api" else args.web_deployment
+            if not identifier or not args.expected_current:
+                raise ValueError("Promotion requires a staged deployment and expected-current")
+            promote(args.target, identifier, args.expected_current)
+            result.update(deployment_id=identifier, promotion="REQUESTED_WITHOUT_REBUILD")
+            folder = Path(".release-evidence")
+            folder.mkdir(exist_ok=True)
+            (folder / (args.target + ".json")).write_text(json.dumps(result, indent=2), encoding="utf-8")
+            return
         # Refuse the UI rollout before the operator has migrated the cloud authority.
         if args.target == "web":
             ready = httpx.get("https://lw-health-intelligence-api.vercel.app/v1/ready", timeout=60)
@@ -51,39 +61,7 @@ def execute(args):
                 time.sleep(10)
             else:
                 raise TimeoutError("Vercel deployment did not become ready in the release window")
-        with httpx.Client(timeout=60, follow_redirects=True) as client:
-            base = "https://lw-health-intelligence-api.vercel.app"
-            ready = client.get(base + "/v1/ready")
-            print(json.dumps({"readiness_http": ready.status_code}), flush=True)
-            assert ready.status_code == 200
-            assert ready.json()["schema_version"] == args.schema_version
-            assert client.get(base + "/v1/operations/context").status_code == 401
-            if args.target == "api" and args.schema_version == 6:
-                response = client.post(
-                    base + "/v1/clinical/00000000-0000-0000-0000-000000000001/workflows/capacity",
-                    headers={"Origin": "https://lw-health-intelligence.vercel.app"},
-                    json={
-                        "service": "READ_ONLY_DEPLOYMENT_GATE_PROBE",
-                        "max_open_encounters": 0,
-                        "resources_evidence": "Unauthenticated gate check; no operating authority",
-                        "policy_reference": "No policy adoption asserted",
-                        "starts_at": "2026-11-08T00:00:00Z",
-                        "ends_at": "2026-11-09T00:00:00Z",
-                        "require_roster": True,
-                        "require_admission_order": True,
-                        "intent_confirmed": True,
-                    },
-                )
-                print(json.dumps({"new_command_migration_gate": response.status_code}), flush=True)
-                assert response.status_code == 503
-                result["new_command_migration_gate"] = 503
-            if args.target == "web":
-                assert (
-                    client.get("https://lw-health-intelligence.vercel.app/care").status_code == 200
-                )
-            result.update(
-                state="READY", schema_version=args.schema_version, authentication="ENFORCED"
-            )
+        result.update(state="STAGED_READY", promotion="NOT_PROMOTED", schema_version=args.schema_version)
     folder = Path(".release-evidence")
     folder.mkdir(exist_ok=True)
     (folder / (args.target + ".json")).write_text(json.dumps(result, indent=2), encoding="utf-8")
@@ -93,7 +71,9 @@ def execute(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target", choices=("api", "web", "verify"), required=True)
-    parser.add_argument("--schema-version", type=int, choices=(6, 7, 8), required=True)
+    parser.add_argument("--schema-version", type=int, choices=(9,), required=True)
+    parser.add_argument("--action", choices=("stage", "promote"), default="stage")
+    parser.add_argument("--expected-current", default="")
     parser.add_argument("--api-deployment", default="")
     parser.add_argument("--web-deployment", default="")
     try:

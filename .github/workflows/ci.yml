@@ -35,7 +35,10 @@ jobs:
       - run: uv python install 3.12
       - run: uv sync --all-extras --frozen
       - name: Lint
-        run: uv run ruff check services tests
+        run: >-
+          uv run ruff check services tests scripts/release_guard.py
+          scripts/platform_cloud_release.py scripts/platform_continuity.py
+          scripts/platform_vercel_runner.py scripts/verify_continuity_postgres.py
       - name: Tests (adversarial + integration boundary)
         run: uv run pytest -q
 

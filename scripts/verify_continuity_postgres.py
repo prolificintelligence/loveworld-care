@@ -17,8 +17,9 @@ from pathlib import Path
 
 import httpx
 from cryptography.exceptions import InvalidTag
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import async_sessionmaker
+from sqlalchemy import func, select, text
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.pool import AsyncAdaptedQueuePool
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "services/api/src"))
@@ -56,6 +57,12 @@ class TrackedObjects(PrivateObjects):
 async def verify():
     cfg = PlatformSettings(_env_file=ROOT / ".env.platform.local")
     database = db.Database(cfg.database_url)
+    from lw_care_api.db.connection import normalize_async_database_url
+    url, arguments = normalize_async_database_url(cfg.database_url)
+    await database.engine.dispose()
+    database.engine = create_async_engine(url, connect_args=arguments, poolclass=AsyncAdaptedQueuePool,
+                                         pool_pre_ping=True, pool_size=5, max_overflow=5)
+    database.session = async_sessionmaker(database.engine, expire_on_commit=False)
     namespace = "lwh_backup_verify_" + db.uid().replace("-", "")
     assert re.fullmatch(r"lwh_backup_verify_[0-9a-f]{32}", namespace)
     objects, backup_id = TrackedObjects(cfg), None
@@ -64,6 +71,7 @@ async def verify():
     test_cfg = cfg.model_copy(
         update={
             "environment": "test",
+            "data_key_hex": secrets.token_hex(32),
             "enforce_activation_dossiers": False,
             "dispatch_recovery_after_commit": False,
             "web_origin": ORIGIN,
@@ -75,7 +83,11 @@ async def verify():
     app.state.database.engine = mapped
     app.state.database.session = async_sessionmaker(mapped, expire_on_commit=False)
     try:
-        assert await database.version() in {4, 5, 6, 7}
+        assert await database.version() == 9
+        async with database.transaction() as session:
+            before = [await session.scalar(select(func.count()).select_from(table))
+                      for table in (db.accounts, db.facilities, clinical.records, clinical.events, clinical.ledger)]
+        print(json.dumps({"recovery_stage": "isolated_schema9_fixture"}), flush=True)
         async with database.engine.begin() as connection:
             await connection.execute(text(f'CREATE SCHEMA "{namespace}"'))
             translated = await connection.execution_options(
@@ -85,7 +97,7 @@ async def verify():
             await db.protect_history(translated, namespace)
         async with app.state.database.transaction() as session:
             await session.execute(
-                db.schema_versions.insert().values(version=7, applied_at=db.now())
+                db.schema_versions.insert().values(version=9, applied_at=db.now())
             )
         actors, facility = await seed_controls(app)
         async with httpx.AsyncClient(
@@ -309,6 +321,7 @@ async def verify():
                     recorded_at=db.now(),
                 )
             )
+        print(json.dumps({"recovery_stage": "encrypted_archive"}), flush=True)
         key = secrets.token_bytes(32)
         archived = await create_archive(
             app.state.database,
@@ -321,6 +334,19 @@ async def verify():
         backup_id = archived["id"]
         manifest_raw = await asyncio.to_thread(objects.get, object_name(backup_id, "manifest.enc"))
         manifest = json.loads(unseal(key, manifest_raw, backup_id, "manifest.enc"))
+        # Commit newer synthetic care and balanced ledger entries after the
+        # snapshot. An isolated rehearsal must never roll this source backward.
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url=ORIGIN) as client:
+            await created("/tasks", {**context, "title": "SYNTHETIC_POST_SNAPSHOT_TASK",
+                                    "instructions": "Must survive rehearsal", "owner_id": actors["target"][0], "due_at": stamp(1)})
+        async with app.state.database.transaction() as session:
+            for leg, amount in ((3, 240), (4, -240)):
+                await session.execute(clinical.ledger.insert().values(
+                    id=db.uid(), facility_id=facility, source_id=encounter["id"], leg=leg,
+                    account="SYNTHETIC_POST_SNAPSHOT", amount_minor=amount, currency="NGN", recorded_at=db.now()))
+            source_heads = list((await session.execute(select(clinical.records.c.id, clinical.records.c.version).order_by(clinical.records.c.id))).all())
+            source_events = await session.scalar(select(func.count()).select_from(clinical.events))
+        print(json.dumps({"recovery_stage": "restore_and_new_data_preservation"}), flush=True)
         try:
             await rehearse_restore(
                 database,
@@ -363,10 +389,23 @@ async def verify():
             pass
         else:
             raise AssertionError("Corrupted private object accepted")
+        async with app.state.database.transaction() as session:
+            assert source_heads == list((await session.execute(select(clinical.records.c.id, clinical.records.c.version).order_by(clinical.records.c.id))).all())
+            assert await session.scalar(select(func.count()).select_from(clinical.events)) == source_events
+            assert await session.scalar(select(func.count()).select_from(clinical.ledger)) == 4
+        async with database.transaction() as session:
+            after = [await session.scalar(select(func.count()).select_from(table))
+                     for table in (db.accounts, db.facilities, clinical.records, clinical.events, clinical.ledger)]
+        assert before == after
         print(
             json.dumps(
                 {
                     "continuity_postgres_private_objects": "PASSED",
+                    "schema_version": 9,
+                    "source_records_committed_after_snapshot_preserved": True,
+                    "source_ledger_entries_after_snapshot": 4,
+                    "restored_snapshot_ledger_entries": 2,
+                    "production_domain_counts_unchanged": True,
                     "recovery_without_original_application_key": "VERIFIED",
                     "wrong_recovery_key": "REJECTED",
                     "tampered_cloud_chunk": "REJECTED",
@@ -401,6 +440,7 @@ async def verify():
         async with database.engine.begin() as connection:
             await connection.execute(text(f'DROP SCHEMA IF EXISTS "{namespace}" CASCADE'))
         await database.engine.dispose()
+        print(json.dumps({"disposable_source_schema_and_private_objects_removed": True}), flush=True)
 
 
 if __name__ == "__main__":

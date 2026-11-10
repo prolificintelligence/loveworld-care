@@ -451,6 +451,14 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
     async def health():
         return {"service": "LW Health Intelligence Platform", "status": "RUNNING"}
 
+    @app.get("/v1/service-capabilities")
+    async def service_capabilities(request: Request):
+        from .storage import capability
+
+        async with database.transaction() as session:
+            await actor_for(session, request)
+        return {"evidence_upload": capability(cfg), "as_of": db.now()}
+
     @app.get("/v1/ready")
     async def ready():
         version = await database.version()

@@ -57,6 +57,27 @@ def test_reliability_has_no_invented_recovery_readiness(controls):
     assert status["recovery_targets"] == "NOT_ADOPTED"
     assert status["independent_off_account_copy"] == "NOT_QUALIFIED"
     assert status["scanner_configured"] is False
+    assert status["evidence_upload"]["state"] == "EXCLUDED_SCANNER_UNAVAILABLE"
+    assert status["evidence_upload"]["scan_bypass_permitted"] is False
+
+
+def test_schema9_reporting_projection_corruption_is_visible_to_reconciliation(controls):
+    from lw_care_api.platform.reporting.source_index import index
+
+    j = controls
+    _patient, encounter, _task = j.task()
+
+    async def remove():
+        async with j.app.state.database.transaction() as session:
+            await session.execute(index.delete().where(index.c.record_id == encounter["id"]))
+
+    run(remove())
+    result = j.create("/operations/reconciliation", {
+        "evidence": "Synthetic missing source projection fault", "intent_confirmed": True,
+    })
+    assert result["checks"]["reporting_source_projection_mismatches"] == 1
+    assert result["integrity_outcome"] == "EXCEPTIONS"
+    assert encounter["id"] not in json.dumps(result)
 
 
 @pytest.mark.parametrize("name", ["target", "privacy", "proposer"])

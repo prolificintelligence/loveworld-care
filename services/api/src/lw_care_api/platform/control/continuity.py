@@ -85,6 +85,9 @@ def object_name(backup_id, relative):
     return prefix(backup_id) + relative
 
 
+SUPPORTED_ARCHIVE_SCHEMAS = frozenset({5, 6, 7, 8, 9})
+
+
 def archive_tables(version=9):
     from ..clinical import flow_index  # noqa: F401
     from ..institutional import tables as institutional_tables  # noqa: F401
@@ -216,7 +219,7 @@ async def create_archive(
                     .order_by(db.schema_versions.c.version.desc())
                     .limit(1)
                 )
-                if version not in {5, 6, 7, 8, 9}:
+                if version not in SUPPORTED_ARCHIVE_SCHEMAS:
                     raise ArchiveError("Archive requires a supported schema from 5 through 9")
                 manifest["shape"] = shape(version)
                 if database.postgres and set(actual) != set(manifest["shape"]):
@@ -471,7 +474,7 @@ async def rehearse_restore(
         if (
             manifest["format"] != FORMAT
             or manifest["id"] != backup_id
-            or manifest["schema_version"] not in {5, 6, 7, 8, 9}
+            or manifest["schema_version"] not in SUPPORTED_ARCHIVE_SCHEMAS
             or manifest["shape"] != shape(manifest["schema_version"])
         ):
             raise ArchiveError("Incompatible archive")

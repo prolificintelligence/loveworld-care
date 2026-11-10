@@ -123,6 +123,7 @@ def install(app, cfg, database, box, actor_for):
                 "publication": "INDEPENDENT_REVIEW_AND_DISTINCT_PUBLISHER",
                 "external_distribution": "NOT_ATTEMPTED_PORTAL_ONLY",
                 "scanner_configured": bool(cfg.clamav_host),
+                "evidence_upload": storage.capability(cfg),
             }
 
     @router.get("/v1/institutional/catalogue")

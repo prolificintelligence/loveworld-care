@@ -20,7 +20,12 @@ sys.path.insert(0, str(ROOT / "services/api/src"))
 from lw_care_api.platform import db
 from lw_care_api.platform.config import PlatformSettings
 from lw_care_api.platform.control.assurance import observe, record
-from lw_care_api.platform.control.continuity import create_archive, fingerprint, rehearse_restore
+from lw_care_api.platform.control.continuity import (
+    SUPPORTED_ARCHIVE_SCHEMAS,
+    create_archive,
+    fingerprint,
+    rehearse_restore,
+)
 from lw_care_api.platform.db import Database
 from lw_care_api.platform.security import SecretBox
 
@@ -70,8 +75,8 @@ async def operate(args):
         raise ValueError("This command requires explicit production cloud settings")
     database = Database(cfg.database_url)
     try:
-        if await database.version() not in {5, 6, 7, 8}:
-            raise ValueError("Supported schema 5 or 6 must be installed first")
+        if await database.version() not in SUPPORTED_ARCHIVE_SCHEMAS:
+            raise ValueError("A supported archive schema must be installed first")
         if args.command == "reconcile":
             started = db.now()
             async with database.transaction() as session:

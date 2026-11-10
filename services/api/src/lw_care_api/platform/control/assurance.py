@@ -93,6 +93,19 @@ async def observe(session):
                 index.c.status != clinical.records.c.status,
             ),
         )
+    if version and version >= 9:
+        from ..reporting.source_index import KINDS
+        from ..reporting.source_index import index as reporting_index
+
+        checks["reporting_source_projection_mismatches"] = await count(
+            clinical.records.outerjoin(reporting_index, clinical.records.c.id == reporting_index.c.record_id),
+            clinical.records.c.kind.in_(KINDS),
+            or_(reporting_index.c.record_id.is_(None),
+                reporting_index.c.indexed_version != clinical.records.c.version,
+                reporting_index.c.facility_id != clinical.records.c.facility_id,
+                reporting_index.c.kind != clinical.records.c.kind,
+                reporting_index.c.status != clinical.records.c.status),
+        )
     if version and version >= 8:
         from ..personal import tables as personal
         checks["personal_requests_with_inactive_owner"] = await count(
@@ -182,6 +195,8 @@ class AssuranceService(ControlService):
 
 
 async def status(session, cfg):
+    from ..storage import capability
+
     latest = {}
     for kind in ("BACKUP", "RESTORE", "RECONCILIATION"):
         row = (
@@ -213,5 +228,6 @@ async def status(session, cfg):
         "independent_off_account_copy": "NOT_QUALIFIED",
         "offline_care": "CORE_LOCAL_DEPLOYMENT_DEFERRED",
         "scanner_configured": bool(cfg.clamav_host),
+        "evidence_upload": capability(cfg),
         "operating_acceptance": "REQUIRES_NAMED_OWNERS_AND_OBSERVED_DRILLS",
     }
