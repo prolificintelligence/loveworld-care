@@ -320,7 +320,8 @@ def candidate_probe_access(client, project, identifier):
     if not project.get("ssoProtection") and not project.get("passwordProtection"):
         yield {}
         return
-    secret = secrets.token_urlsafe(32)
+    # The provider accepts a 32-character hexadecimal automation secret.
+    secret = secrets.token_hex(16)
     endpoint = f"https://api.vercel.com/v1/projects/{project['id']}/protection-bypass"
     try:
         checked(client.patch(endpoint, json={"generate": {
@@ -328,9 +329,11 @@ def candidate_probe_access(client, project, identifier):
         }}), "create_temporary_probe_access")
         yield {"x-vercel-protection-bypass": secret}
     finally:
-        checked(client.patch(endpoint, json={"revoke": {
+        removed = client.patch(endpoint, json={"revoke": {
             "secret": secret, "regenerate": False,
-        }}), "revoke_temporary_probe_access")
+        }})
+        if removed.status_code != 404:
+            checked(removed, "revoke_temporary_probe_access")
         remaining = checked(client.get(f"https://api.vercel.com/v9/projects/{project['id']}"), "probe_access_cleanup")
         if secret in (remaining.get("protectionBypass") or {}):
             raise ValueError("Temporary probe access was not revoked; promotion stopped")
