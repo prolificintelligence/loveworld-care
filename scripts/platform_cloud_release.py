@@ -9,9 +9,11 @@ provider response bodies and invitation tokens are never printed. `inspect` is r
 import argparse
 import asyncio
 import base64
+import contextlib
 import json
 import os
 import re
+import secrets
 import sys
 from pathlib import Path
 from uuid import uuid4
@@ -308,6 +310,32 @@ def active_deployment(client, name):
     return alias["deploymentId"]
 
 
+@contextlib.contextmanager
+def candidate_probe_access(client, project, identifier):
+    """Short-lived provider authentication, never application authorisation.
+
+    The credential stays in memory, travels only in a request header and is
+    revoked before promotion. Existing SSO protection is never disabled.
+    """
+    if not project.get("ssoProtection") and not project.get("passwordProtection"):
+        yield {}
+        return
+    secret = secrets.token_urlsafe(32)
+    endpoint = f"https://api.vercel.com/v1/projects/{project['id']}/protection-bypass"
+    try:
+        checked(client.patch(endpoint, json={"generate": {
+            "secret": secret, "note": "Temporary release probe " + identifier,
+        }}), "create_temporary_probe_access")
+        yield {"x-vercel-protection-bypass": secret}
+    finally:
+        checked(client.patch(endpoint, json={"revoke": {
+            "secret": secret, "regenerate": False,
+        }}), "revoke_temporary_probe_access")
+        remaining = checked(client.get(f"https://api.vercel.com/v9/projects/{project['id']}"), "probe_access_cleanup")
+        if secret in (remaining.get("protectionBypass") or {}):
+            raise ValueError("Temporary probe access was not revoked; promotion stopped")
+
+
 def promote(target, identifier, expected_current):
     from release_guard import committed_source, manifest, successful_ci, verify_source_tree
 
@@ -328,7 +356,9 @@ def promote(target, identifier, expected_current):
         count = verify_source_tree(manifest(source_files(target)), tree)
         # Only signed-out read probes run against a production-backed candidate.
         origin = "https://" + deployment["url"]
-        with httpx.Client(timeout=60, follow_redirects=False) as probe:
+        with candidate_probe_access(client, project, identifier) as headers, httpx.Client(
+            timeout=60, follow_redirects=False, headers=headers,
+        ) as probe:
             if target == "api":
                 response = probe.get(origin + "/v1/ready")
                 if response.status_code != 200 or response.json().get("schema_version") != 9:
@@ -348,6 +378,7 @@ def promote(target, identifier, expected_current):
         checked(client.post(f"https://api.vercel.com/v10/projects/{project['id']}/promote/{identifier}"), "promote")
         print(json.dumps({"project": name, "deployment_id": identifier, "source_commit": commit,
                           "ci": ci, "verified_source_files": count, "previous_deployment": expected_current,
+                          "temporary_provider_probe_access": "REVOKED_BEFORE_PROMOTION",
                           "promotion": "REQUESTED_WITHOUT_REBUILD"}))
 
 
