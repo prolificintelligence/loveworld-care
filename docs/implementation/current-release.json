@@ -1,9 +1,9 @@
 {
-  "release": "2026-11-10-service-release-assurance",
-  "recorded_at": "2026-11-10T03:40:03.591841+00:00",
-  "runtime_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+  "release": "2026-11-10-director-affiliation-conformance",
+  "recorded_at": "2026-11-10T11:05:25.602548+00:00",
+  "runtime_commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
   "code_delivery": "DEPLOYED",
-  "engineering_evidence": "BOUNDED_SERVICE_RECOVERY_AND_STAGED_PROMOTION_VERIFIED",
+  "engineering_evidence": "INITIAL_AFFILIATION_GUARDS_AND_PARTIAL_FIELD_STATE_PROOFS_VERIFIED",
   "operating_adoption": "INCOMPLETE",
   "full_suite_acceptance": "INCOMPLETE_NOT_RUN",
   "schema_version": 9,
@@ -14,24 +14,24 @@
     "protected_history_tables": 53
   },
   "api": {
-    "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
+    "deployment_id": "dpl_B9E5uZw5bDwcHt1mkPuo17DxUuuq",
     "origin": "https://lw-health-intelligence-api.vercel.app",
-    "source_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
-    "verified_source_files": 65,
-    "submitted_source_files_verified": 69
+    "source_commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
+    "verified_source_files": 66,
+    "submitted_source_files_verified": 70
   },
   "web": {
-    "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
+    "deployment_id": "dpl_7ggSJqBAZPHhQVLtjgyQmpmoNn4D",
     "origin": "https://lw-health-intelligence.vercel.app",
-    "source_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+    "source_commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
     "verified_source_files": 31,
     "submitted_source_files_verified": 36
   },
   "ci": {
-    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42749245751",
-    "run_id": 42749245751,
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42801852903",
+    "run_id": 42801852903,
     "status": "SUCCESS",
-    "python_tests": 231,
+    "python_tests": 253,
     "api_client_tests": 11,
     "pwa_tests": 4,
     "typecheck": "PASSED",
@@ -39,258 +39,163 @@
     "secret_scan": "PASSED",
     "jobs": [
       {
-        "id": 129608682659,
+        "id": 129781096744,
+        "name": "web",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129781097049,
         "name": "secrets-scan",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 129608682939,
+        "id": 129781097292,
         "name": "python",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 129608683006,
-        "name": "web",
         "status": "completed",
         "conclusion": "success"
       }
     ]
   },
   "local_checks": {
-    "targeted_python_tests": 19,
-    "platform_typecheck": "PASSED",
-    "api_client_tests": 11,
-    "pwa_tests": 4,
-    "production_build": "CI_AND_VERCEL_BUILDS_PASSED"
+    "initial_compatibility_tests_passed": 24,
+    "final_targeted_tests_passed": 22
   },
-  "postgres_r2_synthetic_recovery": {
-    "continuity_postgres_private_objects": "PASSED",
+  "before_fix_reproduction": {
+    "initial_regression_failures": 8,
+    "baseline_passed": 1,
+    "corrected_expiry_clock_probe": "EXPIRED_INSPECTION_EXPIRED_DECISION_AND_UNMET_APPROVAL_EACH_RETURNED_UNSAFE_200",
+    "scope": "ISOLATED_SQLITE_SYNTHETIC_NO_PRODUCTION_WORKFLOW"
+  },
+  "neon_engineering_proof": {
+    "status": "PASSED",
+    "qualification": "LOCAL_ASGI_POOLED_NEON_ENGINEERING_NOT_CAPACITY_OR_OPERATING_ADOPTION",
     "schema_version": 9,
-    "source_records_committed_after_snapshot_preserved": true,
-    "source_ledger_entries_after_snapshot": 4,
-    "restored_snapshot_ledger_entries": 2,
+    "scenarios": [
+      {
+        "scenario": "missing",
+        "result": "REFUSED_WITHOUT_DOMAIN_EFFECTS"
+      },
+      {
+        "scenario": "duplicate",
+        "result": "REFUSED_WITHOUT_DOMAIN_EFFECTS"
+      },
+      {
+        "scenario": "wrong_criterion",
+        "result": "REFUSED_WITHOUT_DOMAIN_EFFECTS"
+      },
+      {
+        "scenario": "expired_inspection",
+        "result": "REFUSED_WITHOUT_DOMAIN_EFFECTS"
+      },
+      {
+        "scenario": "unscanned_submit",
+        "result": "REFUSED_WITHOUT_DOMAIN_EFFECTS"
+      },
+      {
+        "scenario": "expired_decision",
+        "result": "REFUSED_WITHOUT_DOMAIN_EFFECTS"
+      },
+      {
+        "scenario": "expired_recommendation",
+        "result": "REFUSED_WITHOUT_DOMAIN_EFFECTS"
+      },
+      {
+        "scenario": "expired_rejection",
+        "result": "ADVERSE_HISTORY_RETAINED_WITHOUT_RECOGNITION"
+      },
+      {
+        "scenario": "unmet_approval",
+        "result": "INDEPENDENT_TYPED_COMMAND_GUARDS_AND_PERSISTENCE_VERIFIED"
+      },
+      {
+        "scenario": "truthful_unobserved",
+        "result": "INDEPENDENT_TYPED_COMMAND_GUARDS_AND_PERSISTENCE_VERIFIED"
+      },
+      {
+        "scenario": "positive_replay",
+        "result": "INDEPENDENT_TYPED_COMMAND_GUARDS_AND_PERSISTENCE_VERIFIED"
+      }
+    ],
+    "evidence_fixture": "METADATA_ONLY_NOT_SCANNER_QUALIFICATION",
+    "controlled_expiry_clock": "ADVANCED_20_MINUTES_WITHOUT_EDITING_IMMUTABLE_EVIDENCE",
+    "source_commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
+    "production_before": {
+      "accounts": 1,
+      "units": 0,
+      "operators": 0,
+      "facilities": 0,
+      "criteria": 0,
+      "applications": 0,
+      "evidence": 0,
+      "inspections": 0,
+      "decisions": 0
+    },
+    "production_after": {
+      "accounts": 1,
+      "units": 0,
+      "operators": 0,
+      "facilities": 0,
+      "criteria": 0,
+      "applications": 0,
+      "evidence": 0,
+      "inspections": 0,
+      "decisions": 0
+    },
     "production_domain_counts_unchanged": true,
-    "recovery_without_original_application_key": "VERIFIED",
-    "wrong_recovery_key": "REJECTED",
-    "tampered_cloud_chunk": "REJECTED",
-    "files": 2,
-    "file_tables_verified": [
-      "evidence",
-      "institutional_case_files"
-    ],
-    "tables": 102,
-    "decrypted_fields_verified": 30,
-    "clinical_signatures_verified": 6,
-    "open_care_stock_and_ledger": "RECONCILED",
-    "protected_history_tables": 53,
-    "production_domain_records_seeded": 0
+    "production_domain_records_seeded": 0,
+    "immutable_decision_delete": "REJECTED",
+    "provider_dispatch_invoked": false,
+    "disposable_schema_removed": true
   },
-  "synthetic_cleanup": {
-    "disposable_source_schema_and_private_objects_removed": true
-  },
-  "production_operator_recovery": {
-    "backup": {
-      "id": "3c8ae9ed-8967-4516-833d-f528b0258911",
-      "tables": 102,
-      "rows": 459,
-      "files": 0,
-      "snapshot_at": "2026-11-10T03:01:44.676132+00:00",
-      "elapsed_seconds": 76.502,
-      "key_fingerprint": "42755733f164e97c",
-      "restore_verified": false
-    },
-    "rehearse": {
-      "tables": 102,
-      "rows": 459,
-      "files": 0,
-      "decrypted_fields_verified": 20,
-      "clinical_signatures_verified": 0,
-      "reporting_payload_hashes_verified": 0,
-      "protected_history_tables": 53,
-      "elapsed_seconds": 228.428,
-      "integrity": {
-        "checks": {
-          "unbalanced_ledger_groups": 0,
-          "stock_movement_mismatches": 0,
-          "negative_stock_lots": 0,
-          "stale_task_indexes": 0,
-          "missing_task_indexes": 0,
-          "unowned_active_alerts": 0,
-          "delivery_reconciliation_required": 0,
-          "expired_job_leases": 0,
-          "incomplete_staff_handovers": 0,
-          "clinical_work_projection_mismatches": 0,
-          "reporting_source_projection_mismatches": 0,
-          "personal_requests_with_inactive_owner": 0
-        },
-        "population": {
-          "clinical_records": 0,
-          "stock_lots": 0,
-          "ledger_entries": 0,
-          "unprocessed_jobs": 0,
-          "open_indexed_tasks": 0,
-          "open_personal_requests": 0
-        },
-        "integrity_outcome": "NO_EXCEPTIONS_IN_EXECUTED_CHECKS",
-        "clinical_fulfilment_inferred": false,
-        "service_approval_inferred": false,
-        "scope": "CENTRAL_DATABASE_AGGREGATE",
-        "as_of": "2026-11-10T03:05:52.131762+00:00",
-        "observation_consistency": "PER_STATEMENT_NOT_SIMULTANEOUS_FULL_AUDIT"
-      },
-      "activation_state": "ISOLATED_VERIFIED_NOT_ACTIVATED",
-      "snapshot_at": "2026-11-10T03:01:44.676132+00:00",
-      "temporary_schema_and_files_removed": true
-    },
-    "reconcile": {
-      "checks": {
-        "unbalanced_ledger_groups": 0,
-        "stock_movement_mismatches": 0,
-        "negative_stock_lots": 0,
-        "stale_task_indexes": 0,
-        "missing_task_indexes": 0,
-        "unowned_active_alerts": 0,
-        "delivery_reconciliation_required": 0,
-        "expired_job_leases": 0,
-        "incomplete_staff_handovers": 0,
-        "clinical_work_projection_mismatches": 0,
-        "reporting_source_projection_mismatches": 0,
-        "personal_requests_with_inactive_owner": 0
-      },
-      "population": {
-        "clinical_records": 0,
-        "stock_lots": 0,
-        "ledger_entries": 0,
-        "unprocessed_jobs": 0,
-        "open_indexed_tasks": 0,
-        "open_personal_requests": 0
-      },
-      "integrity_outcome": "NO_EXCEPTIONS_IN_EXECUTED_CHECKS",
-      "clinical_fulfilment_inferred": false,
-      "service_approval_inferred": false,
-      "scope": "CENTRAL_DATABASE_AGGREGATE",
-      "as_of": "2026-11-10T03:07:22.605727+00:00",
-      "observation_consistency": "PER_STATEMENT_NOT_SIMULTANEOUS_FULL_AUDIT"
-    }
-  },
-  "production_before": {
-    "observed_at": "2026-11-10T03:01:24.035770+00:00",
-    "phase": "readiness_before",
-    "aggregate_only": true,
-    "schema_version": 9,
-    "business_counts": {
-      "accounts": 1,
-      "units": 0,
-      "facilities": 0,
-      "clinical_sites": 0,
-      "clinical_records": 0,
-      "clinical_events": 0,
-      "reporting_definitions": 0,
-      "reporting_obligations": 0,
-      "reporting_returns": 0,
-      "reporting_snapshots": 0
-    },
-    "base_tables": 102,
-    "protected_history_tables": 53,
-    "projects": [
-      {
-        "name": "lw-health-intelligence-api",
-        "deployment_id": "dpl_4G2tZ7c44hyqqwke5RoBbiDZcBCa",
-        "readyState": "READY"
-      },
-      {
-        "name": "lw-health-intelligence",
-        "deployment_id": "dpl_C94r5peG4PcrCEgRr5UoSWgb5t45",
-        "readyState": "READY"
-      }
-    ],
-    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
-  },
-  "production_after": {
-    "observed_at": "2026-11-10T03:32:11.952491+00:00",
-    "phase": "readiness_after",
-    "aggregate_only": true,
-    "schema_version": 9,
-    "business_counts": {
-      "accounts": 1,
-      "units": 0,
-      "facilities": 0,
-      "clinical_sites": 0,
-      "clinical_records": 0,
-      "clinical_events": 0,
-      "reporting_definitions": 0,
-      "reporting_obligations": 0,
-      "reporting_returns": 0,
-      "reporting_snapshots": 0
-    },
-    "base_tables": 102,
-    "protected_history_tables": 53,
-    "projects": [
-      {
-        "name": "lw-health-intelligence-api",
-        "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
-        "readyState": "READY"
-      },
-      {
-        "name": "lw-health-intelligence",
-        "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
-        "readyState": "READY"
-      }
-    ],
-    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
-  },
-  "production_domain_records_seeded": 0,
-  "operator_assurance_records_added": 3,
-  "notification_dispatch_invoked": false,
   "staged_builds": [
     {
       "project": "lw-health-intelligence-api",
-      "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
-      "url": "lw-health-intelligence-8tiz2j1uk-prolific-intelligence.vercel.app",
-      "state": "INITIALIZING",
-      "source_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+      "deployment_id": "dpl_B9E5uZw5bDwcHt1mkPuo17DxUuuq",
+      "url": "lw-health-intelligence-fse6fymtl-prolific-intelligence.vercel.app",
+      "state": "STAGED_READY",
+      "source_commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
       "promotion": "STAGED_REQUIRES_VERIFICATION"
     },
     {
       "project": "lw-health-intelligence",
-      "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
-      "url": "lw-health-intelligence-cp1y4yp3q-prolific-intelligence.vercel.app",
-      "state": "INITIALIZING",
-      "source_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+      "deployment_id": "dpl_7ggSJqBAZPHhQVLtjgyQmpmoNn4D",
+      "url": "lw-health-intelligence-agdkjh5ho-prolific-intelligence.vercel.app",
+      "state": "STAGED_READY",
+      "source_commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
       "promotion": "STAGED_REQUIRES_VERIFICATION"
     }
   ],
   "exact_build_promotions": [
     {
       "project": "lw-health-intelligence-api",
-      "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
-      "source_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+      "deployment_id": "dpl_B9E5uZw5bDwcHt1mkPuo17DxUuuq",
+      "source_commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
       "ci": {
-        "commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
-        "run_id": 42749245751,
-        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42749245751",
+        "commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
+        "run_id": 42801852903,
+        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42801852903",
         "conclusion": "success"
       },
-      "verified_source_files": 69,
-      "previous_deployment": "dpl_4G2tZ7c44hyqqwke5RoBbiDZcBCa",
+      "verified_source_files": 70,
+      "previous_deployment": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
       "temporary_provider_probe_access": "REVOKED_BEFORE_PROMOTION",
       "promotion_http": 201,
       "promotion": "REQUESTED_WITHOUT_REBUILD"
     },
     {
       "project": "lw-health-intelligence",
-      "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
-      "source_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+      "deployment_id": "dpl_7ggSJqBAZPHhQVLtjgyQmpmoNn4D",
+      "source_commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
       "ci": {
-        "commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
-        "run_id": 42749245751,
-        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42749245751",
+        "commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
+        "run_id": 42801852903,
+        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42801852903",
         "conclusion": "success"
       },
       "verified_source_files": 36,
-      "previous_deployment": "dpl_C94r5peG4PcrCEgRr5UoSWgb5t45",
+      "previous_deployment": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
       "temporary_provider_probe_access": "REVOKED_BEFORE_PROMOTION",
       "promotion_http": 201,
       "promotion": "REQUESTED_WITHOUT_REBUILD"
@@ -298,122 +203,30 @@
   ],
   "live_provider_state": {
     "lw-health-intelligence-api": {
-      "active_deployment": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
-      "automation_tokens_remaining": 0,
+      "active_deployment": "dpl_B9E5uZw5bDwcHt1mkPuo17DxUuuq",
       "sso_protection": {
         "deploymentType": "all_except_custom_domains"
-      }
+      },
+      "automation_tokens_remaining": 0
     },
     "lw-health-intelligence": {
-      "active_deployment": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
-      "automation_tokens_remaining": 0,
+      "active_deployment": "dpl_7ggSJqBAZPHhQVLtjgyQmpmoNn4D",
       "sso_protection": {
         "deploymentType": "all_except_custom_domains"
-      }
-    },
-    "latest_assurance": [
-      {
-        "kind": "RECONCILIATION",
-        "outcome": "NO_EXCEPTIONS_IN_EXECUTED_CHECKS",
-        "source_id": null,
-        "completed_at": "2026-11-10T03:07:22.970547+00:00"
       },
-      {
-        "kind": "RESTORE",
-        "outcome": "ISOLATED_VERIFIED",
-        "source_id": "3c8ae9ed-8967-4516-833d-f528b0258911",
-        "completed_at": "2026-11-10T03:07:03.403031+00:00"
-      },
-      {
-        "kind": "BACKUP",
-        "outcome": "ARCHIVED_NOT_RESTORE_VERIFIED",
-        "source_id": null,
-        "completed_at": "2026-11-10T03:03:01.179703+00:00"
-      }
-    ]
-  },
-  "release_guard_negative_cases": {
-    "before_ci": {
-      "test": "STAGE_BEFORE_EXACT_COMMIT_CI",
-      "exit_code": 1,
-      "result": {
-        "status": "FAILED",
-        "error_type": "ValueError"
-      }
-    },
-    "wrong_parent": {
-      "test": "PROMOTION_REJECTS_CHANGED_EXPECTED_PARENT",
-      "exit_code": 1,
-      "result": {
-        "status": "FAILED",
-        "error_type": "ValueError"
-      }
+      "automation_tokens_remaining": 0
     }
   },
-  "preserved_rejected_candidate": {
-    "stage": {
-      "project": "lw-health-intelligence-api",
-      "deployment_id": "dpl_ctreGscXYTiGksXxmQkoVqYqCYx8",
-      "url": "lw-health-intelligence-juahlyq94-prolific-intelligence.vercel.app",
-      "state": "INITIALIZING",
-      "source_commit": "9c8909a7beb05ef78848d133d388fff298d1336f",
-      "promotion": "STAGED_REQUIRES_VERIFICATION"
-    },
-    "diagnosis": {
-      "readyState": "READY",
-      "target": "production",
-      "project_match": true,
-      "source_commit": "9c8909a7beb05ef78848d133d388fff298d1336f",
-      "active": "dpl_4G2tZ7c44hyqqwke5RoBbiDZcBCa",
-      "sources": 69,
-      "probes": [
-        {
-          "path": "/v1/ready",
-          "http": 302,
-          "cache_control": "no-store, max-age=0",
-          "redirect": "https://vercel.com/sso-api"
-        },
-        {
-          "path": "/v1/auth/me",
-          "http": 302,
-          "cache_control": "no-store, max-age=0",
-          "redirect": "https://vercel.com/sso-api"
-        },
-        {
-          "path": "/v1/service-capabilities",
-          "http": 302,
-          "cache_control": "no-store, max-age=0",
-          "redirect": "https://vercel.com/sso-api"
-        },
-        {
-          "path": "/v1/reporting/snapshots",
-          "http": 302,
-          "cache_control": "no-store, max-age=0",
-          "redirect": "https://vercel.com/sso-api"
-        }
-      ]
-    }
-  },
-  "protected_probe_qualification": {
-    "authenticated_provider_probe_http": 200,
-    "application_signed_out_http": 401,
-    "remaining_automation_tokens": 0,
-    "sso_protection": {
-      "deploymentType": "all_except_custom_domains"
-    },
-    "after_revocation_without_token_http": 302
-  },
-  "corrected_provider_contract": "Initial automation-token request returned 400; a 32-character hexadecimal token was created/revoked and actual protected probes passed. Empty accepted promotion responses are handled without JSON parsing.",
   "cloud_route_checks": [
     {
       "target": "api",
-      "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
+      "deployment_id": "dpl_B9E5uZw5bDwcHt1mkPuo17DxUuuq",
       "state": "READY",
-      "actual_source_hashes_verified": 65
+      "actual_source_hashes_verified": 66
     },
     {
       "target": "web",
-      "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
+      "deployment_id": "dpl_7ggSJqBAZPHhQVLtjgyQmpmoNn4D",
       "state": "READY",
       "actual_source_hashes_verified": 31
     },
@@ -532,7 +345,7 @@
       "path": "/v1/auth/login",
       "method": "POST",
       "http": 401,
-      "elapsed_seconds": 2.833,
+      "elapsed_seconds": 2.789,
       "invalid_credentials_rejected": true,
       "session_created": false
     },
@@ -651,7 +464,7 @@
       "path": "/v1/auth/login",
       "method": "POST",
       "http": 401,
-      "elapsed_seconds": 2.86,
+      "elapsed_seconds": 2.775,
       "invalid_credentials_rejected": true,
       "session_created": false
     },
@@ -717,98 +530,160 @@
     }
   ],
   "live": {
-    "runtime_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
     "bundles": [
       {
         "page": "/",
-        "bundle": "/_next/static/chunks/app/page-d115aa448d7ae6d9.js",
-        "sha256": "e398b956334f66de77979f5052526c31c97a4cd0d009a9eaa58dda39dcf0bf02"
-      },
-      {
-        "page": "/governance",
-        "bundle": "/_next/static/chunks/app/governance/page-9c3967393d77daf3.js",
-        "sha256": "b22c233a87aa530c7f75c8e96ded1c6226c5dc78ada6a70a60c10e5778d2ae7c"
-      }
-    ],
-    "auth_boundaries": [
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/service-capabilities",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/reporting/source-profiles",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/reporting/extracts/00000000-0000-4000-8000-000000000000",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/reporting/source-profiles/prepare",
-        "method": "POST",
-        "http": 401
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/service-capabilities",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/reporting/source-profiles",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/reporting/extracts/00000000-0000-4000-8000-000000000000",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/reporting/source-profiles/prepare",
-        "method": "POST",
-        "http": 401
+        "bundle": "/_next/static/chunks/app/page-89c2afb9b223630f.js",
+        "sha256": "455b7d3a3cb164a7445ff85b1c03f74715139fda1386a49b201725f9325cb515"
       }
     ],
     "pwa_assets_retained": [
       {
         "path": "/my-health.webmanifest",
-        "http": 200,
         "sha256": "544be4c3631fe9ff3cd09b630544bcf56726e9cbc0fc86c2cde58142644c9a4a"
       },
       {
         "path": "/my-health-sw.js",
-        "http": 200,
         "sha256": "565eec504bf498481094d01c55959c9260089be28177794ea36e32b0654299e5"
       },
       {
         "path": "/health-icon-180.png",
-        "http": 200,
         "sha256": "75ef5e98053ccc13deb92abab2d0fde395c7272b874376b906f4a377bd984045"
       },
       {
         "path": "/health-icon-192.png",
-        "http": 200,
         "sha256": "2972528edfa12dbd64e2fcf187ffc1a7d5a8d8a58a4c367f5b8f6b9f1184a5f8"
       },
       {
         "path": "/health-icon-512.png",
-        "http": 200,
         "sha256": "a7961b6b7b874bedbfa67db104a5d264b07f282602b465b9f9934cc99608dc46"
+      }
+    ],
+    "auth_boundaries": [
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/inspections",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence.vercel.app",
+        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/decisions",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/inspections",
+        "http": 401,
+        "no_store": true
+      },
+      {
+        "origin": "https://lw-health-intelligence-api.vercel.app",
+        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/decisions",
+        "http": 401,
+        "no_store": true
       }
     ]
   },
-  "source_manifest": "2026-11-10-service-release-assurance-source-manifest.json",
+  "production_before": {
+    "observed_at": "2026-11-10T10:38:10.742540+00:00",
+    "phase": "director_before",
+    "aggregate_only": true,
+    "schema_version": 9,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 102,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  },
+  "production_after": {
+    "observed_at": "2026-11-10T11:02:50.562823+00:00",
+    "phase": "director_after",
+    "aggregate_only": true,
+    "schema_version": 9,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 102,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_B9E5uZw5bDwcHt1mkPuo17DxUuuq",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_7ggSJqBAZPHhQVLtjgyQmpmoNn4D",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  },
+  "production_domain_records_seeded": 0,
+  "notification_dispatch_invoked": false,
+  "conformance": {
+    "counts": {
+      "forms": {
+        "PARTIAL_CANDIDATE_MAPPING": 47,
+        "OPEN_EXPLICIT_MAPPING_GAP": 4
+      },
+      "fields": {
+        "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS": 14,
+        "OPEN_EXPLICIT_FIELD_MAPPING_GAP": 305,
+        "PARTIAL_NAME_OR_ALIAS_CANDIDATE": 36
+      },
+      "screens": {
+        "OPEN_SEMANTIC_CONFORMANCE_GAP": 75
+      },
+      "state_families": {
+        "OPEN_SEMANTIC_CONFORMANCE_GAP": 28,
+        "PARTIAL_ENGINEERING_TRANSITION_PROOF_EXCEPTION_OPEN": 2
+      },
+      "interfaces": {
+        "OPEN_TYPED_EXTENSION_RECONCILIATION": 67,
+        "PARTIAL_PATH_MATCH_SEMANTICS_UNQUALIFIED": 1,
+        "OPEN_ROUTE_MAPPING_GAP": 14
+      }
+    },
+    "reviewed_field_proofs": 14,
+    "partial_state_families": 2,
+    "register": "conformance/canonical-register.json",
+    "proofs": "conformance/director-proofs.json",
+    "meaning": "BOUNDED_ENGINEERING_PROOFS_CAPTURE_EXCEPTIONS_ADOPTION_AND_FORMAL_ACCEPTANCE_OPEN"
+  },
   "preservation": {
     "controlled_documents_unchanged": 78,
     "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf",
@@ -833,78 +708,61 @@
       }
     }
   },
-  "local_log_evidence": [
-    {
-      "path": ".toolchain/readiness-targeted-tests.log",
-      "sha256": "249024e894971862411e30feb9a97d28d7e59563342bfe53e04b2cd09fd60c13"
-    },
-    {
-      "path": ".toolchain/readiness-recovery-schema9.log",
-      "sha256": "1612c7562800e592c42fe541e1c4ec10621e3b82c6b90decb54c1622c5db90ba"
-    },
-    {
-      "path": ".toolchain/readiness-operator-recovery.log",
-      "sha256": "ee8dcffc284bcb94b0bf45750326846773a093ff1c108191b5b68dce840433bc"
-    },
-    {
-      "path": ".toolchain/readiness-cloud-check.jsonl",
-      "sha256": "01aa7f59eda377a6cde79b8720e08830d58540c18cab73b09c05898ea29fd14d"
-    }
-  ],
-  "prior_reporting_qualification": {
-    "runtime_commit": "d16b2549f77e5532348f4659b97e5135aac1c24d",
-    "evidence": "2026-11-10-phase-a-reporting-evidence.json",
-    "capacity_repeated_this_release": false
-  },
-  "native_source_package": {
-    "edition": "LWH-NATIVE-2026.1",
-    "status": "PROPOSED_NATIVE_MAPPING_REQUIRES_REVIEW_AND_ADOPTION",
-    "profiles": 4,
-    "canonical_sha256": "46f10416b6640999033caf1f8bd44ce5dc617223f7402650aa43236965155778",
-    "source_guide": "native-reporting-source-guide.md",
-    "production_templates_auto_adopted": 0
-  },
+  "source_manifest": "2026-11-10-director-affiliation-source-manifest.json",
+  "report": "2026-11-10-director-affiliation-conformance.md",
+  "prior_runtime_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+  "prior_production_evidence": "2026-11-10-service-release-assurance-evidence.json",
+  "prior_capacity_evidence": "2026-11-10-capacity-and-conformance-evidence.json",
+  "capacity_requalified_in_this_increment": false,
+  "manual_recovery_reference": "2026-11-10-service-release-assurance-evidence.json",
+  "automatic_backup_cadence_established": false,
+  "scanner_qualified": false,
   "tickets": {
-    "LWH-AUD-20261109-003": "EXPLICIT_UPLOAD_EXCLUSION_DELIVERED_SCANNER_ENGINE_NOT_QUALIFIED",
-    "LWH-AUD-20261109-004": "SCHEMA9_MANUAL_RECOVERY_AND_NEW_SOURCE_DATA_PRESERVATION_VERIFIED_CADENCE_CUSTODY_TARGETS_OPEN",
-    "LWH-AUD-20261109-019": "STAGED_EXACT_BUILD_PROMOTION_VERIFIED_ISOLATED_PROVIDER_SANDBOX_LICENCE_REVIEW_AND_PAIRED_ROLLBACK_OPEN",
-    "LWH-AUD-20261109-002": "CAPACITY_ACCEPTANCE_REMAINS_OPEN",
-    "LWH-AUD-20261109-014": "CANONICAL_CONFORMANCE_CROSSWALK_REMAINS_OPEN"
+    "LWH-AUD-20261109-014": "INITIAL_AFFILIATION_GUARDS_AND_14_PARTIAL_FIELD_PROOFS_DELIVERED_COMPLETE_CONFORMANCE_OPEN",
+    "LWH-AUD-20261109-002": "PRIOR_BOUNDED_CLOUD_MEASUREMENTS_RETAINED_SUSTAINED_CAPACITY_TARGETS_OPEN"
   },
   "remaining_acceptance_gates": [
-    "002: representative Vercel memory/duration, larger event histories, sustained contention/correction/replay/load and adopted latency targets",
-    "003: actual scanner qualification before enabling file-dependent operation; no additional scanner host authorised",
-    "004: automatic backup cadence/monitoring, independent copy/key custody, adopted RPO/RTO and representative staffed resumption",
-    "014: 51 forms/355 fields, 75 screens and 30 state-family implementation/validation/permission/persistence/test crosswalk",
-    "019: isolated end-to-end provider sandbox, dependency/licence review, paired code rollback and concurrent-new-data/resumption qualification",
-    "Actual Director-first operating adoption, real independent officers/facility/affiliation/forms/calendar/disclosure/service authority and observed intervention/outcome loop",
-    "Independent security/privacy and real-role/device/accessibility/low-bandwidth UAT; 200 requirements and 111 cases remain NOT_RUN",
-    "Remaining core clinical/referral/personal/finance/sponsorship/assistance and offline care scope; extra/local hosting remains deferred"
+    "014: 305 explicit field-mapping gaps, 36 automatic name candidates, capture/missingness exceptions in all 14 reviewed proofs, 75 screen qualifications and full transition/correction/withdrawal semantics",
+    "002: representative sustained correction/replay/contention, maximum-volume simultaneous facilities, provider telemetry/cold starts and adopted targets; prior measurements are not recertified",
+    "003: actual scanner qualification; uploads remain excluded without prerequisites",
+    "004: automatic cadence/monitoring, independent copy/key custody, adopted RPO/RTO and representative staffed resumption",
+    "019: isolated complete provider/service sandbox, dependency/licence review and paired-code/new-data rollback/resumption",
+    "Real Director nominations/facilities/affiliation/forms/calendar/disclosure and service authority; independent security/privacy and actual-role/device/accessibility/low-bandwidth UAT",
+    "Remaining cloud core and full offline care; extra/local hosting stays deferred; equipment follows selected-facility registration and approval"
   ],
+  "formal_requirements": 200,
+  "formal_cases": 111,
+  "formal_status": "NOT_RUN",
   "canonical_documents_verified": 78,
   "operating_acceptance": "INCOMPLETE",
-  "report": "2026-11-10-service-release-assurance.md",
-  "recovery_reference": "2026-11-10-service-release-assurance-evidence.json",
-  "next_phase": "Continue Director-first field-specific conformance proofs and representative capacity/targets; preserve remaining service/recovery/rollback and operating gates",
-  "equipment_connections": "AFTER_FACILITY_REGISTRATION_AND_APPROVAL",
   "additional_hosts_added": 0,
   "playwright_installed": false,
-  "latest_engineering_increment": {
-    "report": "2026-11-10-capacity-and-conformance.md",
-    "evidence": "2026-11-10-capacity-and-conformance-evidence.json",
-    "tickets": {
-      "LWH-AUD-20261109-002": "BOUNDED_VERCEL_NULLPOOL_MEASUREMENTS_VERIFIED_CAPACITY_ACCEPTANCE_OPEN",
-      "LWH-AUD-20261109-014": "COMPLETE_CANONICAL_INVENTORY_WITH_EXPLICIT_EXCEPTIONS_FIELD_AND_STATE_CONFORMANCE_OPEN"
+  "dependencies_added": 0,
+  "log_hashes": [
+    {
+      "path": ".toolchain/director-before-fix.log",
+      "sha256": "c934244cadfadf609e85af89479f9b45e19009c0e332ccef24b1253a98dc645a"
     },
-    "tooling_commit": "3e167fd112743993a3e0066ee3263faaf274291c",
-    "ci_run_id": 42754146252,
-    "disposable_preview": "dpl_BVoSexBc4xd5TjzrWprLDLf1U67f",
-    "preview_removed": true,
-    "production_runtime_changed": false,
-    "schema_version": 9,
-    "002_capacity_accepted": false,
-    "014_conformance_accepted": false,
-    "operating_adoption": "INCOMPLETE",
-    "full_suite_acceptance": "INCOMPLETE_NOT_RUN"
-  }
+    {
+      "path": ".toolchain/director-before-clock-corrected.log",
+      "sha256": "a6968fda8a4d4ba41f32acc3166a784c12bec7b79f1740243ef5d2160a9c6db9"
+    },
+    {
+      "path": ".toolchain/director-after-fix.log",
+      "sha256": "034b771d522fa763c0bae3d9b80332b3fd21d180546c8f8702ed67ccf57fcbd0"
+    },
+    {
+      "path": ".toolchain/director-final-targeted.log",
+      "sha256": "ef88be1505b6e5ab4d65b42a0a99b1dacb872893b745978434918ba9df79ec6c"
+    },
+    {
+      "path": ".toolchain/director-neon-proof.log",
+      "sha256": "ca67d7c1d499795cb31605ab672fcd47742f10fa74399c945b09d0bbd0a6dbd4"
+    },
+    {
+      "path": ".toolchain/director-cloud-check.jsonl",
+      "sha256": "a5b18e8aa9dacefadbde6ba037384b49d1045f333d85d4b4ac4db3e5c6dbcd51"
+    }
+  ],
+  "next_phase": "Continue Director-first capture/field and correction/withdrawal transition proofs; retain capacity, service, recovery, rollback and real operating gates"
 }
