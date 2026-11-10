@@ -207,6 +207,8 @@ async def qualify(
                 if state.get("readyState") in ("READY", "ERROR", "CANCELED"):
                     break
                 await asyncio.sleep(5)
+            RESULT["preview_build"] = {k: state.get(k) for k in ("readyState", "errorCode", "target")}
+            record()
             assert state.get("readyState") == "READY", "Preview build did not become READY"
             assert state.get("target") != "production"
             tree = checked(

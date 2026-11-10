@@ -79,9 +79,12 @@ def candidate(settings, namespace, *, provider_environment):
     return app
 
 
-if os.environ.get("LWH_CAPACITY_SCHEMA"):
-    app = candidate(
+app = (
+    candidate(
         PlatformSettings(),
         os.environ["LWH_CAPACITY_SCHEMA"],
         provider_environment=os.environ.get("VERCEL_ENV"),
     )
+    if os.environ.get("LWH_CAPACITY_SCHEMA")
+    else None
+)
