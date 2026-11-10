@@ -1,0 +1,1341 @@
+{
+  "recorded_at": "2026-11-10T04:27:48.375476+00:00",
+  "code_delivery": "TOOLING_COMMITTED_DISPOSABLE_PREVIEW_DEPLOYED_TESTED_AND_REMOVED",
+  "tickets": {
+    "LWH-AUD-20261109-002": "BOUNDED_VERCEL_NULLPOOL_MEASUREMENTS_VERIFIED_CAPACITY_ACCEPTANCE_OPEN",
+    "LWH-AUD-20261109-014": "COMPLETE_CANONICAL_INVENTORY_WITH_EXPLICIT_EXCEPTIONS_FIELD_AND_STATE_CONFORMANCE_OPEN"
+  },
+  "engineering_evidence": "BOUNDED_CLOUD_CAPACITY_AND_COMPLETE_INVENTORY_WITH_EXPLICIT_GAPS",
+  "operating_adoption": "INCOMPLETE",
+  "full_suite_acceptance": "INCOMPLETE_NOT_RUN",
+  "tooling_commit": "3e167fd112743993a3e0066ee3263faaf274291c",
+  "production_runtime_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+  "production_deployments": {
+    "api": {
+      "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "source_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+      "verified_source_files": 65,
+      "submitted_source_files_verified": 69
+    },
+    "web": {
+      "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "source_commit": "3633c9572535f23522a2bb21b1d900b04105bd51",
+      "verified_source_files": 31,
+      "submitted_source_files_verified": 36
+    }
+  },
+  "production_runtime_changed": false,
+  "migration_required": false,
+  "schema_version": 9,
+  "ci": {
+    "commit": "3e167fd112743993a3e0066ee3263faaf274291c",
+    "run_id": 42754146252,
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42754146252",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 129624465570,
+        "name": "web",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129624465852,
+        "name": "python",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129624466115,
+        "name": "secrets-scan",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "web": {
+      "passed_counts": [],
+      "client_pass": [
+        "11",
+        "4"
+      ],
+      "build_compiled": true
+    },
+    "python": {
+      "passed_counts": [
+        "242"
+      ],
+      "client_pass": [],
+      "build_compiled": false
+    }
+  },
+  "local_targeted_tests": 11,
+  "capacity_qualification": {
+    "status": "BOUNDED_MEASUREMENTS_PASSED",
+    "measurement": "SYNTHETIC_DISPOSABLE_VERCEL_PREVIEW_NEON",
+    "operating_acceptance": "NOT_ESTABLISHED",
+    "requests": [
+      {
+        "label": "cold_readiness",
+        "http": 200,
+        "client_elapsed_seconds": 4.573,
+        "server_elapsed_ms": "3523.426",
+        "process_lifetime_maxrss_kib": "115916",
+        "pool": "NullPool"
+      },
+      {
+        "label": "baseline_extract",
+        "http": 200,
+        "client_elapsed_seconds": 6.742,
+        "server_elapsed_ms": "6304.717",
+        "process_lifetime_maxrss_kib": "119780",
+        "pool": "NullPool"
+      },
+      {
+        "label": "5001_later_period_extract",
+        "http": 200,
+        "client_elapsed_seconds": 6.876,
+        "server_elapsed_ms": "6131.257",
+        "process_lifetime_maxrss_kib": "119960",
+        "pool": "NullPool"
+      },
+      {
+        "label": "duplicate_a",
+        "http": 200,
+        "client_elapsed_seconds": 6.643,
+        "server_elapsed_ms": "6165.102",
+        "process_lifetime_maxrss_kib": "120844",
+        "pool": "NullPool"
+      },
+      {
+        "label": "duplicate_b",
+        "http": 200,
+        "client_elapsed_seconds": 6.913,
+        "server_elapsed_ms": "6137.396",
+        "process_lifetime_maxrss_kib": "120844",
+        "pool": "NullPool"
+      },
+      {
+        "label": "5000_selected_extract",
+        "http": 200,
+        "client_elapsed_seconds": 9.773,
+        "server_elapsed_ms": "8973.575",
+        "process_lifetime_maxrss_kib": "166560",
+        "pool": "NullPool"
+      },
+      {
+        "label": "simultaneous_facility_b",
+        "http": 200,
+        "client_elapsed_seconds": 6.689,
+        "server_elapsed_ms": "5975.998",
+        "process_lifetime_maxrss_kib": "166560",
+        "pool": "NullPool"
+      },
+      {
+        "label": "simultaneous_facility_a",
+        "http": 200,
+        "client_elapsed_seconds": 9.581,
+        "server_elapsed_ms": "9185.193",
+        "process_lifetime_maxrss_kib": "166560",
+        "pool": "NullPool"
+      },
+      {
+        "label": "repeated_bound_1",
+        "http": 200,
+        "client_elapsed_seconds": 9.403,
+        "server_elapsed_ms": "9067.103",
+        "process_lifetime_maxrss_kib": "168236",
+        "pool": "NullPool"
+      },
+      {
+        "label": "repeated_bound_2",
+        "http": 200,
+        "client_elapsed_seconds": 9.262,
+        "server_elapsed_ms": "8935.157",
+        "process_lifetime_maxrss_kib": "168236",
+        "pool": "NullPool"
+      },
+      {
+        "label": "repeated_bound_3",
+        "http": 200,
+        "client_elapsed_seconds": 9.308,
+        "server_elapsed_ms": "8963.485",
+        "process_lifetime_maxrss_kib": "168236",
+        "pool": "NullPool"
+      },
+      {
+        "label": "5000_records_20000_events",
+        "http": 200,
+        "client_elapsed_seconds": 13.469,
+        "server_elapsed_ms": "12777.223",
+        "process_lifetime_maxrss_kib": "202880",
+        "pool": "NullPool"
+      },
+      {
+        "label": "20001_events_overflow",
+        "http": 409,
+        "client_elapsed_seconds": 9.086,
+        "server_elapsed_ms": "8368.639",
+        "process_lifetime_maxrss_kib": "202880",
+        "pool": "NullPool",
+        "code": "SOURCE_BATCH_REQUIRED"
+      },
+      {
+        "label": "5001_selected_overflow",
+        "http": 409,
+        "client_elapsed_seconds": 7.445,
+        "server_elapsed_ms": "7134.173",
+        "process_lifetime_maxrss_kib": "202880",
+        "pool": "NullPool",
+        "code": "SOURCE_BATCH_REQUIRED"
+      },
+      {
+        "label": "retained_extract_history_after_overflow",
+        "http": 200,
+        "client_elapsed_seconds": 5.792,
+        "server_elapsed_ms": "5478.573",
+        "process_lifetime_maxrss_kib": "202880",
+        "pool": "NullPool"
+      }
+    ],
+    "commit": "3e167fd112743993a3e0066ee3263faaf274291c",
+    "ci": {
+      "commit": "3e167fd112743993a3e0066ee3263faaf274291c",
+      "run_id": 42754146252,
+      "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42754146252",
+      "conclusion": "success"
+    },
+    "source_manifest": [
+      {
+        "file": "api/index.py",
+        "sha256": "1b353e81b9081a31a98cbead8300a31ee408fb2c3b9d52157ea5c23da9933d62"
+      },
+      {
+        "file": "requirements.txt",
+        "sha256": "c33b1cbbbccf65ca1ba5b49b4fd00f722bf4c5f78988fc6b083c66a43cd20990"
+      },
+      {
+        "file": "services/api/src/lw_care_api/__init__.py",
+        "sha256": "0873af693343467bf3c3ad9b56c95607499f9881893a21ea73d484314a283939"
+      },
+      {
+        "file": "services/api/src/lw_care_api/db/connection.py",
+        "sha256": "8c2bd27035a5cf6d16c3749b832ccb2d6c00240eaf229b24922003859803cfb4"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/__init__.py",
+        "sha256": "dd62ac1690e4f96e62fc8ffa0fdf3213a2cb17768aa75efe6542fa3d36cc8526"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/cli.py",
+        "sha256": "6b417473dd669f0524328c4d93fbed03e9c242f0ddc982207188bbaea41aa7fb"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/__init__.py",
+        "sha256": "08dfbd8cf697807c989782fc7adac95cbae5c70bf0810931b0dc80d791c44eea"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/advanced.py",
+        "sha256": "6cf7b7b98b44506e89f608770b960b8a4aa7038ea70c4dd91f7728200617b9d4"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/advanced_contracts.py",
+        "sha256": "65accb1b1a23c422db0545a6a6e7a81ad5fc001ffd86e06bf325f4f897786c21"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/continuity.py",
+        "sha256": "0438e2d5cf2d38e44eeb6093d5327ad35b83dd771d68fdfa540b0a0c4d4b1ff9"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/contracts.py",
+        "sha256": "d4bf48539e61643fde5f2645a6fca41d4c0ea9f3461cb8aff1938a8275237c4d"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/flow_index.py",
+        "sha256": "16fe0cfa616b8aafb2f0159fd773ab0d11ea42e06f21de4c5c0cc37244fb0c5f"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/router.py",
+        "sha256": "987f1c9fb005ad85e1c5d9128181c435f4023509672d9621948374d07c356cfc"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/service.py",
+        "sha256": "edcf2bce9173ae162c8346b5fbfe311322e7fd4aef93f2ab512b0e1da811399c"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/specialties.py",
+        "sha256": "47449d6824b91231d6b8a28391b3dd8bee6ea962650cf5c63f9a37ec95c3cf3f"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/store.py",
+        "sha256": "3528a18e87dffed2403affc0db1693a1e3aa8f9e4d2d133f937802f07f945bf6"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/tables.py",
+        "sha256": "1b4a0f0edcd9f638293131ea51735ed50d83af8308db0c305af2d71444043ee9"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/config.py",
+        "sha256": "22e43dfcb3de3c6f00aeb535a7eee8677675d72b7b9c0372535eabfc4ecaee3b"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/contracts.py",
+        "sha256": "49e68db305bc4c7b73abad0995760ea6ce9ff7ff46c5079360f80bfeb1ed69d9"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/__init__.py",
+        "sha256": "8f1a78a65861048f397b812de2306e4e811ca32626f04b28fb3c5034d2d6ade0"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/assurance.py",
+        "sha256": "7fdde09d6ce237a83c6571cba4d68b2c7ac92e457ba275655cf7ab6c6ceb9849"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/continuity.py",
+        "sha256": "93af479fcb8b735f79581cacc7c461e68861b1e48a183b4a085727d5bb340fb7"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/contracts.py",
+        "sha256": "42a67e5ece2347ba0b529f6982f2e9fd75787aca5e46f414d68b343e5f1864d2"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/jobs.py",
+        "sha256": "cbed9120400e85517704172838f075e9c4463b0e1b4f0a5bc147a6ad01a34fa5"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/offboarding.py",
+        "sha256": "39c2a4bcfdc4c2e0a3b355db836341aad49932689957548451a464398fafb35e"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/recovery.py",
+        "sha256": "7c2184908c8e6869f53aeb365cde170ded96818df83aa7ce164adfb3fbb7745a"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/router.py",
+        "sha256": "f12fa25216f3422707a021004b8505e9a347a09daa2c5949d7cd569041893579"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/service.py",
+        "sha256": "662c49fae982cd3d4d7100b58c811160ebe0f051b3bcc885ae1380c542a2d859"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/tables.py",
+        "sha256": "540b67f4ec5395b42cfe75c377dc8a3db63bf71b446dbf6eebef0fcd6615e17a"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/worker.py",
+        "sha256": "46b5542319133c156b3171ac79f759b10ecb49a4572a60ccd8dc65358103ee85"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/db.py",
+        "sha256": "d90449d436dc4291760574f320ab8b600836e08e52d1008966ed097951193469"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/domain.py",
+        "sha256": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/__init__.py",
+        "sha256": "2a308b58623e7f2a2a083b50154dfd1ae4ed9f4a401c00e3bdd3132549c107a2"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
+        "sha256": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/base.py",
+        "sha256": "f57b93dae929b49b0ee9316233673ad2db6ffd361d4f40dd9d8f58f6ecb2c593"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/contracts.py",
+        "sha256": "e762bb4da6738a51d8579c7eff69a239ffb8735b36aeeca3e3844510f78e937a"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/knowledge.py",
+        "sha256": "37a32038dfa4b785338687b968242b7f2179a8a5b16a404c67f73dbe3aeb72f2"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/master.py",
+        "sha256": "2df41a4775da6931eac6d2086c1717b1c83d8ca759472b4397d6bd6a37296a93"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/router.py",
+        "sha256": "0070e06f0d5ce4aa40ab85aaf52b40c732f71a45e926f5908924a30db4b6976b"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/tables.py",
+        "sha256": "97132db14e67e4e0304c653d6be4cd7dbd1c8a7c069cb46ac959084b2fce70b9"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/integrations.py",
+        "sha256": "7c3f49fea274c0973534f04072ecf5ca6f46fdeada16329ff4387df2a3156524"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/main.py",
+        "sha256": "97ef08876a4b6e4e8f174a5db75e73fb44dbc82a9d2df343623ef465bdcf7383"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/operations.py",
+        "sha256": "9cffe7fd37ad4a558ceef459cdb1e535e6bd31a27a6a3c97d19cdefee6ad2c88"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/organisation_sources.json",
+        "sha256": "d7abfad7564315d7e635805f40eaba850da3f5637160c2479b14c89bb7f18fa2"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/paging.py",
+        "sha256": "738780d9880c0efa79072b1d97a5f3fe2a8219efac20f125302f7592c0fdc5ea"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/__init__.py",
+        "sha256": "0af13118e9de76ebe9296c935ad48757323adac406ccdcf76ff284603243d587"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/care.py",
+        "sha256": "63a6eb9a336785e455d866cc9860f0e834bf7d06f0e983a0aaa59b78f8208eff"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/contracts.py",
+        "sha256": "ceb08d41c5d0621fa65cd73e2c5e8427c2c90238df1e0815ec402585758b1f35"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/router.py",
+        "sha256": "a98c30cdda34a99ecb5fb1a31a8dd06624dc27ded069b62d965b80ab03bd97bc"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/service.py",
+        "sha256": "71415b906fa783f2682aa81c2fdaa98610d098392f344988c06ca4c8daea5f44"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/tables.py",
+        "sha256": "3feae8f3fa05ead15400df79f4bfdd485e2c560ec56931db3c2ddcbdb660165b"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/__init__.py",
+        "sha256": "8abae57b82fa2197f1dddfa1c5d9afa0f535f0e23f221dde8fac40708f690e39"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/analytics.py",
+        "sha256": "b24f02d0e69d9b1fcdcdc184d6faabe86bb876c05269f52901f99f23609af9da"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/contracts.py",
+        "sha256": "fbb23e51407175e224bc43f0021158fbeec204d6814a5c888ec11295e5485a77"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/coverage.py",
+        "sha256": "e1be6c48ae31c58be9f9650ca7ea7191c22d8f9dad3486cddd3f385f62d88111"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/metric_catalog.json",
+        "sha256": "898412e36038cfa330bba754abfbfaf7a91f8a6e2a22994a60fa15a3cad89d97"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/native.py",
+        "sha256": "2260c87f517c8f12814b72b05ae64ee4c6eb88f1ed1845bedc95cef507a3141d"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/operations.py",
+        "sha256": "119e83c4cf7bdd9ebd3932a7cd67e3de8853c45ba23fb43edac1e419184e40c4"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/proposals.py",
+        "sha256": "51d6bad3794bb8e8136f6542b0eba00b4f76551559208bb94d083c776b05adaf"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/recipients.py",
+        "sha256": "9dad41b7b97e8925a308391fb182604a765003d8394e850f9e998a6706afecee"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/router.py",
+        "sha256": "37704e58b16622bd070ef51b88616147eb7f383fac46d59586193a7642e25e3d"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/service.py",
+        "sha256": "0585a407046a42f3d67214c46a4b2d0f016bb2a2fea55ac91b8e32526dfc385e"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/source_index.py",
+        "sha256": "b72ed9c2a004e435d5c99cde871146e75acde4cb8d7f81c501d4a0c7229016a7"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/store.py",
+        "sha256": "3875179b42b3362f197243efaa78c99380f8b95bd0bd92a808995f86c6b6c953"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/tables.py",
+        "sha256": "10403dc205e1d37f9bb662eea2373deb63895c1ed05508028ffb1a7d03899393"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/templates.py",
+        "sha256": "57499578b26e00688c634a31a39aa345ec6f3786766d2a9eb6d3a44f587b7ced"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/security.py",
+        "sha256": "f3aedde1ec9e5b230a37830d6ff4478c15f95ed917b106e27a4220bb05182dfd"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/storage.py",
+        "sha256": "b622b3650d653962d3927dd09f399c1f3ea4418a64c27f0be6c080eca639a907"
+      },
+      {
+        "file": "vercel.json",
+        "sha256": "83009c955788627619e79b0f5b5670f78fca0e4a027b325238bc497f3c7c2556"
+      }
+    ],
+    "deployment_id": "dpl_BVoSexBc4xd5TjzrWprLDLf1U67f",
+    "url": "https://lw-health-intelligence-bswr0mjeo-prolific-intelligence.vercel.app",
+    "previous_api": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
+    "previous_web": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
+    "cron_removed": true,
+    "preview_build": {
+      "readyState": "READY",
+      "errorCode": null,
+      "target": null
+    },
+    "verified_source_files": 69,
+    "function_configuration": {
+      "api/index.py": {
+        "includeFiles": "services/api/src/**",
+        "maxDuration": 60
+      }
+    },
+    "synthetic_counts": {
+      "clinical_records": 10004,
+      "clinical_events": 25005,
+      "reporting_extracts": 12
+    },
+    "duplicate_receipt_identical": true,
+    "later_period_hash_unchanged": true,
+    "selected_boundary": 5000,
+    "selected_overflow": 5001,
+    "selected_events_boundary": 20000,
+    "selected_events_overflow": 20001,
+    "missing_summaries_accounted_as_unknown": 4990,
+    "jobs_excluded": true,
+    "synthetic_fixture_key_separate": true,
+    "temporary_probe_access": "REVOKED",
+    "preview_removed": true,
+    "preview_absent_http": 404,
+    "sso_protection_unchanged": true,
+    "remaining_automation_tokens": 0,
+    "production_aliases_unchanged": true,
+    "disposable_schema_removed": true
+  },
+  "conformance_counts": {
+    "forms": {
+      "PARTIAL_CANDIDATE_MAPPING": 47,
+      "OPEN_EXPLICIT_MAPPING_GAP": 4
+    },
+    "fields": {
+      "PARTIAL_NAME_OR_ALIAS_CANDIDATE": 48,
+      "OPEN_EXPLICIT_FIELD_MAPPING_GAP": 307
+    },
+    "screens": {
+      "OPEN_SEMANTIC_CONFORMANCE_GAP": 75
+    },
+    "state_families": {
+      "OPEN_SEMANTIC_CONFORMANCE_GAP": 30
+    },
+    "interfaces": {
+      "OPEN_TYPED_EXTENSION_RECONCILIATION": 67,
+      "PARTIAL_PATH_MATCH_SEMANTICS_UNQUALIFIED": 1,
+      "OPEN_ROUTE_MAPPING_GAP": 14
+    }
+  },
+  "implementation_routes_indexed": 296,
+  "implementation_models_indexed": 58,
+  "requiredness_differences": [
+    "LWH-FRM-007.F008",
+    "LWH-FRM-014.F006",
+    "LWH-FRM-025.F006",
+    "LWH-FRM-032.F007",
+    "LWH-FRM-033.F006",
+    "LWH-FRM-034.F001",
+    "LWH-FRM-034.F004",
+    "LWH-FRM-035.F006"
+  ],
+  "conformance_register": "conformance/canonical-register.json",
+  "production_before": {
+    "observed_at": "2026-11-10T03:55:47.505622+00:00",
+    "phase": "capacity_before",
+    "aggregate_only": true,
+    "schema_version": 9,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 102,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  },
+  "production_after": {
+    "observed_at": "2026-11-10T04:26:52.424753+00:00",
+    "phase": "capacity_after",
+    "aggregate_only": true,
+    "schema_version": 9,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 102,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  },
+  "production_http_source_checks": [
+    {
+      "target": "api",
+      "deployment_id": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
+      "state": "READY",
+      "actual_source_hashes_verified": 65
+    },
+    {
+      "target": "web",
+      "deployment_id": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
+      "state": "READY",
+      "actual_source_hashes_verified": 31
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/health",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/ready",
+      "http": 200,
+      "cache_control": "no-store",
+      "schema_version": 9,
+      "reporting": "READY"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/auth/me",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/service-capabilities",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/clinical/sites",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/templates",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/template-proposals",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/jobs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/reliability",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/assurance-runs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/articles",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/knowledge",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/safety-cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/snapshots",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/auth/login",
+      "method": "POST",
+      "http": 401,
+      "elapsed_seconds": 2.854,
+      "invalid_credentials_rejected": true,
+      "session_created": false
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/health",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/ready",
+      "http": 200,
+      "cache_control": "no-store",
+      "schema_version": 9,
+      "reporting": "READY"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/auth/me",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/service-capabilities",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/clinical/sites",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/templates",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/template-proposals",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/jobs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/reliability",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/assurance-runs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/articles",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/knowledge",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/safety-cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/snapshots",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/auth/login",
+      "method": "POST",
+      "http": 401,
+      "elapsed_seconds": 2.864,
+      "invalid_credentials_rejected": true,
+      "session_created": false
+    },
+    {
+      "frontend_page": "/",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/care",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/directorate",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/reporting-templates",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/operations",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/recover",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/governance",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/learn",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/activate",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/directory",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/my-health",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/patient-access",
+      "http": 200,
+      "platform_title_verified": true
+    }
+  ],
+  "preservation": {
+    "controlled_documents_unchanged": 78,
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf",
+    "native_mapping_sha256": "46f10416b6640999033caf1f8bd44ce5dc617223f7402650aa43236965155778",
+    "2026-11-09-audit-requirements.csv": {
+      "rows": 200,
+      "status_fields": {
+        "formal_verification_status": {
+          "NOT_RUN": 200
+        }
+      }
+    },
+    "2026-11-09-audit-acceptance-cases.csv": {
+      "rows": 111,
+      "status_fields": {
+        "canonical_execution_status": {
+          "NOT_RUN": 111
+        },
+        "audit_execution_status": {
+          "NOT_EXECUTED_AS_FORMAL_ACCEPTANCE": 111
+        }
+      }
+    }
+  },
+  "formal_requirements": 200,
+  "formal_cases": 111,
+  "formal_status": "NOT_RUN",
+  "remaining_gates": [
+    "002: sustained correction/replay/contention and representative event distributions, provider-billed duration/isolated memory, representative production configuration/cold starts and adopted latency/capacity targets",
+    "014: field-specific permission/type/requiredness/missingness/persistence/failure proofs, 75 actual screen and 30 transition-family proofs, explicit extension decisions and independent actual-role UAT",
+    "003: actual malware engine qualification; affected uploads remain excluded",
+    "004: automatic backup cadence/monitoring, independent copy/key custody, adopted RPO/RTO and staffed resumption",
+    "019: isolated end-to-end provider/service sandbox, dependency/licence review, paired-code rollback and representative new-data/service-resumption qualification",
+    "Director-first operating adoption and independent security/privacy/device/accessibility/low-bandwidth acceptance"
+  ],
+  "additional_hosts_added": 0,
+  "playwright_installed": false,
+  "production_domain_records_seeded": 0,
+  "notification_dispatch_invoked": false,
+  "retained_failed_ci": {
+    "commit": "66bb106e3228ee4a7b6a678f866de764c45a9440",
+    "run_id": 42752683084,
+    "reason": "Conformance text fingerprints differed on CRLF/LF; fixed with explicitly labelled LF-normalized implementation hashes. Baseline integrity and deployment hashes remain exact bytes."
+  },
+  "retained_failed_preview": {
+    "status": "FAILED",
+    "measurement": "SYNTHETIC_DISPOSABLE_VERCEL_PREVIEW_NEON",
+    "operating_acceptance": "NOT_ESTABLISHED",
+    "requests": [],
+    "commit": "b3f7810d172c27161130072f9e295a6ef3440de4",
+    "ci": {
+      "commit": "b3f7810d172c27161130072f9e295a6ef3440de4",
+      "run_id": 42752914099,
+      "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42752914099",
+      "conclusion": "success"
+    },
+    "source_manifest": [
+      {
+        "file": "api/index.py",
+        "sha256": "80e5cc6b9dc71f1ca9d09c3940d3e7d106e2b9d1ec18fc64c4c913ccd6e5768d"
+      },
+      {
+        "file": "requirements.txt",
+        "sha256": "c33b1cbbbccf65ca1ba5b49b4fd00f722bf4c5f78988fc6b083c66a43cd20990"
+      },
+      {
+        "file": "services/api/src/lw_care_api/__init__.py",
+        "sha256": "0873af693343467bf3c3ad9b56c95607499f9881893a21ea73d484314a283939"
+      },
+      {
+        "file": "services/api/src/lw_care_api/db/connection.py",
+        "sha256": "8c2bd27035a5cf6d16c3749b832ccb2d6c00240eaf229b24922003859803cfb4"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/__init__.py",
+        "sha256": "dd62ac1690e4f96e62fc8ffa0fdf3213a2cb17768aa75efe6542fa3d36cc8526"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/cli.py",
+        "sha256": "6b417473dd669f0524328c4d93fbed03e9c242f0ddc982207188bbaea41aa7fb"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/__init__.py",
+        "sha256": "08dfbd8cf697807c989782fc7adac95cbae5c70bf0810931b0dc80d791c44eea"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/advanced.py",
+        "sha256": "6cf7b7b98b44506e89f608770b960b8a4aa7038ea70c4dd91f7728200617b9d4"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/advanced_contracts.py",
+        "sha256": "65accb1b1a23c422db0545a6a6e7a81ad5fc001ffd86e06bf325f4f897786c21"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/continuity.py",
+        "sha256": "0438e2d5cf2d38e44eeb6093d5327ad35b83dd771d68fdfa540b0a0c4d4b1ff9"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/contracts.py",
+        "sha256": "d4bf48539e61643fde5f2645a6fca41d4c0ea9f3461cb8aff1938a8275237c4d"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/flow_index.py",
+        "sha256": "16fe0cfa616b8aafb2f0159fd773ab0d11ea42e06f21de4c5c0cc37244fb0c5f"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/router.py",
+        "sha256": "987f1c9fb005ad85e1c5d9128181c435f4023509672d9621948374d07c356cfc"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/service.py",
+        "sha256": "edcf2bce9173ae162c8346b5fbfe311322e7fd4aef93f2ab512b0e1da811399c"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/specialties.py",
+        "sha256": "47449d6824b91231d6b8a28391b3dd8bee6ea962650cf5c63f9a37ec95c3cf3f"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/store.py",
+        "sha256": "3528a18e87dffed2403affc0db1693a1e3aa8f9e4d2d133f937802f07f945bf6"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/clinical/tables.py",
+        "sha256": "1b4a0f0edcd9f638293131ea51735ed50d83af8308db0c305af2d71444043ee9"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/config.py",
+        "sha256": "22e43dfcb3de3c6f00aeb535a7eee8677675d72b7b9c0372535eabfc4ecaee3b"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/contracts.py",
+        "sha256": "49e68db305bc4c7b73abad0995760ea6ce9ff7ff46c5079360f80bfeb1ed69d9"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/__init__.py",
+        "sha256": "8f1a78a65861048f397b812de2306e4e811ca32626f04b28fb3c5034d2d6ade0"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/assurance.py",
+        "sha256": "7fdde09d6ce237a83c6571cba4d68b2c7ac92e457ba275655cf7ab6c6ceb9849"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/continuity.py",
+        "sha256": "93af479fcb8b735f79581cacc7c461e68861b1e48a183b4a085727d5bb340fb7"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/contracts.py",
+        "sha256": "42a67e5ece2347ba0b529f6982f2e9fd75787aca5e46f414d68b343e5f1864d2"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/jobs.py",
+        "sha256": "cbed9120400e85517704172838f075e9c4463b0e1b4f0a5bc147a6ad01a34fa5"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/offboarding.py",
+        "sha256": "39c2a4bcfdc4c2e0a3b355db836341aad49932689957548451a464398fafb35e"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/recovery.py",
+        "sha256": "7c2184908c8e6869f53aeb365cde170ded96818df83aa7ce164adfb3fbb7745a"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/router.py",
+        "sha256": "f12fa25216f3422707a021004b8505e9a347a09daa2c5949d7cd569041893579"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/service.py",
+        "sha256": "662c49fae982cd3d4d7100b58c811160ebe0f051b3bcc885ae1380c542a2d859"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/tables.py",
+        "sha256": "540b67f4ec5395b42cfe75c377dc8a3db63bf71b446dbf6eebef0fcd6615e17a"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/control/worker.py",
+        "sha256": "46b5542319133c156b3171ac79f759b10ecb49a4572a60ccd8dc65358103ee85"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/db.py",
+        "sha256": "d90449d436dc4291760574f320ab8b600836e08e52d1008966ed097951193469"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/domain.py",
+        "sha256": "44a3df643e0c33bd4db68458adcf56837e756373bdeb210cdd262763e45c9888"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/__init__.py",
+        "sha256": "2a308b58623e7f2a2a083b50154dfd1ae4ed9f4a401c00e3bdd3132549c107a2"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
+        "sha256": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/base.py",
+        "sha256": "f57b93dae929b49b0ee9316233673ad2db6ffd361d4f40dd9d8f58f6ecb2c593"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/contracts.py",
+        "sha256": "e762bb4da6738a51d8579c7eff69a239ffb8735b36aeeca3e3844510f78e937a"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/knowledge.py",
+        "sha256": "37a32038dfa4b785338687b968242b7f2179a8a5b16a404c67f73dbe3aeb72f2"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/master.py",
+        "sha256": "2df41a4775da6931eac6d2086c1717b1c83d8ca759472b4397d6bd6a37296a93"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/router.py",
+        "sha256": "0070e06f0d5ce4aa40ab85aaf52b40c732f71a45e926f5908924a30db4b6976b"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/institutional/tables.py",
+        "sha256": "97132db14e67e4e0304c653d6be4cd7dbd1c8a7c069cb46ac959084b2fce70b9"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/integrations.py",
+        "sha256": "7c3f49fea274c0973534f04072ecf5ca6f46fdeada16329ff4387df2a3156524"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/main.py",
+        "sha256": "97ef08876a4b6e4e8f174a5db75e73fb44dbc82a9d2df343623ef465bdcf7383"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/operations.py",
+        "sha256": "9cffe7fd37ad4a558ceef459cdb1e535e6bd31a27a6a3c97d19cdefee6ad2c88"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/organisation_sources.json",
+        "sha256": "d7abfad7564315d7e635805f40eaba850da3f5637160c2479b14c89bb7f18fa2"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/paging.py",
+        "sha256": "738780d9880c0efa79072b1d97a5f3fe2a8219efac20f125302f7592c0fdc5ea"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/__init__.py",
+        "sha256": "0af13118e9de76ebe9296c935ad48757323adac406ccdcf76ff284603243d587"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/care.py",
+        "sha256": "63a6eb9a336785e455d866cc9860f0e834bf7d06f0e983a0aaa59b78f8208eff"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/contracts.py",
+        "sha256": "ceb08d41c5d0621fa65cd73e2c5e8427c2c90238df1e0815ec402585758b1f35"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/router.py",
+        "sha256": "a98c30cdda34a99ecb5fb1a31a8dd06624dc27ded069b62d965b80ab03bd97bc"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/service.py",
+        "sha256": "71415b906fa783f2682aa81c2fdaa98610d098392f344988c06ca4c8daea5f44"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/personal/tables.py",
+        "sha256": "3feae8f3fa05ead15400df79f4bfdd485e2c560ec56931db3c2ddcbdb660165b"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/__init__.py",
+        "sha256": "8abae57b82fa2197f1dddfa1c5d9afa0f535f0e23f221dde8fac40708f690e39"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/analytics.py",
+        "sha256": "b24f02d0e69d9b1fcdcdc184d6faabe86bb876c05269f52901f99f23609af9da"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/contracts.py",
+        "sha256": "fbb23e51407175e224bc43f0021158fbeec204d6814a5c888ec11295e5485a77"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/coverage.py",
+        "sha256": "e1be6c48ae31c58be9f9650ca7ea7191c22d8f9dad3486cddd3f385f62d88111"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/metric_catalog.json",
+        "sha256": "898412e36038cfa330bba754abfbfaf7a91f8a6e2a22994a60fa15a3cad89d97"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/native.py",
+        "sha256": "2260c87f517c8f12814b72b05ae64ee4c6eb88f1ed1845bedc95cef507a3141d"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/operations.py",
+        "sha256": "119e83c4cf7bdd9ebd3932a7cd67e3de8853c45ba23fb43edac1e419184e40c4"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/proposals.py",
+        "sha256": "51d6bad3794bb8e8136f6542b0eba00b4f76551559208bb94d083c776b05adaf"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/recipients.py",
+        "sha256": "9dad41b7b97e8925a308391fb182604a765003d8394e850f9e998a6706afecee"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/router.py",
+        "sha256": "37704e58b16622bd070ef51b88616147eb7f383fac46d59586193a7642e25e3d"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/service.py",
+        "sha256": "0585a407046a42f3d67214c46a4b2d0f016bb2a2fea55ac91b8e32526dfc385e"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/source_index.py",
+        "sha256": "b72ed9c2a004e435d5c99cde871146e75acde4cb8d7f81c501d4a0c7229016a7"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/store.py",
+        "sha256": "3875179b42b3362f197243efaa78c99380f8b95bd0bd92a808995f86c6b6c953"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/tables.py",
+        "sha256": "10403dc205e1d37f9bb662eea2373deb63895c1ed05508028ffb1a7d03899393"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/reporting/templates.py",
+        "sha256": "57499578b26e00688c634a31a39aa345ec6f3786766d2a9eb6d3a44f587b7ced"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/security.py",
+        "sha256": "f3aedde1ec9e5b230a37830d6ff4478c15f95ed917b106e27a4220bb05182dfd"
+      },
+      {
+        "file": "services/api/src/lw_care_api/platform/storage.py",
+        "sha256": "b622b3650d653962d3927dd09f399c1f3ea4418a64c27f0be6c080eca639a907"
+      },
+      {
+        "file": "vercel.json",
+        "sha256": "83009c955788627619e79b0f5b5670f78fca0e4a027b325238bc497f3c7c2556"
+      }
+    ],
+    "deployment_id": "dpl_5ssnfdLZMUPqDstR5is5bVHfmFu3",
+    "url": "https://lw-health-intelligence-fa2ctm5rw-prolific-intelligence.vercel.app",
+    "previous_api": "dpl_FVWYJSPJgTvF59TbkVAht2vvzYSS",
+    "previous_web": "dpl_2yBK8rEmhraHP6X6CQKo2CVjW1hc",
+    "cron_removed": true,
+    "preview_removed": true,
+    "preview_absent_http": 404,
+    "sso_protection_unchanged": true,
+    "remaining_automation_tokens": 0,
+    "production_aliases_unchanged": true,
+    "failure": {
+      "type": "AssertionError",
+      "file": "verify_capacity_cloud.py",
+      "line": 210
+    }
+  },
+  "failed_fixture_cleanup_receipts": [
+    {
+      "qualification": "Creating isolated Neon schema and immutable-history protections"
+    },
+    {
+      "capacity_preview": "dpl_5ssnfdLZMUPqDstR5is5bVHfmFu3",
+      "stage": "BUILDING"
+    },
+    {
+      "native_postgres": "RUNNING",
+      "schema_version": 9,
+      "disposable_schema_removed": true
+    },
+    {
+      "capacity_cloud": "FAILED",
+      "failure": {
+        "type": "AssertionError",
+        "file": "verify_capacity_cloud.py",
+        "line": 210
+      }
+    }
+  ],
+  "provider_build_diagnosis": {
+    "id": "dpl_GSSLUN7sy6kpzTo4MLXRsfY7qtGZ",
+    "readyState": "ERROR",
+    "errorCode": "unused_function",
+    "errorMessage": "The pattern \"api/index.py\" defined in `functions` doesn't match any Serverless Functions inside the `api` directory.",
+    "target": null,
+    "errorLink": "https://vercel.link/unmatched-function-pattern"
+  },
+  "corrected_build_diagnosis": {
+    "id": "dpl_5VBzhGJGVh9DeyymrgVQ4DUDc8xu",
+    "readyState": "READY",
+    "errorCode": null,
+    "errorMessage": null,
+    "target": null,
+    "errorLink": null
+  },
+  "log_hashes": [
+    {
+      "path": ".toolchain/capacity-cloud.log",
+      "sha256": "ca191ea28044845337cce47940b2842cf8c4603f5277491b54ec371d9d9a6bf2"
+    },
+    {
+      "path": ".toolchain/capacity-production-live.jsonl",
+      "sha256": "b560d47f93cdc2e415a0adb95516100fb9a71730f56c26189e27e853edb57181"
+    },
+    {
+      "path": ".toolchain/capacity-conformance-targeted.log",
+      "sha256": "c766194bcad8a7f111c4c4425fabbe3d77a7486582ac485c77177b5cc402a87a"
+    }
+  ]
+}

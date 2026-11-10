@@ -885,8 +885,26 @@
   "operating_acceptance": "INCOMPLETE",
   "report": "2026-11-10-service-release-assurance.md",
   "recovery_reference": "2026-11-10-service-release-assurance-evidence.json",
-  "next_phase": "Finish Phase A capacity/conformance/cadence/custody/isolated rollback gates, then actual Director operating adoption",
+  "next_phase": "Continue Director-first field-specific conformance proofs and representative capacity/targets; preserve remaining service/recovery/rollback and operating gates",
   "equipment_connections": "AFTER_FACILITY_REGISTRATION_AND_APPROVAL",
   "additional_hosts_added": 0,
-  "playwright_installed": false
+  "playwright_installed": false,
+  "latest_engineering_increment": {
+    "report": "2026-11-10-capacity-and-conformance.md",
+    "evidence": "2026-11-10-capacity-and-conformance-evidence.json",
+    "tickets": {
+      "LWH-AUD-20261109-002": "BOUNDED_VERCEL_NULLPOOL_MEASUREMENTS_VERIFIED_CAPACITY_ACCEPTANCE_OPEN",
+      "LWH-AUD-20261109-014": "COMPLETE_CANONICAL_INVENTORY_WITH_EXPLICIT_EXCEPTIONS_FIELD_AND_STATE_CONFORMANCE_OPEN"
+    },
+    "tooling_commit": "3e167fd112743993a3e0066ee3263faaf274291c",
+    "ci_run_id": 42754146252,
+    "disposable_preview": "dpl_BVoSexBc4xd5TjzrWprLDLf1U67f",
+    "preview_removed": true,
+    "production_runtime_changed": false,
+    "schema_version": 9,
+    "002_capacity_accepted": false,
+    "014_conformance_accepted": false,
+    "operating_adoption": "INCOMPLETE",
+    "full_suite_acceptance": "INCOMPLETE_NOT_RUN"
+  }
 }
