@@ -22,7 +22,7 @@
           "request_model": "contracts.Facility",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
           },
           "handler_line": 884
         },
@@ -32,7 +32,7 @@
           "request_model": "contracts.Application",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
           },
           "handler_line": 1038
         }
@@ -40,7 +40,7 @@
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -312,15 +312,15 @@
           "request_model": "contracts.Decision",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
           },
-          "handler_line": 1504
+          "handler_line": 1477
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -355,15 +355,15 @@
           "request_model": "contracts.Inspection",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
           },
-          "handler_line": 1395
+          "handler_line": 1379
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -797,7 +797,7 @@
           "request_model": "contracts.Invite",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
           },
           "handler_line": 667
         },
@@ -807,7 +807,7 @@
           "request_model": "contracts.Unit",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
           },
           "handler_line": 773
         }
@@ -815,7 +815,7 @@
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -2287,14 +2287,46 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "facilities.name",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-001.F001",
+        "binding": "Facility.site_name -> facilities.name",
+        "meaning": "Typed nonempty site name; not an alias/location/adoption proof",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "facilities.name",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-001.F002",
@@ -2319,14 +2351,46 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "facilities.operator_id",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-001.F002",
+        "binding": "Facility.operator_org_id -> facilities.operator_id",
+        "meaning": "Actual existing operator reference; not legal-owner verification",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "facilities.operator_id",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-001.F003",
@@ -2355,14 +2419,46 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "facilities.ownership",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-001.F003",
+        "binding": "Facility.ownership_category -> facilities.ownership",
+        "meaning": "Independent ownership enum; does not confer recognition",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "facilities.ownership",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-001.F004",
@@ -2388,14 +2484,46 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "facilities.jurisdiction",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-001.F004",
+        "binding": "Facility.jurisdiction_profile -> facilities.jurisdiction",
+        "meaning": "Explicit supplied jurisdiction; not inferred from Region/Zone",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "facilities.jurisdiction",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-001.F005",
@@ -2443,14 +2571,46 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "facilities.services",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-001.F006",
+        "binding": "Facility.services -> facilities.services",
+        "meaning": "Nonempty declared service list; readiness remains separate",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "facilities.services",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-001.F007",
@@ -3319,14 +3479,52 @@
       "source": "PROJECT-003",
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
-      "status": "OPEN_EXPLICIT_FIELD_MAPPING_GAP",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "decisions.application_id",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-007.F001",
+        "binding": "POST /v1/applications/{application_id}/decisions -> decisions.application_id",
+        "meaning": "Server resolves the scoped application path; no trusted client envelope identity",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "decisions.application_id",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay",
+              "expired_decision",
+              "truthful_unobserved",
+              "unmet_approval"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-007.F002",
@@ -3393,14 +3591,52 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "decisions.decision and facilities.affiliation_status",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-007.F004",
+        "binding": "Decision.decision -> decisions.decision and facilities.affiliation_status",
+        "meaning": "Independent central decision; unrestricted required findings must be MET",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "decisions.decision and facilities.affiliation_status",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay",
+              "expired_decision",
+              "truthful_unobserved",
+              "unmet_approval"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-007.F005",
@@ -3426,14 +3662,52 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "decisions.reason",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-007.F005",
+        "binding": "Decision.reason -> decisions.reason",
+        "meaning": "Nonempty attributed reason retained in immutable decision history",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "decisions.reason",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay",
+              "expired_decision",
+              "truthful_unobserved",
+              "unmet_approval"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-007.F006",
@@ -3459,14 +3733,52 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "decisions.conditions",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-007.F006",
+        "binding": "Decision.conditions -> decisions.conditions",
+        "meaning": "Conditional recognition needs explicit nonblank conditions; no automatic correction closure",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "decisions.conditions",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay",
+              "expired_decision",
+              "truthful_unobserved",
+              "unmet_approval"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-007.F007",
@@ -3491,14 +3803,52 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "decisions.effective_at",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-007.F007",
+        "binding": "Decision.effective_at -> decisions.effective_at",
+        "meaning": "Explicit current interval; future activation is not inferred",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "decisions.effective_at",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay",
+              "expired_decision",
+              "truthful_unobserved",
+              "unmet_approval"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-007.F008",
@@ -3523,14 +3873,52 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "decisions.expires_at",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-007.F008",
+        "binding": "Decision.expires_at -> decisions.expires_at",
+        "meaning": "Explicit expiry; native decision requires expiry although generic capture makes it conditional",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "decisions.expires_at",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay",
+              "expired_decision",
+              "truthful_unobserved",
+              "unmet_approval"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-008.F001",
@@ -3580,14 +3968,52 @@
       "source": "LWH-SRC-003",
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
-      "status": "OPEN_EXPLICIT_FIELD_MAPPING_GAP",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "inspections.inspector_id",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-008.F003",
+        "binding": "Assignment.inspector_id and authenticated session -> inspections.inspector_id",
+        "meaning": "Only personally assigned inspector can attest; no client-author attribution",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "inspections.inspector_id",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay",
+              "expired_decision",
+              "truthful_unobserved",
+              "unmet_approval"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-008.F004",
@@ -3611,14 +4037,52 @@
           "match": "REVIEWED_ALIAS_CANDIDATE"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "inspections.conflict_declared",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-008.F004",
+        "binding": "Inspection.conflict_declared -> inspections.conflict_declared",
+        "meaning": "Declared conflict refuses attestation without consequential effects",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "inspections.conflict_declared",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "positive_replay",
+              "expired_decision",
+              "truthful_unobserved",
+              "unmet_approval"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-008.F005",
@@ -3666,14 +4130,58 @@
           "match": "NAME_ONLY"
         }
       ],
-      "status": "PARTIAL_NAME_OR_ALIAS_CANDIDATE",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
       "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "inspections.findings",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "missing",
+            "duplicate",
+            "wrong_criterion",
+            "expired_inspection",
+            "truthful_unobserved",
+            "expired_recommendation",
+            "expired_decision"
+          ],
+          "source": {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "sha256_lf": "e64f5577facf8750b9a964c1b32c5dbd3ca927ff56ef894cf542e850cb4fa3ce"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-008.F006",
+        "binding": "Inspection.findings -> inspections.findings",
+        "meaning": "Each required criterion once; evidence belongs to this case/criterion; MET requires current CLEAN metadata; absent findings remain explicit",
+        "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+        "persistence": "inspections.findings",
+        "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+        "tests": [
+          {
+            "path": "tests/integration/test_director_affiliation_conformance.py",
+            "symbol": "test_director_initial_affiliation_guards_and_evidence",
+            "scenarios": [
+              "missing",
+              "duplicate",
+              "wrong_criterion",
+              "expired_inspection",
+              "truthful_unobserved",
+              "expired_recommendation",
+              "expired_decision"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-008.F007",
@@ -9876,7 +10384,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -9895,7 +10403,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "ff30d1f0ea16c6fc7fbcb59f5c11b91cfc2267e4d3efe3ef416bab31d5958d03"
+        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
       },
       "page_route": "/"
     },
@@ -9911,7 +10419,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -9930,7 +10438,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "ff30d1f0ea16c6fc7fbcb59f5c11b91cfc2267e4d3efe3ef416bab31d5958d03"
+        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
       },
       "page_route": "/"
     },
@@ -9946,7 +10454,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -9965,7 +10473,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "ff30d1f0ea16c6fc7fbcb59f5c11b91cfc2267e4d3efe3ef416bab31d5958d03"
+        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
       },
       "page_route": "/"
     },
@@ -9981,7 +10489,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -10000,7 +10508,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "ff30d1f0ea16c6fc7fbcb59f5c11b91cfc2267e4d3efe3ef416bab31d5958d03"
+        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
       },
       "page_route": "/"
     },
@@ -10016,7 +10524,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -10035,7 +10543,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "ff30d1f0ea16c6fc7fbcb59f5c11b91cfc2267e4d3efe3ef416bab31d5958d03"
+        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
       },
       "page_route": "/"
     },
@@ -10051,7 +10559,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -10070,7 +10578,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "ff30d1f0ea16c6fc7fbcb59f5c11b91cfc2267e4d3efe3ef416bab31d5958d03"
+        "sha256_lf": "fc3d8b6c0c1aabe1c19a9e9af282313d0799896e3b75dbebc6731170cf9a5800"
       },
       "page_route": "/"
     },
@@ -12399,7 +12907,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -12425,12 +12933,12 @@
         "Applicant submits; reviewers/inspectors attest; Directorate alone decides",
         "Versioned dossier; original evidence immutable; no fee/AI approval"
       ],
-      "status": "OPEN_SEMANTIC_CONFORMANCE_GAP",
+      "status": "PARTIAL_ENGINEERING_TRANSITION_PROOF_EXCEPTION_OPEN",
       "formal_acceptance": "NOT_RUN",
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -12446,7 +12954,12 @@
         }
       },
       "test_evidence": [],
-      "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence."
+      "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence.",
+      "engineering_proof": {
+        "id": "LWH-STM-002",
+        "covered": "DRAFT -> SUBMITTED -> INSPECTION -> EVIDENCE_REVIEW -> RECOMMENDED -> DECIDED; refused commands preserve states, versions, revisions, effects and receipts",
+        "exceptions": "SCREENING, CORRECTION_REQUIRED, WITHDRAWN and complete capture/offline/UAT semantics remain open."
+      }
     },
     {
       "id": "LWH-STM-003",
@@ -12456,7 +12969,7 @@
         "Central Directorate, adopted criteria, notices and review authority",
         "Conditions/expiry and publication updated separately; retain continuity/history"
       ],
-      "status": "OPEN_SEMANTIC_CONFORMANCE_GAP",
+      "status": "PARTIAL_ENGINEERING_TRANSITION_PROOF_EXCEPTION_OPEN",
       "formal_acceptance": "NOT_RUN",
       "candidate_sources": {
         "permission_candidate": {
@@ -12477,7 +12990,12 @@
         }
       },
       "test_evidence": [],
-      "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence."
+      "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence.",
+      "engineering_proof": {
+        "id": "LWH-STM-003",
+        "covered": "Only independent global Directorate decider grants ACTIVE/CONDITIONAL; required unmet findings cannot receive unrestricted recognition; adverse history retained",
+        "exceptions": "Complete renewal/noncompliance/appeal/notice/expiry and actual-role operating acceptance remain separate."
+      }
     },
     {
       "id": "LWH-STM-004",
@@ -12492,7 +13010,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+          "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
@@ -13855,9 +14373,9 @@
           "request_model": null,
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+            "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
           },
-          "handler_line": 1649
+          "handler_line": 1623
         }
       ],
       "status": "PARTIAL_PATH_MATCH_SEMANTICS_UNQUALIFIED",
@@ -15090,7 +15608,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "49e68db305bc4c7b73abad0995760ea6ce9ff7ff46c5079360f80bfeb1ed69d9"
+        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
       },
       "line": 109
     },
@@ -15118,7 +15636,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "49e68db305bc4c7b73abad0995760ea6ce9ff7ff46c5079360f80bfeb1ed69d9"
+        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
       },
       "line": 151
     },
@@ -15822,7 +16340,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "49e68db305bc4c7b73abad0995760ea6ce9ff7ff46c5079360f80bfeb1ed69d9"
+        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
       },
       "line": 185
     },
@@ -15859,7 +16377,6 @@
                   "type": "string"
                 },
                 "maxItems": 40,
-                "minItems": 1,
                 "title": "Evidence Ids",
                 "type": "array"
               }
@@ -15867,8 +16384,7 @@
             "required": [
               "criterion",
               "observation",
-              "outcome",
-              "evidence_ids"
+              "outcome"
             ],
             "title": "Finding",
             "type": "object"
@@ -15911,7 +16427,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "49e68db305bc4c7b73abad0995760ea6ce9ff7ff46c5079360f80bfeb1ed69d9"
+        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
       },
       "line": 174
     },
@@ -16852,7 +17368,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "49e68db305bc4c7b73abad0995760ea6ce9ff7ff46c5079360f80bfeb1ed69d9"
+        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
       },
       "line": 95
     },
@@ -16943,7 +17459,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "49e68db305bc4c7b73abad0995760ea6ce9ff7ff46c5079360f80bfeb1ed69d9"
+        "sha256_lf": "15e4d686fdefbe39b3548fe9d2df46b61c2db852994c4b9d11331a41d546753f"
       },
       "line": 77
     },
@@ -21252,6 +21768,10 @@
       "line": 218
     }
   },
+  "reviewed_proof_input": {
+    "path": "docs/implementation/conformance/director-proofs.json",
+    "sha256_lf": "6cb426a4f36b3a7ba4baa0f8f78e330500ce777b396a9546f1d57735a09826fd"
+  },
   "actual_routes": [
     {
       "method": "GET",
@@ -21259,7 +21779,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 450
     },
@@ -21269,7 +21789,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 454
     },
@@ -21279,7 +21799,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 462
     },
@@ -21289,7 +21809,7 @@
       "request_model": "contracts.Login",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 493
     },
@@ -21299,7 +21819,7 @@
       "request_model": "contracts.Enrol",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 533
     },
@@ -21309,7 +21829,7 @@
       "request_model": "contracts.ConfirmEnrolment",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 587
     },
@@ -21319,7 +21839,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 647
     },
@@ -21329,7 +21849,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 652
     },
@@ -21339,7 +21859,7 @@
       "request_model": "contracts.Invite",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 667
     },
@@ -21349,7 +21869,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 684
     },
@@ -21359,7 +21879,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 718
     },
@@ -21369,7 +21889,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 737
     },
@@ -21379,7 +21899,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 750
     },
@@ -21389,7 +21909,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 765
     },
@@ -21399,7 +21919,7 @@
       "request_model": "contracts.Unit",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 773
     },
@@ -21409,7 +21929,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 826
     },
@@ -21419,7 +21939,7 @@
       "request_model": "contracts.Operator",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 839
     },
@@ -21429,7 +21949,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 857
     },
@@ -21439,7 +21959,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 878
     },
@@ -21449,7 +21969,7 @@
       "request_model": "contracts.Facility",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 884
     },
@@ -21459,7 +21979,7 @@
       "request_model": "contracts.Verification",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 960
     },
@@ -21469,7 +21989,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 996
     },
@@ -21479,7 +21999,7 @@
       "request_model": "contracts.CriteriaSet",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 1013
     },
@@ -21489,7 +22009,7 @@
       "request_model": "contracts.Application",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 1038
     },
@@ -21499,7 +22019,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 1084
     },
@@ -21509,7 +22029,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 1102
     },
@@ -21519,7 +22039,7 @@
       "request_model": "contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
       "handler_line": 1132
     },
@@ -21529,9 +22049,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1186
+      "handler_line": 1170
     },
     {
       "method": "GET",
@@ -21539,9 +22059,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1290
+      "handler_line": 1274
     },
     {
       "method": "POST",
@@ -21549,9 +22069,9 @@
       "request_model": "contracts.Assignment",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1331
+      "handler_line": 1315
     },
     {
       "method": "POST",
@@ -21559,9 +22079,9 @@
       "request_model": "contracts.Inspection",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1395
+      "handler_line": 1379
     },
     {
       "method": "POST",
@@ -21569,9 +22089,9 @@
       "request_model": "contracts.Recommendation",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1468
+      "handler_line": 1435
     },
     {
       "method": "POST",
@@ -21579,9 +22099,9 @@
       "request_model": "contracts.Decision",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1504
+      "handler_line": 1477
     },
     {
       "method": "POST",
@@ -21589,9 +22109,9 @@
       "request_model": "contracts.Publication",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1608
+      "handler_line": 1582
     },
     {
       "method": "GET",
@@ -21599,9 +22119,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1649
+      "handler_line": 1623
     },
     {
       "method": "GET",
@@ -21609,9 +22129,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1691
+      "handler_line": 1665
     },
     {
       "method": "GET",
@@ -21619,9 +22139,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1709
+      "handler_line": 1683
     },
     {
       "method": "GET",
@@ -21629,9 +22149,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1751
+      "handler_line": 1725
     },
     {
       "method": "POST",
@@ -21639,9 +22159,9 @@
       "request_model": "contracts.StrictModel",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1770
+      "handler_line": 1744
     },
     {
       "method": "POST",
@@ -21649,9 +22169,9 @@
       "request_model": "contracts.AiControl",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1797
+      "handler_line": 1771
     },
     {
       "method": "POST",
@@ -21659,9 +22179,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "ed2c3e16093e102c1d1902cf16965b2a0e76e490523e621422921e7c393d8282"
+        "sha256_lf": "3d69ce66cd90fa02c149784b6d48a4dcac410346da63a10d3738ac1e0daabf48"
       },
-      "handler_line": 1817
+      "handler_line": 1791
     },
     {
       "method": "GET",

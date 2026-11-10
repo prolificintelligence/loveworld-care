@@ -1,0 +1,315 @@
+{
+  "format": 1,
+  "status": "ENGINEERING_TRACEABILITY_REQUIRES_SEPARATE_EXECUTION_EVIDENCE",
+  "operating_adoption": "INCOMPLETE",
+  "fields": [
+    {
+      "id": "LWH-FRM-001.F001",
+      "binding": "Facility.site_name -> facilities.name",
+      "meaning": "Typed nonempty site name; not an alias/location/adoption proof",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "facilities.name",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-001.F002",
+      "binding": "Facility.operator_org_id -> facilities.operator_id",
+      "meaning": "Actual existing operator reference; not legal-owner verification",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "facilities.operator_id",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-001.F003",
+      "binding": "Facility.ownership_category -> facilities.ownership",
+      "meaning": "Independent ownership enum; does not confer recognition",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "facilities.ownership",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-001.F004",
+      "binding": "Facility.jurisdiction_profile -> facilities.jurisdiction",
+      "meaning": "Explicit supplied jurisdiction; not inferred from Region/Zone",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "facilities.jurisdiction",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-001.F006",
+      "binding": "Facility.services -> facilities.services",
+      "meaning": "Nonempty declared service list; readiness remains separate",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "facilities.services",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-007.F001",
+      "binding": "POST /v1/applications/{application_id}/decisions -> decisions.application_id",
+      "meaning": "Server resolves the scoped application path; no trusted client envelope identity",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "decisions.application_id",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-007.F004",
+      "binding": "Decision.decision -> decisions.decision and facilities.affiliation_status",
+      "meaning": "Independent central decision; unrestricted required findings must be MET",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "decisions.decision and facilities.affiliation_status",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-007.F005",
+      "binding": "Decision.reason -> decisions.reason",
+      "meaning": "Nonempty attributed reason retained in immutable decision history",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "decisions.reason",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-007.F006",
+      "binding": "Decision.conditions -> decisions.conditions",
+      "meaning": "Conditional recognition needs explicit nonblank conditions; no automatic correction closure",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "decisions.conditions",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-007.F007",
+      "binding": "Decision.effective_at -> decisions.effective_at",
+      "meaning": "Explicit current interval; future activation is not inferred",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "decisions.effective_at",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-007.F008",
+      "binding": "Decision.expires_at -> decisions.expires_at",
+      "meaning": "Explicit expiry; native decision requires expiry although generic capture makes it conditional",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "decisions.expires_at",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-008.F003",
+      "binding": "Assignment.inspector_id and authenticated session -> inspections.inspector_id",
+      "meaning": "Only personally assigned inspector can attest; no client-author attribution",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "inspections.inspector_id",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-008.F004",
+      "binding": "Inspection.conflict_declared -> inspections.conflict_declared",
+      "meaning": "Declared conflict refuses attestation without consequential effects",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "inspections.conflict_declared",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "positive_replay",
+            "expired_decision",
+            "truthful_unobserved",
+            "unmet_approval"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "LWH-FRM-008.F006",
+      "binding": "Inspection.findings -> inspections.findings",
+      "meaning": "Each required criterion once; evidence belongs to this case/criterion; MET requires current CLEAN metadata; absent findings remain explicit",
+      "permission": "CURRENT_SERVER_SCOPE_AND_PERSONAL_ASSIGNMENT_OR_INDEPENDENT_CENTRAL_ROLE",
+      "persistence": "inspections.findings",
+      "missingness_exception": "Native consequential typed commands are not the canonical tagged capture envelope. Unknown/not-assessed/declined and broader field semantics remain unqualified.",
+      "tests": [
+        {
+          "path": "tests/integration/test_director_affiliation_conformance.py",
+          "symbol": "test_director_initial_affiliation_guards_and_evidence",
+          "scenarios": [
+            "missing",
+            "duplicate",
+            "wrong_criterion",
+            "expired_inspection",
+            "truthful_unobserved",
+            "expired_recommendation",
+            "expired_decision"
+          ]
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "formal_acceptance": "NOT_RUN"
+    }
+  ],
+  "states": [
+    {
+      "id": "LWH-STM-002",
+      "covered": "DRAFT -> SUBMITTED -> INSPECTION -> EVIDENCE_REVIEW -> RECOMMENDED -> DECIDED; refused commands preserve states, versions, revisions, effects and receipts",
+      "exceptions": "SCREENING, CORRECTION_REQUIRED, WITHDRAWN and complete capture/offline/UAT semantics remain open."
+    },
+    {
+      "id": "LWH-STM-003",
+      "covered": "Only independent global Directorate decider grants ACTIVE/CONDITIONAL; required unmet findings cannot receive unrestricted recognition; adverse history retained",
+      "exceptions": "Complete renewal/noncompliance/appeal/notice/expiry and actual-role operating acceptance remain separate."
+    }
+  ]
+}

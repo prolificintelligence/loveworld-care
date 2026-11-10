@@ -168,7 +168,7 @@ class Finding(StrictModel):
     criterion: str = Field(min_length=2, max_length=120)
     observation: str = Field(min_length=5, max_length=5000)
     outcome: Literal["MET", "NOT_MET", "NOT_OBSERVED"]
-    evidence_ids: list[UUID] = Field(min_length=1, max_length=40)
+    evidence_ids: list[UUID] = Field(default_factory=list, max_length=40)
 
 
 class Inspection(Versioned):

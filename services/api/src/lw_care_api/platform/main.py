@@ -21,7 +21,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from starlette.concurrency import run_in_threadpool
 
 from . import contracts as c
-from . import db
+from . import db, standards
 from .config import PlatformSettings, get_platform_settings
 from .domain import (
     RuleError,
@@ -1153,23 +1153,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 "The adopted criteria have expired",
                 409,
             )
-            available = set(
-                (
-                    await session.execute(
-                        select(db.evidence.c.criterion).where(
-                            db.evidence.c.application_id == row["id"],
-                            db.evidence.c.expires_at > db.now(),
-                        )
-                    )
-                ).scalars()
-            )
-            required = {r["code"] for r in criterion["requirements"] if r["required"]}
-            require(
-                required <= available,
-                "VALIDATION_FAILED",
-                "Upload current evidence for every required criterion",
-                422,
-            )
+            await standards.submission_evidence(session, row, criterion)
             row = await amend(session, db.applications, row, {"state": "SUBMITTED"})
             await record_change(
                 session,
@@ -1421,25 +1405,8 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 .mappings()
                 .one()
             )
-            codes = {r["code"] for r in criterion["requirements"]}
-            require(
-                {f.criterion for f in payload.findings} <= codes,
-                "VALIDATION_FAILED",
-                "Unknown criterion",
-                422,
-            )
-            evidence_ids = set(
-                (
-                    await session.execute(
-                        select(db.evidence.c.id).where(db.evidence.c.application_id == row["id"])
-                    )
-                ).scalars()
-            )
-            require(
-                all(str(e) in evidence_ids for f in payload.findings for e in f.evidence_ids),
-                "VALIDATION_FAILED",
-                "Every finding must reference this application's actual evidence",
-                422,
+            await standards.inspection_findings(
+                session, row, criterion, [f.model_dump(mode="json") for f in payload.findings]
             )
             await session.execute(
                 db.inspections.insert().values(
@@ -1480,6 +1447,12 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 "Inspection evidence must be reviewed first",
                 409,
             )
+            criterion = (await session.execute(
+                select(db.criteria).where(db.criteria.c.id == row["criteria_id"])
+            )).mappings().one()
+            require(current_criteria(criterion), "POLICY_NOT_ACTIVE",
+                    "The adopted criterion set is no longer current", 409)
+            await standards.positive_disposition(session, row, criterion, payload.decision)
             row = await amend(
                 session,
                 db.applications,
@@ -1540,6 +1513,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 409,
             )
             valid_interval(payload.effective_at, payload.expires_at)
+            await standards.positive_disposition(session, row, criterion, payload.decision)
             require(
                 payload.effective_at <= datetime.now(UTC) < payload.expires_at,
                 "VALIDATION_FAILED",

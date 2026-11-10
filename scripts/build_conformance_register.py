@@ -5,6 +5,7 @@ names do not establish meaning, transition parity, clinical acceptance or adopti
 """
 
 import argparse
+import ast
 import csv
 import hashlib
 import importlib
@@ -171,6 +172,33 @@ def canonical_table(document, prefix):
             identifier = re.match(re.escape(prefix) + r"\d{3}", cells[0]).group()
             rows.append({"id": identifier, "cells": cells})
     return rows
+
+
+def proof_references(proof):
+    require_refs = proof.get("tests", [])
+    if not require_refs:
+        raise ValueError("Field proof needs a concrete regression reference")
+    references = []
+    for item in require_refs:
+        path = ROOT / item["path"]
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        symbols = {
+            node.name
+            for node in tree.body
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        }
+        scenarios = next(
+            ast.literal_eval(node.value)
+            for node in tree.body
+            if isinstance(node, ast.Assign)
+            and any(isinstance(t, ast.Name) and t.id == "SCENARIOS" for t in node.targets)
+        )
+        if item["symbol"] not in symbols or not set(item["scenarios"]) <= set(scenarios):
+            raise ValueError("Dangling field proof test/scenario")
+        references.append(
+            item | {"source": source(path), "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"}
+        )
+    return references
 
 
 def build():
@@ -347,6 +375,31 @@ def build():
             row["exception"] += (
                 " Complete sponsorship/payer/sync/ERP family is not delivered by these candidate modules."
             )
+    proof_path = OUTPUT / "director-proofs.json"
+    proofs = load(proof_path)
+    by_field = {f["id"]: f for f in fields}
+    seen = set()
+    for proof in proofs["fields"]:
+        if (
+            proof["id"] in seen
+            or proof["id"] not in by_field
+            or proof["formal_acceptance"] != "NOT_RUN"
+        ):
+            raise ValueError("Invalid/duplicate field proof identity or acceptance claim")
+        seen.add(proof["id"])
+        field = by_field[proof["id"]]
+        field.update(
+            engineering_proof=proof,
+            status=proof["status"],
+            test_evidence=proof_references(proof),
+            permission=proof["permission"],
+            persistence=proof["persistence"],
+        )
+    by_state = {r["id"]: r for r in states}
+    for proof in proofs["states"]:
+        by_state[proof["id"]].update(
+            status="PARTIAL_ENGINEERING_TRANSITION_PROOF_EXCEPTION_OPEN", engineering_proof=proof
+        )
     captures = load(SUITE / "contracts/openapi.capture.json")["paths"]
     interfaces = []
     for path, operations in captures.items():
@@ -396,6 +449,7 @@ def build():
         "state_families": states,
         "interfaces": interfaces,
         "implementation_models": models,
+        "reviewed_proof_input": source(proof_path),
         "actual_routes": routes,
         "baseline_inputs": [
             source(SUITE / p)
@@ -433,6 +487,8 @@ def validate(register):
     for field in register["fields"]:
         if field["form_id"] not in forms or field["formal_acceptance"] != "NOT_RUN":
             raise ValueError("Invalid field ownership or unexecuted acceptance claim")
+        if "engineering_proof" in field and field["engineering_proof"]["id"] != field["id"]:
+            raise ValueError("Field-specific proof was attached to a different canonical field")
         for binding in field["candidate_bindings"]:
             schema = register["implementation_models"][binding["model"]]["schema"]
             if binding["field"] not in schema["properties"]:
