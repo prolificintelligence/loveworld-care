@@ -34,7 +34,7 @@ RESULT = {
     "schema_version": 9,
     "scenarios": [],
     "evidence_fixture": "METADATA_ONLY_NOT_SCANNER_QUALIFICATION",
-    "controlled_expiry_clock": "ADVANCED_20_MINUTES_WITHOUT_EDITING_IMMUTABLE_EVIDENCE",
+    "controlled_recording_time": "BACKDATED_ONE_HOUR_ONLY_IN_CYCLE_BINDING_SCENARIO",
 }
 
 
