@@ -133,7 +133,7 @@ def source(path):
     path = Path(path)
     return {
         "path": path.relative_to(ROOT).as_posix(),
-        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "sha256_lf": hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest(),
     }
 
 
@@ -177,7 +177,7 @@ def build():
     manifest = load(SUITE / "manifest.json")
     documents = {row["document_id"]: row for row in manifest["documents"]}
     for row in documents.values():
-        if source(SUITE / row["path"])["sha256"] != row["sha256"]:
+        if hashlib.sha256((SUITE / row["path"]).read_bytes()).hexdigest() != row["sha256"]:
             raise ValueError("Controlled document integrity mismatch: " + row["document_id"])
     # Pinned FastAPI has lazy included routers; cross-check effective paths with OpenAPI.
     from fastapi.routing import _iter_routes_with_context
