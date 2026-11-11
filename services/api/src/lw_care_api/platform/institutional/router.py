@@ -68,6 +68,10 @@ def install(app, cfg, database, box, actor_for):
     async def command(request, payload, service_type, guard, callback, raw_body=None):
         await available()
         body = raw_body if raw_body is not None else payload.model_dump(mode="json")
+        if isinstance(payload, c.Response) and body.get("corrective_plan_id") is None:
+            # Preserve historical response receipt hashes; a new response still
+            # binds the current agreed plan in its protected server-side data.
+            body.pop("corrective_plan_id", None)
         actor = None
         try:
             async with database.transaction() as session:
@@ -460,7 +464,7 @@ def install(app, cfg, database, box, actor_for):
                 )
             ).mappings()
         )
-        return {
+        result = {
             "items": [
                 {
                     **clean(row),
@@ -474,6 +478,22 @@ def install(app, cfg, database, box, actor_for):
             ],
             "next_cursor": rows[2]["id"] if len(rows) > 3 else None,
         }
+        if kind == "findings":
+            for item, row in zip(result["items"], rows[:3]):
+                plan = await service.corrective_plan(row)
+                if plan:
+                    plan["parties_current"] = (plan["owner_account_id"] == row["owner_id"] == case["respondent_id"]
+                        and plan.get("reviewed_by", plan["assigned_reviewer_id"]) == case["reviewer_id"])
+                    plan["current_for_response"] = (case["state"] == "INSPECTED"
+                        and row["state"] in {"AWAITING_RESPONSE", "RETURNED"} and plan["status"] == "AGREED"
+                        and plan["owner_account_id"] == row["owner_id"] == case["respondent_id"]
+                        and plan.get("reviewed_by") == case["reviewer_id"])
+                    plan["current_for_review"] = (case["state"] == "INSPECTED" and plan["status"] == "PROPOSED"
+                        and plan["owner_account_id"] == row["owner_id"] == case["respondent_id"]
+                        and plan["assigned_reviewer_id"] == case["reviewer_id"]
+                        and plan["proposal_finding_version"] == row["version"])
+                item["corrective_plan"] = plan
+        return result
 
     @router.get("/v1/institutional/cases/{identifier}/records")
     async def dossier_records(identifier: UUID, request: Request, kind: str, after: str = ""):
@@ -554,6 +574,34 @@ def install(app, cfg, database, box, actor_for):
 
     finding_route("respond", c.Response, "respond", True)
     finding_route("review", c.FindingReview, "review_finding", False)
+    finding_route("corrective-plan", c.CorrectivePlan, "propose_corrective_plan", True)
+    finding_route("corrective-plan-review", c.CorrectivePlanReview, "review_corrective_plan", False)
+
+    @router.get("/v1/institutional/findings/{identifier}/corrective-history")
+    async def corrective_history(identifier: UUID, request: Request, before_version: int = 0):
+        await available()
+        require(before_version >= 0, "VALIDATION_FAILED", "Use a valid history version", 422)
+        async with database.transaction() as session:
+            actor = await actor_for(session, request)
+            service = AffiliationService(session, cfg, box, actor, request.state.correlation_id)
+            finding = await service.row(t.findings, identifier, lock=False)
+            await service.case(finding["case_id"])
+            rows = list((await session.execute(select(t.journal).where(
+                t.journal.c.resource_id == str(identifier),
+                t.journal.c.action.in_(["standards.corrective_plan_proposed", "standards.corrective_plan_reviewed", "standards.response_submitted", "standards.response_reviewed"]),
+                t.journal.c.version < before_version if before_version else True,
+            ).order_by(t.journal.c.version.desc(), t.journal.c.id.desc()).limit(51))).mappings())
+            items = []
+            for row in rows[:50]:
+                details = service.open(row["payload_ciphertext"])["details"]
+                if row["action"] == "standards.response_submitted":
+                    response = details["response"]
+                    details = {"response_id": response["id"], "author_id": response["author_id"],
+                               "response": service.open(response["details_ciphertext"])}
+                items.append({"id": row["id"], "action": row["action"], "version": row["version"],
+                              "actor_id": row["actor_id"], "recorded_at": row["recorded_at"], "details": details})
+            await service.audit("standards.corrective_history_read", str(identifier))
+            return {"items": items, "next_before_version": rows[49]["version"] if len(rows) > 50 else None}
 
     @router.post("/v1/institutional/notices/{identifier}/acknowledge")
     async def notice_ack(identifier: UUID, payload: Evidence, request: Request):

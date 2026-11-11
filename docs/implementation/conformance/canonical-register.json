@@ -409,19 +409,19 @@
           "request_model": "institutional.contracts.CaseOpen",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
           },
-          "handler_line": 377
+          "handler_line": 381
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
-          "sha256_lf": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+          "sha256_lf": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/tables.py",
@@ -444,6 +444,9 @@
       },
       "candidate_models": [
         "institutional.contracts.Response",
+        "institutional.contracts.CorrectivePlan",
+        "institutional.contracts.CorrectivePlanReview",
+        "institutional.contracts.FindingReview",
         "contracts.ApplicationCorrection",
         "contracts.ApplicationResubmit"
       ],
@@ -474,19 +477,49 @@
           "request_model": "institutional.contracts.Response",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
           },
-          "handler_line": 535
+          "handler_line": 555
+        },
+        {
+          "method": "POST",
+          "path": "/v1/institutional/findings/{identifier}/review",
+          "request_model": "institutional.contracts.FindingReview",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/institutional/router.py",
+            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          },
+          "handler_line": 555
+        },
+        {
+          "method": "POST",
+          "path": "/v1/institutional/findings/{identifier}/corrective-plan",
+          "request_model": "institutional.contracts.CorrectivePlan",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/institutional/router.py",
+            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          },
+          "handler_line": 555
+        },
+        {
+          "method": "POST",
+          "path": "/v1/institutional/findings/{identifier}/corrective-plan-review",
+          "request_model": "institutional.contracts.CorrectivePlanReview",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/institutional/router.py",
+            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          },
+          "handler_line": 555
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
-          "sha256_lf": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+          "sha256_lf": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/tables.py",
@@ -517,19 +550,19 @@
           "request_model": "institutional.contracts.Decide",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
           },
-          "handler_line": 489
+          "handler_line": 509
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
-          "sha256_lf": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+          "sha256_lf": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/tables.py",
@@ -603,19 +636,19 @@
           "request_model": "institutional.contracts.Content",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
           },
-          "handler_line": 787
+          "handler_line": 835
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
-          "sha256_lf": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+          "sha256_lf": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/tables.py",
@@ -4379,23 +4412,27 @@
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
       "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
-      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+      "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "Immutable Application revisions / inspections / decisions",
+      "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
       "test_evidence": [
         {
-          "path": "tests/integration/test_application_corrections.py",
-          "symbol": "test_application_correction_and_withdrawal",
+          "path": "tests/integration/test_corrective_plans.py",
+          "symbol": "test_corrective_plan_guards_and_history",
           "scenarios": [
-            "round_trip",
-            "cycle_binding",
-            "historical_independence",
-            "response_validation"
+            "guards_and_resolution",
+            "revision_and_history",
+            "deadline_and_expiry",
+            "legacy_receipt_scope",
+            "legacy_resolved_recovery",
+            "handover_pending",
+            "handover_resolved",
+            "concurrent_agree_revise"
           ],
           "source": {
-            "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
+            "path": "tests/integration/test_corrective_plans.py",
+            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4404,20 +4441,24 @@
       "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
       "engineering_proof": {
         "id": "LWH-FRM-010.F001",
-        "binding": "criterion_codes",
-        "meaning": "Initial criterion references are not canonical corrective finding IDs; equivalence remains open.",
-        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
-        "persistence": "Immutable Application revisions / inspections / decisions",
-        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "binding": "Institutional finding UUID -> institutional_findings.id / protected plan.finding_id",
+        "meaning": "Actual finding identity is case-bound; initial criterion-code correction remains a separate narrower contract.",
+        "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
+        "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
+        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
         "tests": [
           {
-            "path": "tests/integration/test_application_corrections.py",
-            "symbol": "test_application_correction_and_withdrawal",
+            "path": "tests/integration/test_corrective_plans.py",
+            "symbol": "test_corrective_plan_guards_and_history",
             "scenarios": [
-              "round_trip",
-              "cycle_binding",
-              "historical_independence",
-              "response_validation"
+              "guards_and_resolution",
+              "revision_and_history",
+              "deadline_and_expiry",
+              "legacy_receipt_scope",
+              "legacy_resolved_recovery",
+              "handover_pending",
+              "handover_resolved",
+              "concurrent_agree_revise"
             ]
           }
         ],
@@ -4434,25 +4475,43 @@
       "rule": "Agreed correction",
       "source": "PROJECT-003",
       "classification": "institutional_or_restricted_by_purpose",
-      "candidate_bindings": [],
+      "candidate_bindings": [
+        {
+          "model": "institutional.contracts.CorrectivePlan",
+          "field": "required_action",
+          "required": true,
+          "requiredness_matches": true,
+          "schema": {
+            "maxLength": 6000,
+            "minLength": 5,
+            "title": "Required Action",
+            "type": "string"
+          },
+          "match": "NAME_ONLY"
+        }
+      ],
       "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
-      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
-      "validation": "UNQUALIFIED",
+      "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
+      "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "Immutable Application revisions / inspections / decisions",
+      "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
       "test_evidence": [
         {
-          "path": "tests/integration/test_application_corrections.py",
-          "symbol": "test_application_correction_and_withdrawal",
+          "path": "tests/integration/test_corrective_plans.py",
+          "symbol": "test_corrective_plan_guards_and_history",
           "scenarios": [
-            "round_trip",
-            "cycle_binding",
-            "historical_independence",
-            "response_validation"
+            "guards_and_resolution",
+            "revision_and_history",
+            "deadline_and_expiry",
+            "legacy_receipt_scope",
+            "legacy_resolved_recovery",
+            "handover_pending",
+            "handover_resolved",
+            "concurrent_agree_revise"
           ],
           "source": {
-            "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
+            "path": "tests/integration/test_corrective_plans.py",
+            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4461,20 +4520,24 @@
       "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
       "engineering_proof": {
         "id": "LWH-FRM-010.F002",
-        "binding": "reason",
-        "meaning": "Actual reviewer request retained; no adopted deadline or institutional rule invented.",
-        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
-        "persistence": "Immutable Application revisions / inspections / decisions",
-        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "binding": "institutional.contracts.CorrectivePlan.required_action -> protected proposal/agreement journal facts",
+        "meaning": "Personally proposed action becomes agreed only after exact-version independent reviewer agreement; revision requires fresh agreement/response.",
+        "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
+        "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
+        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
         "tests": [
           {
-            "path": "tests/integration/test_application_corrections.py",
-            "symbol": "test_application_correction_and_withdrawal",
+            "path": "tests/integration/test_corrective_plans.py",
+            "symbol": "test_corrective_plan_guards_and_history",
             "scenarios": [
-              "round_trip",
-              "cycle_binding",
-              "historical_independence",
-              "response_validation"
+              "guards_and_resolution",
+              "revision_and_history",
+              "deadline_and_expiry",
+              "legacy_receipt_scope",
+              "legacy_resolved_recovery",
+              "handover_pending",
+              "handover_resolved",
+              "concurrent_agree_revise"
             ]
           }
         ],
@@ -4510,15 +4573,74 @@
       "rule": "Adopted deadline",
       "source": "PROJECT-003",
       "classification": "institutional_or_restricted_by_purpose",
-      "candidate_bindings": [],
-      "status": "OPEN_EXPLICIT_FIELD_MAPPING_GAP",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
-      "validation": "UNQUALIFIED",
+      "candidate_bindings": [
+        {
+          "model": "institutional.contracts.CorrectivePlan",
+          "field": "due_at",
+          "required": true,
+          "requiredness_matches": true,
+          "schema": {
+            "format": "date-time",
+            "title": "Due At",
+            "type": "string"
+          },
+          "match": "NAME_ONLY"
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
+      "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_corrective_plans.py",
+          "symbol": "test_corrective_plan_guards_and_history",
+          "scenarios": [
+            "guards_and_resolution",
+            "revision_and_history",
+            "deadline_and_expiry",
+            "legacy_receipt_scope",
+            "legacy_resolved_recovery",
+            "handover_pending",
+            "handover_resolved",
+            "concurrent_agree_revise"
+          ],
+          "source": {
+            "path": "tests/integration/test_corrective_plans.py",
+            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-010.F004",
+        "binding": "institutional.contracts.CorrectivePlan.due_at / deadline_authority_reference -> protected agreement and findings.due_at projection",
+        "meaning": "Actual prospective deadline/reference supplied explicitly and independently agreed; original observed deadline retained. No automatic extension or completion.",
+        "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
+        "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
+        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
+        "tests": [
+          {
+            "path": "tests/integration/test_corrective_plans.py",
+            "symbol": "test_corrective_plan_guards_and_history",
+            "scenarios": [
+              "guards_and_resolution",
+              "revision_and_history",
+              "deadline_and_expiry",
+              "legacy_receipt_scope",
+              "legacy_resolved_recovery",
+              "handover_pending",
+              "handover_resolved",
+              "concurrent_agree_revise"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-010.F005",
@@ -4531,23 +4653,27 @@
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
       "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
-      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+      "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "Immutable Application revisions / inspections / decisions",
+      "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
       "test_evidence": [
         {
-          "path": "tests/integration/test_application_corrections.py",
-          "symbol": "test_application_correction_and_withdrawal",
+          "path": "tests/integration/test_corrective_plans.py",
+          "symbol": "test_corrective_plan_guards_and_history",
           "scenarios": [
-            "round_trip",
-            "cycle_binding",
-            "historical_independence",
-            "response_validation"
+            "guards_and_resolution",
+            "revision_and_history",
+            "deadline_and_expiry",
+            "legacy_receipt_scope",
+            "legacy_resolved_recovery",
+            "handover_pending",
+            "handover_resolved",
+            "concurrent_agree_revise"
           ],
           "source": {
-            "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
+            "path": "tests/integration/test_corrective_plans.py",
+            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4556,20 +4682,24 @@
       "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
       "engineering_proof": {
         "id": "LWH-FRM-010.F005",
-        "binding": "responses[].response",
-        "meaning": "Every requested criterion receives an attributed response; not a resolution.",
-        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
-        "persistence": "Immutable Application revisions / inspections / decisions",
-        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "binding": "institutional.contracts.Response.completion_evidence -> immutable institutional_responses bound to exact plan/agreement",
+        "meaning": "Actual response is attributed to its agreed work and current owner; submission does not resolve a finding. Old authorised receipt hashes remain compatible.",
+        "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
+        "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
+        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
         "tests": [
           {
-            "path": "tests/integration/test_application_corrections.py",
-            "symbol": "test_application_correction_and_withdrawal",
+            "path": "tests/integration/test_corrective_plans.py",
+            "symbol": "test_corrective_plan_guards_and_history",
             "scenarios": [
-              "round_trip",
-              "cycle_binding",
-              "historical_independence",
-              "response_validation"
+              "guards_and_resolution",
+              "revision_and_history",
+              "deadline_and_expiry",
+              "legacy_receipt_scope",
+              "legacy_resolved_recovery",
+              "handover_pending",
+              "handover_resolved",
+              "concurrent_agree_revise"
             ]
           }
         ],
@@ -4588,23 +4718,27 @@
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
       "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
-      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+      "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "Immutable Application revisions / inspections / decisions",
+      "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
       "test_evidence": [
         {
-          "path": "tests/integration/test_application_corrections.py",
-          "symbol": "test_application_correction_and_withdrawal",
+          "path": "tests/integration/test_corrective_plans.py",
+          "symbol": "test_corrective_plan_guards_and_history",
           "scenarios": [
-            "round_trip",
-            "cycle_binding",
-            "historical_independence",
-            "response_validation"
+            "guards_and_resolution",
+            "revision_and_history",
+            "deadline_and_expiry",
+            "legacy_receipt_scope",
+            "legacy_resolved_recovery",
+            "handover_pending",
+            "handover_resolved",
+            "concurrent_agree_revise"
           ],
           "source": {
-            "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
+            "path": "tests/integration/test_corrective_plans.py",
+            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4613,20 +4747,24 @@
       "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
       "engineering_proof": {
         "id": "LWH-FRM-010.F006",
-        "binding": "responses[].evidence_ids",
-        "meaning": "Current CLEAN case/criterion references; upload scanner exclusion remains enforced.",
-        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
-        "persistence": "Immutable Application revisions / inspections / decisions",
-        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "binding": "institutional.contracts.Response.evidence_ids -> current case/criterion CLEAN evidence rechecked on resolution and positive disposition",
+        "meaning": "Actual proof references remain source-bound and immutable; synthetic metadata qualifies no scanner/file. Older timestamps do not choose a different response.",
+        "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
+        "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
+        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
         "tests": [
           {
-            "path": "tests/integration/test_application_corrections.py",
-            "symbol": "test_application_correction_and_withdrawal",
+            "path": "tests/integration/test_corrective_plans.py",
+            "symbol": "test_corrective_plan_guards_and_history",
             "scenarios": [
-              "round_trip",
-              "cycle_binding",
-              "historical_independence",
-              "response_validation"
+              "guards_and_resolution",
+              "revision_and_history",
+              "deadline_and_expiry",
+              "legacy_receipt_scope",
+              "legacy_resolved_recovery",
+              "handover_pending",
+              "handover_resolved",
+              "concurrent_agree_revise"
             ]
           }
         ],
@@ -4645,23 +4783,27 @@
       "classification": "institutional_or_restricted_by_purpose",
       "candidate_bindings": [],
       "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
-      "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
+      "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
       "validation": "UNQUALIFIED",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "Immutable Application revisions / inspections / decisions",
+      "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
       "test_evidence": [
         {
-          "path": "tests/integration/test_application_corrections.py",
-          "symbol": "test_application_correction_and_withdrawal",
+          "path": "tests/integration/test_corrective_plans.py",
+          "symbol": "test_corrective_plan_guards_and_history",
           "scenarios": [
-            "round_trip",
-            "cycle_binding",
-            "historical_independence",
-            "response_validation"
+            "guards_and_resolution",
+            "revision_and_history",
+            "deadline_and_expiry",
+            "legacy_receipt_scope",
+            "legacy_resolved_recovery",
+            "handover_pending",
+            "handover_resolved",
+            "concurrent_agree_revise"
           ],
           "source": {
-            "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
+            "path": "tests/integration/test_corrective_plans.py",
+            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4670,20 +4812,24 @@
       "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
       "engineering_proof": {
         "id": "LWH-FRM-010.F007",
-        "binding": "fresh inspection and independent decision",
-        "meaning": "Review is distinct from response submission; historical reviewers cannot decide.",
-        "permission": "CURRENT_SCOPED_APPLICANT_OR_PERSONALLY_ASSIGNED_REVIEWER_AND_HISTORICAL_INDEPENDENCE",
-        "persistence": "Immutable Application revisions / inspections / decisions",
-        "missingness_exception": "LWH-EXT-APPLICATION-001 is a criterion-scoped typed extension. Full finding IDs/plans/deadlines/tagged capture/adoption remain open.",
+        "binding": "institutional.contracts.FindingReview.decision + Evidence.evidence -> exact version-specific protected resolution/return facts",
+        "meaning": "Actual independent review and reason follow the current response and plan. Prior reviews remain retained; handover does not rewrite completed authorship.",
+        "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
+        "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
+        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
         "tests": [
           {
-            "path": "tests/integration/test_application_corrections.py",
-            "symbol": "test_application_correction_and_withdrawal",
+            "path": "tests/integration/test_corrective_plans.py",
+            "symbol": "test_corrective_plan_guards_and_history",
             "scenarios": [
-              "round_trip",
-              "cycle_binding",
-              "historical_independence",
-              "response_validation"
+              "guards_and_resolution",
+              "revision_and_history",
+              "deadline_and_expiry",
+              "legacy_receipt_scope",
+              "legacy_resolved_recovery",
+              "handover_pending",
+              "handover_resolved",
+              "concurrent_agree_revise"
             ]
           }
         ],
@@ -11447,11 +11593,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
-          "sha256_lf": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+          "sha256_lf": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/tables.py",
@@ -11482,11 +11628,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
-          "sha256_lf": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+          "sha256_lf": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/tables.py",
@@ -11517,11 +11663,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
-          "sha256_lf": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+          "sha256_lf": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/tables.py",
@@ -13256,11 +13402,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
-          "sha256_lf": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+          "sha256_lf": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/tables.py",
@@ -13286,12 +13432,31 @@
             "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        },
+        {
+          "path": "tests/integration/test_corrective_plans.py",
+          "symbol": "test_corrective_plan_guards_and_history",
+          "scenarios": [
+            "guards_and_resolution",
+            "revision_and_history",
+            "deadline_and_expiry",
+            "legacy_receipt_scope",
+            "legacy_resolved_recovery",
+            "handover_pending",
+            "handover_resolved",
+            "concurrent_agree_revise"
+          ],
+          "source": {
+            "path": "tests/integration/test_corrective_plans.py",
+            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
       ],
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence.",
       "engineering_proof": {
         "id": "LWH-STM-003",
-        "covered": "Only independent global Directorate decider grants ACTIVE/CONDITIONAL; required unmet findings cannot receive unrestricted recognition; adverse history retained Independence includes applicants/respondents and historical inspectors/reviewers across correction cycles; withdrawal changes no prior affiliation.",
+        "covered": "Only independent global Directorate decider grants ACTIVE/CONDITIONAL; required unmet findings cannot receive unrestricted recognition; adverse history retained Independence includes applicants/respondents and historical inspectors/reviewers across correction cycles; withdrawal changes no prior affiliation. Finding-specific action/deadline proposals and independent agreement, exact plan-bound responses/resolution, protected version-specific review and accepted handover retain original sources.",
         "exceptions": "Complete renewal/noncompliance/appeal/notice/expiry and actual-role operating acceptance remain separate.",
         "tests": [
           {
@@ -13302,6 +13467,20 @@
               "cycle_binding",
               "historical_independence",
               "response_validation"
+            ]
+          },
+          {
+            "path": "tests/integration/test_corrective_plans.py",
+            "symbol": "test_corrective_plan_guards_and_history",
+            "scenarios": [
+              "guards_and_resolution",
+              "revision_and_history",
+              "deadline_and_expiry",
+              "legacy_receipt_scope",
+              "legacy_resolved_recovery",
+              "handover_pending",
+              "handover_resolved",
+              "concurrent_agree_revise"
             ]
           }
         ]
@@ -13475,11 +13654,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
-          "sha256_lf": "a0810d9c3e02056b1a144bf5472721d9c6f132c05411d61e44d837e3fe9d94dd"
+          "sha256_lf": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/tables.py",
@@ -16856,7 +17035,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "e762bb4da6738a51d8579c7eff69a239ffb8735b36aeeca3e3844510f78e937a"
+        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
       },
       "line": 36
     },
@@ -16895,6 +17074,19 @@
             "minItems": 1,
             "title": "Evidence Ids",
             "type": "array"
+          },
+          "corrective_plan_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Corrective Plan Id"
           }
         },
         "required": [
@@ -16909,9 +17101,164 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "e762bb4da6738a51d8579c7eff69a239ffb8735b36aeeca3e3844510f78e937a"
+        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
       },
       "line": 66
+    },
+    "institutional.contracts.CorrectivePlan": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "maxLength": 12000,
+            "minLength": 3,
+            "title": "Evidence",
+            "type": "string"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          },
+          "expected_version": {
+            "minimum": 1,
+            "title": "Expected Version",
+            "type": "integer"
+          },
+          "required_action": {
+            "maxLength": 6000,
+            "minLength": 5,
+            "title": "Required Action",
+            "type": "string"
+          },
+          "due_at": {
+            "format": "date-time",
+            "title": "Due At",
+            "type": "string"
+          },
+          "deadline_authority_reference": {
+            "maxLength": 4000,
+            "minLength": 5,
+            "title": "Deadline Authority Reference",
+            "type": "string"
+          }
+        },
+        "required": [
+          "evidence",
+          "intent_confirmed",
+          "expected_version",
+          "required_action",
+          "due_at",
+          "deadline_authority_reference"
+        ],
+        "title": "CorrectivePlan",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
+        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+      },
+      "line": 72
+    },
+    "institutional.contracts.CorrectivePlanReview": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "maxLength": 12000,
+            "minLength": 3,
+            "title": "Evidence",
+            "type": "string"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          },
+          "expected_version": {
+            "minimum": 1,
+            "title": "Expected Version",
+            "type": "integer"
+          },
+          "plan_id": {
+            "format": "uuid",
+            "title": "Plan Id",
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "AGREE",
+              "RETURN"
+            ],
+            "title": "Decision",
+            "type": "string"
+          }
+        },
+        "required": [
+          "evidence",
+          "intent_confirmed",
+          "expected_version",
+          "plan_id",
+          "decision"
+        ],
+        "title": "CorrectivePlanReview",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
+        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+      },
+      "line": 78
+    },
+    "institutional.contracts.FindingReview": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "maxLength": 12000,
+            "minLength": 3,
+            "title": "Evidence",
+            "type": "string"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          },
+          "expected_version": {
+            "minimum": 1,
+            "title": "Expected Version",
+            "type": "integer"
+          },
+          "response_id": {
+            "format": "uuid",
+            "title": "Response Id",
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "RESOLVE",
+              "RETURN"
+            ],
+            "title": "Decision",
+            "type": "string"
+          }
+        },
+        "required": [
+          "evidence",
+          "intent_confirmed",
+          "expected_version",
+          "response_id",
+          "decision"
+        ],
+        "title": "FindingReview",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
+        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+      },
+      "line": 83
     },
     "contracts.ApplicationCorrection": {
       "schema": {
@@ -17140,9 +17487,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "e762bb4da6738a51d8579c7eff69a239ffb8735b36aeeca3e3844510f78e937a"
+        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
       },
-      "line": 111
+      "line": 123
     },
     "reporting.contracts.Review": {
       "schema": {
@@ -17406,9 +17753,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "e762bb4da6738a51d8579c7eff69a239ffb8735b36aeeca3e3844510f78e937a"
+        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
       },
-      "line": 127
+      "line": 139
     },
     "reporting.contracts.ActionUpdate": {
       "schema": {
@@ -22239,7 +22586,7 @@
   },
   "reviewed_proof_input": {
     "path": "docs/implementation/conformance/director-proofs.json",
-    "sha256_lf": "925ab2c606059b716673ca1f6d5aab1053b8c98531870363e212a3d411103223"
+    "sha256_lf": "cdd5a07eeeb5503c7c8b91f60e5655302e48aadd2950215ca72d66192d09f283"
   },
   "actual_routes": [
     {
@@ -24558,9 +24905,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 112
+      "handler_line": 116
     },
     {
       "method": "GET",
@@ -24568,9 +24915,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 129
+      "handler_line": 133
     },
     {
       "method": "GET",
@@ -24578,9 +24925,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 214
+      "handler_line": 218
     },
     {
       "method": "POST",
@@ -24588,9 +24935,9 @@
       "request_model": "institutional.contracts.MasterChange",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 235
+      "handler_line": 239
     },
     {
       "method": "GET",
@@ -24598,9 +24945,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 245
+      "handler_line": 249
     },
     {
       "method": "POST",
@@ -24608,9 +24955,9 @@
       "request_model": "institutional.contracts.Review",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 261
+      "handler_line": 265
     },
     {
       "method": "POST",
@@ -24618,9 +24965,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 280
+      "handler_line": 284
     },
     {
       "method": "GET",
@@ -24628,9 +24975,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 299
+      "handler_line": 303
     },
     {
       "method": "POST",
@@ -24638,9 +24985,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 330
+      "handler_line": 334
     },
     {
       "method": "GET",
@@ -24648,9 +24995,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 349
+      "handler_line": 353
     },
     {
       "method": "POST",
@@ -24658,9 +25005,9 @@
       "request_model": "institutional.contracts.CaseOpen",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 377
+      "handler_line": 381
     },
     {
       "method": "GET",
@@ -24668,9 +25015,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 392
+      "handler_line": 396
     },
     {
       "method": "GET",
@@ -24678,9 +25025,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 478
+      "handler_line": 498
     },
     {
       "method": "POST",
@@ -24688,9 +25035,9 @@
       "request_model": "institutional.contracts.Assign",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 489
+      "handler_line": 509
     },
     {
       "method": "POST",
@@ -24698,9 +25045,9 @@
       "request_model": "institutional.contracts.Inspection",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 489
+      "handler_line": 509
     },
     {
       "method": "POST",
@@ -24708,9 +25055,9 @@
       "request_model": "institutional.contracts.Recommend",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 489
+      "handler_line": 509
     },
     {
       "method": "POST",
@@ -24718,9 +25065,9 @@
       "request_model": "institutional.contracts.Notice",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 489
+      "handler_line": 509
     },
     {
       "method": "POST",
@@ -24728,9 +25075,9 @@
       "request_model": "institutional.contracts.Decide",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 489
+      "handler_line": 509
     },
     {
       "method": "POST",
@@ -24738,9 +25085,9 @@
       "request_model": "institutional.contracts.AssignmentOffer",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 489
+      "handler_line": 509
     },
     {
       "method": "POST",
@@ -24748,9 +25095,9 @@
       "request_model": "institutional.contracts.AssignmentAccept",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 520
+      "handler_line": 540
     },
     {
       "method": "POST",
@@ -24758,9 +25105,9 @@
       "request_model": "institutional.contracts.Response",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 535
+      "handler_line": 555
     },
     {
       "method": "POST",
@@ -24768,9 +25115,39 @@
       "request_model": "institutional.contracts.FindingReview",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 535
+      "handler_line": 555
+    },
+    {
+      "method": "POST",
+      "path": "/v1/institutional/findings/{identifier}/corrective-plan",
+      "request_model": "institutional.contracts.CorrectivePlan",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/router.py",
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+      },
+      "handler_line": 555
+    },
+    {
+      "method": "POST",
+      "path": "/v1/institutional/findings/{identifier}/corrective-plan-review",
+      "request_model": "institutional.contracts.CorrectivePlanReview",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/router.py",
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+      },
+      "handler_line": 555
+    },
+    {
+      "method": "GET",
+      "path": "/v1/institutional/findings/{identifier}/corrective-history",
+      "request_model": null,
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/router.py",
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+      },
+      "handler_line": 580
     },
     {
       "method": "POST",
@@ -24778,9 +25155,9 @@
       "request_model": "control.contracts.Evidence",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 558
+      "handler_line": 606
     },
     {
       "method": "POST",
@@ -24788,9 +25165,9 @@
       "request_model": "institutional.contracts.NoticeDelivery",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 573
+      "handler_line": 621
     },
     {
       "method": "POST",
@@ -24798,9 +25175,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 607
+      "handler_line": 655
     },
     {
       "method": "GET",
@@ -24808,9 +25185,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 703
+      "handler_line": 751
     },
     {
       "method": "GET",
@@ -24818,9 +25195,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 760
+      "handler_line": 808
     },
     {
       "method": "POST",
@@ -24828,9 +25205,9 @@
       "request_model": "institutional.contracts.Content",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 787
+      "handler_line": 835
     },
     {
       "method": "GET",
@@ -24838,9 +25215,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 799
+      "handler_line": 847
     },
     {
       "method": "GET",
@@ -24848,9 +25225,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 863
+      "handler_line": 911
     },
     {
       "method": "POST",
@@ -24858,9 +25235,9 @@
       "request_model": "institutional.contracts.Revision",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 910
+      "handler_line": 958
     },
     {
       "method": "POST",
@@ -24868,9 +25245,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 894
+      "handler_line": 942
     },
     {
       "method": "POST",
@@ -24878,9 +25255,9 @@
       "request_model": "institutional.contracts.ContentReview",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 894
+      "handler_line": 942
     },
     {
       "method": "POST",
@@ -24888,9 +25265,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 894
+      "handler_line": 942
     },
     {
       "method": "POST",
@@ -24898,9 +25275,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 894
+      "handler_line": 942
     },
     {
       "method": "POST",
@@ -24908,9 +25285,9 @@
       "request_model": "institutional.contracts.Distribute",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 894
+      "handler_line": 942
     },
     {
       "method": "GET",
@@ -24918,9 +25295,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 929
+      "handler_line": 977
     },
     {
       "method": "GET",
@@ -24928,9 +25305,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 956
+      "handler_line": 1004
     },
     {
       "method": "POST",
@@ -24938,9 +25315,9 @@
       "request_model": "institutional.contracts.ContentReceipt",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 999
+      "handler_line": 1047
     },
     {
       "method": "GET",
@@ -24948,9 +25325,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 1029
+      "handler_line": 1077
     },
     {
       "method": "GET",
@@ -24958,9 +25335,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 1080
+      "handler_line": 1128
     },
     {
       "method": "GET",
@@ -24968,9 +25345,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6bca3af91c33e879c1e34a17a374668bc98667bcfba8f155a76fb4a8b55813f6"
+        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
       },
-      "handler_line": 1158
+      "handler_line": 1206
     },
     {
       "method": "POST",

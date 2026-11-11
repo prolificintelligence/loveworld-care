@@ -252,6 +252,18 @@ def decide_body(row, action="RENEW"):
     }
 
 
+def agree_corrective_plan(j, finding, owner="applicant", reviewer="reviewer"):
+    proposed = j.create(f"/institutional/findings/{finding['id']}/corrective-plan", {
+        "expected_version": finding["version"], "required_action": "Synthetic actual agreed corrective work",
+        "due_at": stamp(3), "deadline_authority_reference": "Synthetic actual deadline authority",
+        "evidence": "Synthetic personally proposed plan", "intent_confirmed": True,
+    }, owner)
+    return j.create(f"/institutional/findings/{finding['id']}/corrective-plan-review", {
+        "expected_version": proposed["version"], "plan_id": proposed["corrective_plan"]["plan_id"],
+        "decision": "AGREE", "evidence": "Synthetic independent plan agreement", "intent_confirmed": True,
+    }, reviewer)
+
+
 def content(j, kind="HEALTH_EDUCATION", audience="PUBLIC"):
     return {
         "facility_id": None,
@@ -513,10 +525,11 @@ def test_finding_response_does_not_resolve_without_independent_review(lifecycle)
     j = lifecycle
     row = advance(j, case(j), outcome="NOT_MET")
     finding = j.get(f"/institutional/cases/{row['id']}", "reviewer").json()["findings"][0]
+    finding = agree_corrective_plan(j, finding)
     response = j.create(
         f"/institutional/findings/{finding['id']}/respond",
         {
-            "expected_version": 1,
+            "expected_version": finding["version"],
             "completion_evidence": "Synthetic actual correction proof",
             "evidence_ids": [j.facts["file"]],
             "evidence": "Synthetic personal response",

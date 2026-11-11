@@ -66,6 +66,18 @@ class Inspection(Versioned):
 class Response(Versioned):
     completion_evidence: str = Field(min_length=5, max_length=6000)
     evidence_ids: list[UUID] = Field(min_length=1, max_length=40)
+    corrective_plan_id: UUID | None = None
+
+
+class CorrectivePlan(Versioned):
+    required_action: str = Field(min_length=5, max_length=6000)
+    due_at: datetime
+    deadline_authority_reference: str = Field(min_length=5, max_length=4000)
+
+
+class CorrectivePlanReview(Versioned):
+    plan_id: UUID
+    decision: Literal["AGREE", "RETURN"]
 
 
 class FindingReview(Versioned):

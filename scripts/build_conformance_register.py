@@ -39,6 +39,9 @@ FORM_MODELS = {
     9: ["institutional.contracts.CaseOpen"],
     10: [
         "institutional.contracts.Response",
+        "institutional.contracts.CorrectivePlan",
+        "institutional.contracts.CorrectivePlanReview",
+        "institutional.contracts.FindingReview",
         "contracts.ApplicationCorrection",
         "contracts.ApplicationResubmit",
     ],

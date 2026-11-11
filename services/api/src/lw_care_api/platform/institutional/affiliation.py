@@ -7,6 +7,7 @@ from ..control.service import has
 from ..domain import expected, record_change, require, scoped
 from . import tables as t
 from .base import Service
+from .corrective import CorrectivePlans
 from .master import MasterService
 
 
@@ -39,7 +40,7 @@ async def latest_decision(session, facility_id):
     return new if new and (not old or new["created_at"] >= old["created_at"]) else old
 
 
-class AffiliationService(Service):
+class AffiliationService(CorrectivePlans, Service):
     async def offer_assignment(self, identifier, body):
         case, facility = await self.case(identifier, write=True)
         require(scoped(self.actor, {"STANDARDS_REVIEWER"}, facility))
@@ -396,13 +397,19 @@ class AffiliationService(Service):
             "This finding is not awaiting a response",
             409,
         )
+        plan = await self.agreed_plan(finding, case)
+        require(body.get("corrective_plan_id") in {None, plan["plan_id"]},
+                "STALE_CORRECTIVE_PLAN", "Respond to the exact current agreed plan", 409)
+        require(len(body["evidence_ids"]) == len(set(body["evidence_ids"])),
+                "VALIDATION_FAILED", "Reference each actual evidence item once", 422)
         await self.valid_files(case, body["evidence_ids"], finding["criterion"])
         response = {
             "id": db.uid(),
             "finding_id": finding["id"],
             "author_id": self.actor["id"],
             "created_at": db.now(),
-            "details_ciphertext": self.seal(body),
+            "details_ciphertext": self.seal({**body, "corrective_plan_id": plan["plan_id"],
+                                             "plan_agreement_version": plan["agreement_finding_version"]}),
         }
         await self.session.execute(t.responses.insert().values(**response))
         finding = await self.change(t.findings, finding, {"state": "RESPONSE_SUBMITTED"})
@@ -432,14 +439,11 @@ class AffiliationService(Service):
             "Review the actual submitted response independently",
             409,
         )
-        latest = await self.session.scalar(
-            select(t.responses.c.id)
-            .where(t.responses.c.finding_id == finding["id"])
-            .order_by(t.responses.c.created_at.desc())
-            .limit(1)
-        )
-        require(latest == response["id"], "STALE_RESPONSE", "A newer response needs review", 409)
+        submitted = await self.finding_fact(finding, "standards.response_submitted", finding["version"])
+        require(submitted and submitted["details"]["response"]["id"] == response["id"],
+                "STALE_RESPONSE", "Review the response bound to this exact finding version", 409)
         if body["decision"] == "RESOLVE":
+            await self.response_plan(finding, case, response)
             await self.valid_files(
                 case,
                 self.open(response["details_ciphertext"])["evidence_ids"],
@@ -495,19 +499,15 @@ class AffiliationService(Service):
                         self.open(finding["details_ciphertext"])["evidence_ids"],
                         finding["criterion"],
                     )
-                elif finding["state"] == "RESOLVED":
-                    response = (
-                        (
-                            await self.session.execute(
-                                select(t.responses)
-                                .where(t.responses.c.finding_id == finding["id"])
-                                .order_by(t.responses.c.created_at.desc())
-                                .limit(1)
-                            )
-                        )
-                        .mappings()
-                        .one()
-                    )
+                else:
+                    await self.agreed_plan(finding, case, current_parties=finding["state"] != "RESOLVED")
+                    if finding["state"] != "RESOLVED":
+                        continue
+                    resolved = await self.finding_fact(finding, "standards.response_reviewed", finding["version"])
+                    require(resolved and resolved["details"]["decision"] == "RESOLVE",
+                            "RESOLUTION_HISTORY_REQUIRED", "The actual independent resolution must be retained", 409)
+                    response = await self.row(t.responses, resolved["details"]["response_id"], lock=False)
+                    await self.response_plan(finding, case, response, current_parties=False)
                     await self.valid_files(
                         case,
                         self.open(response["details_ciphertext"])["evidence_ids"],

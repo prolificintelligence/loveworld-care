@@ -43,6 +43,7 @@ jobs:
           scripts/verify_director_conformance_postgres.py
           scripts/verify_application_workflow_postgres.py
           scripts/verify_application_screening_postgres.py
+          scripts/verify_corrective_plans_postgres.py
       - name: Canonical conformance register integrity (not operating acceptance)
         run: uv run python scripts/build_conformance_register.py --check
       - name: Tests (adversarial + integration boundary)
