@@ -1,84 +1,95 @@
 {
-  "release": "2026-11-11-delivery-team-accountability",
-  "recorded_at": "2026-11-11T09:20:35.370620+00:00",
-  "runtime_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
+  "release": "2026-11-11-corrective-capture",
+  "recorded_at": "2026-11-11T11:37:48.333652+00:00",
+  "runtime_commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
   "code_delivery": "DEPLOYED",
-  "engineering_evidence": "ACCEPTED_DELIVERY_TEAM_IDENTITY_EXACT_PLAN_BINDING_CURRENT_PENDING_AUTHORITY_AND_PRESERVED_COMPLETED_SOURCE_VERIFIED",
+  "engineering_evidence": "BOUNDED_FRM010_MISSINGNESS_SOURCE_CAPTURE_AND_IMMUTABLE_REPLAY_VERIFIED",
   "operating_adoption": "INCOMPLETE",
   "full_suite_acceptance": "INCOMPLETE_NOT_RUN",
   "schema_version": 9,
   "migration_required": false,
   "migration": {
-    "status": "NOT_REQUIRED_EXISTING_PROTECTED_ENCRYPTED_INSTITUTIONAL_JOURNAL",
+    "status": "NOT_REQUIRED_EXISTING_PROTECTED_JOURNAL",
     "tables": 102,
     "protected_history_tables": 53
   },
   "api": {
-    "deployment_id": "dpl_5oHkG9SdT4JfVWEiJNfaTt8rPpKC",
+    "deployment_id": "dpl_2JUizpncxn31TcBypWX24e8P9skx",
     "origin": "https://lw-health-intelligence-api.vercel.app",
-    "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
-    "verified_source_files": 69,
-    "submitted_source_files_verified": 73
+    "source_commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
+    "verified_source_files": 71,
+    "submitted_source_files_verified": 75
   },
   "web": {
-    "deployment_id": "dpl_D9x88ksxC4cqMMbBS4frX3mMK5tm",
+    "deployment_id": "dpl_7ZBWs788GTeT3cZn9jYGJFs4TyKq",
     "origin": "https://lw-health-intelligence.vercel.app",
-    "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
-    "verified_source_files": 31,
-    "submitted_source_files_verified": 36
+    "source_commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
+    "verified_source_files": 32,
+    "submitted_source_files_verified": 37
   },
   "ci": {
-    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42991413402",
-    "run_id": 42991413402,
+    "commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
+    "run_id": 43011190306,
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/43011190306",
     "status": "SUCCESS",
-    "python_tests": 282,
-    "postgres_only_skipped": 4,
-    "api_client_tests": 11,
-    "pwa_tests": 4,
-    "typecheck": "PASSED",
-    "build": "PASSED",
-    "secret_scan": "PASSED",
+    "conclusion": "success",
     "jobs": [
       {
-        "id": 130425095362,
-        "name": "web",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 130425095900,
+        "id": 130490916342,
         "name": "secrets-scan",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 130425095917,
+        "id": 130490916574,
+        "name": "web",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 130490916642,
         "name": "python",
         "status": "completed",
         "conclusion": "success"
       }
-    ]
-  },
-  "local_checks": {
-    "institutional_corrective_compatibility_passed": 25,
-    "compatibility_postgres_skipped": 2,
-    "complete_team_matrix_passed": 3,
-    "team_matrix_postgres_skipped": 1,
-    "typescript": "PASSED",
-    "final_source_authority": "EXACT_COMMIT_CI_AND_PINNED_NEON",
-    "development_checks_are_not_additional_unique_tests": true
+    ],
+    "web": {
+      "passed_counts": [],
+      "client_pass": [
+        "11",
+        "4"
+      ],
+      "build_compiled": true
+    },
+    "python": {
+      "passed_counts": [
+        "285"
+      ],
+      "client_pass": [],
+      "build_compiled": false,
+      "skipped_counts": [
+        "5"
+      ]
+    },
+    "python_tests": 285,
+    "postgres_only_skipped": 5,
+    "api_client_tests": 11,
+    "pwa_tests": 4,
+    "typecheck": "PASSED",
+    "build": "PASSED",
+    "secret_scan": "PASSED"
   },
   "neon_engineering_proof": {
     "status": "PASSED",
     "qualification": "LOCAL_ASGI_POOLED_NEON_NOT_CAPACITY_OR_OPERATING_ACCEPTANCE",
     "scenarios": [
       {
-        "scenario": "team_guards_and_completion",
-        "result": "EXACT_ACCEPTED_TEAM_BINDING_CURRENT_PENDING_AUTHORITY_AND_COMPLETED_SOURCE_PRESERVED"
+        "scenario": "capture_missingness_and_source",
+        "result": "CANONICAL_ABSENCES_OMISSIONS_AND_CHECKED_SOURCE_CAPTURE_NEVER_REPLACE_ACTUAL_TEAM_PLAN_RESPONSE_REVIEW_DECISION"
       },
       {
-        "scenario": "concurrent_accept_revise",
-        "result": "ONE_TEAM_ACCEPTANCE_OR_REVISION_ONE_JOURNAL_AND_RECEIPT"
+        "scenario": "concurrent_capture_replay",
+        "result": "ONE_IMMUTABLE_CAPTURE_AND_RECEIPT_FOR_SIMULTANEOUS_REPLAY_NO_FINDING_TRANSITION"
       }
     ],
     "schema_version": 9,
@@ -87,8 +98,8 @@
     "clock_override": "NONE",
     "history_fixture": "NONE",
     "disposable_schema_removed": true,
-    "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
-    "disposable_schema": "lwh_team_verify_966f6615fea245e69cc9371d229c7f23",
+    "source_commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
+    "disposable_schema": "lwh_capture_verify_a53c109a526645cda92de24862b1559b",
     "production_before": {
       "accounts": 1,
       "units": 0,
@@ -112,7 +123,7 @@
       "institutional_decisions": 0,
       "institutional_journal": 0
     },
-    "running_scenario": "concurrent_accept_revise",
+    "running_scenario": "concurrent_capture_replay",
     "immutable_application_history_delete": "REJECTED",
     "immutable_decision_history_delete": "REJECTED",
     "immutable_corrective_journal_delete": "REJECTED",
@@ -145,169 +156,63 @@
     "production_domain_records_seeded": 0,
     "provider_dispatch_invoked": false
   },
-  "local_dns_resolution_harness": {
+  "local_resolver": {
     "scope": "THIS_DISPOSABLE_PROOF_PROCESS_ONLY",
     "lookup_attempt_limit": 5,
-    "dns_failures": 6,
+    "dns_failures": 0,
     "retry_exhaustions": 0,
     "ip_cache": false,
     "application_transaction_retries": false,
     "tls_changed": false
   },
-  "resolver_launcher": {
-    "path": ".toolchain/team_neon_resolver.py",
-    "sha256": "130292af80c065f3cfd3b186317bbd22fba6b77db9f8fd07a2d69083d52fd54f",
-    "purpose": "Bounded retries of local getaddrinfo failures only; no cached IP, TLS change, application request/transaction retry or production resolver change."
-  },
-  "retained_failed_attempts": [
-    {
-      "artifact": ".toolchain/corrective-observation-failure-20261111084827.json",
-      "receipt": {
-        "status": "FAILED",
-        "observed_at": "2026-11-11T08:48:27.720636+00:00",
-        "phase": "teams_before",
-        "type": "gaierror",
-        "file": "socket.py",
-        "line": 983
-      },
-      "sha256": "52f5b5305558566958c1ee793b04f88ad16b44828ca81147bb8d57313860d0c1"
-    },
-    {
-      "artifact": ".toolchain/team-deployment-failure-cloudcheck-attempt1.json",
-      "receipt": {
-        "status": "FAILED_READ_ONLY_LIVE_SWEEP",
-        "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
-        "error_type": "ConnectError",
-        "completed_checks": {
-          "api_source_hashes": 69,
-          "web_source_hashes": 31,
-          "both_builds": "READY"
-        },
-        "stage": "AFTER_SOURCE_HASH_CHECKS_BEFORE_FIRST_ROUTE_RESULT",
-        "retained_log": ".toolchain/team-cloud-check-attempt1.jsonl",
-        "next_action": "Rerun the full unchanged read-only checker; do not count the interrupted sweep as a final pass."
-      },
-      "sha256": "2ad65a8d237dcda71a8eed52d9deaabc499b61145bc8e1e0c1f54fc37d53fdf9"
-    },
-    {
-      "artifact": ".toolchain/team-neon-attempt1.json",
-      "receipt": {
-        "status": "FAILED",
-        "qualification": "LOCAL_ASGI_POOLED_NEON_NOT_CAPACITY_OR_OPERATING_ACCEPTANCE",
-        "scenarios": [],
-        "schema_version": 9,
-        "evidence_fixture": "LABELLED_METADATA_ONLY_NOT_SCANNER_QUALIFICATION",
-        "synthetic_evidence_valid_minutes": 60,
-        "clock_override": "NONE",
-        "history_fixture": "NONE",
-        "disposable_schema_removed": true,
-        "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
-        "disposable_schema": "lwh_team_verify_df81206010314a538c61438f9ce477d6",
-        "failure": {
-          "type": "gaierror",
-          "file": "socket.py",
-          "line": 983
-        }
-      },
-      "sha256": "e02c407976fa2ce048a4aed484df10e96c1f234fb590c930a2f25728df7dbeea"
-    },
-    {
-      "artifact": ".toolchain/team-neon-attempt2.json",
-      "receipt": {
-        "status": "FAILED_BEFORE_VERIFIER_IMPORT",
-        "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
-        "failure": {
-          "type": "ModuleNotFoundError",
-          "module": "release_guard"
-        },
-        "cause": "The ignored runpy logging/resolver launcher lacked the scripts import path; the committed verifier did not start.",
-        "new_schema_created": false,
-        "correction": "Add scripts to the launcher import path and reject stale receipts from earlier invocations. No application, SQL, TLS, scenario or domain assertion changed."
-      },
-      "sha256": "e8f0c35c72288839cf006cdb41cb2331035c0f821c53f909751800657b66a581"
-    },
-    {
-      "artifact": ".toolchain/team-observation-failure-20261111085409.json",
-      "receipt": {
-        "status": "FAILED",
-        "observed_at": "2026-11-11T08:54:09.544867+00:00",
-        "phase": "teams_before",
-        "type": "gaierror",
-        "file": "socket.py",
-        "line": 983
-      },
-      "sha256": "ac242bec64c9237b11b0102f129d2f485cf353b3b82d8090f61cfa3dba3c2782"
-    },
-    {
-      "artifact": ".toolchain/team-register-stale-before-source-publication.json",
-      "receipt": {
-        "status": "STALE_GENERATED_REGISTER_CAUGHT_LOCALLY",
-        "source_commit": "9c47679271d538c46736479391ce0289459ad340",
-        "cause": "Final old-shape/null-team receipt regression assertion changed a referenced test fingerprint after register generation.",
-        "publication_error": "PowerShell did not stop on the native stale-check exit; source was pushed before regeneration.",
-        "deployment_attempted": false,
-        "correction": "Regenerate the three affected views and commit them before exact-commit CI, Neon qualification or deployment. Subsequent publication performs the register check inside a check=True subprocess."
-      },
-      "sha256": "22b0301e67c2085a4acc13185dc243c3bd257496590396725c397ec1685fd15c"
-    }
-  ],
-  "retained_local_fixture_failures": [
-    {
-      "artifact": ".toolchain/team-targeted-attempt1.log",
-      "cause": "2 new team tests expected old helper HTTP 200 but new creation routes returned successful 201; fixture now expects the route contract."
-    },
-    {
-      "artifact": ".toolchain/team-handover-scope.log",
-      "cause": "Foreign-facility metadata clone reused a unique external reference; fixture now uses a distinct labelled synthetic reference. No production guard weakened."
-    }
-  ],
+  "source_manifest": "2026-11-11-corrective-capture-source-manifest.json",
   "staged_builds": [
     {
       "project": "lw-health-intelligence-api",
-      "deployment_id": "dpl_5oHkG9SdT4JfVWEiJNfaTt8rPpKC",
-      "url": "lw-health-intelligence-age0vt63f-prolific-intelligence.vercel.app",
+      "deployment_id": "dpl_2JUizpncxn31TcBypWX24e8P9skx",
+      "url": "lw-health-intelligence-7k2mgdc91-prolific-intelligence.vercel.app",
       "state": "STAGED_READY",
-      "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
+      "source_commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
       "promotion": "STAGED_REQUIRES_VERIFICATION"
     },
     {
       "project": "lw-health-intelligence",
-      "deployment_id": "dpl_D9x88ksxC4cqMMbBS4frX3mMK5tm",
-      "url": "lw-health-intelligence-aceavnofw-prolific-intelligence.vercel.app",
+      "deployment_id": "dpl_7ZBWs788GTeT3cZn9jYGJFs4TyKq",
+      "url": "lw-health-intelligence-maugplyin-prolific-intelligence.vercel.app",
       "state": "STAGED_READY",
-      "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
+      "source_commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
       "promotion": "STAGED_REQUIRES_VERIFICATION"
     }
   ],
   "exact_build_promotions": [
     {
       "project": "lw-health-intelligence-api",
-      "deployment_id": "dpl_5oHkG9SdT4JfVWEiJNfaTt8rPpKC",
-      "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
+      "deployment_id": "dpl_2JUizpncxn31TcBypWX24e8P9skx",
+      "source_commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
       "ci": {
-        "commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
-        "run_id": 42991413402,
-        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42991413402",
+        "commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
+        "run_id": 43011190306,
+        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/43011190306",
         "conclusion": "success"
       },
-      "verified_source_files": 73,
-      "previous_deployment": "dpl_syTKu3Zig3eoKgeGqE31PHUf5aAp",
+      "verified_source_files": 75,
+      "previous_deployment": "dpl_5oHkG9SdT4JfVWEiJNfaTt8rPpKC",
       "temporary_provider_probe_access": "REVOKED_BEFORE_PROMOTION",
       "promotion_http": 201,
       "promotion": "REQUESTED_WITHOUT_REBUILD"
     },
     {
       "project": "lw-health-intelligence",
-      "deployment_id": "dpl_D9x88ksxC4cqMMbBS4frX3mMK5tm",
-      "source_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
+      "deployment_id": "dpl_7ZBWs788GTeT3cZn9jYGJFs4TyKq",
+      "source_commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
       "ci": {
-        "commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
-        "run_id": 42991413402,
-        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42991413402",
+        "commit": "ad5d7c6f7efbddc0d79f365d95c56ee55d1f4eb6",
+        "run_id": 43011190306,
+        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/43011190306",
         "conclusion": "success"
       },
-      "verified_source_files": 36,
-      "previous_deployment": "dpl_Ei4eFbpv7gNn1qubRK6BXFUCt2re",
+      "verified_source_files": 37,
+      "previous_deployment": "dpl_D9x88ksxC4cqMMbBS4frX3mMK5tm",
       "temporary_provider_probe_access": "REVOKED_BEFORE_PROMOTION",
       "promotion_http": 201,
       "promotion": "REQUESTED_WITHOUT_REBUILD"
@@ -315,33 +220,32 @@
   ],
   "live_provider_state": {
     "lw-health-intelligence-api": {
-      "active_deployment": "dpl_5oHkG9SdT4JfVWEiJNfaTt8rPpKC",
+      "active_deployment": "dpl_2JUizpncxn31TcBypWX24e8P9skx",
       "sso_protection": {
         "deploymentType": "all_except_custom_domains"
       },
       "automation_tokens_remaining": 0
     },
     "lw-health-intelligence": {
-      "active_deployment": "dpl_D9x88ksxC4cqMMbBS4frX3mMK5tm",
+      "active_deployment": "dpl_7ZBWs788GTeT3cZn9jYGJFs4TyKq",
       "sso_protection": {
         "deploymentType": "all_except_custom_domains"
       },
       "automation_tokens_remaining": 0
     }
   },
-  "source_manifest": "2026-11-11-delivery-team-source-manifest.json",
   "cloud_route_checks": [
     {
       "target": "api",
-      "deployment_id": "dpl_5oHkG9SdT4JfVWEiJNfaTt8rPpKC",
+      "deployment_id": "dpl_2JUizpncxn31TcBypWX24e8P9skx",
       "state": "READY",
-      "actual_source_hashes_verified": 69
+      "actual_source_hashes_verified": 71
     },
     {
       "target": "web",
-      "deployment_id": "dpl_D9x88ksxC4cqMMbBS4frX3mMK5tm",
+      "deployment_id": "dpl_7ZBWs788GTeT3cZn9jYGJFs4TyKq",
       "state": "READY",
-      "actual_source_hashes_verified": 31
+      "actual_source_hashes_verified": 32
     },
     {
       "origin": "https://lw-health-intelligence-api.vercel.app",
@@ -458,7 +362,7 @@
       "path": "/v1/auth/login",
       "method": "POST",
       "http": 401,
-      "elapsed_seconds": 2.809,
+      "elapsed_seconds": 2.832,
       "invalid_credentials_rejected": true,
       "session_created": false
     },
@@ -577,7 +481,7 @@
       "path": "/v1/auth/login",
       "method": "POST",
       "http": 401,
-      "elapsed_seconds": 2.799,
+      "elapsed_seconds": 2.804,
       "invalid_credentials_rejected": true,
       "session_created": false
     },
@@ -646,8 +550,8 @@
     "bundles": [
       {
         "page": "/governance",
-        "bundle": "/_next/static/chunks/app/governance/page-a230c2b89b6ca77f.js",
-        "sha256": "c301c814833bd5c99c89bc56bce98292142f597ff99d3eb67cfdaf7abc38fde6"
+        "bundle": "/_next/static/chunks/app/governance/page-69bd63b905f8d994.js",
+        "sha256": "8388f440803e4be557937966820cf2795ac14100b911dbbd667d9078d2ebb060"
       }
     ],
     "pwa_assets_retained": [
@@ -675,84 +579,28 @@
     "auth_boundaries": [
       {
         "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/institutional/delivery-teams",
+        "path": "/v1/institutional/findings/00000000-0000-4000-8000-000000000000/corrective-captures",
         "method": "POST",
         "http": 401,
         "no_store": true
       },
       {
         "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/institutional/delivery-teams/00000000-0000-4000-8000-000000000000/revise",
-        "method": "POST",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/institutional/delivery-teams/00000000-0000-4000-8000-000000000000/accept",
-        "method": "POST",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/institutional/delivery-teams/00000000-0000-4000-8000-000000000000/retire",
-        "method": "POST",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/institutional/delivery-teams?facility_id=00000000-0000-4000-8000-000000000000",
-        "method": "GET",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/institutional/delivery-teams/00000000-0000-4000-8000-000000000000/history",
+        "path": "/v1/institutional/findings/00000000-0000-4000-8000-000000000000/corrective-captures",
         "method": "GET",
         "http": 401,
         "no_store": true
       },
       {
         "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/institutional/delivery-teams",
+        "path": "/v1/institutional/findings/00000000-0000-4000-8000-000000000000/corrective-captures",
         "method": "POST",
         "http": 401,
         "no_store": true
       },
       {
         "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/institutional/delivery-teams/00000000-0000-4000-8000-000000000000/revise",
-        "method": "POST",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/institutional/delivery-teams/00000000-0000-4000-8000-000000000000/accept",
-        "method": "POST",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/institutional/delivery-teams/00000000-0000-4000-8000-000000000000/retire",
-        "method": "POST",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/institutional/delivery-teams?facility_id=00000000-0000-4000-8000-000000000000",
-        "method": "GET",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/institutional/delivery-teams/00000000-0000-4000-8000-000000000000/history",
+        "path": "/v1/institutional/findings/00000000-0000-4000-8000-000000000000/corrective-captures",
         "method": "GET",
         "http": 401,
         "no_store": true
@@ -760,41 +608,8 @@
     ]
   },
   "production_before": {
-    "observed_at": "2026-11-11T08:55:57.367103+00:00",
-    "phase": "teams_before",
-    "aggregate_only": true,
-    "schema_version": 9,
-    "business_counts": {
-      "accounts": 1,
-      "units": 0,
-      "facilities": 0,
-      "clinical_sites": 0,
-      "clinical_records": 0,
-      "clinical_events": 0,
-      "reporting_definitions": 0,
-      "reporting_obligations": 0,
-      "reporting_returns": 0,
-      "reporting_snapshots": 0
-    },
-    "base_tables": 102,
-    "protected_history_tables": 53,
-    "projects": [
-      {
-        "name": "lw-health-intelligence-api",
-        "deployment_id": "dpl_syTKu3Zig3eoKgeGqE31PHUf5aAp",
-        "readyState": "READY"
-      },
-      {
-        "name": "lw-health-intelligence",
-        "deployment_id": "dpl_Ei4eFbpv7gNn1qubRK6BXFUCt2re",
-        "readyState": "READY"
-      }
-    ],
-    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
-  },
-  "production_after": {
-    "observed_at": "2026-11-11T09:15:43.881722+00:00",
-    "phase": "teams_after",
+    "observed_at": "2026-11-11T11:17:12.538664+00:00",
+    "phase": "capture_before",
     "aggregate_only": true,
     "schema_version": 9,
     "business_counts": {
@@ -825,8 +640,39 @@
     ],
     "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
   },
-  "production_domain_records_seeded": 0,
-  "notification_dispatch_invoked": false,
+  "production_after": {
+    "observed_at": "2026-11-11T11:34:55.482503+00:00",
+    "phase": "capture_after",
+    "aggregate_only": true,
+    "schema_version": 9,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 102,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_2JUizpncxn31TcBypWX24e8P9skx",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_7ZBWs788GTeT3cZn9jYGJFs4TyKq",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  },
   "preservation": {
     "controlled_documents_unchanged": 78,
     "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf",
@@ -851,116 +697,74 @@
       }
     }
   },
-  "regression_boundary": {
-    "initial_application_flow": "Both current Neon scenarios execute actual initial screening/evidence review/inspection/independent recognition and actual renewal bootstrap.",
-    "individual_plans": "Existing individually accountable corrective tests pass, including original-shaped/null-team receipt replay; new team binding is explicit.",
-    "pending_team_changes": "Revision/retirement/handover and original-source preservation tested in CI; current Neon guards include scope/refusal/completion/retirement, plus the actual team race.",
-    "historical_completed_team": "Original accepted team snapshot remains valid for independently completed work after retirement, subject to current evidence and positive-decision checks.",
-    "not_requalified": "Prior screening/withdrawal, resubmission/withdrawal and individual agreement/revision PG races, capacity and recovery receipts remain historical."
+  "retained_failed_attempts": [],
+  "local_checks": {
+    "capture_matrix": "3 passed /1 PG skip",
+    "compatibility": "13 passed /3 PG skips",
+    "typescript": "PASSED",
+    "final_source_authority": "EXACT_CI_AND_PINNED_NEON"
   },
-  "conformance": {
-    "partial_field_proofs": 21,
-    "partial_state_families": 2,
-    "actual_routes": 310,
-    "indexed_models": 66,
-    "counts": {
-      "forms": {
-        "PARTIAL_CANDIDATE_MAPPING": 47,
-        "OPEN_EXPLICIT_MAPPING_GAP": 4
-      },
-      "fields": {
-        "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS": 21,
-        "OPEN_EXPLICIT_FIELD_MAPPING_GAP": 298,
-        "PARTIAL_NAME_OR_ALIAS_CANDIDATE": 36
-      },
-      "screens": {
-        "OPEN_SEMANTIC_CONFORMANCE_GAP": 75
-      },
-      "state_families": {
-        "OPEN_SEMANTIC_CONFORMANCE_GAP": 28,
-        "PARTIAL_ENGINEERING_TRANSITION_PROOF_EXCEPTION_OPEN": 2
-      },
-      "interfaces": {
-        "OPEN_TYPED_EXTENSION_RECONCILIATION": 67,
-        "PARTIAL_PATH_MATCH_SEMANTICS_UNQUALIFIED": 1,
-        "OPEN_ROUTE_MAPPING_GAP": 14
-      }
-    },
-    "register": "conformance/canonical-register.json"
+  "retained_fixture_failure": {
+    "artifact": ".toolchain/capture-targeted-attempt1.log",
+    "outcome": "1 failed /2 passed /1 PG skip",
+    "cause": "Fixture treated a decision receipt as a case row; fresh read of actual case version corrected it. Production guards unchanged."
   },
-  "extension": "delivery-team-extension.md",
   "formal_requirements": 200,
   "formal_cases": 111,
   "formal_status": "NOT_RUN",
-  "prior_runtime_commit": "021a469978d02b5187c10afe26f5a76e04818ea7",
-  "prior_release": "2026-11-11-corrective-plan-evidence.json",
-  "current_backlog": "2026-11-11-delivery-team-readiness-backlog.csv",
-  "prior_capacity_evidence": "2026-11-10-capacity-and-conformance-evidence.json",
-  "capacity_requalified": false,
-  "prior_recovery_evidence": "2026-11-10-service-release-assurance-evidence.json",
-  "backup_cadence_established": false,
-  "scanner_qualified": false,
-  "tickets": {
-    "LWH-AUD-20261109-014": "ACCEPTED_TEAM_REFERENCE_SLICE_DELIVERED_TAGGED_CAPTURE_INITIAL_LINKAGE_ROSTER_POLICY_AND_ACCEPTANCE_OPEN"
+  "conformance": {
+    "partial_field_proofs": 21,
+    "explicit_field_gaps": 298,
+    "candidates": 36,
+    "screens_open": 75,
+    "actual_routes": 312,
+    "indexed_models": 69
   },
-  "remaining_acceptance_gates": [
-    "014 tagged capture/missingness, safe initial criterion-to-finding linkage, complete roster/team policy and full notice/appeal/offline/actual-role semantics; 298 field gaps/36 candidates/75 open screen qualifications.",
-    "002 sustained maximum-volume simultaneous facilities/correction/replay/contention, provider telemetry/cold-start classification and adopted targets.",
-    "003 actual permitted scanner qualification; file-dependent operation remains excluded.",
-    "004 monitored backup cadence, independent copy/key custody, adopted RPO/RTO and representative staffed resumption.",
-    "019 full provider/service sandbox, dependency/licence/legacy review and qualified paired-code/new-data rollback/resumption.",
-    "Actual Director nominations/deputies, facility/criteria/forms/calendar/disclosure/service authority/funded ownership; independent security/privacy/clinical/finance and actual-role/device/accessibility/low-bandwidth UAT."
-  ],
+  "current_backlog": "2026-11-11-corrective-capture-readiness-backlog.csv",
+  "extension": "corrective-capture-extension.md",
+  "prior_runtime_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
+  "prior_release": "2026-11-11-delivery-team-evidence.json",
+  "capacity_requalified": false,
+  "scanner_qualified": false,
+  "backup_cadence_established": false,
+  "production_business_records_seeded": 0,
+  "notification_dispatch_invoked": false,
+  "playwright_installed": false,
   "additional_hosts_added": 0,
   "dependencies_added": 0,
-  "playwright_installed": false,
-  "canonical_documents_verified": 78,
-  "report": "2026-11-11-delivery-team-release.md",
-  "next_phase": "Director-first tagged FRM-010 capture/missingness and safe initial finding linkage; complete roster/team policy and all operating qualification gates remain open.",
+  "remaining_acceptance_gates": [
+    "014 safe initial finding bridge, broader generic capture, full roster/team policy, notice/appeal/offline and actual-role semantics.",
+    "002 sustained maximum-volume contention/provider telemetry/adopted targets.",
+    "003 actual permitted scanner; uploads remain excluded.",
+    "004 monitored cadence/independent copy-key custody/adopted RPO-RTO/staffed resumption.",
+    "019 full sandbox/dependency/licence/legacy review and qualified paired-code/new-data rollback.",
+    "Actual Director nominations/deputies/facilities/criteria/forms/calendar/disclosure/service authority/funding; security/privacy/clinical/finance and actual-role/device/accessibility/low-bandwidth acceptance."
+  ],
+  "report": "2026-11-11-corrective-capture-release.md",
   "log_hashes": [
     {
-      "path": ".toolchain/team-targeted-attempt1.log",
-      "sha256": "60d3ffdb3144ac85f9bd3d640df72dee035c83f11da4965979e92647d2c8a752"
+      "path": ".toolchain/capture-targeted-attempt1.log",
+      "sha256": "1950e531f7648c9cc894016fefa8f655a37e8e56d5be9d4127ac3256a7b26d4e"
     },
     {
-      "path": ".toolchain/team-targeted-final.log",
-      "sha256": "2ed9df049e94c4791e3f5af488119e298d5f40ed4716388825ac898ea88abab9"
+      "path": ".toolchain/capture-targeted-final.log",
+      "sha256": "fdd3a842e473f1f251543b6398ee7c8c90a66e5b3273d73a1ba7547c37ec9154"
     },
     {
-      "path": ".toolchain/team-handover-scope.log",
-      "sha256": "30cf3b173588153e1925ac60ccf79d6a17f84a59e76cec7ec046b3be082f0763"
+      "path": ".toolchain/capture-compatibility.log",
+      "sha256": "a124be2586779388160b628e4aba39c5d0a93cc6df3114753f1d921c7ca0c5b9"
     },
     {
-      "path": ".toolchain/team-complete-matrix.log",
-      "sha256": "1b502c91365a8e662d9260c66aaf175749689c4c69c8dc7f774d90886c212535"
-    },
-    {
-      "path": ".toolchain/team-compatibility.log",
-      "sha256": "b5315cdee3851dcddf37995995032242aaf8bba4ee881f875adc43c1b7756dcc"
-    },
-    {
-      "path": ".toolchain/team-typescript.log",
+      "path": ".toolchain/capture-typescript.log",
       "sha256": "25d7147b27a1bf9673440923cb65c03c0b922cf2c89d5dbdbf3930c2f6b5bea0"
     },
     {
-      "path": ".toolchain/team-neon-attempt1.log",
-      "sha256": "c54bbbe38516a8ee82f89f187f4366dceea801a91038a10a61bbe93780f67cb0"
+      "path": ".toolchain/capture-neon-proof.log",
+      "sha256": "abc9efc28360ef5c9f75dd1bf44f7997aaff3ae105df8db1564c7d1f62ae95f7"
     },
     {
-      "path": ".toolchain/team-neon-attempt2-stderr.log",
-      "sha256": "869bf0a4d763ca003f626d31d0b38bf70eb66c8cf49653039bc9be91898c4510"
-    },
-    {
-      "path": ".toolchain/team-neon-proof.log",
-      "sha256": "c5c1fd3323461f67830a3975ef1bacfe4b32f4ab78a955b2bd28fba7dbbdc76d"
-    },
-    {
-      "path": ".toolchain/team-cloud-check-attempt1.jsonl",
-      "sha256": "41b43d05a8788e4b3404e7ec94ed8f7c4398001a57cee7e55d4922bb6d5b0093"
-    },
-    {
-      "path": ".toolchain/team-cloud-check.jsonl",
-      "sha256": "9e4285c1d2dda004d92d6a14714fb378816b7ce5d2186416fde66a5c205e76db"
+      "path": ".toolchain/capture-cloud-check.jsonl",
+      "sha256": "4cf97ed81d2403cbbfdb35235557795eaeab7fbe1c2759e553cd983d7a1f8825"
     }
   ]
 }
