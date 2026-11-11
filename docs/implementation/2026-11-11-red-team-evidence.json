@@ -1,0 +1,1030 @@
+{
+  "audit": "2026-11-11-red-team",
+  "recorded_at": "2026-11-11T19:05:57.914555+00:00",
+  "audited_repository_head": "addd1ad917536f740445be3b40bad06846d337d3",
+  "deployed_runtime": "6de5ddb87b5428df371e6159cd1264afa7a52e24",
+  "audit_changes": "DOCUMENTATION_ONLY_NO_DEPLOYMENT_MIGRATION_BUSINESS_SEED_OR_DISPATCH",
+  "release_inventory_sha256": "6857802a552f3d0da1b33e1dae76b24525fe9ddd534d90bbdf05773346f9d0c9",
+  "release_inventory_unchanged_required": true,
+  "release_evidence": "2026-11-11-initial-source-evidence.json",
+  "release_evidence_sha256": "6857802a552f3d0da1b33e1dae76b24525fe9ddd534d90bbdf05773346f9d0c9",
+  "readiness_dimensions": {
+    "code_delivery": "DEPLOYED_SUBSTANTIAL_CORE_SCOPE_PARTIAL",
+    "engineering_evidence": "BOUNDED_SUCCESS_WITH_NEW_REPRODUCED_AVAILABILITY_GAP",
+    "operating_adoption": "INCOMPLETE_NO_ACTUAL_DIRECTOR_LOOP",
+    "full_suite_acceptance": "200_REQUIREMENTS_111_CASES_NOT_RUN"
+  },
+  "fresh_observation": {
+    "observed_at": "2026-11-11T18:54:08.158333+00:00",
+    "phase": "redteam_audit",
+    "aggregate_only": true,
+    "schema_version": 9,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 102,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_BRBXrzAxXVboSZS3dRNLk1iSmHkJ",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_FVisAWdnT2SemRxRvRpSQw8raKGU",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  },
+  "fresh_provider_metadata": {
+    "observed_at": "2026-11-11T18:56:33.087464+00:00",
+    "scope": "READ_ONLY_METADATA_NO_DECRYPTED_ENVIRONMENT_OR_BUSINESS_RECORDS",
+    "additional_aggregate_counts": {
+      "operators": 0,
+      "criteria": 0,
+      "applications": 0,
+      "evidence": 0,
+      "inspections": 0,
+      "decisions": 0,
+      "control_policy_packages": 0,
+      "control_site_packages": 0,
+      "control_clinical_coverage": 0,
+      "control_assurance_runs": 22,
+      "institutional_cases": 0,
+      "institutional_findings": 0,
+      "institutional_responses": 0,
+      "institutional_decisions": 0,
+      "institutional_journal": 0
+    },
+    "current_grants": [
+      {
+        "role": "PLATFORM_ADMIN",
+        "count": 1
+      },
+      {
+        "role": "REGISTRY_STEWARD",
+        "count": 1
+      }
+    ],
+    "retained_link_fixture_schemas": 0,
+    "projects": {
+      "lw-health-intelligence-api": {
+        "active_deployment": "dpl_BRBXrzAxXVboSZS3dRNLk1iSmHkJ",
+        "ready_state": "READY",
+        "source_commit": "6de5ddb87b5428df371e6159cd1264afa7a52e24",
+        "sso_protection": {
+          "deploymentType": "all_except_custom_domains"
+        },
+        "temporary_automation_token_count": 0,
+        "production_scanner_host_entry_present": false,
+        "entry_presence_is_not_runtime_value_or_qualification": true
+      },
+      "lw-health-intelligence": {
+        "active_deployment": "dpl_FVisAWdnT2SemRxRvRpSQw8raKGU",
+        "ready_state": "READY",
+        "source_commit": "6de5ddb87b5428df371e6159cd1264afa7a52e24",
+        "sso_protection": {
+          "deploymentType": "all_except_custom_domains"
+        },
+        "temporary_automation_token_count": 0,
+        "production_scanner_host_entry_present": false,
+        "entry_presence_is_not_runtime_value_or_qualification": true
+      }
+    }
+  },
+  "fresh_runtime_ci_recheck": {
+    "commit": "6de5ddb87b5428df371e6159cd1264afa7a52e24",
+    "run_id": 43018352401,
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/43018352401",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 130515005036,
+        "name": "python",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 130515005493,
+        "name": "web",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 130515006159,
+        "name": "secrets-scan",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "python": {
+      "passed_counts": [
+        "289"
+      ],
+      "client_pass": [],
+      "build_compiled": false
+    },
+    "web": {
+      "passed_counts": [],
+      "client_pass": [
+        "11",
+        "4"
+      ],
+      "build_compiled": true
+    }
+  },
+  "fresh_cloud_checks": [
+    {
+      "target": "api",
+      "deployment_id": "dpl_BRBXrzAxXVboSZS3dRNLk1iSmHkJ",
+      "state": "READY",
+      "actual_source_hashes_verified": 72
+    },
+    {
+      "target": "web",
+      "deployment_id": "dpl_FVisAWdnT2SemRxRvRpSQw8raKGU",
+      "state": "READY",
+      "actual_source_hashes_verified": 33
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/health",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/ready",
+      "http": 200,
+      "cache_control": "no-store",
+      "schema_version": 9,
+      "reporting": "READY"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/auth/me",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/service-capabilities",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/clinical/sites",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/templates",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/template-proposals",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/jobs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/reliability",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/operations/assurance-runs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/institutional/articles",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/knowledge",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/safety-cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/reporting/snapshots",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence-api.vercel.app",
+      "path": "/v1/auth/login",
+      "method": "POST",
+      "http": 401,
+      "elapsed_seconds": 2.759,
+      "invalid_credentials_rejected": true,
+      "session_created": false
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/health",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/ready",
+      "http": 200,
+      "cache_control": "no-store",
+      "schema_version": 9,
+      "reporting": "READY"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/auth/me",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/service-capabilities",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/clinical/sites",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/templates",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/template-proposals",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/jobs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/reliability",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/operations/assurance-runs",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/context",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/institutional/articles",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/knowledge",
+      "http": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/safety-cases",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/reporting/snapshots",
+      "http": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "origin": "https://lw-health-intelligence.vercel.app",
+      "path": "/v1/auth/login",
+      "method": "POST",
+      "http": 401,
+      "elapsed_seconds": 2.782,
+      "invalid_credentials_rejected": true,
+      "session_created": false
+    },
+    {
+      "frontend_page": "/",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/care",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/directorate",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/reporting-templates",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/operations",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/recover",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/governance",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/learn",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/activate",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/directory",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/my-health",
+      "http": 200,
+      "platform_title_verified": true
+    },
+    {
+      "frontend_page": "/patient-access",
+      "http": 200,
+      "platform_title_verified": true
+    }
+  ],
+  "fresh_register_check": {
+    "register": "docs/implementation/conformance/canonical-register.json",
+    "checked": true,
+    "counts": {
+      "forms": {
+        "PARTIAL_CANDIDATE_MAPPING": 47,
+        "OPEN_EXPLICIT_MAPPING_GAP": 4
+      },
+      "fields": {
+        "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS": 21,
+        "OPEN_EXPLICIT_FIELD_MAPPING_GAP": 298,
+        "PARTIAL_NAME_OR_ALIAS_CANDIDATE": 36
+      },
+      "screens": {
+        "OPEN_SEMANTIC_CONFORMANCE_GAP": 75
+      },
+      "state_families": {
+        "OPEN_SEMANTIC_CONFORMANCE_GAP": 28,
+        "PARTIAL_ENGINEERING_TRANSITION_PROOF_EXCEPTION_OPEN": 2
+      },
+      "interfaces": {
+        "OPEN_TYPED_EXTENSION_RECONCILIATION": 67,
+        "PARTIAL_PATH_MATCH_SEMANTICS_UNQUALIFIED": 1,
+        "OPEN_ROUTE_MAPPING_GAP": 14
+      }
+    }
+  },
+  "preservation": {
+    "controlled_documents_unchanged": 78,
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf",
+    "native_mapping_sha256": "46f10416b6640999033caf1f8bd44ce5dc617223f7402650aa43236965155778",
+    "2026-11-09-audit-requirements.csv": {
+      "rows": 200,
+      "status_fields": {
+        "formal_verification_status": {
+          "NOT_RUN": 200
+        }
+      }
+    },
+    "2026-11-09-audit-acceptance-cases.csv": {
+      "rows": 111,
+      "status_fields": {
+        "canonical_execution_status": {
+          "NOT_RUN": 111
+        },
+        "audit_execution_status": {
+          "NOT_EXECUTED_AS_FORMAL_ACCEPTANCE": 111
+        }
+      }
+    }
+  },
+  "local_checks": {
+    "result": "7 passed /1 warning",
+    "meaning": "Six existing guard regressions plus one audit reproduction that confirms the current gap; no remediation claim",
+    "postgres_races_rerun": false,
+    "full_suite_rerun": false,
+    "warning": "Existing Starlette TestClient/httpx deprecation; no package installed"
+  },
+  "auth_budget_reproduction": {
+    "reproduction": "CONFIRMED_APPLICATION_BUDGET_IS_IDENTITY_ONLY",
+    "same_local_client": true,
+    "fixed_identity_http": [
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      429
+    ],
+    "rotated_identity_http": [
+      401,
+      401
+    ],
+    "rate_limit_rows": 3,
+    "accounts": 0,
+    "production_requests": 0,
+    "provider_edge_controls_tested": false,
+    "authentication_bypassed": false,
+    "passing_test_means_gap_observed_not_mitigated": true
+  },
+  "reproduction_source": "\"\"\"Audit reproduction only: a passing check confirms the observed availability gap.\"\"\"\nimport json,sys\nfrom pathlib import Path\nsys.path.insert(0,str(Path.cwd()/'tests/integration'))\nfrom test_platform_institutional import runtime,ORIGIN,run\nfrom lw_care_api.platform import db\nfrom sqlalchemy import select,func\n\ndef test_rotating_identity_gets_fresh_budget_from_same_local_client(runtime):\n app,client,_=runtime\n def attempt(email):\n  return client.post('/v1/auth/login',headers={'Origin':ORIGIN},json={'email':email,'password':'Wrong-synthetic-password-only','otp':'123456'}).status_code\n fixed=[attempt('audit-first@test.invalid') for _ in range(9)]\n rotated=[attempt('audit-second@test.invalid'),attempt('audit-third@test.invalid')]\n assert fixed==[401]*8+[429]\n assert rotated==[401,401]\n async def counts():\n  async with app.state.database.transaction() as s:\n   return {'rate_limit_rows':await s.scalar(select(func.count()).select_from(db.rate_limits)),'accounts':await s.scalar(select(func.count()).select_from(db.accounts))}\n observed=run(counts());assert observed=={'rate_limit_rows':3,'accounts':0}\n result={'reproduction':'CONFIRMED_APPLICATION_BUDGET_IS_IDENTITY_ONLY','same_local_client':True,'fixed_identity_http':fixed,'rotated_identity_http':rotated,**observed,'production_requests':0,'provider_edge_controls_tested':False,'authentication_bypassed':False,'passing_test_means_gap_observed_not_mitigated':True}\n (Path.cwd()/'.toolchain/redteam-auth-budget.json').write_text(json.dumps(result,indent=2)+'\\n',encoding='utf-8')\n",
+  "prior_runtime_neon_proof_retained_not_rerun": {
+    "scenarios": [
+      {
+        "scenario": "source_guards_and_resolution",
+        "result": "EXACT_HISTORICAL_NEGATIVE_SOURCE_LINK_AND_RETRACTION_NEVER_SUBSTITUTE_FOR_CURRENT_CORRECTIVE_WORK"
+      },
+      {
+        "scenario": "concurrent_source_confirmation",
+        "result": "ONE_EXACT_SOURCE_ASSOCIATION_FOR_CONCURRENT_DISTINCT_INTENTS_NO_FINDING_TRANSITION"
+      }
+    ],
+    "schema_removed": true,
+    "history_guards": 6,
+    "production_aggregates": 21,
+    "failed_attempts": [
+      {
+        "artifact": ".toolchain/link-neon-attempt1.json",
+        "sha256": "d41fdf526226f3915f13bba69fd50bd9525f85d5f2e0d358c07e0a6d7f617709",
+        "receipt": {
+          "status": "INTERRUPTED_NO_PASS",
+          "qualification": "LOCAL_ASGI_POOLED_NEON_NOT_CAPACITY_OR_OPERATING_ACCEPTANCE",
+          "scenarios": [],
+          "schema_version": 9,
+          "evidence_fixture": "LABELLED_METADATA_ONLY_NOT_SCANNER_QUALIFICATION",
+          "synthetic_evidence_valid_minutes": 60,
+          "clock_override": "NONE",
+          "history_fixture": "NONE",
+          "disposable_schema_removed": true,
+          "source_commit": "6de5ddb87b5428df371e6159cd1264afa7a52e24",
+          "disposable_schema": "lwh_link_verify_05582ed3dca5427081061e2ba50a20a4",
+          "production_before": {
+            "accounts": 1,
+            "units": 0,
+            "operators": 0,
+            "facilities": 0,
+            "criteria": 0,
+            "applications": 0,
+            "evidence": 0,
+            "inspections": 0,
+            "decisions": 0,
+            "clinical_sites": 0,
+            "clinical_records": 0,
+            "clinical_events": 0,
+            "reporting_definitions": 0,
+            "reporting_obligations": 0,
+            "reporting_returns": 0,
+            "reporting_snapshots": 0,
+            "institutional_cases": 0,
+            "institutional_findings": 0,
+            "institutional_responses": 0,
+            "institutional_decisions": 0,
+            "institutional_journal": 0
+          },
+          "running_scenario": "source_guards_and_resolution",
+          "failure": {
+            "type": "PROCESS_ENDED_WITHOUT_FINAL_RECEIPT"
+          },
+          "production_after": {
+            "accounts": 1,
+            "units": 0,
+            "operators": 0,
+            "facilities": 0,
+            "criteria": 0,
+            "applications": 0,
+            "evidence": 0,
+            "inspections": 0,
+            "decisions": 0,
+            "clinical_sites": 0,
+            "clinical_records": 0,
+            "clinical_events": 0,
+            "reporting_definitions": 0,
+            "reporting_obligations": 0,
+            "reporting_returns": 0,
+            "reporting_snapshots": 0,
+            "institutional_cases": 0,
+            "institutional_findings": 0,
+            "institutional_responses": 0,
+            "institutional_decisions": 0,
+            "institutional_journal": 0
+          },
+          "production_domain_counts_unchanged": true,
+          "original_raw_sha256": "7fb26798f52beb5e1f34f3a7324c0c3de949cc967745bdfb9850d7ba0add66de"
+        }
+      }
+    ]
+  },
+  "current_backlog": "2026-11-11-initial-source-readiness-backlog.csv",
+  "original_ticket_count": 20,
+  "formal_requirements": 200,
+  "formal_cases": 111,
+  "formal_status": "NOT_RUN",
+  "findings": [
+    {
+      "finding_id": "RT-001",
+      "severity": "HIGH",
+      "category": "TECHNICAL_AVAILABILITY",
+      "evidence_class": "LOCAL_REPRODUCTION_AND_SOURCE_CONFIRMED",
+      "backlog_ticket_suffixes": "010;002;019",
+      "finding": "Rotating login identities obtain independent application budgets",
+      "observed_evidence": "Eight attempts to one unknown email returned 401; ninth 429. Two other emails from the same local client each returned 401 and created two more persistent limiter rows. No authentication bypass or production load test.",
+      "source_anchors": "main.py:422;main.py:502;main.py:519;security.py:26",
+      "risk": "Account-only throttling does not bound total password-verification cost or limiter-key growth across changing identities. Edge protection was not verified.",
+      "next_action": "Implement trusted-client and aggregate admission limits, bounded TTL/key growth and explicit saturation behavior; preserve per-account limits/MFA and reject spoofed proxy identity. Qualify within existing stack.",
+      "required_owner_roles_not_appointments": "Platform/security engineering; provider operator",
+      "exit_evidence": "Changing identities and concurrent bursts are bounded without account enumeration or MFA weakening; trusted proxy behavior, state growth and contention measured.",
+      "status": "NEXT_ENGINEERING_PRIORITY"
+    },
+    {
+      "finding_id": "RT-002",
+      "severity": "CRITICAL_READINESS_GATE",
+      "category": "OPERATING",
+      "evidence_class": "FRESH_AGGREGATES_CONFIRMED",
+      "backlog_ticket_suffixes": "005;006;008;020",
+      "finding": "No actual Director operating loop or independent roster",
+      "observed_evidence": "One account; two grants belong to that one account. Zero facilities, criteria, applications, reporting definitions/obligations/returns/snapshots, activation packages, site packages and clinical coverage.",
+      "source_anchors": "redteam-provider.json;phase-a-observation-redteam_audit.json",
+      "risk": "The real registration-to-affiliation-to-return-to-independent-verification-to-permitted-release-to-accepted-outcome loop is unobserved.",
+      "next_action": "Obtain actual nominations/deputies, approved facility and criteria, forms/calendar/disclosure, scoped authority and funded support. No synthetic operating records.",
+      "required_owner_roles_not_appointments": "Directorate and actual accountable institutional owners",
+      "exit_evidence": "Attributable real decisions plus witnessed complete Director loop and accepted intervention/outcome.",
+      "status": "BLOCKS_OPERATING_PILOT"
+    },
+    {
+      "finding_id": "RT-003",
+      "severity": "CRITICAL_READINESS_GATE",
+      "category": "ACCEPTANCE",
+      "evidence_class": "FRESH_REGISTER_CONFIRMED",
+      "backlog_ticket_suffixes": "009;013",
+      "finding": "No executed full-suite acceptance",
+      "observed_evidence": "All 200 requirements and 111 formal cases remain NOT_RUN; automated engineering checks have different populations and purposes.",
+      "source_anchors": "2026-11-09-audit-requirements.csv;2026-11-09-audit-acceptance-cases.csv",
+      "risk": "A green build or a route count cannot establish clinical, privacy, finance or institutional acceptance.",
+      "next_action": "Execute applicable scope-mapped formal cases with actual independent roles; retain failed/blocked cases and attributable acceptance decisions.",
+      "required_owner_roles_not_appointments": "Domain QA and actual clinical/security/privacy/finance/institutional owners",
+      "exit_evidence": "Requirement-to-case-to-result-to-decision traceability with remaining scope explicit.",
+      "status": "BLOCKS_FULL_SUITE_ACCEPTANCE"
+    },
+    {
+      "finding_id": "RT-004",
+      "severity": "HIGH",
+      "category": "SERVICE_EXCLUSION",
+      "evidence_class": "FRESH_CONFIGURATION_PRESENCE_AND_SOURCE_CONFIRMED",
+      "backlog_ticket_suffixes": "003",
+      "finding": "Scanned files remain unavailable",
+      "observed_evidence": "No production scanner-host environment entry. Mandatory scan/private-storage capability is fail closed. Environment presence itself would still not qualify an engine.",
+      "source_anchors": "storage.py:13;storage.py:49;vercel platform environment-entry metadata",
+      "risk": "Required file evidence cannot be waived to make affiliation or care appear usable. A configured R2 bucket is not a scanner.",
+      "next_action": "Keep file-dependent operation excluded until actual clean/malicious/timeout/private-access/lineage qualification is achievable within authorised stack.",
+      "required_owner_roles_not_appointments": "Platform/security and actual evidence service owners",
+      "exit_evidence": "Real scanner negative/timeout/private-access tests and retained lineage, or explicit continuing exclusion from affected operating scope.",
+      "status": "BLOCKS_FILE_DEPENDENT_SCOPE"
+    },
+    {
+      "finding_id": "RT-005",
+      "severity": "CRITICAL_READINESS_GATE",
+      "category": "RECOVERY",
+      "evidence_class": "RETAINED_ENGINEERING_EVIDENCE_OPERATING_SERVICE_UNQUALIFIED",
+      "backlog_ticket_suffixes": "004;020",
+      "finding": "Recovery rehearsal is not an assured backup and resumption service",
+      "observed_evidence": "Retained schema-9 nonempty Neon/R2 and newer-data-preservation proof; 22 assurance records observed. No adopted cadence, independent copy/key custody, RPO/RTO or staffed resumption evidenced.",
+      "source_anchors": "2026-11-10-service-release-assurance.md;control/assurance.py:226",
+      "risk": "Manual business-empty production rehearsal cannot establish representative clinical recovery or supported service resumption.",
+      "next_action": "Establish monitored cadence and independent custody; qualify representative restoration, reconciliation and staffed resumption against owner-adopted RPO/RTO.",
+      "required_owner_roles_not_appointments": "Actual technical/custody/clinical continuity owners",
+      "exit_evidence": "Missed-backup detection, independent copy/key restoration, preserved newer events and witnessed accepted service resumption.",
+      "status": "BLOCKS_UNRESTRICTED_CLINICAL_OPERATION"
+    },
+    {
+      "finding_id": "RT-006",
+      "severity": "HIGH",
+      "category": "CLINICAL_SERVICE",
+      "evidence_class": "SOURCE_AND_FRESH_COVERAGE_AGGREGATE_CONFIRMED",
+      "backlog_ticket_suffixes": "007;020",
+      "finding": "Daily jobs do not provide timely staffed escalation",
+      "observed_evidence": "Packaged cron is 0 0 * * *; zero clinical coverage rows observed. Worker CLI existence is not a running staffed service. No jobs dispatch was invoked by this audit.",
+      "source_anchors": "vercel.platform.json:5;control/worker.py:32",
+      "risk": "Critical-result and urgent-request response times are unqualified.",
+      "next_action": "Define achievable actual primary/fallback coverage and escalation commitments; prove acknowledgement and continuity without adding deferred hosts.",
+      "required_owner_roles_not_appointments": "Actual clinical/service owners and platform operations",
+      "exit_evidence": "Supported timing and human response/fallback demonstrated with retained ownership through outage and handover.",
+      "status": "BLOCKS_TIME_CRITICAL_SERVICE_CLAIMS"
+    },
+    {
+      "finding_id": "RT-007",
+      "severity": "HIGH",
+      "category": "CONFORMANCE",
+      "evidence_class": "FRESH_CANONICAL_INTEGRITY_AND_RETAINED_BOUNDED_PROOFS",
+      "backlog_ticket_suffixes": "014;012",
+      "finding": "Bounded extensions do not establish canonical parity",
+      "observed_evidence": "51 forms/355 fields: 21 partial proofs, 298 explicit gaps, 36 candidates. All 75 screens open; 2 partial/28 open state families; 82 interfaces unqualified.",
+      "source_anchors": "conformance/canonical-register.json;conformance/director-proofs.json",
+      "risk": "Screening, accepted teams, corrective plans/capture and source links are delivered, while wider Director forms, state semantics and leadership defaults remain partial.",
+      "next_action": "Reconcile specific notice/service/appeal/expiry and broader Director-first field/permission/missingness/persistence contracts against existing code.",
+      "required_owner_roles_not_appointments": "Domain engineering, analyst, QA and actual policy owners",
+      "exit_evidence": "Bounded explicit extension decisions and negative state/permission/version/replay tests; no blanket parity claim.",
+      "status": "DIRECTOR_FIRST_ENGINEERING_OPEN"
+    },
+    {
+      "finding_id": "RT-008",
+      "severity": "HIGH",
+      "category": "CORE_SCOPE_HOSTING_CONSTRAINT",
+      "evidence_class": "SOURCE_AND_SCOPE_GAP_CONFIRMED",
+      "backlog_ticket_suffixes": "017",
+      "finding": "Full WAN-offline clinical operation is undelivered",
+      "observed_evidence": "PWA service worker provides public connection guidance and caches no charts/drafts. Full local API/DB/files/auth/department/jobs and semantic reconnect are not delivered; extra/local hosting remains deferred.",
+      "source_anchors": "apps/platform-web/public/my-health-sw.js:1;2026-11-10-capability-audit.csv",
+      "risk": "Full product readiness cannot be claimed while offline care is core and the needed runtime/hosting qualification is deferred.",
+      "next_action": "Retain offline as an explicit full-readiness blocker; obtain an actual scope/hosting decision before any future local deployment. Do not silently replace it with a PWA.",
+      "required_owner_roles_not_appointments": "Actual clinical/technical/custody owners",
+      "exit_evidence": "Authorised deployment boundary plus outage/auth/revocation/fencing/sync/reconciliation/printing/resumption evidence.",
+      "status": "BLOCKS_COMPLETE_OFFLINE_CORE_ACCEPTANCE"
+    },
+    {
+      "finding_id": "RT-009",
+      "severity": "HIGH",
+      "category": "CARE_CONTINUITY",
+      "evidence_class": "SOURCE_CONFIRMED_EXISTING_BACKLOG_GAP",
+      "backlog_ticket_suffixes": "011",
+      "finding": "Referral closure lacks a separate receiving-outcome contract",
+      "observed_evidence": "Referral actions are REQUEST/RECORD_ACCEPTANCE/TRANSFER/CLOSE/CANCEL. CLOSE accepts TRANSFERRED without its own receiving-outcome evidence; originating clinician remains the actor.",
+      "source_anchors": "clinical/contracts.py:500;clinical/service.py:1780",
+      "risk": "Transfer records cannot prove receiving receipt or clinical outcome; decline/unreachable paths remain incomplete.",
+      "next_action": "Implement complete receiving/decline/unreachable/outcome responsibility and patient-visible continuity with actual counterpart governance.",
+      "required_owner_roles_not_appointments": "Clinical/network engineering and actual referring/receiving owners",
+      "exit_evidence": "Wrong receiver, unreachable, decline, missing receipt/outcome and pending responsibility transitions qualified.",
+      "status": "CORE_REFERRAL_WORK_OPEN"
+    },
+    {
+      "finding_id": "RT-010",
+      "severity": "HIGH",
+      "category": "FINANCIAL_CORE_SCOPE",
+      "evidence_class": "RETAINED_IMPLEMENTATION_AND_SCOPE_GAP",
+      "backlog_ticket_suffixes": "015",
+      "finding": "Cash ledger does not complete care finance and sponsorship",
+      "observed_evidence": "Cash billing and balanced ledger are delivered; payer splits/claims/remittance/electronic settlement/controlled refunds and contracted sponsorship entitlement/reservation/reconciliation remain incomplete.",
+      "source_anchors": "clinical/continuity.py:333;clinical/continuity.py:357;2026-11-10-capability-audit.csv",
+      "risk": "A balanced cash ledger is not full financial service or sponsor accounting acceptance.",
+      "next_action": "Complete core finance/sponsorship under actual contracts and independent financial authority; keep optional ERP separate.",
+      "required_owner_roles_not_appointments": "Finance engineering and actual financial/programme owners",
+      "exit_evidence": "Concurrent entitlement/settlement/refund/reversal and reconciliation cases with accepted records and controls.",
+      "status": "CORE_FINANCE_SPONSORSHIP_OPEN"
+    },
+    {
+      "finding_id": "RT-011",
+      "severity": "HIGH",
+      "category": "SECURITY_PRIVACY",
+      "evidence_class": "CONTROLS_PRESENT_INDEPENDENT_REVIEW_UNEXECUTED",
+      "backlog_ticket_suffixes": "010",
+      "finding": "Independent threat/privacy/key/rights qualification is missing",
+      "observed_evidence": "MFA, current grants, no-store, protected histories, independent review and encrypted records have engineering evidence; this audit is not external independent penetration testing or privacy/clinical certification.",
+      "source_anchors": "security.py;main.py;personal/service.py;2026-11-10-service-release-assurance.md",
+      "risk": "No broad assurance follows from selected guard tests. Key rotation/custody, rights/retention/exit, tenant boundaries and incident operation require review.",
+      "next_action": "Conduct authorised independent security/privacy and dependency review with current scope; qualify abuse resistance, keys/rights/retention/custody and incident operation.",
+      "required_owner_roles_not_appointments": "Independent security/privacy assessors and actual custodians",
+      "exit_evidence": "Traceable threat/access/dependency/privacy findings closed or explicitly accepted by actual owners; key/rights drills witnessed.",
+      "status": "BLOCKS_UNRESTRICTED_SENSITIVE_SERVICE"
+    },
+    {
+      "finding_id": "RT-012",
+      "severity": "HIGH",
+      "category": "CAPACITY",
+      "evidence_class": "RETAINED_ACTUAL_CLOUD_BOUNDS_NOT_SUSTAINED_ACCEPTANCE",
+      "backlog_ticket_suffixes": "002",
+      "finding": "Representative sustained capacity remains unqualified",
+      "observed_evidence": "Prior actual Vercel/Neon 5000-record/20000-event bounds and explicit overflow refusal exist. Other simultaneous facility had no source load; no representative sustained maximum-volume correction/contention/provider telemetry/adopted targets.",
+      "source_anchors": "2026-11-10-capacity-and-conformance.md;institutional/base.py:13;reporting/store.py:343",
+      "risk": "Global low-volume governance locks and per-request reconciliation can contend. Current local pooled Neon success does not qualify Vercel production capacity.",
+      "next_action": "Measure bounded representative simultaneous facilities, sustained correction/replay/contention and provider cold/warm/memory/duration against actual adopted targets.",
+      "required_owner_roles_not_appointments": "Performance/platform/data engineering and actual service owners",
+      "exit_evidence": "Complete-accounting bound/overflow behavior plus reproducible sustained provider measurements and adopted targets.",
+      "status": "CAPACITY_ACCEPTANCE_OPEN"
+    },
+    {
+      "finding_id": "RT-013",
+      "severity": "HIGH",
+      "category": "RELEASE_SUPPLY_CHAIN",
+      "evidence_class": "CONTROLS_VERIFIED_ACCEPTANCE_GAPS_RETAINED",
+      "backlog_ticket_suffixes": "019",
+      "finding": "Sandbox, supply-chain review and paired rollback remain open",
+      "observed_evidence": "Exact-CI/same-build/source/expected-parent promotion and probe revocation exist. Qualifiers share existing provider stack/DB connectivity; full service sandbox, dependency/licence review and newer-data-preserving paired rollback remain unqualified.",
+      "source_anchors": "scripts/platform_cloud_release.py:342;.github/workflows/ci.yml;.github/workflows/platform-vercel.yml",
+      "risk": "Six PG-only cases are skipped in SQLite CI. Latest release proves two selected Neon scenarios, not a full fresh rerun of all PG races. Expected-parent checks are not provider-side atomic CAS.",
+      "next_action": "Qualify least-privilege disposable proof isolation, repeatable PG release gates, complete dependency/licence/legacy surface disposition and schema-9-compatible rollback with concurrent newer data.",
+      "required_owner_roles_not_appointments": "Release/security/platform engineering and actual release/custody owners",
+      "exit_evidence": "Safe failure/cleanup receipts, verified code/schema pair, preserved newer events and accepted service resumption; no old DB restore.",
+      "status": "RELEASE_AND_ROLLBACK_ACCEPTANCE_OPEN"
+    },
+    {
+      "finding_id": "RT-014",
+      "severity": "MEDIUM",
+      "category": "ASSISTANCE_COUNTERPART_SCOPE",
+      "evidence_class": "INFRASTRUCTURE_ONLY_OR_UNQUALIFIED",
+      "backlog_ticket_suffixes": "016;018",
+      "finding": "AI readiness and interface placeholders are not adopted services",
+      "observed_evidence": "Free OpenRouter probe sends fixed public readiness text; no governed assistant is established. Selected-facility equipment/exchange/migration counterparts remain unqualified.",
+      "source_anchors": "integrations.py:49;2026-11-10-capability-audit.csv",
+      "risk": "Provider connectivity is not governed tools/memory/data routing, useful clinical assistance or LIS/PACS/settlement operation.",
+      "next_action": "Keep AI bounded to existing controls until approved use cases and injection/AI-off evaluations; select/approve facilities before real counterpart interface work.",
+      "required_owner_roles_not_appointments": "Actual clinical/data/technical/counterpart owners",
+      "exit_evidence": "Approved bounded AI safety and actual identity/version/quarantine/reconciliation/migration rollback evidence.",
+      "status": "DOWNSTREAM_QUALIFICATION_OPEN"
+    },
+    {
+      "finding_id": "RT-015",
+      "severity": "HIGH",
+      "category": "HUMAN_DEVICE_ACCEPTANCE",
+      "evidence_class": "AUTOMATED_HTTP_CLIENT_EVIDENCE_ONLY",
+      "backlog_ticket_suffixes": "013;009",
+      "finding": "Real-role device/accessibility/low-bandwidth journeys are unobserved",
+      "observed_evidence": "Fresh 12-page/source checks and retained client/PWA tests passed. They do not exercise actual operators, keyboard/screen-reader/device behavior or interrupted submissions under representative networks.",
+      "source_anchors": "apps/platform-web/src/app/api.ts;apps/platform-web/src/app/governance/InitialSourceLinks.tsx;2026-11-11-initial-source-release.md",
+      "risk": "A page returning 200 does not establish usability, safe subject switching or a workable clinical workflow.",
+      "next_action": "Execute actual manual role/device/accessibility/low-bandwidth UAT with denial, conflict, subject switch and interrupted action evidence. No Playwright installation.",
+      "required_owner_roles_not_appointments": "Actual users and usability/accessibility/domain QA",
+      "exit_evidence": "Witnessed workflows with defects corrected, failed cases retained and actual operating acceptance.",
+      "status": "HUMAN_UAT_OPEN"
+    }
+  ],
+  "capability_counts": {
+    "Partial": 22,
+    "Not delivered": 1,
+    "Infrastructure only": 1,
+    "Optional/deferred": 1
+  },
+  "files": {
+    "report": "2026-11-11-red-team-audit.md",
+    "evidence": "2026-11-11-red-team-evidence.json",
+    "findings": "2026-11-11-red-team-findings.csv",
+    "capabilities": "2026-11-11-red-team-capability-assessment.csv",
+    "roadmap": "2026-11-11-red-team-roadmap.csv",
+    "prompt": "2026-11-11-red-team-new-session-prompt.md"
+  },
+  "source_review_fingerprints": [
+    {
+      "path": "services/api/src/lw_care_api/platform/main.py",
+      "sha256": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/security.py",
+      "sha256": "f3aedde1ec9e5b230a37830d6ff4478c15f95ed917b106e27a4220bb05182dfd"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/storage.py",
+      "sha256": "b622b3650d653962d3927dd09f399c1f3ea4418a64c27f0be6c080eca639a907"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/config.py",
+      "sha256": "22e43dfcb3de3c6f00aeb535a7eee8677675d72b7b9c0372535eabfc4ecaee3b"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/integrations.py",
+      "sha256": "7c3f49fea274c0973534f04072ecf5ca6f46fdeada16329ff4387df2a3156524"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
+      "sha256": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/institutional/router.py",
+      "sha256": "809799acaaadb61b78996799618c41b991d9f498450597c9ed02cd587ff174fc"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/institutional/source_links.py",
+      "sha256": "e4bba7c9550fa53b7d5fad98e87abaa482e3dbe2e38354c9c189656a7aa44b9b"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/institutional/base.py",
+      "sha256": "f57b93dae929b49b0ee9316233673ad2db6ffd361d4f40dd9d8f58f6ecb2c593"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/institutional/master.py",
+      "sha256": "2df41a4775da6931eac6d2086c1717b1c83d8ca759472b4397d6bd6a37296a93"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/clinical/service.py",
+      "sha256": "edcf2bce9173ae162c8346b5fbfe311322e7fd4aef93f2ab512b0e1da811399c"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/clinical/contracts.py",
+      "sha256": "d4bf48539e61643fde5f2645a6fca41d4c0ea9f3461cb8aff1938a8275237c4d"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/clinical/continuity.py",
+      "sha256": "0438e2d5cf2d38e44eeb6093d5327ad35b83dd771d68fdfa540b0a0c4d4b1ff9"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/control/assurance.py",
+      "sha256": "7fdde09d6ce237a83c6571cba4d68b2c7ac92e457ba275655cf7ab6c6ceb9849"
+    },
+    {
+      "path": "services/api/src/lw_care_api/platform/control/worker.py",
+      "sha256": "46b5542319133c156b3171ac79f759b10ecb49a4572a60ccd8dc65358103ee85"
+    },
+    {
+      "path": "scripts/platform_cloud_release.py",
+      "sha256": "ad20487aa8347a81fe6d25d6af7f0be960e5c7a5c750421762056c6736d96999"
+    },
+    {
+      "path": "scripts/release_guard.py",
+      "sha256": "e597920a1a67b9c40db99e1813af6381dca4e59750487f61919712f21fad1b10"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "facf7126868e177fe04ee293c326605c698f81da1b8f9d9796d57e71ab07ab56"
+    },
+    {
+      "path": ".github/workflows/platform-vercel.yml",
+      "sha256": "11d878ebdba78a75d941f7ab59e1154d57c75edcf9fe979e7b152b086747828e"
+    },
+    {
+      "path": "vercel.platform.json",
+      "sha256": "57d552192d6eef5836475d383d21ed29f06c97cd86e11eadfc29e2d6febcdf04"
+    },
+    {
+      "path": "apps/platform-web/public/my-health-sw.js",
+      "sha256": "565eec504bf498481094d01c55959c9260089be28177794ea36e32b0654299e5"
+    },
+    {
+      "path": "apps/platform-web/next.config.mjs",
+      "sha256": "7eeb422544d6980ff2551119e68ae535b00365e0d291cbf52b4679654e018bb8"
+    },
+    {
+      "path": "apps/platform-web/src/app/api.ts",
+      "sha256": "5237b892ee2b4c05bb91bc64e996eaa517c654f2840cba949d1856e2b9705512"
+    },
+    {
+      "path": "apps/platform-web/package.json",
+      "sha256": "e5d382373ae4ca0bc2a85ea5e1bb3e9d83ebef7818eb5fa44d0afb9ca1125f3e"
+    },
+    {
+      "path": "requirements.platform.txt",
+      "sha256": "c33b1cbbbccf65ca1ba5b49b4fd00f722bf4c5f78988fc6b083c66a43cd20990"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "07f0a037f4389fd214ab3c24e8e5f7482b09d06e228a28c1cfff99c0a18a837f"
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "path": ".toolchain/redteam-local-checks.log",
+      "sha256": "8fcb32f4053b43165293e98f23312053948ce5ebcb970769d5068a6d86f38816"
+    },
+    {
+      "path": ".toolchain/redteam-auth-budget.json",
+      "sha256": "a24768783f7cc6f32875a31a17ad142a76724343f4c35cb2050bc9e431ed680f"
+    },
+    {
+      "path": ".toolchain/test_redteam_auth_budget.py",
+      "sha256": "bf46adc26659d24e76ab084ef4bbba526d3d1b75d672e5290fda2d405b02b990"
+    },
+    {
+      "path": ".toolchain/redteam-cloud-check.jsonl",
+      "sha256": "bf1ffcd88c12794dbdebe362a5d88a6715d2aa321b7d6e7cd3e6a5b4aced40e0"
+    },
+    {
+      "path": ".toolchain/redteam-register-check.log",
+      "sha256": "c4987d7631c9971355f1a365dc50a0e5d94d8518f9c8a67272ab52195290f275"
+    },
+    {
+      "path": ".toolchain/redteam-provider.json",
+      "sha256": "7b50d4910b768db1b4c4d9511c7213afdcd9dbaf7016ca5d6398f32ab79f6eac"
+    },
+    {
+      "path": ".toolchain/redteam-preservation.json",
+      "sha256": "84207db7779a58b80cb90cf8b4e3c24be06d1a1e9b2fba1f0d6b5be057d361d4"
+    },
+    {
+      "path": ".toolchain/phase-a-observation-redteam_audit.json",
+      "sha256": "5ce74adfe957e95994f06a69b0140eb52339fd08c9301704811c15c501172762"
+    }
+  ],
+  "limits": [
+    "Selected source and engineering review; not external independent penetration test or every-clause certification",
+    "No authenticated production business flow, notification/jobs dispatch, backup, private record read or decrypted provider environment",
+    "No live abuse/load test, new Neon qualification, device/manual UAT or new dependency/licence vulnerability certification",
+    "Provider edge abuse protection not tested; observed rate-budget gap does not demonstrate production outage or authentication bypass",
+    "Retained capacity/recovery/Neon evidence is historical execution, not fresh audit execution"
+  ],
+  "session_recommendation": "FINISH_AUDIT_AND_HANDOFF_HERE_START_NEXT_BOUNDED_IMPLEMENTATION_IN_A_FRESH_SESSION",
+  "runtime_deployed_by_audit": false,
+  "migration_run": false,
+  "playwright_installed": false,
+  "dependencies_added": 0,
+  "hosts_added": 0,
+  "operating_approvals_invented": false
+}
