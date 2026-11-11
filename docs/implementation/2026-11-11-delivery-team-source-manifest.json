@@ -1,0 +1,563 @@
+{
+  "runtime_commit": "20ed22a34e58fbcb9a0f3eaff48cf404229640c9",
+  "byte_identity": "PACKAGED_WORKSPACE_SOURCE_BYTES",
+  "targets": {
+    "api": {
+      "files": [
+        {
+          "file": "api/index.py",
+          "sha1": "5862f737eca9779a63a7e3684cae5a713c790000",
+          "sha256": "381079c81e64b3517bd96021028076e979c1864710692697435ebe975c6279a7"
+        },
+        {
+          "file": "requirements.txt",
+          "sha1": "11e733e4d76144c42be189df8c99752a31f40d10",
+          "sha256": "c33b1cbbbccf65ca1ba5b49b4fd00f722bf4c5f78988fc6b083c66a43cd20990"
+        },
+        {
+          "file": "services/api/src/lw_care_api/__init__.py",
+          "sha1": "f8f47dfaf0baa8cb3a2be803436f38bf10577431",
+          "sha256": "0873af693343467bf3c3ad9b56c95607499f9881893a21ea73d484314a283939"
+        },
+        {
+          "file": "services/api/src/lw_care_api/db/connection.py",
+          "sha1": "59f0fba94b69cb4fc4875f2ddde16fbc2a2f6944",
+          "sha256": "8c2bd27035a5cf6d16c3749b832ccb2d6c00240eaf229b24922003859803cfb4"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/__init__.py",
+          "sha1": "7c982b2a3f81dc2427992c2e894a02ece5000409",
+          "sha256": "dd62ac1690e4f96e62fc8ffa0fdf3213a2cb17768aa75efe6542fa3d36cc8526"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/application_workflow.py",
+          "sha1": "d1f391cbbc3ba4894e3c2100392dff1530c62c16",
+          "sha256": "2a638d00ea25e8df9658c702c8538a3759301b4374f19756771f8e7a54e8afd9"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/cli.py",
+          "sha1": "ec03906e1f0d49ff2d239f88264b308816430e05",
+          "sha256": "6b417473dd669f0524328c4d93fbed03e9c242f0ddc982207188bbaea41aa7fb"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/__init__.py",
+          "sha1": "e318bec50d06dae514108fa12fe4ee7f3aac2a52",
+          "sha256": "08dfbd8cf697807c989782fc7adac95cbae5c70bf0810931b0dc80d791c44eea"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/advanced.py",
+          "sha1": "27e2f9d205d5f99448e3553b502d045137e63ebd",
+          "sha256": "6cf7b7b98b44506e89f608770b960b8a4aa7038ea70c4dd91f7728200617b9d4"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/advanced_contracts.py",
+          "sha1": "a90c57c64706c2cdee148d4368aabff3fa828dc1",
+          "sha256": "65accb1b1a23c422db0545a6a6e7a81ad5fc001ffd86e06bf325f4f897786c21"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/continuity.py",
+          "sha1": "f88c5d669e7be524e6935c54088e0e6ca1907b9b",
+          "sha256": "0438e2d5cf2d38e44eeb6093d5327ad35b83dd771d68fdfa540b0a0c4d4b1ff9"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/contracts.py",
+          "sha1": "5a1fd252eb86f3bd04d4592acf5000ed8c31a75c",
+          "sha256": "d4bf48539e61643fde5f2645a6fca41d4c0ea9f3461cb8aff1938a8275237c4d"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/flow_index.py",
+          "sha1": "9f9592da5b68859cad22a1cc9dac37336dc122e8",
+          "sha256": "16fe0cfa616b8aafb2f0159fd773ab0d11ea42e06f21de4c5c0cc37244fb0c5f"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/router.py",
+          "sha1": "26547736616292113369077f1f656f276bbf0fcd",
+          "sha256": "987f1c9fb005ad85e1c5d9128181c435f4023509672d9621948374d07c356cfc"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/service.py",
+          "sha1": "6565af08c09d90b9b5254123ad664a0782182d01",
+          "sha256": "edcf2bce9173ae162c8346b5fbfe311322e7fd4aef93f2ab512b0e1da811399c"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/specialties.py",
+          "sha1": "f6acebbb3b266241c0ab41cce3da546455d29b82",
+          "sha256": "47449d6824b91231d6b8a28391b3dd8bee6ea962650cf5c63f9a37ec95c3cf3f"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/store.py",
+          "sha1": "d2e614fe137f2cd6c52a47f520f7225b062b1b5e",
+          "sha256": "3528a18e87dffed2403affc0db1693a1e3aa8f9e4d2d133f937802f07f945bf6"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/clinical/tables.py",
+          "sha1": "44ff854b1cd2668f8b00fdddfadba4cfd3600a3b",
+          "sha256": "1b4a0f0edcd9f638293131ea51735ed50d83af8308db0c305af2d71444043ee9"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/config.py",
+          "sha1": "059cd8e2e25b838401c0a9181853ebe0951410fa",
+          "sha256": "22e43dfcb3de3c6f00aeb535a7eee8677675d72b7b9c0372535eabfc4ecaee3b"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/contracts.py",
+          "sha1": "dd0ef91ff5e5f9caf98c24b9537af09ae811172b",
+          "sha256": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/__init__.py",
+          "sha1": "c7e2587c6f630e65021ff3d5887e71138781c6b8",
+          "sha256": "8f1a78a65861048f397b812de2306e4e811ca32626f04b28fb3c5034d2d6ade0"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/assurance.py",
+          "sha1": "5fd620ca29694db1671b0fbb054c23a75b0684af",
+          "sha256": "7fdde09d6ce237a83c6571cba4d68b2c7ac92e457ba275655cf7ab6c6ceb9849"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/continuity.py",
+          "sha1": "b99d152e7f6a4224a2161c8a2f71fa9692b4750a",
+          "sha256": "93af479fcb8b735f79581cacc7c461e68861b1e48a183b4a085727d5bb340fb7"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/contracts.py",
+          "sha1": "8d92c0979922f795bb50ba86fc20ea003c4d8f70",
+          "sha256": "42a67e5ece2347ba0b529f6982f2e9fd75787aca5e46f414d68b343e5f1864d2"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/jobs.py",
+          "sha1": "3b6d2f7662a186d7a0e72bbc4264b7ec7f666f87",
+          "sha256": "cbed9120400e85517704172838f075e9c4463b0e1b4f0a5bc147a6ad01a34fa5"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/offboarding.py",
+          "sha1": "5d2bd9c4ac931496f1f822906ca53f1f92bddccb",
+          "sha256": "39c2a4bcfdc4c2e0a3b355db836341aad49932689957548451a464398fafb35e"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/recovery.py",
+          "sha1": "d331a3cdd8861fa81c4728ee1d194a7e38dde5aa",
+          "sha256": "7c2184908c8e6869f53aeb365cde170ded96818df83aa7ce164adfb3fbb7745a"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/router.py",
+          "sha1": "1a567af04ee3a1a9c9c5ea0aef2252e0686da8d4",
+          "sha256": "f12fa25216f3422707a021004b8505e9a347a09daa2c5949d7cd569041893579"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/service.py",
+          "sha1": "25d9956736de77f2ccddec1b7b185a07b9c0ea32",
+          "sha256": "662c49fae982cd3d4d7100b58c811160ebe0f051b3bcc885ae1380c542a2d859"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/tables.py",
+          "sha1": "4e3e03d06e2e53cbfc4f7ee17ad96a87cc891e1a",
+          "sha256": "540b67f4ec5395b42cfe75c377dc8a3db63bf71b446dbf6eebef0fcd6615e17a"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/control/worker.py",
+          "sha1": "37747c00967c6fbb6614afa80c358e88f1b901da",
+          "sha256": "46b5542319133c156b3171ac79f759b10ecb49a4572a60ccd8dc65358103ee85"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/db.py",
+          "sha1": "3be517aaef36e15e941033dbda2bacf3c96586c7",
+          "sha256": "d90449d436dc4291760574f320ab8b600836e08e52d1008966ed097951193469"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/domain.py",
+          "sha1": "8bd18e99253dedd23ef31aec4d15afcc83c11eaa",
+          "sha256": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/__init__.py",
+          "sha1": "a99432e6322ae46541e64caf4597c7fe35e8d14b",
+          "sha256": "2a308b58623e7f2a2a083b50154dfd1ae4ed9f4a401c00e3bdd3132549c107a2"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
+          "sha1": "2f58e428476f597146e55a1936419d4077a14ee3",
+          "sha256": "3ca38e4f24879a2b9fa1f70642dd5de910de4e525417540355fe83b0da3bbd7e"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/base.py",
+          "sha1": "266dfbb57a3b100cbb334f9874fc9c52d621a205",
+          "sha256": "f57b93dae929b49b0ee9316233673ad2db6ffd361d4f40dd9d8f58f6ecb2c593"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/contracts.py",
+          "sha1": "14fdf044213f12ae3da7da107ba38bbb03cd3014",
+          "sha256": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/corrective.py",
+          "sha1": "ce3fecd476bfb1f378adfaafb98f24efb6b88a5a",
+          "sha256": "e6f91d19c37babe2f157de211f435d4066a4e08d9ddef375d9e4bdba00b223e3"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/knowledge.py",
+          "sha1": "d25352e2e2b1f0ff4881e2f232e6b6929fe3aa5f",
+          "sha256": "37a32038dfa4b785338687b968242b7f2179a8a5b16a404c67f73dbe3aeb72f2"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/master.py",
+          "sha1": "f06cbacb3aaff32c2d33dd8ffac578fe94a29a6d",
+          "sha256": "2df41a4775da6931eac6d2086c1717b1c83d8ca759472b4397d6bd6a37296a93"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/router.py",
+          "sha1": "8ebf1469b46933fbfb102ad13f5bf9092a11c215",
+          "sha256": "071c814b0a013c2f965c6bde833fc822a23f5a2eb354f1c535e4b4ed50f3a759"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/tables.py",
+          "sha1": "63cfed2a1048916ca38b0517c1aef17f0fe5113c",
+          "sha256": "97132db14e67e4e0304c653d6be4cd7dbd1c8a7c069cb46ac959084b2fce70b9"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/institutional/teams.py",
+          "sha1": "7cf6ec9df21b4762b7e23ccf7c7592fc87a2f908",
+          "sha256": "5b5081d9b7e1a14dc0cd4e821663240abacda83bb9241b79ec43d74e4b0c08ad"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/integrations.py",
+          "sha1": "4177d15c1408e2c8822f460d48c7484aca3a14f9",
+          "sha256": "7c3f49fea274c0973534f04072ecf5ca6f46fdeada16329ff4387df2a3156524"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/main.py",
+          "sha1": "1d4985ac0bdae816d6da32b8fd1d7a0c4b1ef29e",
+          "sha256": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/operations.py",
+          "sha1": "e5bd1d82c155cdf868b06311fa0bfc90062a0f5f",
+          "sha256": "9cffe7fd37ad4a558ceef459cdb1e535e6bd31a27a6a3c97d19cdefee6ad2c88"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/organisation_sources.json",
+          "sha1": "07bfad14e59980f2f236cc281b30d79f9ec6871c",
+          "sha256": "d7abfad7564315d7e635805f40eaba850da3f5637160c2479b14c89bb7f18fa2"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/paging.py",
+          "sha1": "f0f367dffc0065f7cf88c92cc52d22cef7b94d18",
+          "sha256": "738780d9880c0efa79072b1d97a5f3fe2a8219efac20f125302f7592c0fdc5ea"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/personal/__init__.py",
+          "sha1": "56449e11a3b20be0d2c779e48e8b0825dd0e8b27",
+          "sha256": "0af13118e9de76ebe9296c935ad48757323adac406ccdcf76ff284603243d587"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/personal/care.py",
+          "sha1": "b14eb8bfd6bd113dcb9498e80e9a954937f98239",
+          "sha256": "63a6eb9a336785e455d866cc9860f0e834bf7d06f0e983a0aaa59b78f8208eff"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/personal/contracts.py",
+          "sha1": "b355722e44cb27f68beda6dfa69404be2fd50ce7",
+          "sha256": "ceb08d41c5d0621fa65cd73e2c5e8427c2c90238df1e0815ec402585758b1f35"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/personal/router.py",
+          "sha1": "f3dff7faccb76b130704e8fc46da4e4118e66062",
+          "sha256": "a98c30cdda34a99ecb5fb1a31a8dd06624dc27ded069b62d965b80ab03bd97bc"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/personal/service.py",
+          "sha1": "f993d678dcf1a87c1b90e1d698aa560082b7aa22",
+          "sha256": "71415b906fa783f2682aa81c2fdaa98610d098392f344988c06ca4c8daea5f44"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/personal/tables.py",
+          "sha1": "0d981402b724900f349955a66c3969c9255aeb2b",
+          "sha256": "3feae8f3fa05ead15400df79f4bfdd485e2c560ec56931db3c2ddcbdb660165b"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/__init__.py",
+          "sha1": "4a00f582390fad328209d63c22acfba250b8cec7",
+          "sha256": "8abae57b82fa2197f1dddfa1c5d9afa0f535f0e23f221dde8fac40708f690e39"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/analytics.py",
+          "sha1": "d6f207c13d60c126adcd99a3b809569298377bf8",
+          "sha256": "b24f02d0e69d9b1fcdcdc184d6faabe86bb876c05269f52901f99f23609af9da"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/contracts.py",
+          "sha1": "0d79ff96059684616ffad3d51d8ddbec3b4b88ca",
+          "sha256": "fbb23e51407175e224bc43f0021158fbeec204d6814a5c888ec11295e5485a77"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/coverage.py",
+          "sha1": "0c8a29bcff269fdd6d68fc790933f73a8550de53",
+          "sha256": "e1be6c48ae31c58be9f9650ca7ea7191c22d8f9dad3486cddd3f385f62d88111"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/metric_catalog.json",
+          "sha1": "66a248d394489e74cde7deb8deeb9685f48eba28",
+          "sha256": "898412e36038cfa330bba754abfbfaf7a91f8a6e2a22994a60fa15a3cad89d97"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/native.py",
+          "sha1": "e0a066a09118cbd56f862c6ad1051495be21a8d6",
+          "sha256": "2260c87f517c8f12814b72b05ae64ee4c6eb88f1ed1845bedc95cef507a3141d"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/operations.py",
+          "sha1": "078e4144fc63bf2225e8efdc770886d96b5fd499",
+          "sha256": "119e83c4cf7bdd9ebd3932a7cd67e3de8853c45ba23fb43edac1e419184e40c4"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/proposals.py",
+          "sha1": "4c347b62cbd9ee8a162cc24f55ac3fb0af143837",
+          "sha256": "51d6bad3794bb8e8136f6542b0eba00b4f76551559208bb94d083c776b05adaf"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/recipients.py",
+          "sha1": "d4f401441d5784d7faa2007c3b83d4bde6374a0e",
+          "sha256": "9dad41b7b97e8925a308391fb182604a765003d8394e850f9e998a6706afecee"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/router.py",
+          "sha1": "d4878c44253b2ca29885dec1533408cc8a9e7553",
+          "sha256": "37704e58b16622bd070ef51b88616147eb7f383fac46d59586193a7642e25e3d"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/service.py",
+          "sha1": "176dfccd72bdbae8cda37e3c8b9313e01bd70f81",
+          "sha256": "0585a407046a42f3d67214c46a4b2d0f016bb2a2fea55ac91b8e32526dfc385e"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/source_index.py",
+          "sha1": "5112c84faaa91fafa2a641a09dbb26b1e9f9245f",
+          "sha256": "b72ed9c2a004e435d5c99cde871146e75acde4cb8d7f81c501d4a0c7229016a7"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/store.py",
+          "sha1": "6a36bea976b5ec52b9b75df178eb8d581655df2b",
+          "sha256": "3875179b42b3362f197243efaa78c99380f8b95bd0bd92a808995f86c6b6c953"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/tables.py",
+          "sha1": "5ab14de012834db369bf8b75e9875a4301811ec6",
+          "sha256": "10403dc205e1d37f9bb662eea2373deb63895c1ed05508028ffb1a7d03899393"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/reporting/templates.py",
+          "sha1": "01d11cdbed8e42bc79c6b729b35897bc28e2b397",
+          "sha256": "57499578b26e00688c634a31a39aa345ec6f3786766d2a9eb6d3a44f587b7ced"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/security.py",
+          "sha1": "0bc94e5a95f72efbb379cda5689efd517661765a",
+          "sha256": "f3aedde1ec9e5b230a37830d6ff4478c15f95ed917b106e27a4220bb05182dfd"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/standards.py",
+          "sha1": "23ee094ad56f4587453c73744666b15a9627ade7",
+          "sha256": "1de0a1c48fb86b3be9c6a399f1d4f12188d5535603d42e920c6f1fffbd2e2398"
+        },
+        {
+          "file": "services/api/src/lw_care_api/platform/storage.py",
+          "sha1": "9596ba3ecf059c010b4958d21d163478305c543f",
+          "sha256": "b622b3650d653962d3927dd09f399c1f3ea4418a64c27f0be6c080eca639a907"
+        },
+        {
+          "file": "vercel.json",
+          "sha1": "b0f1cf86cfc26aab6c0f1432fc020ad4b852696f",
+          "sha256": "57d552192d6eef5836475d383d21ed29f06c97cd86e11eadfc29e2d6febcdf04"
+        }
+      ],
+      "count": 73,
+      "manifest_sha256": "45bfe0bcefc47f89ee9e6ce8a7e4c77b403e1d91af3430b6d1bbb8a4dfe98488"
+    },
+    "web": {
+      "files": [
+        {
+          "file": "next-env.d.ts",
+          "sha1": "79ea33d5bd6bf5319667f287c6aec3a5e0ce256a",
+          "sha256": "85ae5aee75f011967cf2d25cbc342f62d69314e9d925f7f4aa3456fc2cffcca6"
+        },
+        {
+          "file": "next.config.mjs",
+          "sha1": "ac9ffaffd5ea69fed889bfca7729f6c67832a4cb",
+          "sha256": "7eeb422544d6980ff2551119e68ae535b00365e0d291cbf52b4679654e018bb8"
+        },
+        {
+          "file": "package.json",
+          "sha1": "2d9496a942e801cb24fb1cd47a92446e64d30f60",
+          "sha256": "e5d382373ae4ca0bc2a85ea5e1bb3e9d83ebef7818eb5fa44d0afb9ca1125f3e"
+        },
+        {
+          "file": "pnpm-lock.yaml",
+          "sha1": "38081b132e112b74d55791d071af558b4d8897df",
+          "sha256": "86b69a9620342f7840c165f56c21d0b3a25a127ca7a780e9e5deb306f9ec7502"
+        },
+        {
+          "file": "public/health-icon-180.png",
+          "sha1": "647d85752fc63d08285701c212f2516ea3212d76",
+          "sha256": "75ef5e98053ccc13deb92abab2d0fde395c7272b874376b906f4a377bd984045"
+        },
+        {
+          "file": "public/health-icon-192.png",
+          "sha1": "c925a704de21fd01da380f8130f1f39226aa6ddc",
+          "sha256": "2972528edfa12dbd64e2fcf187ffc1a7d5a8d8a58a4c367f5b8f6b9f1184a5f8"
+        },
+        {
+          "file": "public/health-icon-512.png",
+          "sha1": "8d63366dc4b29cb364cc76596b172f1a5319444d",
+          "sha256": "a7961b6b7b874bedbfa67db104a5d264b07f282602b465b9f9934cc99608dc46"
+        },
+        {
+          "file": "public/my-health-sw.js",
+          "sha1": "04e2a7ae49249c9b750fb835c0e9507feec506c5",
+          "sha256": "565eec504bf498481094d01c55959c9260089be28177794ea36e32b0654299e5"
+        },
+        {
+          "file": "public/my-health.webmanifest",
+          "sha1": "2c6a199939cae2d66db4a2a6c2a6a2715e2353ae",
+          "sha256": "544be4c3631fe9ff3cd09b630544bcf56726e9cbc0fc86c2cde58142644c9a4a"
+        },
+        {
+          "file": "src/app/IntegrationControls.tsx",
+          "sha1": "1db033f2308a359acec4a40e5f91d2d077a3c79d",
+          "sha256": "8dd64f9030d1130eb42677a3a4f41465d80b35f883399d237c5a928f3aa6b3d9"
+        },
+        {
+          "file": "src/app/activate/page.tsx",
+          "sha1": "0e6ba90b6cb34d5b7dc430071b0d2b473dd673c1",
+          "sha256": "bca736216bccd83b651ab6639a47bb5d8ba270680af84be6703f3cc124667c11"
+        },
+        {
+          "file": "src/app/api.ts",
+          "sha1": "595830a01954c3de2b68130d88b57de5626db75b",
+          "sha256": "5237b892ee2b4c05bb91bc64e996eaa517c654f2840cba949d1856e2b9705512"
+        },
+        {
+          "file": "src/app/care/care.css",
+          "sha1": "e1e1f483a2c4ba1450d6b8b528e68dce87ee5037",
+          "sha256": "6f3609b2d54d41d105a21ba3cdbd2c982e1207a330a607963854ba6888608a2a"
+        },
+        {
+          "file": "src/app/care/forms.ts",
+          "sha1": "8451b8a60983f882c427faf6dccb3b40507968ab",
+          "sha256": "dc8193eb2815be16abcedbe312a599c1cc8a8fc6b3b151dd6231dc5111b0b893"
+        },
+        {
+          "file": "src/app/care/page.tsx",
+          "sha1": "3ad62cf3141e3aa3f1d488ae2593ff32664ba577",
+          "sha256": "a446b7f552be395763009d7e55167e3b41096ee46651ff93e41a521ba9a2a642"
+        },
+        {
+          "file": "src/app/care/phase5-forms.ts",
+          "sha1": "2b34e613ce4613f90e0ec707df7664affea8a27d",
+          "sha256": "e90bcee8bb7188c1d32c4e0e75db54290bd17404c5f75f89714b49be50f80632"
+        },
+        {
+          "file": "src/app/directorate/extract-values.ts",
+          "sha1": "002ec8c29cbbe05eecfc3cf9343452a142109dcd",
+          "sha256": "281c70651bcc7bae55c96e1251fcd7e0dfb3572c41dc546940d691fc88f783c1"
+        },
+        {
+          "file": "src/app/directorate/forms.ts",
+          "sha1": "eae9141d969e589ee42a7db0856887346d3053b4",
+          "sha256": "a61cc7433b6e5bec0cbce9916fba4dc00a0b5e020bdc867d1dd96bf4c51e1bab"
+        },
+        {
+          "file": "src/app/directorate/page.tsx",
+          "sha1": "bd9acd57f692073fc09422251801e8eee2aa11e1",
+          "sha256": "a56663c1696f5c8bf9dcb4bc3e30b17f1148d5e7a56c29880b987ef808f2d5c1"
+        },
+        {
+          "file": "src/app/directorate/reporting.css",
+          "sha1": "b4c4ecfc1947332f6c57c50f094e6abaf47d7732",
+          "sha256": "8437b83571ad04e5722529af1e85b139d7c9f47bc40ffec2991ecd8175f1d4a8"
+        },
+        {
+          "file": "src/app/directory/page.tsx",
+          "sha1": "05208a0ae667d931831bdf03d002046740ff48e8",
+          "sha256": "f4d2fc12e2f2db67959862a39459273569f5e81fa8e4658bc0dfe639a54fb614"
+        },
+        {
+          "file": "src/app/governance/page.tsx",
+          "sha1": "f6113bb8b81fe4d4c827af7c5ee54519cfda5970",
+          "sha256": "bfdc2c328f51134df0964f44d93c57155e8291bf1d06ac735740ef50aec777e6"
+        },
+        {
+          "file": "src/app/layout.tsx",
+          "sha1": "f14f3e89b54712a55cf5a23bb71856621ff7ca6f",
+          "sha256": "664cd231def4cacda801b3526af69e35b36c4df4962284f722bcfce82988d104"
+        },
+        {
+          "file": "src/app/learn/page.tsx",
+          "sha1": "0399d272999849cefb8061fb9ff47fcc2d8dde75",
+          "sha256": "22f046f1f8ac49a8630b28403852c6b2ce9a013d1f3af188ebf8b4fd31e1f392"
+        },
+        {
+          "file": "src/app/my-health/install.tsx",
+          "sha1": "e66b9dd76a5c38a15379314f9390b1d6d60206f8",
+          "sha256": "695c0f0d2f32b57c24dcfe9b6c7a16e08d61588bc384b41780d9f4603abcebde"
+        },
+        {
+          "file": "src/app/my-health/layout.tsx",
+          "sha1": "18b29a2eac06679e880d594a7737833db45f4cde",
+          "sha256": "495a165f567a9f83b3f57e33cf95590545515eb66835d92d8d7d38fb51bc12b5"
+        },
+        {
+          "file": "src/app/my-health/page.tsx",
+          "sha1": "c3424d6e134f85415644954bd60f1465e44e2605",
+          "sha256": "d00d41ce0dd581ff2558464c441a7ac58da991dad7f1bbc2921d698136de66a7"
+        },
+        {
+          "file": "src/app/my-health/personal.css",
+          "sha1": "99d12f5b735628795178d31e4e27ffa75d758f33",
+          "sha256": "bb13763d4fc68ab50d8fce271c8133a58b69cae087d64342a14673d6f0b48108"
+        },
+        {
+          "file": "src/app/operations/page.tsx",
+          "sha1": "62f68cef6e8423d99cc7838815e0050a791902cb",
+          "sha256": "5d5ab5d590d7d073254f62fdd34de73e2a8d1bab7012fe930e4d7d57dcd8c013"
+        },
+        {
+          "file": "src/app/operations/reliability-panel.tsx",
+          "sha1": "5b4509110a1eb09754622acb890777366c0feb9d",
+          "sha256": "abc3a2c839f0c1d0f1634707c85d06bc0b1b7c194fd8907fb0c4f77f98f619dc"
+        },
+        {
+          "file": "src/app/page.tsx",
+          "sha1": "dc3b42258f8dd535598a7e190122f2efdb45a7d3",
+          "sha256": "4639ab0f42eb5c8d6f38b8a9231cd539d67742a521074c72d284b558556117e4"
+        },
+        {
+          "file": "src/app/patient-access/page.tsx",
+          "sha1": "bbc4d2e45ff9517cb74f980483688bba41d3a410",
+          "sha256": "8ce66ce41b8a523b500d548b54f11b9db0672264b2dca49ad3658e337bb7d531"
+        },
+        {
+          "file": "src/app/recover/page.tsx",
+          "sha1": "fc14f104fd9e7a74d97c3618dee17a03db5a01c1",
+          "sha256": "701958453b53e5273b5080ba3acfbe277f0ec9b1819ef1441f3e45916e143556"
+        },
+        {
+          "file": "src/app/reporting-templates/page.tsx",
+          "sha1": "02a5d6d3f8b410f4c88e36b8de95cc3bad811417",
+          "sha256": "3162a0d0d2c85c12a0aef17ee0a7143caffe4e8fc6280d44e9277ce4ec79e1b2"
+        },
+        {
+          "file": "src/app/style.css",
+          "sha1": "baa2a22b32edfa81db473fab4aaae95a5f099031",
+          "sha256": "fa1fdccdc325ff263a5db916040be1eb9c1e58cc7308a0778bfccfde4684a1fa"
+        },
+        {
+          "file": "tsconfig.json",
+          "sha1": "f38e9cd051dde5277e16a2476e2063f35a9f2aab",
+          "sha256": "bb75118a847cb1afea33b870dee8fa58fe6bbe3a6e2d3344918ead89e6a5d197"
+        }
+      ],
+      "count": 36,
+      "manifest_sha256": "8393cf15d7e7fad6fbf3137a66164c2a339c5694fbeb4c88651d7305497e3db9"
+    }
+  }
+}
