@@ -1,37 +1,38 @@
 {
-  "release": "2026-11-10-application-correction",
-  "recorded_at": "2026-11-10T18:10:04.143005+00:00",
-  "runtime_commit": "f2e29e3300433a095b154fce765273713222625f",
+  "release": "2026-11-11-application-screening",
+  "recorded_at": "2026-11-11T05:49:57.962310+00:00",
+  "runtime_commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
   "code_delivery": "DEPLOYED",
-  "engineering_evidence": "CORRECTION_CYCLES_WITHDRAWAL_VERSION_BOUND_INSPECTION_AND_HISTORICAL_INDEPENDENCE_VERIFIED",
+  "engineering_evidence": "CANONICAL_INITIAL_SCREENING_ORDER_EVIDENCE_ASSESSMENT_VERSION_BOUND_INSPECTION_AND_LEGACY_RESUBMISSION_VERIFIED",
   "operating_adoption": "INCOMPLETE",
   "full_suite_acceptance": "INCOMPLETE_NOT_RUN",
   "schema_version": 9,
   "migration_required": false,
   "migration": {
-    "status": "NOT_REQUIRED_ADDITIVE_REVISION_METADATA",
+    "status": "NOT_REQUIRED_EXISTING_IMMUTABLE_REVISION_METADATA",
     "tables": 102,
     "protected_history_tables": 53
   },
   "api": {
-    "deployment_id": "dpl_HQdm6DJm2tLEurnYCFpCFiNQ5kkt",
+    "deployment_id": "dpl_5ph5kFK7VvvyPwWybArDmAaz8i2M",
     "origin": "https://lw-health-intelligence-api.vercel.app",
-    "source_commit": "f2e29e3300433a095b154fce765273713222625f",
+    "source_commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
     "verified_source_files": 67,
     "submitted_source_files_verified": 71
   },
   "web": {
-    "deployment_id": "dpl_uuLQU1PFeW4TNJFW5ZUHzp5EDSYE",
+    "deployment_id": "dpl_8crEc4NZHPZ8moJXYRpQGtUfhc7n",
     "origin": "https://lw-health-intelligence.vercel.app",
-    "source_commit": "f2e29e3300433a095b154fce765273713222625f",
+    "source_commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
     "verified_source_files": 31,
     "submitted_source_files_verified": 36
   },
   "ci": {
-    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42864525902",
-    "run_id": 42864525902,
+    "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42957502367",
+    "run_id": 42957502367,
     "status": "SUCCESS",
-    "python_tests": 265,
+    "python_tests": 272,
+    "postgres_only_skipped": 2,
     "api_client_tests": 11,
     "pwa_tests": 4,
     "typecheck": "PASSED",
@@ -39,93 +40,85 @@
     "secret_scan": "PASSED",
     "jobs": [
       {
-        "id": 129999185726,
+        "id": 130315965100,
+        "name": "python",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 130315965395,
         "name": "secrets-scan",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 129999186182,
+        "id": 130315966495,
         "name": "web",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 129999186448,
-        "name": "python",
         "status": "completed",
         "conclusion": "success"
       }
     ]
   },
   "local_checks": {
-    "targeted_passed": 23,
-    "postgres_only_skipped": 1,
-    "additional_response_validation_passed": 1,
-    "typescript": "PASSED"
+    "compatibility_passed": 39,
+    "compatibility_postgres_skipped": 1,
+    "screening_passed": 5,
+    "screening_postgres_skipped": 1,
+    "additional_policy_and_scope_passed": 1,
+    "register_and_release_guards_passed": 16,
+    "typescript": "PASSED",
+    "complete_exact_source_authority": "CI_AND_PINNED_NEON_PROOF"
   },
+  "retained_failed_attempts": [
+    {
+      "artifact": ".toolchain/screening-targeted-attempt1.log",
+      "type": "SYNTHETIC_FIXTURE_SETUP_UNIQUE_FACILITY_APPLICATION_CONFLICT",
+      "result": "1 failed /4 passed /1 PostgreSQL-only skip",
+      "correction": "Use a separate synthetic facility for cross-case evidence; no domain guard was weakened."
+    },
+    {
+      "recorded_at": "2026-11-11T04:07:33.058247+00:00",
+      "phase": "screening_before",
+      "status": "FAILED",
+      "failure_type": "gaierror",
+      "file": "socket.py",
+      "line": 983,
+      "disposition": "Original direct observer failed before counts; subsequent guarded read-only observation passed. No write/migration/deployment."
+    },
+    {
+      "status": "FAILED",
+      "observed_at": "2026-11-11T05:47:07.518253+00:00",
+      "phase": "screening_after",
+      "type": "gaierror",
+      "file": "socket.py",
+      "line": 983
+    }
+  ],
   "neon_engineering_proof": {
     "status": "PASSED",
-    "qualification": "LOCAL_ASGI_POOLED_NEON_ENGINEERING_NOT_CAPACITY_OR_OPERATING_ADOPTION",
-    "schema_version": 9,
+    "qualification": "LOCAL_ASGI_POOLED_NEON_NOT_CAPACITY_OR_OPERATING_ACCEPTANCE",
     "scenarios": [
       {
-        "scenario": "round_trip",
-        "result": "CORRECTION_RESPONSE_FRESH_INSPECTION_AND_INDEPENDENT_DECISION_HISTORY_RETAINED"
+        "scenario": "guards_and_order",
+        "result": "SCREENING_EVIDENCE_REVIEW_INSPECTION_RECOMMENDATION_BOUND_BY_VERSION_HISTORY_RETAINED"
       },
       {
-        "scenario": "cycle_binding",
-        "result": "CURRENT_REVISION_BINDS_INSPECTION_DESPITE_REVERSED_TIMESTAMPS"
+        "scenario": "legacy_recovery",
+        "result": "SCREENING_EVIDENCE_REVIEW_INSPECTION_RECOMMENDATION_BOUND_BY_VERSION_HISTORY_RETAINED"
       },
       {
-        "scenario": "historical_independence",
-        "result": "CORRECTION_RESPONSE_FRESH_INSPECTION_AND_INDEPENDENT_DECISION_HISTORY_RETAINED"
-      },
-      {
-        "scenario": "response_validation",
-        "result": "CORRECTION_RESPONSE_FRESH_INSPECTION_AND_INDEPENDENT_DECISION_HISTORY_RETAINED"
-      },
-      {
-        "scenario": "withdraw_DRAFT",
-        "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-      },
-      {
-        "scenario": "withdraw_SUBMITTED",
-        "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-      },
-      {
-        "scenario": "withdraw_INSPECTION",
-        "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-      },
-      {
-        "scenario": "withdraw_EVIDENCE_REVIEW",
-        "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-      },
-      {
-        "scenario": "withdraw_RECOMMENDED",
-        "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-      },
-      {
-        "scenario": "withdraw_CORRECTION_REQUIRED",
-        "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-      },
-      {
-        "scenario": "decided_terminal",
-        "result": "DECIDED_APPLICATION_CANNOT_BE_WITHDRAWN"
-      },
-      {
-        "scenario": "history_scope_and_paging",
-        "result": "BOUNDED_PRIVATE_HISTORY_PAGES_SYNTHETIC_PAGINATION_FIXTURE"
-      },
-      {
-        "scenario": "concurrent_withdraw_resubmit",
-        "result": "ONE_CONCURRENT_TRANSITION_NO_DOUBLE_EFFECT"
+        "scenario": "concurrent_screen_withdraw",
+        "result": "ONE_CONCURRENT_SCREEN_OR_WITHDRAW_NO_DOUBLE_EFFECT"
       }
     ],
-    "evidence_fixture": "METADATA_ONLY_NOT_SCANNER_QUALIFICATION",
-    "controlled_expiry_clock": "ADVANCED_20_MINUTES_WITHOUT_EDITING_IMMUTABLE_EVIDENCE",
-    "source_commit": "f2e29e3300433a095b154fce765273713222625f",
-    "retry_scope": "DECIDED_FIXTURE_REQUIRED_FOR_NONEMPTY_IMMUTABLE_DELETE_PROBE_AND_FINAL_COUNTS_CLEANUP",
+    "schema_version": 9,
+    "evidence_fixture": "LABELLED_METADATA_ONLY_NOT_SCANNER_QUALIFICATION",
+    "synthetic_evidence_valid_minutes": 60,
+    "clock_override": "NONE_IN_SELECTED_NEON_SCENARIOS",
+    "legacy_fixture": "LEGACY_SHAPE_NOT_EXECUTED_HISTORICAL_TRANSITIONS",
+    "disposable_schema_removed": true,
+    "source_commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
+    "disposable_schema": "lwh_screening_verify_5165959178e04834bd75dfc99dd666df",
     "production_before": {
       "accounts": 1,
       "units": 0,
@@ -135,8 +128,18 @@
       "applications": 0,
       "evidence": 0,
       "inspections": 0,
-      "decisions": 0
+      "decisions": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
     },
+    "running_scenario": "concurrent_screen_withdraw",
+    "immutable_application_history_delete": "REJECTED",
+    "immutable_decision_history_delete": "REJECTED",
     "production_after": {
       "accounts": 1,
       "units": 0,
@@ -146,239 +149,66 @@
       "applications": 0,
       "evidence": 0,
       "inspections": 0,
-      "decisions": 0
+      "decisions": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
     },
     "production_domain_counts_unchanged": true,
     "production_domain_records_seeded": 0,
-    "immutable_decision_delete": "REJECTED",
-    "provider_dispatch_invoked": false,
-    "disposable_schema_removed": true,
-    "qualification_execution": "COMBINED_SAME_RUNTIME_THREE_ATTEMPTS_NOT_ONE_UNINTERRUPTED_RUN",
-    "attempts": [
-      {
-        "status": "FAILED",
-        "qualification": "LOCAL_ASGI_POOLED_NEON_ENGINEERING_NOT_CAPACITY_OR_OPERATING_ADOPTION",
-        "schema_version": 9,
-        "scenarios": [
-          {
-            "scenario": "round_trip",
-            "result": "CORRECTION_RESPONSE_FRESH_INSPECTION_AND_INDEPENDENT_DECISION_HISTORY_RETAINED"
-          },
-          {
-            "scenario": "cycle_binding",
-            "result": "CURRENT_REVISION_BINDS_INSPECTION_DESPITE_REVERSED_TIMESTAMPS"
-          },
-          {
-            "scenario": "historical_independence",
-            "result": "CORRECTION_RESPONSE_FRESH_INSPECTION_AND_INDEPENDENT_DECISION_HISTORY_RETAINED"
-          },
-          {
-            "scenario": "response_validation",
-            "result": "CORRECTION_RESPONSE_FRESH_INSPECTION_AND_INDEPENDENT_DECISION_HISTORY_RETAINED"
-          },
-          {
-            "scenario": "withdraw_DRAFT",
-            "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-          },
-          {
-            "scenario": "withdraw_SUBMITTED",
-            "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-          },
-          {
-            "scenario": "withdraw_INSPECTION",
-            "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-          },
-          {
-            "scenario": "withdraw_EVIDENCE_REVIEW",
-            "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-          },
-          {
-            "scenario": "withdraw_RECOMMENDED",
-            "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-          },
-          {
-            "scenario": "withdraw_CORRECTION_REQUIRED",
-            "result": "WITHDRAWAL_RETAINS_HISTORY_AND_AFFILIATION_NO_RECOGNITION"
-          },
-          {
-            "scenario": "decided_terminal",
-            "result": "DECIDED_APPLICATION_CANNOT_BE_WITHDRAWN"
-          },
-          {
-            "scenario": "history_scope_and_paging",
-            "result": "BOUNDED_PRIVATE_HISTORY_PAGES_SYNTHETIC_PAGINATION_FIXTURE"
-          }
-        ],
-        "evidence_fixture": "METADATA_ONLY_NOT_SCANNER_QUALIFICATION",
-        "controlled_expiry_clock": "ADVANCED_20_MINUTES_WITHOUT_EDITING_IMMUTABLE_EVIDENCE",
-        "source_commit": "f2e29e3300433a095b154fce765273713222625f",
-        "failure": {
-          "type": "gaierror",
-          "file": "socket.py",
-          "line": 983
-        }
-      },
-      {
-        "status": "FAILED",
-        "qualification": "LOCAL_ASGI_POOLED_NEON_ENGINEERING_NOT_CAPACITY_OR_OPERATING_ADOPTION",
-        "schema_version": 9,
-        "scenarios": [
-          {
-            "scenario": "concurrent_withdraw_resubmit",
-            "result": "ONE_CONCURRENT_TRANSITION_NO_DOUBLE_EFFECT"
-          }
-        ],
-        "evidence_fixture": "METADATA_ONLY_NOT_SCANNER_QUALIFICATION",
-        "controlled_expiry_clock": "ADVANCED_20_MINUTES_WITHOUT_EDITING_IMMUTABLE_EVIDENCE",
-        "source_commit": "f2e29e3300433a095b154fce765273713222625f",
-        "retry_scope": "ONLY_UNRESOLVED_RACE_AND_FINAL_IMMUTABILITY_COUNT_CLEANUP_CHECKS",
-        "disposable_schema_removed": true,
-        "failure": {
-          "type": "AssertionError",
-          "file": "verify_application_workflow_postgres.py",
-          "line": 126
-        }
-      },
-      {
-        "status": "PASSED",
-        "qualification": "LOCAL_ASGI_POOLED_NEON_ENGINEERING_NOT_CAPACITY_OR_OPERATING_ADOPTION",
-        "schema_version": 9,
-        "scenarios": [
-          {
-            "scenario": "decided_terminal",
-            "result": "DECIDED_APPLICATION_CANNOT_BE_WITHDRAWN"
-          }
-        ],
-        "evidence_fixture": "METADATA_ONLY_NOT_SCANNER_QUALIFICATION",
-        "controlled_expiry_clock": "ADVANCED_20_MINUTES_WITHOUT_EDITING_IMMUTABLE_EVIDENCE",
-        "source_commit": "f2e29e3300433a095b154fce765273713222625f",
-        "retry_scope": "DECIDED_FIXTURE_REQUIRED_FOR_NONEMPTY_IMMUTABLE_DELETE_PROBE_AND_FINAL_COUNTS_CLEANUP",
-        "production_before": {
-          "accounts": 1,
-          "units": 0,
-          "operators": 0,
-          "facilities": 0,
-          "criteria": 0,
-          "applications": 0,
-          "evidence": 0,
-          "inspections": 0,
-          "decisions": 0
-        },
-        "production_after": {
-          "accounts": 1,
-          "units": 0,
-          "operators": 0,
-          "facilities": 0,
-          "criteria": 0,
-          "applications": 0,
-          "evidence": 0,
-          "inspections": 0,
-          "decisions": 0
-        },
-        "production_domain_counts_unchanged": true,
-        "production_domain_records_seeded": 0,
-        "immutable_decision_delete": "REJECTED",
-        "provider_dispatch_invoked": false,
-        "disposable_schema_removed": true
-      }
-    ],
-    "first_attempt_cleanup_recovery": {
-      "observed_at": "2026-11-10T17:54:06.155874+00:00",
-      "disposable_schemas": [
-        "lwh_correction_verify_47f9a5ef4ea248b680eb46fb36c751f6"
-      ],
-      "status": "PASSED",
-      "removed": true,
-      "production_schema_untouched": true
-    },
-    "initial_failure": "DNS resolution interrupted the race attempt and cleanup; twelve earlier scenarios passed. The exact disposable schema was separately removed before rerunning only the unresolved race and final checks.",
-    "targeted_runner_failure": "The race passed, but a race-only subset leaves the decision table empty, so DELETE touched no rows and fired no row trigger. The subset runner asserted deletion protection without creating a decision. A separate decided-case fixture subsequently verified nonempty immutable deletion rejection and final counts/cleanup.",
-    "raw_artifacts": [
-      {
-        "path": ".toolchain/correction-neon-first-attempt.json",
-        "sha256": "d9fd27e061ce3248656fad302cdbe50d2cfa3b94b7327ccb3274393603943e6b"
-      },
-      {
-        "path": ".toolchain/correction-neon-first-attempt.log",
-        "sha256": "0ed80027333ab2eaa68b631981dcb4d1dcadac024900fd8a19e51f529e323c5c"
-      },
-      {
-        "path": ".toolchain/correction-neon-recovery.json",
-        "sha256": "2dccf9a0ca0f6ce808729fadb76c781615f59f75b21952f0ae7a87810c5302b6"
-      },
-      {
-        "path": ".toolchain/correction-neon-retry.json",
-        "sha256": "fe410b86dbb8eb663c156ec1e2ea2691d82b96bb6cbe43433dca756418e5f456"
-      },
-      {
-        "path": ".toolchain/correction-neon-retry.log",
-        "sha256": "394754c2654ab795de96f5310e4f61c654c0e7cb10b0a18cfda16d49387bb96a"
-      },
-      {
-        "path": ".toolchain/correction-neon-final-checks.json",
-        "sha256": "9ca3ffab1ab48ef08b3e3033a7908032f45f8de44e170c0a1721b8a575f7f8eb"
-      },
-      {
-        "path": ".toolchain/correction-neon-final-checks.log",
-        "sha256": "2ec521fcd49bb4e93be09866f2bf74dc5e5e5d986e6c8254d1b4ad135e0bcd6a"
-      }
-    ]
-  },
-  "neon_runner_metadata_erratum": {
-    "raw_receipt_field": "controlled_expiry_clock",
-    "copied_label_is_inapplicable": true,
-    "actual_instrumentation": "One-hour backdating of recording time in cycle_binding only; no 20-minute expiry advance in this workflow run.",
-    "raw_receipt_preserved": true,
-    "tooling_label_corrected_after_runtime_qualification": true,
-    "runtime_and_test_logic_changed": false
+    "provider_dispatch_invoked": false
   },
   "staged_builds": [
     {
       "project": "lw-health-intelligence-api",
-      "deployment_id": "dpl_HQdm6DJm2tLEurnYCFpCFiNQ5kkt",
-      "url": "lw-health-intelligence-8qw7ixaqo-prolific-intelligence.vercel.app",
+      "deployment_id": "dpl_5ph5kFK7VvvyPwWybArDmAaz8i2M",
+      "url": "lw-health-intelligence-lsuvfdabt-prolific-intelligence.vercel.app",
       "state": "STAGED_READY",
-      "source_commit": "f2e29e3300433a095b154fce765273713222625f",
+      "source_commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
       "promotion": "STAGED_REQUIRES_VERIFICATION"
     },
     {
       "project": "lw-health-intelligence",
-      "deployment_id": "dpl_uuLQU1PFeW4TNJFW5ZUHzp5EDSYE",
-      "url": "lw-health-intelligence-ilyggqvws-prolific-intelligence.vercel.app",
+      "deployment_id": "dpl_8crEc4NZHPZ8moJXYRpQGtUfhc7n",
+      "url": "lw-health-intelligence-nj2yvypw2-prolific-intelligence.vercel.app",
       "state": "STAGED_READY",
-      "source_commit": "f2e29e3300433a095b154fce765273713222625f",
+      "source_commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
       "promotion": "STAGED_REQUIRES_VERIFICATION"
     }
   ],
   "exact_build_promotions": [
     {
       "project": "lw-health-intelligence-api",
-      "deployment_id": "dpl_HQdm6DJm2tLEurnYCFpCFiNQ5kkt",
-      "source_commit": "f2e29e3300433a095b154fce765273713222625f",
+      "deployment_id": "dpl_5ph5kFK7VvvyPwWybArDmAaz8i2M",
+      "source_commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
       "ci": {
-        "commit": "f2e29e3300433a095b154fce765273713222625f",
-        "run_id": 42864525902,
-        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42864525902",
+        "commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
+        "run_id": 42957502367,
+        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42957502367",
         "conclusion": "success"
       },
       "verified_source_files": 71,
-      "previous_deployment": "dpl_B9E5uZw5bDwcHt1mkPuo17DxUuuq",
+      "previous_deployment": "dpl_HQdm6DJm2tLEurnYCFpCFiNQ5kkt",
       "temporary_provider_probe_access": "REVOKED_BEFORE_PROMOTION",
       "promotion_http": 201,
       "promotion": "REQUESTED_WITHOUT_REBUILD"
     },
     {
       "project": "lw-health-intelligence",
-      "deployment_id": "dpl_uuLQU1PFeW4TNJFW5ZUHzp5EDSYE",
-      "source_commit": "f2e29e3300433a095b154fce765273713222625f",
+      "deployment_id": "dpl_8crEc4NZHPZ8moJXYRpQGtUfhc7n",
+      "source_commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
       "ci": {
-        "commit": "f2e29e3300433a095b154fce765273713222625f",
-        "run_id": 42864525902,
-        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42864525902",
+        "commit": "8af26b093b5b70fa02166350cd696a7d3ffcbc0c",
+        "run_id": 42957502367,
+        "url": "https://github.com/prolificintelligence/loveworld-care/actions/runs/42957502367",
         "conclusion": "success"
       },
       "verified_source_files": 36,
-      "previous_deployment": "dpl_7ggSJqBAZPHhQVLtjgyQmpmoNn4D",
+      "previous_deployment": "dpl_uuLQU1PFeW4TNJFW5ZUHzp5EDSYE",
       "temporary_provider_probe_access": "REVOKED_BEFORE_PROMOTION",
       "promotion_http": 201,
       "promotion": "REQUESTED_WITHOUT_REBUILD"
@@ -386,14 +216,14 @@
   ],
   "live_provider_state": {
     "lw-health-intelligence-api": {
-      "active_deployment": "dpl_HQdm6DJm2tLEurnYCFpCFiNQ5kkt",
+      "active_deployment": "dpl_5ph5kFK7VvvyPwWybArDmAaz8i2M",
       "sso_protection": {
         "deploymentType": "all_except_custom_domains"
       },
       "automation_tokens_remaining": 0
     },
     "lw-health-intelligence": {
-      "active_deployment": "dpl_uuLQU1PFeW4TNJFW5ZUHzp5EDSYE",
+      "active_deployment": "dpl_8crEc4NZHPZ8moJXYRpQGtUfhc7n",
       "sso_protection": {
         "deploymentType": "all_except_custom_domains"
       },
@@ -403,13 +233,13 @@
   "cloud_route_checks": [
     {
       "target": "api",
-      "deployment_id": "dpl_HQdm6DJm2tLEurnYCFpCFiNQ5kkt",
+      "deployment_id": "dpl_5ph5kFK7VvvyPwWybArDmAaz8i2M",
       "state": "READY",
       "actual_source_hashes_verified": 67
     },
     {
       "target": "web",
-      "deployment_id": "dpl_uuLQU1PFeW4TNJFW5ZUHzp5EDSYE",
+      "deployment_id": "dpl_8crEc4NZHPZ8moJXYRpQGtUfhc7n",
       "state": "READY",
       "actual_source_hashes_verified": 31
     },
@@ -528,7 +358,7 @@
       "path": "/v1/auth/login",
       "method": "POST",
       "http": 401,
-      "elapsed_seconds": 2.79,
+      "elapsed_seconds": 2.852,
       "invalid_credentials_rejected": true,
       "session_created": false
     },
@@ -647,7 +477,7 @@
       "path": "/v1/auth/login",
       "method": "POST",
       "http": 401,
-      "elapsed_seconds": 2.807,
+      "elapsed_seconds": 2.812,
       "invalid_credentials_rejected": true,
       "session_created": false
     },
@@ -716,8 +546,8 @@
     "bundles": [
       {
         "page": "/",
-        "bundle": "/_next/static/chunks/app/page-446f4cdff25cee44.js",
-        "sha256": "0ce10d9327dcd67278474569dd84ba395946506458b0973abffcc14d18b963d2"
+        "bundle": "/_next/static/chunks/app/page-2dc5d2ab262a3516.js",
+        "sha256": "5fb6d53cd7da6b803bdccece8e02f90ddaf838d8a940bf315092b14a6c478a0d"
       }
     ],
     "pwa_assets_retained": [
@@ -745,79 +575,34 @@
     "auth_boundaries": [
       {
         "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/correction-request",
+        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/screening",
         "http": 401,
         "no_store": true
       },
       {
         "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/resubmit",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence.vercel.app",
-        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/withdraw",
+        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/evidence-review",
         "http": 401,
         "no_store": true
       },
       {
         "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/correction-request",
+        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/screening",
         "http": 401,
         "no_store": true
       },
       {
         "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/resubmit",
-        "http": 401,
-        "no_store": true
-      },
-      {
-        "origin": "https://lw-health-intelligence-api.vercel.app",
-        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/withdraw",
+        "path": "/v1/applications/00000000-0000-4000-8000-000000000000/evidence-review",
         "http": 401,
         "no_store": true
       }
     ]
   },
-  "source_manifest": "2026-11-10-application-correction-source-manifest.json",
+  "source_manifest": "2026-11-11-application-screening-source-manifest.json",
   "production_before": {
-    "observed_at": "2026-11-10T17:13:27.897056+00:00",
-    "phase": "correction_before",
-    "aggregate_only": true,
-    "schema_version": 9,
-    "business_counts": {
-      "accounts": 1,
-      "units": 0,
-      "facilities": 0,
-      "clinical_sites": 0,
-      "clinical_records": 0,
-      "clinical_events": 0,
-      "reporting_definitions": 0,
-      "reporting_obligations": 0,
-      "reporting_returns": 0,
-      "reporting_snapshots": 0
-    },
-    "base_tables": 102,
-    "protected_history_tables": 53,
-    "projects": [
-      {
-        "name": "lw-health-intelligence-api",
-        "deployment_id": "dpl_B9E5uZw5bDwcHt1mkPuo17DxUuuq",
-        "readyState": "READY"
-      },
-      {
-        "name": "lw-health-intelligence",
-        "deployment_id": "dpl_7ggSJqBAZPHhQVLtjgyQmpmoNn4D",
-        "readyState": "READY"
-      }
-    ],
-    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
-  },
-  "production_after": {
-    "observed_at": "2026-11-10T18:07:07.568552+00:00",
-    "phase": "correction_after",
+    "observed_at": "2026-11-11T04:02:50.171615+00:00",
+    "phase": "screening_before",
     "aggregate_only": true,
     "schema_version": 9,
     "business_counts": {
@@ -843,6 +628,39 @@
       {
         "name": "lw-health-intelligence",
         "deployment_id": "dpl_uuLQU1PFeW4TNJFW5ZUHzp5EDSYE",
+        "readyState": "READY"
+      }
+    ],
+    "recording_sha256": "4fd2bbb9fedb1b6ab890f6b79488ba53f4bd266acab2a980a7f7f5dfc9aac5bf"
+  },
+  "production_after": {
+    "observed_at": "2026-11-11T05:48:43.105137+00:00",
+    "phase": "screening_after",
+    "aggregate_only": true,
+    "schema_version": 9,
+    "business_counts": {
+      "accounts": 1,
+      "units": 0,
+      "facilities": 0,
+      "clinical_sites": 0,
+      "clinical_records": 0,
+      "clinical_events": 0,
+      "reporting_definitions": 0,
+      "reporting_obligations": 0,
+      "reporting_returns": 0,
+      "reporting_snapshots": 0
+    },
+    "base_tables": 102,
+    "protected_history_tables": 53,
+    "projects": [
+      {
+        "name": "lw-health-intelligence-api",
+        "deployment_id": "dpl_5ph5kFK7VvvyPwWybArDmAaz8i2M",
+        "readyState": "READY"
+      },
+      {
+        "name": "lw-health-intelligence",
+        "deployment_id": "dpl_8crEc4NZHPZ8moJXYRpQGtUfhc7n",
         "readyState": "READY"
       }
     ],
@@ -877,6 +695,8 @@
   "conformance": {
     "partial_field_proofs": 19,
     "partial_state_families": 2,
+    "actual_routes": 301,
+    "typed_models": 61,
     "counts": {
       "forms": {
         "PARTIAL_CANDIDATE_MAPPING": 47,
@@ -902,52 +722,63 @@
     },
     "register": "conformance/canonical-register.json"
   },
-  "extension": "application-workflow-extension.md",
+  "extension": "application-screening-extension.md",
   "formal_requirements": 200,
   "formal_cases": 111,
   "formal_status": "NOT_RUN",
-  "prior_runtime_commit": "a21aa78a04acda2d5575ea9148ed3f90cb2d8867",
-  "prior_release": "2026-11-10-director-affiliation-evidence.json",
-  "capacity_requalified": false,
+  "prior_runtime_commit": "f2e29e3300433a095b154fce765273713222625f",
+  "prior_release": "2026-11-10-application-correction-evidence.json",
   "prior_capacity_evidence": "2026-11-10-capacity-and-conformance-evidence.json",
-  "manual_recovery_reference": "2026-11-10-service-release-assurance-evidence.json",
-  "automatic_backup_cadence_established": false,
+  "capacity_requalified": false,
+  "prior_recovery_evidence": "2026-11-10-service-release-assurance-evidence.json",
+  "backup_cadence_established": false,
   "scanner_qualified": false,
   "tickets": {
-    "LWH-AUD-20261109-014": "INITIAL_CORRECTION_WITHDRAWAL_AND_19_PARTIAL_FIELD_PROOFS_DELIVERED_FULL_CONFORMANCE_OPEN",
-    "LWH-AUD-20261109-002": "PRIOR_BOUNDED_MEASUREMENTS_RETAINED_SUSTAINED_CAPACITY_TARGETS_OPEN"
+    "LWH-AUD-20261109-014": "INITIAL_SCREENING_ORDER_DELIVERED_FULL_FRM010_CAPTURE_AND_ACTUAL_ACCEPTANCE_OPEN"
   },
+  "current_backlog": "2026-11-11-production-readiness-backlog.csv",
   "remaining_acceptance_gates": [
-    "014: 300 field gaps, 36 name candidates, 19 capture/missingness exceptions, 75 screen qualifications, SCREENING and full corrective plans/deadlines/notices/appeals/offline/actual-role semantics",
-    "002: sustained correction/replay/contention, maximum-volume simultaneous facilities, provider telemetry/cold starts and adopted targets",
-    "003: actual scanner qualification; uploads remain excluded without prerequisites",
-    "004: automatic cadence/monitoring, independent copy/key custody, adopted RPO/RTO and staffed resumption",
-    "019: complete provider/service sandbox, dependency/licence review, paired-code/new-data rollback and resumption",
-    "Actual Director nominations, facilities, forms/calendar/disclosure/service authority and independent security/privacy/device/accessibility/low-bandwidth UAT"
+    "014: Full FRM-010 finding identity/agreed plan/owner team/adopted deadline/resolution proof/independent review, tagged capture and full notice/appeal/renewal/expiry/offline/actual-role semantics; 300 field gaps/36 candidates/75 screen qualifications remain open.",
+    "002: sustained maximum-volume simultaneous facilities/correction/replay/contention, provider telemetry/cold-start classification and adopted targets.",
+    "003: actual permitted scanner qualification; file-dependent operation stays excluded.",
+    "004: automatic backup cadence/monitoring, independent copy/key custody, adopted RPO/RTO and representative staffed resumption.",
+    "019: complete provider/service sandbox, dependency/licence/legacy review and paired-code/new-data rollback/resumption.",
+    "Actual Director nominations/deputies, approved facilities/criteria/forms/calendar/disclosure/service authority and funded support; independent security/privacy and actual-role/device/accessibility/low-bandwidth UAT."
   ],
-  "canonical_documents_verified": 78,
-  "operating_acceptance": "INCOMPLETE",
   "additional_hosts_added": 0,
-  "playwright_installed": false,
   "dependencies_added": 0,
-  "report": "2026-11-10-application-correction-release.md",
+  "playwright_installed": false,
+  "canonical_documents_verified": 78,
+  "report": "2026-11-11-application-screening-release.md",
+  "next_phase": "Director-first full FRM-010 corrective-plan and capture semantics; maintain capacity/scanner/recovery/release and real-adoption gates.",
   "log_hashes": [
     {
-      "path": ".toolchain/correction-targeted.log",
-      "sha256": "1e77ffc28445b4c55240f59de0983a4d9b71d286dd4e9c9897da2b0c4dcdfc8a"
+      "path": ".toolchain/screening-compatibility.log",
+      "sha256": "b2fe2d3c6706919b36f6913023dfb02e906b6c9c5bb246f01378e80c4190962a"
     },
     {
-      "path": ".toolchain/correction-response-extra.log",
-      "sha256": "f9466719ba716c07a1caca1b5f73d4a5d1d15b942bb8ff9e8e2d54e788d8c123"
+      "path": ".toolchain/screening-targeted-attempt1.log",
+      "sha256": "8b3e2e55919b477fe10e8af7260bb9221ce0be0137d352562e4beb757bc95dd8"
     },
     {
-      "path": ".toolchain/correction-neon-proof.log",
-      "sha256": "bfb835e953c75c9ef01006b6d641dbc60b280274076981a99f3e5d0ea3e95797"
+      "path": ".toolchain/screening-targeted-final.log",
+      "sha256": "3f08d257cd086813e093dd1653349e4324e46d6021921315c96940449db3da9f"
     },
     {
-      "path": ".toolchain/correction-cloud-check.jsonl",
-      "sha256": "8b08b3504ab455fd59beb46907f4fd26bf60098dd1b2e29d861fb06c1bb2c3f3"
+      "path": ".toolchain/screening-policy.log",
+      "sha256": "b2a890681a5b59957063c7a03e56654cd270651c05197560aa47b606ae94b101"
+    },
+    {
+      "path": ".toolchain/screening-register-release-guards.log",
+      "sha256": "b1e0ada82d178ab504be0915b419e1c0f0f294821157ead9702d9b9dc533a84e"
+    },
+    {
+      "path": ".toolchain/screening-neon-proof.log",
+      "sha256": "f3d89b9fcb4b8c715538c435e7f9bed34a2e324574d46e107c5bd5fe50914357"
+    },
+    {
+      "path": ".toolchain/screening-cloud-check.jsonl",
+      "sha256": "ad5a5ae481ff25428fba6e54d8891c8cbdfdabc002ee48a2afcd341cf56145e9"
     }
-  ],
-  "next_phase": "Director-first remaining capture/field and screening/corrective-plan qualification; preserve capacity, scanner, recovery, rollback and actual operating gates"
+  ]
 }
