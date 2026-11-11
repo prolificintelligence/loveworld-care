@@ -409,15 +409,15 @@
           "request_model": "institutional.contracts.CaseOpen",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+            "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
           },
-          "handler_line": 381
+          "handler_line": 386
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -446,6 +446,8 @@
         "institutional.contracts.Response",
         "institutional.contracts.CorrectivePlan",
         "institutional.contracts.CorrectivePlanReview",
+        "institutional.contracts.DeliveryTeamProposal",
+        "institutional.contracts.DeliveryTeamRevision",
         "institutional.contracts.FindingReview",
         "contracts.ApplicationCorrection",
         "contracts.ApplicationResubmit"
@@ -477,9 +479,9 @@
           "request_model": "institutional.contracts.Response",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+            "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
           },
-          "handler_line": 555
+          "handler_line": 567
         },
         {
           "method": "POST",
@@ -487,9 +489,9 @@
           "request_model": "institutional.contracts.FindingReview",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+            "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
           },
-          "handler_line": 555
+          "handler_line": 567
         },
         {
           "method": "POST",
@@ -497,9 +499,9 @@
           "request_model": "institutional.contracts.CorrectivePlan",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+            "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
           },
-          "handler_line": 555
+          "handler_line": 567
         },
         {
           "method": "POST",
@@ -507,15 +509,35 @@
           "request_model": "institutional.contracts.CorrectivePlanReview",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+            "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
           },
-          "handler_line": 555
+          "handler_line": 567
+        },
+        {
+          "method": "POST",
+          "path": "/v1/institutional/delivery-teams",
+          "request_model": "institutional.contracts.DeliveryTeamProposal",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/institutional/teams.py",
+            "sha256_lf": "5b5081d9b7e1a14dc0cd4e821663240abacda83bb9241b79ec43d74e4b0c08ad"
+          },
+          "handler_line": 220
+        },
+        {
+          "method": "POST",
+          "path": "/v1/institutional/delivery-teams/{identifier}/revise",
+          "request_model": "institutional.contracts.DeliveryTeamRevision",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/institutional/teams.py",
+            "sha256_lf": "5b5081d9b7e1a14dc0cd4e821663240abacda83bb9241b79ec43d74e4b0c08ad"
+          },
+          "handler_line": 244
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -550,15 +572,15 @@
           "request_model": "institutional.contracts.Decide",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+            "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
           },
-          "handler_line": 509
+          "handler_line": 521
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -636,15 +658,15 @@
           "request_model": "institutional.contracts.Content",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+            "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
           },
-          "handler_line": 835
+          "handler_line": 847
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -4432,7 +4454,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
+            "sha256_lf": "15b4456edeb3d553ff70248f85aae5823d3abb8726a8096cac5f07f9dcc97356"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4445,7 +4467,7 @@
         "meaning": "Actual finding identity is case-bound; initial criterion-code correction remains a separate narrower contract.",
         "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
         "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
-        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
+        "missingness_exception": "Individual accountability remains supported; optional explicit accepted delivery-team binding is separately qualified by LWH-EXT-DELIVERY-TEAM-001. Generic tagged capture/missingness, full roster/team policy, initial finding linkage and institutional adoption remain open.",
         "tests": [
           {
             "path": "tests/integration/test_corrective_plans.py",
@@ -4511,7 +4533,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
+            "sha256_lf": "15b4456edeb3d553ff70248f85aae5823d3abb8726a8096cac5f07f9dcc97356"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4524,7 +4546,7 @@
         "meaning": "Personally proposed action becomes agreed only after exact-version independent reviewer agreement; revision requires fresh agreement/response.",
         "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
         "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
-        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
+        "missingness_exception": "Individual accountability remains supported; optional explicit accepted delivery-team binding is separately qualified by LWH-EXT-DELIVERY-TEAM-001. Generic tagged capture/missingness, full roster/team policy, initial finding linkage and institutional adoption remain open.",
         "tests": [
           {
             "path": "tests/integration/test_corrective_plans.py",
@@ -4554,15 +4576,74 @@
       "rule": "Responsible delivery owner",
       "source": "PROJECT-003",
       "classification": "institutional_or_restricted_by_purpose",
-      "candidate_bindings": [],
-      "status": "OPEN_EXPLICIT_FIELD_MAPPING_GAP",
-      "permission": "UNQUALIFIED_AT_FIELD_LEVEL_SEE_FORM_ROUTE_HANDLERS",
-      "validation": "UNQUALIFIED",
+      "candidate_bindings": [
+        {
+          "model": "institutional.contracts.CorrectivePlan",
+          "field": "owner_team_id",
+          "required": false,
+          "requiredness_matches": false,
+          "schema": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Owner Team Id"
+          },
+          "match": "NAME_ONLY"
+        }
+      ],
+      "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+      "permission": "CURRENT_SCOPED_FACILITY_ADMIN_PROPOSAL_PERSONALLY_ACCEPTED_LEAD_AND_INDEPENDENT_PLAN_REVIEW",
+      "validation": "TYPED_SCHEMA_CANDIDATE_RULE_EQUIVALENCE_NOT_PROVEN",
       "missingness": "UNQUALIFIED_CANONICAL_UNKNOWN_NIL_NOT_APPLICABLE_SEMANTICS",
-      "persistence": "UNQUALIFIED_AT_FIELD_LEVEL",
-      "test_evidence": [],
+      "persistence": "Existing encrypted immutable institutional journal team/proposal/acceptance/retirement and plan snapshots; no migration.",
+      "test_evidence": [
+        {
+          "path": "tests/integration/test_delivery_teams.py",
+          "symbol": "test_delivery_team_accountability",
+          "scenarios": [
+            "team_guards_and_completion",
+            "team_revision_and_retirement",
+            "team_handover",
+            "concurrent_accept_revise"
+          ],
+          "source": {
+            "path": "tests/integration/test_delivery_teams.py",
+            "sha256_lf": "47765bcf9dadb4e989bbd84e2a7f0f4fd4f89e3913800bfcd5cc4d49e7847c27"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        }
+      ],
       "formal_acceptance": "NOT_RUN",
-      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof."
+      "exception": "No equivalence inferred from name/type. Requiredness, purpose/field scope, persistence, missingness and failure cases require a field-specific proof.",
+      "engineering_proof": {
+        "id": "LWH-FRM-010.F003",
+        "binding": "institutional.contracts.CorrectivePlan.owner_team_id + owner_team_version -> distinct protected accepted delivery-team snapshot",
+        "meaning": "Actual scoped team identity and personally accepted lead, exact version binding, current pending authority and preserved completed ownership; an account is not a team ID.",
+        "permission": "CURRENT_SCOPED_FACILITY_ADMIN_PROPOSAL_PERSONALLY_ACCEPTED_LEAD_AND_INDEPENDENT_PLAN_REVIEW",
+        "persistence": "Existing encrypted immutable institutional journal team/proposal/acceptance/retirement and plan snapshots; no migration.",
+        "missingness_exception": "Optional typed team ownership retains existing individual plans; generic tagged missingness, full roster/team policy, initial finding linkage and adoption remain open.",
+        "tests": [
+          {
+            "path": "tests/integration/test_delivery_teams.py",
+            "symbol": "test_delivery_team_accountability",
+            "scenarios": [
+              "team_guards_and_completion",
+              "team_revision_and_retirement",
+              "team_handover",
+              "concurrent_accept_revise"
+            ]
+          }
+        ],
+        "status": "PARTIAL_ENGINEERING_PROOF_WITH_CAPTURE_EXCEPTIONS",
+        "formal_acceptance": "NOT_RUN"
+      }
     },
     {
       "id": "LWH-FRM-010.F004",
@@ -4608,7 +4689,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
+            "sha256_lf": "15b4456edeb3d553ff70248f85aae5823d3abb8726a8096cac5f07f9dcc97356"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4621,7 +4702,7 @@
         "meaning": "Actual prospective deadline/reference supplied explicitly and independently agreed; original observed deadline retained. No automatic extension or completion.",
         "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
         "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
-        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
+        "missingness_exception": "Individual accountability remains supported; optional explicit accepted delivery-team binding is separately qualified by LWH-EXT-DELIVERY-TEAM-001. Generic tagged capture/missingness, full roster/team policy, initial finding linkage and institutional adoption remain open.",
         "tests": [
           {
             "path": "tests/integration/test_corrective_plans.py",
@@ -4673,7 +4754,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
+            "sha256_lf": "15b4456edeb3d553ff70248f85aae5823d3abb8726a8096cac5f07f9dcc97356"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4686,7 +4767,7 @@
         "meaning": "Actual response is attributed to its agreed work and current owner; submission does not resolve a finding. Old authorised receipt hashes remain compatible.",
         "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
         "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
-        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
+        "missingness_exception": "Individual accountability remains supported; optional explicit accepted delivery-team binding is separately qualified by LWH-EXT-DELIVERY-TEAM-001. Generic tagged capture/missingness, full roster/team policy, initial finding linkage and institutional adoption remain open.",
         "tests": [
           {
             "path": "tests/integration/test_corrective_plans.py",
@@ -4738,7 +4819,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
+            "sha256_lf": "15b4456edeb3d553ff70248f85aae5823d3abb8726a8096cac5f07f9dcc97356"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4751,7 +4832,7 @@
         "meaning": "Actual proof references remain source-bound and immutable; synthetic metadata qualifies no scanner/file. Older timestamps do not choose a different response.",
         "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
         "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
-        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
+        "missingness_exception": "Individual accountability remains supported; optional explicit accepted delivery-team binding is separately qualified by LWH-EXT-DELIVERY-TEAM-001. Generic tagged capture/missingness, full roster/team policy, initial finding linkage and institutional adoption remain open.",
         "tests": [
           {
             "path": "tests/integration/test_corrective_plans.py",
@@ -4803,7 +4884,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
+            "sha256_lf": "15b4456edeb3d553ff70248f85aae5823d3abb8726a8096cac5f07f9dcc97356"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4816,7 +4897,7 @@
         "meaning": "Actual independent review and reason follow the current response and plan. Prior reviews remain retained; handover does not rewrite completed authorship.",
         "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
         "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
-        "missingness_exception": "LWH-EXT-CORRECTIVE-001 has an individual accountable owner, not canonical owner_team_id. Generic tagged capture/missingness, full initial-application linkage and institutional adoption remain open.",
+        "missingness_exception": "Individual accountability remains supported; optional explicit accepted delivery-team binding is separately qualified by LWH-EXT-DELIVERY-TEAM-001. Generic tagged capture/missingness, full roster/team policy, initial finding linkage and institutional adoption remain open.",
         "tests": [
           {
             "path": "tests/integration/test_corrective_plans.py",
@@ -11593,7 +11674,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -11628,7 +11709,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -11663,7 +11744,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -13402,7 +13483,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -13448,7 +13529,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "762fd24ba660cda3f515c5af326954ff8023784206b86e1a496d11f079b8367b"
+            "sha256_lf": "15b4456edeb3d553ff70248f85aae5823d3abb8726a8096cac5f07f9dcc97356"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -13654,7 +13735,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+          "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -17035,7 +17116,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+        "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
       },
       "line": 36
     },
@@ -17101,7 +17182,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+        "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
       },
       "line": 66
     },
@@ -17124,6 +17205,32 @@
             "minimum": 1,
             "title": "Expected Version",
             "type": "integer"
+          },
+          "owner_team_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Owner Team Id"
+          },
+          "owner_team_version": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Owner Team Version"
           },
           "required_action": {
             "maxLength": 6000,
@@ -17156,7 +17263,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+        "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
       },
       "line": 72
     },
@@ -17206,9 +17313,139 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+        "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
       },
-      "line": 78
+      "line": 80
+    },
+    "institutional.contracts.DeliveryTeamProposal": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "maxLength": 12000,
+            "minLength": 3,
+            "title": "Evidence",
+            "type": "string"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          },
+          "facility_id": {
+            "format": "uuid",
+            "title": "Facility Id",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "purpose": {
+            "maxLength": 4000,
+            "minLength": 5,
+            "title": "Purpose",
+            "type": "string"
+          },
+          "authority_reference": {
+            "maxLength": 4000,
+            "minLength": 5,
+            "title": "Authority Reference",
+            "type": "string"
+          },
+          "lead_account_id": {
+            "format": "uuid",
+            "title": "Lead Account Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "evidence",
+          "intent_confirmed",
+          "facility_id",
+          "name",
+          "purpose",
+          "authority_reference",
+          "lead_account_id"
+        ],
+        "title": "DeliveryTeamProposal",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
+        "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
+      },
+      "line": 85
+    },
+    "institutional.contracts.DeliveryTeamRevision": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "maxLength": 12000,
+            "minLength": 3,
+            "title": "Evidence",
+            "type": "string"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          },
+          "facility_id": {
+            "format": "uuid",
+            "title": "Facility Id",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "purpose": {
+            "maxLength": 4000,
+            "minLength": 5,
+            "title": "Purpose",
+            "type": "string"
+          },
+          "authority_reference": {
+            "maxLength": 4000,
+            "minLength": 5,
+            "title": "Authority Reference",
+            "type": "string"
+          },
+          "lead_account_id": {
+            "format": "uuid",
+            "title": "Lead Account Id",
+            "type": "string"
+          },
+          "expected_version": {
+            "minimum": 1,
+            "title": "Expected Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "evidence",
+          "intent_confirmed",
+          "facility_id",
+          "name",
+          "purpose",
+          "authority_reference",
+          "lead_account_id",
+          "expected_version"
+        ],
+        "title": "DeliveryTeamRevision",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
+        "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
+      },
+      "line": 93
     },
     "institutional.contracts.FindingReview": {
       "schema": {
@@ -17256,9 +17493,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+        "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
       },
-      "line": 83
+      "line": 97
     },
     "contracts.ApplicationCorrection": {
       "schema": {
@@ -17487,9 +17724,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+        "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
       },
-      "line": 123
+      "line": 137
     },
     "reporting.contracts.Review": {
       "schema": {
@@ -17753,9 +17990,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/institutional/contracts.py",
-        "sha256_lf": "520f3d9a6743e2d384d3459f04653ce21f363599d30b74225f056c4a8deb21fb"
+        "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
       },
-      "line": 139
+      "line": 153
     },
     "reporting.contracts.ActionUpdate": {
       "schema": {
@@ -22586,7 +22823,7 @@
   },
   "reviewed_proof_input": {
     "path": "docs/implementation/conformance/director-proofs.json",
-    "sha256_lf": "cdd5a07eeeb5503c7c8b91f60e5655302e48aadd2950215ca72d66192d09f283"
+    "sha256_lf": "4a139ff43af19d7738147a53409277af67376f7dca7ad49cf14350c10136232a"
   },
   "actual_routes": [
     {
@@ -24905,9 +25142,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 116
+      "handler_line": 121
     },
     {
       "method": "GET",
@@ -24915,9 +25152,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 133
+      "handler_line": 138
     },
     {
       "method": "GET",
@@ -24925,9 +25162,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 218
+      "handler_line": 223
     },
     {
       "method": "POST",
@@ -24935,9 +25172,9 @@
       "request_model": "institutional.contracts.MasterChange",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 239
+      "handler_line": 244
     },
     {
       "method": "GET",
@@ -24945,9 +25182,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 249
+      "handler_line": 254
     },
     {
       "method": "POST",
@@ -24955,9 +25192,9 @@
       "request_model": "institutional.contracts.Review",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 265
+      "handler_line": 270
     },
     {
       "method": "POST",
@@ -24965,9 +25202,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 284
+      "handler_line": 289
     },
     {
       "method": "GET",
@@ -24975,9 +25212,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 303
+      "handler_line": 308
     },
     {
       "method": "POST",
@@ -24985,9 +25222,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 334
+      "handler_line": 339
     },
     {
       "method": "GET",
@@ -24995,9 +25232,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 353
+      "handler_line": 358
     },
     {
       "method": "POST",
@@ -25005,9 +25242,9 @@
       "request_model": "institutional.contracts.CaseOpen",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 381
+      "handler_line": 386
     },
     {
       "method": "GET",
@@ -25015,9 +25252,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 396
+      "handler_line": 401
     },
     {
       "method": "GET",
@@ -25025,9 +25262,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 498
+      "handler_line": 510
     },
     {
       "method": "POST",
@@ -25035,9 +25272,9 @@
       "request_model": "institutional.contracts.Assign",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 509
+      "handler_line": 521
     },
     {
       "method": "POST",
@@ -25045,9 +25282,9 @@
       "request_model": "institutional.contracts.Inspection",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 509
+      "handler_line": 521
     },
     {
       "method": "POST",
@@ -25055,9 +25292,9 @@
       "request_model": "institutional.contracts.Recommend",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 509
+      "handler_line": 521
     },
     {
       "method": "POST",
@@ -25065,9 +25302,9 @@
       "request_model": "institutional.contracts.Notice",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 509
+      "handler_line": 521
     },
     {
       "method": "POST",
@@ -25075,9 +25312,9 @@
       "request_model": "institutional.contracts.Decide",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 509
+      "handler_line": 521
     },
     {
       "method": "POST",
@@ -25085,9 +25322,9 @@
       "request_model": "institutional.contracts.AssignmentOffer",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 509
+      "handler_line": 521
     },
     {
       "method": "POST",
@@ -25095,9 +25332,9 @@
       "request_model": "institutional.contracts.AssignmentAccept",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 540
+      "handler_line": 552
     },
     {
       "method": "POST",
@@ -25105,9 +25342,9 @@
       "request_model": "institutional.contracts.Response",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 555
+      "handler_line": 567
     },
     {
       "method": "POST",
@@ -25115,9 +25352,9 @@
       "request_model": "institutional.contracts.FindingReview",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 555
+      "handler_line": 567
     },
     {
       "method": "POST",
@@ -25125,9 +25362,9 @@
       "request_model": "institutional.contracts.CorrectivePlan",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 555
+      "handler_line": 567
     },
     {
       "method": "POST",
@@ -25135,9 +25372,9 @@
       "request_model": "institutional.contracts.CorrectivePlanReview",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 555
+      "handler_line": 567
     },
     {
       "method": "GET",
@@ -25145,9 +25382,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 580
+      "handler_line": 592
     },
     {
       "method": "POST",
@@ -25155,9 +25392,9 @@
       "request_model": "control.contracts.Evidence",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 606
+      "handler_line": 618
     },
     {
       "method": "POST",
@@ -25165,9 +25402,9 @@
       "request_model": "institutional.contracts.NoticeDelivery",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 621
+      "handler_line": 633
     },
     {
       "method": "POST",
@@ -25175,9 +25412,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 655
+      "handler_line": 667
     },
     {
       "method": "GET",
@@ -25185,9 +25422,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 751
+      "handler_line": 763
     },
     {
       "method": "GET",
@@ -25195,9 +25432,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 808
+      "handler_line": 820
     },
     {
       "method": "POST",
@@ -25205,9 +25442,9 @@
       "request_model": "institutional.contracts.Content",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 835
+      "handler_line": 847
     },
     {
       "method": "GET",
@@ -25215,9 +25452,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 847
+      "handler_line": 859
     },
     {
       "method": "GET",
@@ -25225,9 +25462,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 911
+      "handler_line": 923
     },
     {
       "method": "POST",
@@ -25235,9 +25472,9 @@
       "request_model": "institutional.contracts.Revision",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 958
+      "handler_line": 970
     },
     {
       "method": "POST",
@@ -25245,9 +25482,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 942
+      "handler_line": 954
     },
     {
       "method": "POST",
@@ -25255,9 +25492,9 @@
       "request_model": "institutional.contracts.ContentReview",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 942
+      "handler_line": 954
     },
     {
       "method": "POST",
@@ -25265,9 +25502,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 942
+      "handler_line": 954
     },
     {
       "method": "POST",
@@ -25275,9 +25512,9 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 942
+      "handler_line": 954
     },
     {
       "method": "POST",
@@ -25285,9 +25522,9 @@
       "request_model": "institutional.contracts.Distribute",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 942
+      "handler_line": 954
     },
     {
       "method": "GET",
@@ -25295,9 +25532,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 977
+      "handler_line": 989
     },
     {
       "method": "GET",
@@ -25305,9 +25542,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 1004
+      "handler_line": 1016
     },
     {
       "method": "POST",
@@ -25315,9 +25552,9 @@
       "request_model": "institutional.contracts.ContentReceipt",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 1047
+      "handler_line": 1059
     },
     {
       "method": "GET",
@@ -25325,9 +25562,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 1077
+      "handler_line": 1089
     },
     {
       "method": "GET",
@@ -25335,9 +25572,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 1128
+      "handler_line": 1140
     },
     {
       "method": "GET",
@@ -25345,9 +25582,69 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "ccb840d65d551785dcdfb143c46cbd5c59989ea1af6a60b44e8aeb6b6f7ba025"
+        "sha256_lf": "e196341df7a73faac884ed215b5ea8d4330f2b7007a307a11991a41d685d9249"
       },
-      "handler_line": 1206
+      "handler_line": 1218
+    },
+    {
+      "method": "POST",
+      "path": "/v1/institutional/delivery-teams",
+      "request_model": "institutional.contracts.DeliveryTeamProposal",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/teams.py",
+        "sha256_lf": "5b5081d9b7e1a14dc0cd4e821663240abacda83bb9241b79ec43d74e4b0c08ad"
+      },
+      "handler_line": 220
+    },
+    {
+      "method": "POST",
+      "path": "/v1/institutional/delivery-teams/{identifier}/revise",
+      "request_model": "institutional.contracts.DeliveryTeamRevision",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/teams.py",
+        "sha256_lf": "5b5081d9b7e1a14dc0cd4e821663240abacda83bb9241b79ec43d74e4b0c08ad"
+      },
+      "handler_line": 244
+    },
+    {
+      "method": "POST",
+      "path": "/v1/institutional/delivery-teams/{identifier}/accept",
+      "request_model": "institutional.contracts.Versioned",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/teams.py",
+        "sha256_lf": "5b5081d9b7e1a14dc0cd4e821663240abacda83bb9241b79ec43d74e4b0c08ad"
+      },
+      "handler_line": 227
+    },
+    {
+      "method": "POST",
+      "path": "/v1/institutional/delivery-teams/{identifier}/retire",
+      "request_model": "institutional.contracts.Versioned",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/teams.py",
+        "sha256_lf": "5b5081d9b7e1a14dc0cd4e821663240abacda83bb9241b79ec43d74e4b0c08ad"
+      },
+      "handler_line": 227
+    },
+    {
+      "method": "GET",
+      "path": "/v1/institutional/delivery-teams",
+      "request_model": null,
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/teams.py",
+        "sha256_lf": "5b5081d9b7e1a14dc0cd4e821663240abacda83bb9241b79ec43d74e4b0c08ad"
+      },
+      "handler_line": 257
+    },
+    {
+      "method": "GET",
+      "path": "/v1/institutional/delivery-teams/{identifier}/history",
+      "request_model": null,
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/teams.py",
+        "sha256_lf": "5b5081d9b7e1a14dc0cd4e821663240abacda83bb9241b79ec43d74e4b0c08ad"
+      },
+      "handler_line": 268
     },
     {
       "method": "POST",

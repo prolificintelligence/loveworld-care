@@ -70,6 +70,8 @@ class Response(Versioned):
 
 
 class CorrectivePlan(Versioned):
+    owner_team_id: UUID | None = None
+    owner_team_version: int | None = Field(default=None, ge=1)
     required_action: str = Field(min_length=5, max_length=6000)
     due_at: datetime
     deadline_authority_reference: str = Field(min_length=5, max_length=4000)
@@ -78,6 +80,18 @@ class CorrectivePlan(Versioned):
 class CorrectivePlanReview(Versioned):
     plan_id: UUID
     decision: Literal["AGREE", "RETURN"]
+
+
+class DeliveryTeamProposal(Evidence):
+    facility_id: UUID
+    name: str = Field(min_length=2, max_length=200)
+    purpose: str = Field(min_length=5, max_length=4000)
+    authority_reference: str = Field(min_length=5, max_length=4000)
+    lead_account_id: UUID
+
+
+class DeliveryTeamRevision(DeliveryTeamProposal):
+    expected_version: int = Field(ge=1)
 
 
 class FindingReview(Versioned):

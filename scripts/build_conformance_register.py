@@ -41,6 +41,8 @@ FORM_MODELS = {
         "institutional.contracts.Response",
         "institutional.contracts.CorrectivePlan",
         "institutional.contracts.CorrectivePlanReview",
+        "institutional.contracts.DeliveryTeamProposal",
+        "institutional.contracts.DeliveryTeamRevision",
         "institutional.contracts.FindingReview",
         "contracts.ApplicationCorrection",
         "contracts.ApplicationResubmit",

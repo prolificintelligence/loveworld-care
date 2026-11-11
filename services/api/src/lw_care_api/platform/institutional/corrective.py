@@ -9,6 +9,7 @@ from sqlalchemy import select
 from .. import db
 from ..domain import expected, require
 from . import tables as t
+from .teams import bound_team, verify_plan_team
 
 CONTRACT = "LWH-EXT-CORRECTIVE-001"
 PROPOSED = "standards.corrective_plan_proposed"
@@ -96,6 +97,7 @@ class CorrectivePlans:
                 "Assignment changed; agree a fresh plan and submit the actual current owner's response",
                 409,
             )
+        await verify_plan_team(self, plan, finding, case, current=current_parties)
         return plan
 
     async def propose_corrective_plan(self, identifier, body):
@@ -122,6 +124,7 @@ class CorrectivePlans:
             "An independent assigned reviewer must agree the plan",
             409,
         )
+        team = await bound_team(self, finding, case, body)
         finding = await self.change(t.findings, finding, {"state": "AWAITING_RESPONSE"})
         plan = {
             "contract": CONTRACT,
@@ -138,6 +141,8 @@ class CorrectivePlans:
             "proposal_finding_version": finding["version"],
             "evidence": body["evidence"],
         }
+        if team:
+            plan["owner_team"] = team
         await self.emit(PROPOSED, finding, plan, facility["id"])
         return {
             "id": finding["id"],
@@ -168,6 +173,7 @@ class CorrectivePlans:
             409,
         )
         if body["decision"] == "AGREE":
+            await verify_plan_team(self, plan, finding, case)
             await self.person(finding["owner_id"], {"FACILITY_ADMIN"}, facility)
             require(
                 plan["due_at"] > db.now(),

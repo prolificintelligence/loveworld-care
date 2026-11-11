@@ -72,6 +72,11 @@ def install(app, cfg, database, box, actor_for):
             # Preserve historical response receipt hashes; a new response still
             # binds the current agreed plan in its protected server-side data.
             body.pop("corrective_plan_id", None)
+        if isinstance(payload, c.CorrectivePlan):
+            # Preserve receipts for existing individually accountable plans.
+            for key in ("owner_team_id", "owner_team_version"):
+                if body.get(key) is None:
+                    body.pop(key, None)
         actor = None
         try:
             async with database.transaction() as session:
@@ -479,16 +484,23 @@ def install(app, cfg, database, box, actor_for):
             "next_cursor": rows[2]["id"] if len(rows) > 3 else None,
         }
         if kind == "findings":
+            from .teams import verify_plan_team
+
             for item, row in zip(result["items"], rows[:3]):
                 plan = await service.corrective_plan(row)
                 if plan:
+                    try:
+                        await verify_plan_team(service, plan, row, case)
+                        plan["team_current"] = True
+                    except RuleError:
+                        plan["team_current"] = False
                     plan["parties_current"] = (plan["owner_account_id"] == row["owner_id"] == case["respondent_id"]
                         and plan.get("reviewed_by", plan["assigned_reviewer_id"]) == case["reviewer_id"])
-                    plan["current_for_response"] = (case["state"] == "INSPECTED"
+                    plan["current_for_response"] = (plan["team_current"] and case["state"] == "INSPECTED"
                         and row["state"] in {"AWAITING_RESPONSE", "RETURNED"} and plan["status"] == "AGREED"
                         and plan["owner_account_id"] == row["owner_id"] == case["respondent_id"]
                         and plan.get("reviewed_by") == case["reviewer_id"])
-                    plan["current_for_review"] = (case["state"] == "INSPECTED" and plan["status"] == "PROPOSED"
+                    plan["current_for_review"] = (plan["team_current"] and case["state"] == "INSPECTED" and plan["status"] == "PROPOSED"
                         and plan["owner_account_id"] == row["owner_id"] == case["respondent_id"]
                         and plan["assigned_reviewer_id"] == case["reviewer_id"]
                         and plan["proposal_finding_version"] == row["version"])
@@ -1249,4 +1261,7 @@ def install(app, cfg, database, box, actor_for):
                 "next_cursor": rows[0]["id"] if len(rows) > 1 else None,
             }
 
+    from .teams import install_team_routes
+
+    install_team_routes(router, cfg, database, box, actor_for, available, command, c)
     app.include_router(router)

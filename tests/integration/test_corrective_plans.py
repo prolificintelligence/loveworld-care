@@ -254,6 +254,26 @@ async def exercise(app, client, scenario):
             "decision": decision,
         }
 
+    if scenario == "delivery_team_fixture":
+        return {
+            "j": j,
+            "case": case,
+            "cp": cp,
+            "finding": finding,
+            "path": path,
+            "actors": actors,
+            "create": create,
+            "post": post,
+            "current": current,
+            "effects": effects,
+            "refused": refused,
+            "new_actor": new_actor,
+            "reason": reason,
+            "proposal": proposal,
+            "response_body": response_body,
+            "review_plan": review_plan,
+        }
+
     if scenario == "legacy_resolved_recovery":
         # Retained pre-extension shape, not claimed executed transitions.
         response = {
@@ -383,6 +403,12 @@ async def exercise(app, client, scenario):
     body = proposal(finding["version"], due)
     proposed = await create(path + "/corrective-plan", body, "creator", key)
     assert await create(path + "/corrective-plan", body, "creator", key) == proposed
+    assert await create(
+        path + "/corrective-plan",
+        body | {"owner_team_id": None, "owner_team_version": None},
+        "creator",
+        key,
+    ) == proposed
     if scenario == "concurrent_agree_revise":
         assert app.state.database.postgres
         before = await effects()
