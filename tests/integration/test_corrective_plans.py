@@ -254,7 +254,7 @@ async def exercise(app, client, scenario):
             "decision": decision,
         }
 
-    if scenario == "delivery_team_fixture":
+    if scenario in {"delivery_team_fixture", "corrective_capture_fixture"}:
         return {
             "j": j,
             "case": case,

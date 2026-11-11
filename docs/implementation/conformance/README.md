@@ -19,3 +19,5 @@ The [corrective-plan extension](../corrective-plan-extension.md) reuses institut
 Director-first review starts with forms 001–018 and screens 001–030: registry → affiliation → returns → independent verification → permitted intelligence → accepted intervention/outcome. Resolve the field-specific exceptions before advancing claims. Record explicit typed extensions for owner review; preserve baseline meanings and actual adoption dependencies. The existing clinical extension register remains applicable.
 
 Formal acceptance remains **200 requirements /111 cases NOT_RUN**. Operating adoption and independent actual-role/device/accessibility/low-bandwidth UAT remain separate gates.
+
+The [corrective capture extension](../corrective-capture-extension.md) adds a bounded canonical FRM-010 envelope tied to actual institutional finding/case versions. Omission, five explicit absence reasons and empty reference lists remain distinct; submitted values are source-checked. Form capture never agrees/resolves/recognises anything. The initial-application bridge and full generic capture/operating acceptance remain open.

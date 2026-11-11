@@ -38,6 +38,9 @@ FORM_MODELS = {
     8: ["contracts.Inspection"],
     9: ["institutional.contracts.CaseOpen"],
     10: [
+        "institutional.capture_contracts.CorrectiveCapture",
+        "institutional.capture_contracts.CorrectiveForm",
+        "institutional.capture_contracts.CorrectiveAnswers",
         "institutional.contracts.Response",
         "institutional.contracts.CorrectivePlan",
         "institutional.contracts.CorrectivePlanReview",

@@ -1261,7 +1261,9 @@ def install(app, cfg, database, box, actor_for):
                 "next_cursor": rows[0]["id"] if len(rows) > 1 else None,
             }
 
+    from .captures import install_capture_routes
     from .teams import install_team_routes
 
     install_team_routes(router, cfg, database, box, actor_for, available, command, c)
+    install_capture_routes(router, cfg, database, box, actor_for, available, command)
     app.include_router(router)

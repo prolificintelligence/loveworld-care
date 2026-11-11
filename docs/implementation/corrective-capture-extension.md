@@ -1,0 +1,15 @@
+# Finding-bound corrective form capture
+
+`LWH-EXT-CORRECTIVE-CAPTURE-001` records a bounded canonical FRM-010 envelope inside a native command carrying explicit intent, reason and expected finding/case versions. It uses existing encrypted immutable institutional journal storage, without a migration.
+
+The envelope preserves `draft` versus `submitted`, unanswered omitted slots, explicit `unknown`, `not_assessed`, `not_applicable`, `not_available`, `declined`, optional explanations and empty reference lists. Null is not an answer. Submitted forms require the four baseline slots, permitting explicit absence. Timestamps require seconds and an explicit timezone; text, explanation, references and request sizes are bounded. Exported schema retains canonical requiredness/absence structure; this is not unrestricted generic capture or complete semantic acceptance.
+
+Only the current named respondent or assigned independent reviewer can write. Actor, facility, UUID authority identity and actual case/finding versions are checked. Team and evidence references remain scoped; evidence must be current/scanned and address the actual criterion, including in drafts. Submitted positive values must match existing agreed-plan, actual response and protected review facts. Only the current independent reviewer can submit an actual review result. Absences remain the author's declarations, not verified claims that a source does not exist.
+
+Capture never creates or agrees a plan, adopts a deadline, submits a corrective response, resolves a finding or grants recognition. Draft values remain unverified notes. Empty evidence lists supply no resolution proof. Actual team acceptance, independent plan agreement, response and independent resolution remain separate required actions. Original facts, authorship and completed ownership are preserved; no automatic backfill or conversion is performed.
+
+Records are immutable snapshots, not a mutable current-form projection. The journal version denotes the finding version observed; multiple intentional captures may observe the same version. Replay returns one original record under current authority. Scoped chronological history uses time/ID cursor ordering and does not replace current workflow state. The server also returns actual available source values for deliberate transcription; changing source versions requires refreshing the dossier. UI drafts stay in memory and are cleared on actor/case/finding-version changes; no clinical/PWA cache is added.
+
+This links forms to actual existing institutional findings. Safe initial-application criterion-to-finding bridging remains undelivered and must retain explicit source/independent-review safeguards. Full generic capture, roster/policy, notice/appeal/offline and actual-role/device/operating acceptance remain open. Metadata-only CLEAN fixtures qualify no scan, file, capacity or operating decision. No production business fixtures, hosts, dependencies or operating approvals are created.
+
+Rollback requires a qualified preserving schema-9-compatible artifact; never restore older business data or discard newer source/capture/care/finance history.
