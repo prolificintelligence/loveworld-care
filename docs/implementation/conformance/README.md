@@ -21,3 +21,5 @@ Director-first review starts with forms 001–018 and screens 001–030: registr
 Formal acceptance remains **200 requirements /111 cases NOT_RUN**. Operating adoption and independent actual-role/device/accessibility/low-bandwidth UAT remain separate gates.
 
 The [corrective capture extension](../corrective-capture-extension.md) adds a bounded canonical FRM-010 envelope tied to actual institutional finding/case versions. Omission, five explicit absence reasons and empty reference lists remain distinct; submitted values are source-checked. Form capture never agrees/resolves/recognises anything. The initial-application bridge and full generic capture/operating acceptance remain open.
+
+The [initial source-link extension](../initial-source-link-extension.md) adds independently confirmed actual initial NOT_MET/NOT_OBSERVED lineage to existing findings, exact screened attestation identity, three version fences and retained retraction. It supplies context only, never current proof or automatic resolution. Full generic capture/operating semantics remain open.

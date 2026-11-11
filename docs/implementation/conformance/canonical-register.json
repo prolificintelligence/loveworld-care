@@ -409,7 +409,7 @@
           "request_model": "institutional.contracts.CaseOpen",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+            "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
           },
           "handler_line": 386
         }
@@ -417,7 +417,7 @@
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+          "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -443,6 +443,8 @@
         "sha256_lf": "87e083e8c943b3d4591c19f7af9b2f8df8eaf86bea8a3cce6231cc17b3ccb167"
       },
       "candidate_models": [
+        "institutional.source_links.InitialSourceLink",
+        "institutional.source_links.SourceLinkRetraction",
         "institutional.capture_contracts.CorrectiveCapture",
         "institutional.capture_contracts.CorrectiveForm",
         "institutional.capture_contracts.CorrectiveAnswers",
@@ -482,7 +484,7 @@
           "request_model": "institutional.contracts.Response",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+            "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
           },
           "handler_line": 567
         },
@@ -492,7 +494,7 @@
           "request_model": "institutional.contracts.FindingReview",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+            "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
           },
           "handler_line": 567
         },
@@ -502,7 +504,7 @@
           "request_model": "institutional.contracts.CorrectivePlan",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+            "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
           },
           "handler_line": 567
         },
@@ -512,7 +514,7 @@
           "request_model": "institutional.contracts.CorrectivePlanReview",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+            "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
           },
           "handler_line": 567
         },
@@ -545,12 +547,32 @@
             "sha256_lf": "15d8f7787e40bb0a911ab08bc32b5d159b3d694b58d286a43de3042a4edff0c7"
           },
           "handler_line": 258
+        },
+        {
+          "method": "POST",
+          "path": "/v1/institutional/findings/{identifier}/initial-source-links",
+          "request_model": "institutional.source_links.InitialSourceLink",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/institutional/source_links.py",
+            "sha256_lf": "e4bba7c9550fa53b7d5fad98e87abaa482e3dbe2e38354c9c189656a7aa44b9b"
+          },
+          "handler_line": 280
+        },
+        {
+          "method": "POST",
+          "path": "/v1/institutional/findings/{identifier}/initial-source-links/{link_id}/retract",
+          "request_model": "institutional.source_links.SourceLinkRetraction",
+          "handler": {
+            "path": "services/api/src/lw_care_api/platform/institutional/source_links.py",
+            "sha256_lf": "e4bba7c9550fa53b7d5fad98e87abaa482e3dbe2e38354c9c189656a7aa44b9b"
+          },
+          "handler_line": 290
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+          "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -585,7 +607,7 @@
           "request_model": "institutional.contracts.Decide",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+            "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
           },
           "handler_line": 521
         }
@@ -593,7 +615,7 @@
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+          "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -671,7 +693,7 @@
           "request_model": "institutional.contracts.Content",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-            "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+            "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
           },
           "handler_line": 847
         }
@@ -679,7 +701,7 @@
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+          "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -4487,7 +4509,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "f2023d06e32e957cc430d48ee39d53fc42f51140d2a5d9b7d77c1eca531944d2"
+            "sha256_lf": "cb167a6d9a135cf2cf24e3090316a97784636aa76c624e31ad495d1550b730b4"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         },
@@ -4505,6 +4527,22 @@
             "sha256_lf": "628166ab6df16bf2fcad90fa9655cb471c6727e74d2c952bf6bdd5ef3dbfa313"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        },
+        {
+          "path": "tests/integration/test_initial_source_links.py",
+          "symbol": "test_initial_source_link_guards",
+          "scenarios": [
+            "source_guards_and_resolution",
+            "source_withdrawal",
+            "source_scope_and_legacy",
+            "source_met_refusal",
+            "concurrent_source_confirmation"
+          ],
+          "source": {
+            "path": "tests/integration/test_initial_source_links.py",
+            "sha256_lf": "9e667f5b254f3fea07c690e98ed2e24001d53b7280ee97c3cdab0887b2759a70"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
       ],
       "formal_acceptance": "NOT_RUN",
@@ -4512,10 +4550,10 @@
       "engineering_proof": {
         "id": "LWH-FRM-010.F001",
         "binding": "Institutional finding UUID -> institutional_findings.id / protected plan.finding_id",
-        "meaning": "Actual finding identity is case-bound; initial criterion-code correction remains a separate narrower contract.",
+        "meaning": "Actual finding identity is case-bound; initial criterion-code correction remains a separate narrower contract. Explicit independent historical initial-criterion lineage now retains exact screened inspection/attestation and target versions, with retained retraction; it supplies no resolution or current proof.",
         "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
         "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
-        "missingness_exception": "Bounded FRM-010 envelope now preserves omitted slots, five canonical absence reasons and explicit empty reference lists. Submitted positive values match actual protected sources; capture never advances work. Initial-application bridge, broader generic capture, full roster/policy and adoption remain open.",
+        "missingness_exception": "Bounded current finding and initial source lineage are explicit. Broader generic capture, roster/policy, notices/appeals/offline and actual-role/adoption semantics remain open.",
         "tests": [
           {
             "path": "tests/integration/test_corrective_plans.py",
@@ -4539,6 +4577,17 @@
               "capture_handover_and_scope",
               "capture_reference_and_history",
               "concurrent_capture_replay"
+            ]
+          },
+          {
+            "path": "tests/integration/test_initial_source_links.py",
+            "symbol": "test_initial_source_link_guards",
+            "scenarios": [
+              "source_guards_and_resolution",
+              "source_withdrawal",
+              "source_scope_and_legacy",
+              "source_met_refusal",
+              "concurrent_source_confirmation"
             ]
           }
         ],
@@ -4611,7 +4660,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "f2023d06e32e957cc430d48ee39d53fc42f51140d2a5d9b7d77c1eca531944d2"
+            "sha256_lf": "cb167a6d9a135cf2cf24e3090316a97784636aa76c624e31ad495d1550b730b4"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         },
@@ -4855,7 +4904,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "f2023d06e32e957cc430d48ee39d53fc42f51140d2a5d9b7d77c1eca531944d2"
+            "sha256_lf": "cb167a6d9a135cf2cf24e3090316a97784636aa76c624e31ad495d1550b730b4"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         },
@@ -4966,7 +5015,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "f2023d06e32e957cc430d48ee39d53fc42f51140d2a5d9b7d77c1eca531944d2"
+            "sha256_lf": "cb167a6d9a135cf2cf24e3090316a97784636aa76c624e31ad495d1550b730b4"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         },
@@ -5080,7 +5129,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "f2023d06e32e957cc430d48ee39d53fc42f51140d2a5d9b7d77c1eca531944d2"
+            "sha256_lf": "cb167a6d9a135cf2cf24e3090316a97784636aa76c624e31ad495d1550b730b4"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         },
@@ -5191,7 +5240,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "f2023d06e32e957cc430d48ee39d53fc42f51140d2a5d9b7d77c1eca531944d2"
+            "sha256_lf": "cb167a6d9a135cf2cf24e3090316a97784636aa76c624e31ad495d1550b730b4"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         },
@@ -12006,7 +12055,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+          "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -12041,7 +12090,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+          "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -12076,7 +12125,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+          "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -13815,7 +13864,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+          "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -13861,7 +13910,7 @@
           ],
           "source": {
             "path": "tests/integration/test_corrective_plans.py",
-            "sha256_lf": "f2023d06e32e957cc430d48ee39d53fc42f51140d2a5d9b7d77c1eca531944d2"
+            "sha256_lf": "cb167a6d9a135cf2cf24e3090316a97784636aa76c624e31ad495d1550b730b4"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -14067,7 +14116,7 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-          "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+          "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/institutional/affiliation.py",
@@ -17451,6 +17500,112 @@
         "sha256_lf": "ef7d06deb7df4e7a1ef3fc79a034a8a18708c297f895721b07f9beb68d88a0ed"
       },
       "line": 36
+    },
+    "institutional.source_links.InitialSourceLink": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "maxLength": 12000,
+            "minLength": 3,
+            "title": "Evidence",
+            "type": "string"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          },
+          "expected_version": {
+            "minimum": 1,
+            "title": "Expected Version",
+            "type": "integer"
+          },
+          "expected_case_version": {
+            "minimum": 1,
+            "title": "Expected Case Version",
+            "type": "integer"
+          },
+          "application_id": {
+            "format": "uuid",
+            "title": "Application Id",
+            "type": "string"
+          },
+          "expected_application_version": {
+            "minimum": 1,
+            "title": "Expected Application Version",
+            "type": "integer"
+          },
+          "inspection_id": {
+            "format": "uuid",
+            "title": "Inspection Id",
+            "type": "string"
+          },
+          "attestation_version": {
+            "minimum": 1,
+            "title": "Attestation Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "evidence",
+          "intent_confirmed",
+          "expected_version",
+          "expected_case_version",
+          "application_id",
+          "expected_application_version",
+          "inspection_id",
+          "attestation_version"
+        ],
+        "title": "InitialSourceLink",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/institutional/source_links.py",
+        "sha256_lf": "e4bba7c9550fa53b7d5fad98e87abaa482e3dbe2e38354c9c189656a7aa44b9b"
+      },
+      "line": 21
+    },
+    "institutional.source_links.SourceLinkRetraction": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "maxLength": 12000,
+            "minLength": 3,
+            "title": "Evidence",
+            "type": "string"
+          },
+          "intent_confirmed": {
+            "const": true,
+            "title": "Intent Confirmed",
+            "type": "boolean"
+          },
+          "expected_version": {
+            "minimum": 1,
+            "title": "Expected Version",
+            "type": "integer"
+          },
+          "expected_case_version": {
+            "minimum": 1,
+            "title": "Expected Case Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "evidence",
+          "intent_confirmed",
+          "expected_version",
+          "expected_case_version"
+        ],
+        "title": "SourceLinkRetraction",
+        "type": "object"
+      },
+      "source": {
+        "path": "services/api/src/lw_care_api/platform/institutional/source_links.py",
+        "sha256_lf": "e4bba7c9550fa53b7d5fad98e87abaa482e3dbe2e38354c9c189656a7aa44b9b"
+      },
+      "line": 29
     },
     "institutional.capture_contracts.CorrectiveCapture": {
       "schema": {
@@ -23781,7 +23936,7 @@
   },
   "reviewed_proof_input": {
     "path": "docs/implementation/conformance/director-proofs.json",
-    "sha256_lf": "b2b2dcd76301e54d91345ee33efaebeeb2774d7212a48154ac7b40aaab43ebcd"
+    "sha256_lf": "532532d575af0b8dc34d1784857c74235b9ce6dfd922974df02fed0ad84ac39c"
   },
   "actual_routes": [
     {
@@ -26100,7 +26255,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 121
     },
@@ -26110,7 +26265,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 138
     },
@@ -26120,7 +26275,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 223
     },
@@ -26130,7 +26285,7 @@
       "request_model": "institutional.contracts.MasterChange",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 244
     },
@@ -26140,7 +26295,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 254
     },
@@ -26150,7 +26305,7 @@
       "request_model": "institutional.contracts.Review",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 270
     },
@@ -26160,7 +26315,7 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 289
     },
@@ -26170,7 +26325,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 308
     },
@@ -26180,7 +26335,7 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 339
     },
@@ -26190,7 +26345,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 358
     },
@@ -26200,7 +26355,7 @@
       "request_model": "institutional.contracts.CaseOpen",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 386
     },
@@ -26210,7 +26365,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 401
     },
@@ -26220,7 +26375,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 510
     },
@@ -26230,7 +26385,7 @@
       "request_model": "institutional.contracts.Assign",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 521
     },
@@ -26240,7 +26395,7 @@
       "request_model": "institutional.contracts.Inspection",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 521
     },
@@ -26250,7 +26405,7 @@
       "request_model": "institutional.contracts.Recommend",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 521
     },
@@ -26260,7 +26415,7 @@
       "request_model": "institutional.contracts.Notice",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 521
     },
@@ -26270,7 +26425,7 @@
       "request_model": "institutional.contracts.Decide",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 521
     },
@@ -26280,7 +26435,7 @@
       "request_model": "institutional.contracts.AssignmentOffer",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 521
     },
@@ -26290,7 +26445,7 @@
       "request_model": "institutional.contracts.AssignmentAccept",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 552
     },
@@ -26300,7 +26455,7 @@
       "request_model": "institutional.contracts.Response",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 567
     },
@@ -26310,7 +26465,7 @@
       "request_model": "institutional.contracts.FindingReview",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 567
     },
@@ -26320,7 +26475,7 @@
       "request_model": "institutional.contracts.CorrectivePlan",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 567
     },
@@ -26330,7 +26485,7 @@
       "request_model": "institutional.contracts.CorrectivePlanReview",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 567
     },
@@ -26340,7 +26495,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 592
     },
@@ -26350,7 +26505,7 @@
       "request_model": "control.contracts.Evidence",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 618
     },
@@ -26360,7 +26515,7 @@
       "request_model": "institutional.contracts.NoticeDelivery",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 633
     },
@@ -26370,7 +26525,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 667
     },
@@ -26380,7 +26535,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 763
     },
@@ -26390,7 +26545,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 820
     },
@@ -26400,7 +26555,7 @@
       "request_model": "institutional.contracts.Content",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 847
     },
@@ -26410,7 +26565,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 859
     },
@@ -26420,7 +26575,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 923
     },
@@ -26430,7 +26585,7 @@
       "request_model": "institutional.contracts.Revision",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 970
     },
@@ -26440,7 +26595,7 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 954
     },
@@ -26450,7 +26605,7 @@
       "request_model": "institutional.contracts.ContentReview",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 954
     },
@@ -26460,7 +26615,7 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 954
     },
@@ -26470,7 +26625,7 @@
       "request_model": "institutional.contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 954
     },
@@ -26480,7 +26635,7 @@
       "request_model": "institutional.contracts.Distribute",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 954
     },
@@ -26490,7 +26645,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 989
     },
@@ -26500,7 +26655,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 1016
     },
@@ -26510,7 +26665,7 @@
       "request_model": "institutional.contracts.ContentReceipt",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 1059
     },
@@ -26520,7 +26675,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 1089
     },
@@ -26530,7 +26685,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 1140
     },
@@ -26540,7 +26695,7 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/institutional/router.py",
-        "sha256_lf": "6daba9807811df2a64d18f5a38fc15ea1a233bdee07beca22ae4670b5b05d30b"
+        "sha256_lf": "7eb7337ba497fd6231ff43a5312ae97014a02d003f49eec5af1b7adc41b03d7b"
       },
       "handler_line": 1218
     },
@@ -26623,6 +26778,36 @@
         "sha256_lf": "15d8f7787e40bb0a911ab08bc32b5d159b3d694b58d286a43de3042a4edff0c7"
       },
       "handler_line": 271
+    },
+    {
+      "method": "POST",
+      "path": "/v1/institutional/findings/{identifier}/initial-source-links",
+      "request_model": "institutional.source_links.InitialSourceLink",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/source_links.py",
+        "sha256_lf": "e4bba7c9550fa53b7d5fad98e87abaa482e3dbe2e38354c9c189656a7aa44b9b"
+      },
+      "handler_line": 280
+    },
+    {
+      "method": "POST",
+      "path": "/v1/institutional/findings/{identifier}/initial-source-links/{link_id}/retract",
+      "request_model": "institutional.source_links.SourceLinkRetraction",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/source_links.py",
+        "sha256_lf": "e4bba7c9550fa53b7d5fad98e87abaa482e3dbe2e38354c9c189656a7aa44b9b"
+      },
+      "handler_line": 290
+    },
+    {
+      "method": "GET",
+      "path": "/v1/institutional/findings/{identifier}/initial-source-links",
+      "request_model": null,
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/institutional/source_links.py",
+        "sha256_lf": "e4bba7c9550fa53b7d5fad98e87abaa482e3dbe2e38354c9c189656a7aa44b9b"
+      },
+      "handler_line": 302
     },
     {
       "method": "POST",

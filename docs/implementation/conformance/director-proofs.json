@@ -302,10 +302,10 @@
     {
       "id": "LWH-FRM-010.F001",
       "binding": "Institutional finding UUID -> institutional_findings.id / protected plan.finding_id",
-      "meaning": "Actual finding identity is case-bound; initial criterion-code correction remains a separate narrower contract.",
+      "meaning": "Actual finding identity is case-bound; initial criterion-code correction remains a separate narrower contract. Explicit independent historical initial-criterion lineage now retains exact screened inspection/attestation and target versions, with retained retraction; it supplies no resolution or current proof.",
       "permission": "CURRENT_CASE_SCOPE_AND_PERSONALLY_ASSIGNED_OWNER_OR_INDEPENDENT_REVIEWER",
       "persistence": "Existing institutional finding/immutable response/protected encrypted journal facts",
-      "missingness_exception": "Bounded FRM-010 envelope now preserves omitted slots, five canonical absence reasons and explicit empty reference lists. Submitted positive values match actual protected sources; capture never advances work. Initial-application bridge, broader generic capture, full roster/policy and adoption remain open.",
+      "missingness_exception": "Bounded current finding and initial source lineage are explicit. Broader generic capture, roster/policy, notices/appeals/offline and actual-role/adoption semantics remain open.",
       "tests": [
         {
           "path": "tests/integration/test_corrective_plans.py",
@@ -329,6 +329,17 @@
             "capture_handover_and_scope",
             "capture_reference_and_history",
             "concurrent_capture_replay"
+          ]
+        },
+        {
+          "path": "tests/integration/test_initial_source_links.py",
+          "symbol": "test_initial_source_link_guards",
+          "scenarios": [
+            "source_guards_and_resolution",
+            "source_withdrawal",
+            "source_scope_and_legacy",
+            "source_met_refusal",
+            "concurrent_source_confirmation"
           ]
         }
       ],

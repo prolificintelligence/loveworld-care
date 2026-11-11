@@ -1262,8 +1262,10 @@ def install(app, cfg, database, box, actor_for):
             }
 
     from .captures import install_capture_routes
+    from .source_links import install_source_link_routes
     from .teams import install_team_routes
 
     install_team_routes(router, cfg, database, box, actor_for, available, command, c)
     install_capture_routes(router, cfg, database, box, actor_for, available, command)
+    install_source_link_routes(router, cfg, database, box, actor_for, available, command)
     app.include_router(router)

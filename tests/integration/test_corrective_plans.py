@@ -74,35 +74,60 @@ async def exercise(app, client, scenario):
             "reason": "Synthetic independently qualified fixture identity",
         },
     )
+    source_fixture = scenario in {"initial_link_fixture", "initial_pending_link_fixture"}
+    if source_fixture:
+        j["finding"] = {
+            **j["finding"],
+            "findings": [
+                {
+                    **item,
+                    "outcome": "NOT_MET",
+                    "observation": "Synthetic initial source noncompliance",
+                    "evidence_ids": [],
+                }
+                if item["criterion"] == "SYN-A"
+                else item
+                for item in j["finding"]["findings"]
+            ],
+        }
     inspected = await create(j["path"] + "/inspections", j["finding"], "inspector")
-    recommended = await create(
-        j["path"] + "/recommendation",
-        {
-            "expected_version": inspected["version"],
-            "decision": "APPROVE",
-            "reason": "Synthetic independent baseline review",
-        },
-        "reviewer",
-    )
-    await create(
-        j["path"] + "/decisions",
-        {
-            "expected_version": recommended["version"],
-            "decision": "APPROVE",
-            "reason": "Synthetic baseline initial recognition",
-            "scope": "Synthetic only",
-            "conditions": "",
-            "effective_at": stamp(-1),
-            "expires_at": stamp(12),
-            "intent_confirmed": True,
-        },
-        "decider",
-    )
+    async with app.state.database.transaction() as session:
+        initial_attestation = await session.scalar(
+            select(db.revisions.c.payload).where(
+                db.revisions.c.resource_type == "Application",
+                db.revisions.c.resource_id == inspected["id"],
+                db.revisions.c.version == inspected["version"],
+            )
+        )
+    if scenario != "initial_pending_link_fixture":
+        recommended = await create(
+            j["path"] + "/recommendation",
+            {
+                "expected_version": inspected["version"],
+                "decision": "CONDITIONAL" if source_fixture else "APPROVE",
+                "reason": "Synthetic independent baseline review",
+            },
+            "reviewer",
+        )
+        await create(
+            j["path"] + "/decisions",
+            {
+                "expected_version": recommended["version"],
+                "decision": "CONDITIONAL" if source_fixture else "APPROVE",
+                "reason": "Synthetic baseline initial recognition",
+                "scope": "Synthetic only",
+                "conditions": "Synthetic pending source correction" if source_fixture else "",
+                "effective_at": stamp(-1),
+                "expires_at": stamp(12),
+                "intent_confirmed": True,
+            },
+            "decider",
+        )
     case = await create(
         "/institutional/cases",
         {
             "facility_id": j["facility"]["id"],
-            "kind": "RENEWAL",
+            "kind": "NONCOMPLIANCE" if scenario == "initial_pending_link_fixture" else "RENEWAL",
             "criteria_id": j["criteria"]["id"],
             "respondent_id": actors["creator"][0],
             "due_at": stamp(5),
@@ -254,9 +279,16 @@ async def exercise(app, client, scenario):
             "decision": decision,
         }
 
-    if scenario in {"delivery_team_fixture", "corrective_capture_fixture"}:
+    if scenario in {
+        "delivery_team_fixture",
+        "corrective_capture_fixture",
+        "initial_link_fixture",
+        "initial_pending_link_fixture",
+        "initial_met_link_fixture",
+    }:
         return {
             "j": j,
+            "initial_attestation": initial_attestation,
             "case": case,
             "cp": cp,
             "finding": finding,
@@ -403,12 +435,15 @@ async def exercise(app, client, scenario):
     body = proposal(finding["version"], due)
     proposed = await create(path + "/corrective-plan", body, "creator", key)
     assert await create(path + "/corrective-plan", body, "creator", key) == proposed
-    assert await create(
-        path + "/corrective-plan",
-        body | {"owner_team_id": None, "owner_team_version": None},
-        "creator",
-        key,
-    ) == proposed
+    assert (
+        await create(
+            path + "/corrective-plan",
+            body | {"owner_team_id": None, "owner_team_version": None},
+            "creator",
+            key,
+        )
+        == proposed
+    )
     if scenario == "concurrent_agree_revise":
         assert app.state.database.postgres
         before = await effects()
