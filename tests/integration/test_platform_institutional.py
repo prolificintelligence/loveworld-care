@@ -354,8 +354,14 @@ def test_complete_institutional_authority_and_publication_chain(runtime):
         ).status_code
         == 200
     )
+    assert post(client, path + "/screening", {"expected_version": 3,
+        "reason": "Synthetic actual dossier screening", "intent_confirmed": True}, reviewer_headers).status_code == 200
+    assert post(client, path + "/evidence-review", {"expected_version": 4,
+        "reason": "Synthetic current evidence assessment", "intent_confirmed": True,
+        "assessments": [{"criterion": "TEST-ID", "assessment": "Synthetic adequate evidence for inspection",
+                         "evidence_ids": [evidence_id]}]}, reviewer_headers).status_code == 200
     finding = {
-        "expected_version": 3,
+        "expected_version": 5,
         "conflict_declared": False,
         "observed_at": stamp(-1),
         "findings": [
@@ -374,7 +380,7 @@ def test_complete_institutional_authority_and_publication_chain(runtime):
             client,
             path + "/recommendation",
             {
-                "expected_version": 4,
+                "expected_version": 6,
                 "decision": "APPROVE",
                 "reason": "Synthetic independent review",
             },
@@ -383,7 +389,7 @@ def test_complete_institutional_authority_and_publication_chain(runtime):
         == 200
     )
     decision = {
-        "expected_version": 5,
+        "expected_version": 7,
         "decision": "APPROVE",
         "reason": "Synthetic final decision",
         "scope": "Synthetic declared service",

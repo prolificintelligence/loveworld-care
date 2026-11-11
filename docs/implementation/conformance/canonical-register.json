@@ -23,9 +23,9 @@
           "request_model": "contracts.Facility",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+            "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
           },
-          "handler_line": 887
+          "handler_line": 889
         },
         {
           "method": "POST",
@@ -33,9 +33,9 @@
           "request_model": "contracts.Application",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+            "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
           },
-          "handler_line": 1041
+          "handler_line": 1043
         },
         {
           "method": "POST",
@@ -43,19 +43,19 @@
           "request_model": "contracts.ApplicationWithdraw",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/application_workflow.py",
-            "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+            "sha256_lf": "2a638d00ea25e8df9658c702c8538a3759301b4374f19756771f8e7a54e8afd9"
           },
-          "handler_line": 190
+          "handler_line": 279
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -323,19 +323,19 @@
           "request_model": "contracts.Decision",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+            "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
           },
-          "handler_line": 1488
+          "handler_line": 1497
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -366,19 +366,19 @@
           "request_model": "contracts.Inspection",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+            "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
           },
-          "handler_line": 1389
+          "handler_line": 1396
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -429,7 +429,7 @@
         },
         "engineering_test_candidate": {
           "path": "tests/integration/test_platform_institutional.py",
-          "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
+          "sha256_lf": "f95f9bdfa7a2eecbe77b3e1b6190327ae0b711c370a698943feca1f2520fa173"
         }
       },
       "status": "PARTIAL_CANDIDATE_MAPPING",
@@ -454,9 +454,9 @@
           "request_model": "contracts.ApplicationCorrection",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/application_workflow.py",
-            "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+            "sha256_lf": "2a638d00ea25e8df9658c702c8538a3759301b4374f19756771f8e7a54e8afd9"
           },
-          "handler_line": 31
+          "handler_line": 120
         },
         {
           "method": "POST",
@@ -464,9 +464,9 @@
           "request_model": "contracts.ApplicationResubmit",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/application_workflow.py",
-            "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+            "sha256_lf": "2a638d00ea25e8df9658c702c8538a3759301b4374f19756771f8e7a54e8afd9"
           },
-          "handler_line": 98
+          "handler_line": 187
         },
         {
           "method": "POST",
@@ -494,7 +494,7 @@
         },
         "engineering_test_candidate": {
           "path": "tests/integration/test_platform_institutional.py",
-          "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
+          "sha256_lf": "f95f9bdfa7a2eecbe77b3e1b6190327ae0b711c370a698943feca1f2520fa173"
         }
       },
       "status": "PARTIAL_CANDIDATE_MAPPING",
@@ -537,7 +537,7 @@
         },
         "engineering_test_candidate": {
           "path": "tests/integration/test_platform_institutional.py",
-          "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
+          "sha256_lf": "f95f9bdfa7a2eecbe77b3e1b6190327ae0b711c370a698943feca1f2520fa173"
         }
       },
       "status": "PARTIAL_CANDIDATE_MAPPING",
@@ -623,7 +623,7 @@
         },
         "engineering_test_candidate": {
           "path": "tests/integration/test_platform_institutional.py",
-          "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
+          "sha256_lf": "f95f9bdfa7a2eecbe77b3e1b6190327ae0b711c370a698943feca1f2520fa173"
         }
       },
       "status": "PARTIAL_CANDIDATE_MAPPING",
@@ -830,9 +830,9 @@
           "request_model": "contracts.Invite",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+            "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
           },
-          "handler_line": 670
+          "handler_line": 672
         },
         {
           "method": "POST",
@@ -840,19 +840,19 @@
           "request_model": "contracts.Unit",
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+            "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
           },
-          "handler_line": 776
+          "handler_line": 778
         }
       ],
       "candidate_evidence": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -2334,7 +2334,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -2398,7 +2398,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -2466,7 +2466,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -2531,7 +2531,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -2618,7 +2618,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3529,7 +3529,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3641,7 +3641,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3712,7 +3712,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3783,7 +3783,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3853,7 +3853,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -3923,7 +3923,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4018,7 +4018,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4087,7 +4087,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4183,7 +4183,7 @@
           ],
           "source": {
             "path": "tests/integration/test_director_affiliation_conformance.py",
-            "sha256_lf": "8ec4fbda790e547b67dd28f189f416a3590628e2feb92e558fd9f01de0716a25"
+            "sha256_lf": "b527591e5cbbcdce3f494a327026dbd7bca10ff9ca61b107cbc10863149556d3"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4395,7 +4395,7 @@
           ],
           "source": {
             "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4452,7 +4452,7 @@
           ],
           "source": {
             "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4547,7 +4547,7 @@
           ],
           "source": {
             "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4604,7 +4604,7 @@
           ],
           "source": {
             "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -4661,7 +4661,7 @@
           ],
           "source": {
             "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -10607,11 +10607,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10626,7 +10626,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
+        "sha256_lf": "4639ab0f42eb5c8d6f38b8a9231cd539d67742a521074c72d284b558556117e4"
       },
       "page_route": "/"
     },
@@ -10642,11 +10642,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10661,7 +10661,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
+        "sha256_lf": "4639ab0f42eb5c8d6f38b8a9231cd539d67742a521074c72d284b558556117e4"
       },
       "page_route": "/"
     },
@@ -10677,11 +10677,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10696,7 +10696,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
+        "sha256_lf": "4639ab0f42eb5c8d6f38b8a9231cd539d67742a521074c72d284b558556117e4"
       },
       "page_route": "/"
     },
@@ -10712,11 +10712,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10731,7 +10731,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
+        "sha256_lf": "4639ab0f42eb5c8d6f38b8a9231cd539d67742a521074c72d284b558556117e4"
       },
       "page_route": "/"
     },
@@ -10747,11 +10747,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10766,7 +10766,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
+        "sha256_lf": "4639ab0f42eb5c8d6f38b8a9231cd539d67742a521074c72d284b558556117e4"
       },
       "page_route": "/"
     },
@@ -10782,11 +10782,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -10801,7 +10801,7 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence. Page association is domain-level, not one of 75 individually qualified screens.",
       "candidate_page": {
         "path": "apps/platform-web/src/app/page.tsx",
-        "sha256_lf": "14eb6d8fbd5dc1bd1a6ba5f060c19568c6b2fa887b9fc3fd741530c66602c03f"
+        "sha256_lf": "4639ab0f42eb5c8d6f38b8a9231cd539d67742a521074c72d284b558556117e4"
       },
       "page_route": "/"
     },
@@ -11459,7 +11459,7 @@
         },
         "engineering_test_candidate": {
           "path": "tests/integration/test_platform_institutional.py",
-          "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
+          "sha256_lf": "f95f9bdfa7a2eecbe77b3e1b6190327ae0b711c370a698943feca1f2520fa173"
         }
       },
       "test_evidence": [],
@@ -11494,7 +11494,7 @@
         },
         "engineering_test_candidate": {
           "path": "tests/integration/test_platform_institutional.py",
-          "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
+          "sha256_lf": "f95f9bdfa7a2eecbe77b3e1b6190327ae0b711c370a698943feca1f2520fa173"
         }
       },
       "test_evidence": [],
@@ -11529,7 +11529,7 @@
         },
         "engineering_test_candidate": {
           "path": "tests/integration/test_platform_institutional.py",
-          "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
+          "sha256_lf": "f95f9bdfa7a2eecbe77b3e1b6190327ae0b711c370a698943feca1f2520fa173"
         }
       },
       "test_evidence": [],
@@ -13130,11 +13130,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -13161,11 +13161,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -13188,7 +13188,25 @@
           ],
           "source": {
             "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
+          },
+          "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
+        },
+        {
+          "path": "tests/integration/test_application_screening.py",
+          "symbol": "test_application_screening_order_and_guards",
+          "scenarios": [
+            "guards_and_order",
+            "expiry",
+            "policy_and_scope",
+            "scope_and_replay",
+            "unreviewed_evidence",
+            "legacy_recovery",
+            "concurrent_screen_withdraw"
+          ],
+          "source": {
+            "path": "tests/integration/test_application_screening.py",
+            "sha256_lf": "ab3ca446ff2ea90e16fd163df4804cc54058c5051a8c49201d450a4dd76e1d3f"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -13196,8 +13214,8 @@
       "exception": "No one-to-one identity/transition equivalence asserted. Require actor, permission, guards, missingness, persistence, failure/recovery and actual-role evidence.",
       "engineering_proof": {
         "id": "LWH-STM-002",
-        "covered": "Correction request/response, fresh independent assignment/reinspection and withdrawal retain versions/history/affiliation; older timestamps do not select the attestation.",
-        "exceptions": "SCREENING, full corrective plans/deadlines/notices/appeals, offline capture and actual-role/device UAT remain open.",
+        "covered": "Initial SUBMITTED -> SCREENING -> EVIDENCE_REVIEW -> INSPECTION -> RECOMMENDED ordering; separate assigned reviewer assessments and inspector attestation, exact consecutive revision links, no premature recommendation, legacy correction/resubmission, retained evidence/history and concurrent screening/withdrawal. Existing correction/resubmission/withdrawal and historical independence remain qualified within their recorded execution bounds.",
+        "exceptions": "Complete canonical tagged capture/missingness and FRM-010 finding IDs/agreed plans/owners/adopted deadlines/resolution review, notice/appeal/renewal/expiry, offline capture and actual-role/device UAT remain open. Synthetic CLEAN evidence is not scanner qualification.",
         "tests": [
           {
             "path": "tests/integration/test_application_corrections.py",
@@ -13207,6 +13225,19 @@
               "cycle_binding",
               "historical_independence",
               "response_validation"
+            ]
+          },
+          {
+            "path": "tests/integration/test_application_screening.py",
+            "symbol": "test_application_screening_order_and_guards",
+            "scenarios": [
+              "guards_and_order",
+              "expiry",
+              "policy_and_scope",
+              "scope_and_replay",
+              "unreviewed_evidence",
+              "legacy_recovery",
+              "concurrent_screen_withdraw"
             ]
           }
         ]
@@ -13237,7 +13268,7 @@
         },
         "engineering_test_candidate": {
           "path": "tests/integration/test_platform_institutional.py",
-          "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
+          "sha256_lf": "f95f9bdfa7a2eecbe77b3e1b6190327ae0b711c370a698943feca1f2520fa173"
         }
       },
       "test_evidence": [
@@ -13252,7 +13283,7 @@
           ],
           "source": {
             "path": "tests/integration/test_application_corrections.py",
-            "sha256_lf": "3105e5f0226d31115c90f90964db3636ba9e9ec0dc6de6c52eba677d5ac768fe"
+            "sha256_lf": "8559987feb7aba4793bbb87117d7fc4cd6b5457560208628491cdee48acaff1f"
           },
           "class": "ENGINEERING_REGRESSION_NOT_FORMAL_ACCEPTANCE"
         }
@@ -13289,11 +13320,11 @@
       "candidate_sources": {
         "permission_candidate": {
           "path": "services/api/src/lw_care_api/platform/main.py",
-          "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+          "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
         },
         "validation_candidate": {
           "path": "services/api/src/lw_care_api/platform/domain.py",
-          "sha256_lf": "8edb8f221adb5008502c762fac60cb2a3e4fe2accc76174b0423cfcbfd154621"
+          "sha256_lf": "d33dee1108062c0d7eda5a46f5878d11bc63ad495f890f91ea55828f2050c652"
         },
         "persistence_candidate": {
           "path": "services/api/src/lw_care_api/platform/db.py",
@@ -13456,7 +13487,7 @@
         },
         "engineering_test_candidate": {
           "path": "tests/integration/test_platform_institutional.py",
-          "sha256_lf": "e9cf5c21d8e7da002563fd1f621424c4c3240a0f4a98e63df31b8b0e640e0d6c"
+          "sha256_lf": "f95f9bdfa7a2eecbe77b3e1b6190327ae0b711c370a698943feca1f2520fa173"
         }
       },
       "test_evidence": [],
@@ -14652,9 +14683,9 @@
           "request_model": null,
           "handler": {
             "path": "services/api/src/lw_care_api/platform/main.py",
-            "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+            "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
           },
-          "handler_line": 1624
+          "handler_line": 1625
         }
       ],
       "status": "PARTIAL_PATH_MATCH_SEMANTICS_UNQUALIFIED",
@@ -15887,7 +15918,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+        "sha256_lf": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
       },
       "line": 109
     },
@@ -15915,7 +15946,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+        "sha256_lf": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
       },
       "line": 151
     },
@@ -15950,9 +15981,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+        "sha256_lf": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
       },
-      "line": 216
+      "line": 231
     },
     "clinical.contracts.Activation": {
       "schema": {
@@ -16654,9 +16685,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+        "sha256_lf": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
       },
-      "line": 185
+      "line": 200
     },
     "contracts.Inspection": {
       "schema": {
@@ -16741,9 +16772,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+        "sha256_lf": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
       },
-      "line": 174
+      "line": 189
     },
     "institutional.contracts.CaseOpen": {
       "schema": {
@@ -16923,9 +16954,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+        "sha256_lf": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
       },
-      "line": 198
+      "line": 213
     },
     "contracts.ApplicationResubmit": {
       "schema": {
@@ -17002,9 +17033,9 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+        "sha256_lf": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
       },
-      "line": 210
+      "line": 225
     },
     "institutional.contracts.Decide": {
       "schema": {
@@ -17806,7 +17837,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+        "sha256_lf": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
       },
       "line": 95
     },
@@ -17897,7 +17928,7 @@
       },
       "source": {
         "path": "services/api/src/lw_care_api/platform/contracts.py",
-        "sha256_lf": "eab798b131d8e44c3c1a0733a03fa2d2387df46a2a4b1e4e2aa0533c6d027198"
+        "sha256_lf": "99d0873579c5a6bf86789c95a29983957c3daab4dd5a6d2b90da645ee6121099"
       },
       "line": 77
     },
@@ -22208,7 +22239,7 @@
   },
   "reviewed_proof_input": {
     "path": "docs/implementation/conformance/director-proofs.json",
-    "sha256_lf": "c0bac591609b93a9cdf6472a502695965aece337333076a297f1b661a921c9d0"
+    "sha256_lf": "925ab2c606059b716673ca1f6d5aab1053b8c98531870363e212a3d411103223"
   },
   "actual_routes": [
     {
@@ -22217,9 +22248,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 453
+      "handler_line": 455
     },
     {
       "method": "GET",
@@ -22227,9 +22258,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 457
+      "handler_line": 459
     },
     {
       "method": "GET",
@@ -22237,9 +22268,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 465
+      "handler_line": 467
     },
     {
       "method": "POST",
@@ -22247,9 +22278,9 @@
       "request_model": "contracts.Login",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 496
+      "handler_line": 498
     },
     {
       "method": "POST",
@@ -22257,9 +22288,9 @@
       "request_model": "contracts.Enrol",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 536
+      "handler_line": 538
     },
     {
       "method": "POST",
@@ -22267,9 +22298,9 @@
       "request_model": "contracts.ConfirmEnrolment",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 590
+      "handler_line": 592
     },
     {
       "method": "GET",
@@ -22277,9 +22308,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 650
+      "handler_line": 652
     },
     {
       "method": "POST",
@@ -22287,9 +22318,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 655
+      "handler_line": 657
     },
     {
       "method": "POST",
@@ -22297,9 +22328,9 @@
       "request_model": "contracts.Invite",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 670
+      "handler_line": 672
     },
     {
       "method": "POST",
@@ -22307,9 +22338,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 687
+      "handler_line": 689
     },
     {
       "method": "GET",
@@ -22317,9 +22348,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 721
+      "handler_line": 723
     },
     {
       "method": "GET",
@@ -22327,9 +22358,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 740
+      "handler_line": 742
     },
     {
       "method": "GET",
@@ -22337,9 +22368,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 753
+      "handler_line": 755
     },
     {
       "method": "GET",
@@ -22347,9 +22378,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 768
+      "handler_line": 770
     },
     {
       "method": "POST",
@@ -22357,9 +22388,9 @@
       "request_model": "contracts.Unit",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 776
+      "handler_line": 778
     },
     {
       "method": "GET",
@@ -22367,9 +22398,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 829
+      "handler_line": 831
     },
     {
       "method": "POST",
@@ -22377,9 +22408,9 @@
       "request_model": "contracts.Operator",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 842
+      "handler_line": 844
     },
     {
       "method": "GET",
@@ -22387,9 +22418,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 860
+      "handler_line": 862
     },
     {
       "method": "GET",
@@ -22397,9 +22428,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 881
+      "handler_line": 883
     },
     {
       "method": "POST",
@@ -22407,9 +22438,9 @@
       "request_model": "contracts.Facility",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 887
+      "handler_line": 889
     },
     {
       "method": "POST",
@@ -22417,9 +22448,9 @@
       "request_model": "contracts.Verification",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 963
+      "handler_line": 965
     },
     {
       "method": "GET",
@@ -22427,9 +22458,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 999
+      "handler_line": 1001
     },
     {
       "method": "POST",
@@ -22437,9 +22468,9 @@
       "request_model": "contracts.CriteriaSet",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1016
+      "handler_line": 1018
     },
     {
       "method": "POST",
@@ -22447,9 +22478,9 @@
       "request_model": "contracts.Application",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1041
+      "handler_line": 1043
     },
     {
       "method": "GET",
@@ -22457,9 +22488,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1087
+      "handler_line": 1089
     },
     {
       "method": "GET",
@@ -22467,9 +22498,29 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1105
+      "handler_line": 1107
+    },
+    {
+      "method": "POST",
+      "path": "/v1/applications/{application_id}/screening",
+      "request_model": "contracts.ApplicationScreening",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/application_workflow.py",
+        "sha256_lf": "2a638d00ea25e8df9658c702c8538a3759301b4374f19756771f8e7a54e8afd9"
+      },
+      "handler_line": 46
+    },
+    {
+      "method": "POST",
+      "path": "/v1/applications/{application_id}/evidence-review",
+      "request_model": "contracts.ApplicationEvidenceReview",
+      "handler": {
+        "path": "services/api/src/lw_care_api/platform/application_workflow.py",
+        "sha256_lf": "2a638d00ea25e8df9658c702c8538a3759301b4374f19756771f8e7a54e8afd9"
+      },
+      "handler_line": 77
     },
     {
       "method": "POST",
@@ -22477,9 +22528,9 @@
       "request_model": "contracts.ApplicationCorrection",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/application_workflow.py",
-        "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+        "sha256_lf": "2a638d00ea25e8df9658c702c8538a3759301b4374f19756771f8e7a54e8afd9"
       },
-      "handler_line": 31
+      "handler_line": 120
     },
     {
       "method": "POST",
@@ -22487,9 +22538,9 @@
       "request_model": "contracts.ApplicationResubmit",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/application_workflow.py",
-        "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+        "sha256_lf": "2a638d00ea25e8df9658c702c8538a3759301b4374f19756771f8e7a54e8afd9"
       },
-      "handler_line": 98
+      "handler_line": 187
     },
     {
       "method": "POST",
@@ -22497,9 +22548,9 @@
       "request_model": "contracts.ApplicationWithdraw",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/application_workflow.py",
-        "sha256_lf": "342f69bdedd98a301382dce5d49fb5cabf68e5ec8090366ce2c92290faf4b1da"
+        "sha256_lf": "2a638d00ea25e8df9658c702c8538a3759301b4374f19756771f8e7a54e8afd9"
       },
-      "handler_line": 190
+      "handler_line": 279
     },
     {
       "method": "POST",
@@ -22507,9 +22558,9 @@
       "request_model": "contracts.Versioned",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1146
+      "handler_line": 1153
     },
     {
       "method": "POST",
@@ -22517,9 +22568,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1184
+      "handler_line": 1191
     },
     {
       "method": "GET",
@@ -22527,9 +22578,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1288
+      "handler_line": 1295
     },
     {
       "method": "POST",
@@ -22537,9 +22588,9 @@
       "request_model": "contracts.Assignment",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1329
+      "handler_line": 1336
     },
     {
       "method": "POST",
@@ -22547,9 +22598,9 @@
       "request_model": "contracts.Inspection",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1389
+      "handler_line": 1396
     },
     {
       "method": "POST",
@@ -22557,9 +22608,9 @@
       "request_model": "contracts.Recommendation",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1446
+      "handler_line": 1455
     },
     {
       "method": "POST",
@@ -22567,9 +22618,9 @@
       "request_model": "contracts.Decision",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1488
+      "handler_line": 1497
     },
     {
       "method": "POST",
@@ -22577,9 +22628,9 @@
       "request_model": "contracts.Publication",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1583
+      "handler_line": 1584
     },
     {
       "method": "GET",
@@ -22587,9 +22638,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1624
+      "handler_line": 1625
     },
     {
       "method": "GET",
@@ -22597,9 +22648,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1666
+      "handler_line": 1667
     },
     {
       "method": "GET",
@@ -22607,9 +22658,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1684
+      "handler_line": 1685
     },
     {
       "method": "GET",
@@ -22617,9 +22668,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1726
+      "handler_line": 1727
     },
     {
       "method": "POST",
@@ -22627,9 +22678,9 @@
       "request_model": "contracts.StrictModel",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1745
+      "handler_line": 1746
     },
     {
       "method": "POST",
@@ -22637,9 +22688,9 @@
       "request_model": "contracts.AiControl",
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1772
+      "handler_line": 1773
     },
     {
       "method": "POST",
@@ -22647,9 +22698,9 @@
       "request_model": null,
       "handler": {
         "path": "services/api/src/lw_care_api/platform/main.py",
-        "sha256_lf": "0b0ff804f332200e46baad7e63949a78e3d77f806bc690c7058f13ebd465e1e8"
+        "sha256_lf": "7521ef8c09c21cacdd9b1dca8be4983c8a0523f991e76deac59fe770057303e2"
       },
-      "handler_line": 1792
+      "handler_line": 1793
     },
     {
       "method": "GET",

@@ -367,6 +367,8 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                         "application.created": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
                         "application.submitted": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
                         "application.correction_requested": {"STANDARDS_REVIEWER"},
+                        "application.screened": {"STANDARDS_REVIEWER"},
+                        "application.evidence_reviewed": {"STANDARDS_REVIEWER"},
                         "application.resubmitted": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
                         "application.withdrawn": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
                         "evidence.stored": {"REGISTRY_STEWARD", "FACILITY_ADMIN"},
@@ -1117,6 +1119,11 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             result["history_next_before"] = history[49]["version"] if len(history)>50 else None
             result["correction_request"] = ((await standards.revision(session, application)).get("correction_request")
                                             if application["state"] == "CORRECTION_REQUIRED" else None)
+            result["current_revision"] = await standards.revision(session, application)
+            result["inspection_cycle_contract"] = (
+                (await standards.revision(session, application, application["version"] - 1)).get("extension_contract")
+                if application["state"] == "RECOMMENDED" else result["current_revision"].get("extension_contract")
+            )
             for name, table in (
                 ("evidence", db.evidence),
                 ("inspections", db.inspections),
@@ -1369,7 +1376,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 db.applications,
                 row,
                 {
-                    "state": "INSPECTION",
+                    "state": "SCREENING",
                     "inspector_id": str(payload.inspector_id),
                     "reviewer_id": str(payload.reviewer_id),
                 },
@@ -1395,6 +1402,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             require(
                 row["state"] == "INSPECTION", "INVALID_TRANSITION", "Inspection is not pending", 409
             )
+            review = await standards.inspection_review(session, row)
             require(
                 not payload.conflict_declared,
                 "ACCESS_DENIED",
@@ -1406,18 +1414,18 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 "Observation time must be a real past time with time zone",
                 422,
             )
-            criterion = (
-                (
-                    await session.execute(
-                        select(db.criteria).where(db.criteria.c.id == row["criteria_id"])
-                    )
-                )
-                .mappings()
-                .one()
-            )
+            criterion = await standards.active_criteria(session, row, facility)
             await standards.inspection_findings(
                 session, row, criterion, [f.model_dump(mode="json") for f in payload.findings]
             )
+            require(current_criteria(criterion), "POLICY_NOT_ACTIVE",
+                    "The adopted criterion set is no longer current", 409)
+            reviewed = {item["criterion"]: set(item["evidence_ids"]) for item in review["assessments"]}
+            await standards.assessed_evidence(session, row, criterion, review["assessments"])
+            require(all({str(identifier) for identifier in finding.evidence_ids} <= reviewed.get(finding.criterion, set())
+                        for finding in payload.findings), "UNREVIEWED_EVIDENCE",
+                    "Inspection references must come from this cycle's evidence review", 409)
+            review_version = row["version"]
             inspection_id = db.uid()
             await session.execute(
                 db.inspections.insert().values(
@@ -1430,12 +1438,13 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                     recorded_at=db.now(),
                 )
             )
-            row = await amend(session, db.applications, row, {"state": "EVIDENCE_REVIEW"})
+            row = await amend(session, db.applications, row, {"state": "INSPECTION"})
             await record_change(
                 session,
                 actor,
                 "Application",
-                row | {"inspection_id": inspection_id, "extension_contract": "LWH-EXT-APPLICATION-001"},
+                row | {"inspection_id": inspection_id, "extension_contract": standards.SCREENING_CONTRACT,
+                       "evidence_review_version": review_version},
                 "inspection.recorded",
                 request.state.correlation_id,
             )
@@ -1453,16 +1462,16 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
             )
             expected(row, payload.expected_version)
             require(
-                row["state"] == "EVIDENCE_REVIEW",
+                row["state"] == "INSPECTION",
                 "INVALID_TRANSITION",
                 "Inspection evidence must be reviewed first",
                 409,
             )
-            criterion = (await session.execute(
-                select(db.criteria).where(db.criteria.c.id == row["criteria_id"])
-            )).mappings().one()
+            criterion = await standards.active_criteria(session, row, facility)
             require(current_criteria(criterion), "POLICY_NOT_ACTIVE",
                     "The adopted criterion set is no longer current", 409)
+            if payload.decision == "REJECT":
+                await standards.current_inspection(session, row)
             await standards.positive_disposition(session, row, criterion, payload.decision)
             row = await amend(
                 session,
@@ -1498,15 +1507,7 @@ def create_platform_app(settings: PlatformSettings | None = None) -> FastAPI:
                 "An independent recommendation is required",
                 409,
             )
-            criterion = (
-                (
-                    await session.execute(
-                        select(db.criteria).where(db.criteria.c.id == row["criteria_id"])
-                    )
-                )
-                .mappings()
-                .one()
-            )
+            criterion = await standards.active_criteria(session, row, facility)
             require(
                 current_criteria(criterion),
                 "POLICY_NOT_ACTIVE",

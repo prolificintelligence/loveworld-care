@@ -164,6 +164,21 @@ class Assignment(Versioned):
     reviewer_id: UUID
 
 
+class ApplicationScreening(Versioned):
+    reason: str = Field(min_length=5, max_length=5000)
+    intent_confirmed: Literal[True]
+
+
+class EvidenceAssessment(StrictModel):
+    criterion: str = Field(min_length=2, max_length=120)
+    assessment: str = Field(min_length=5, max_length=5000)
+    evidence_ids: list[UUID] = Field(min_length=1, max_length=40)
+
+
+class ApplicationEvidenceReview(ApplicationScreening):
+    assessments: list[EvidenceAssessment] = Field(max_length=100)
+
+
 class Finding(StrictModel):
     criterion: str = Field(min_length=2, max_length=120)
     observation: str = Field(min_length=5, max_length=5000)

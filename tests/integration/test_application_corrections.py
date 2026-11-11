@@ -11,7 +11,7 @@ from lw_care_api.platform.config import PlatformSettings
 from lw_care_api.platform.main import create_platform_app
 from lw_care_api.platform.security import issue_session
 from sqlalchemy import update
-from test_director_affiliation_conformance import ORIGIN, stamp
+from test_director_affiliation_conformance import ORIGIN, advance_review, stamp
 from test_director_affiliation_conformance import exercise as initial_fixture
 
 SCENARIOS = (
@@ -21,6 +21,7 @@ SCENARIOS = (
     "response_validation",
     "withdraw_DRAFT",
     "withdraw_SUBMITTED",
+    "withdraw_SCREENING",
     "withdraw_INSPECTION",
     "withdraw_EVIDENCE_REVIEW",
     "withdraw_RECOMMENDED",
@@ -46,7 +47,7 @@ async def exercise(app, client, scenario):
     target = (
         scenario.removeprefix("withdraw_") if scenario.startswith("withdraw_") else "RECOMMENDED"
     )
-    phase = target if target in {"DRAFT", "SUBMITTED"} else "INSPECTION"
+    phase = target if target in {"DRAFT", "SUBMITTED", "SCREENING", "EVIDENCE_REVIEW"} else "INSPECTION"
     j = await initial_fixture(app, client, "workflow_fixture", fixture_state=phase)
     post, create, refused, actors, path = (
         j[k] for k in ("post", "create", "refused", "actors", "path")
@@ -129,7 +130,7 @@ async def exercise(app, client, scenario):
             await create(
                 path + "/recommendation",
                 {
-                    "expected_version": 4,
+                    "expected_version": 6,
                     "decision": "APPROVE",
                     "reason": "Synthetic independent recommendation",
                 },
@@ -183,7 +184,7 @@ async def exercise(app, client, scenario):
         await create(
             path + "/decisions",
             {
-                "expected_version": 5,
+                "expected_version": 7,
                 "decision": "APPROVE",
                 "reason": "Synthetic final decision",
                 "scope": "Synthetic only",
@@ -197,7 +198,7 @@ async def exercise(app, client, scenario):
         await refused(
             path + "/withdraw",
             {
-                "expected_version": 6,
+                "expected_version": 8,
                 "reason": "Synthetic cannot erase decision",
                 "intent_confirmed": True,
             },
@@ -357,7 +358,9 @@ async def exercise(app, client, scenario):
             inspector_id=actors["new_inspector"][0], reviewer_id=actors["new_reviewer"][0]
         )
     assigned = await create(path + "/assignment", assignment)
-    findings = {**j["finding"], "expected_version": assigned["version"]}
+    reviewer = "new_reviewer" if scenario == "historical_independence" else "reviewer"
+    ready = await advance_review(j, assigned, reviewer)
+    findings = {**j["finding"], "expected_version": ready["version"]}
     if scenario == "cycle_binding":
         findings["findings"][0]["outcome"] = "NOT_MET"
         with older_recording_time():

@@ -86,7 +86,24 @@ async def actors(app):
     return values
 
 
-async def exercise(app, client, scenario, *, fixture_state=None):
+async def advance_review(fixture, assigned, reviewer="reviewer", *, stop_after_screening=False):
+    create, path = fixture["create"], fixture["path"]
+    screened = await create(path + "/screening", {
+        "expected_version": assigned["version"], "reason": "Synthetic actual dossier screening",
+        "intent_confirmed": True,
+    }, reviewer)
+    if stop_after_screening:
+        return screened
+    return await create(path + "/evidence-review", {
+        "expected_version": screened["version"], "reason": "Synthetic evidence assessment before inspection",
+        "intent_confirmed": True, "assessments": [
+            {"criterion": code, "assessment": "Synthetic evidence sufficient for inspection, not a MET finding",
+             "evidence_ids": [identifier]} for code, identifier in fixture["proofs"].items()
+        ],
+    }, reviewer)
+
+
+async def exercise(app, client, scenario, *, fixture_state=None, evidence_valid_minutes=10, criteria_valid_until=None):
     identity = await actors(app)
 
     async def post(path, body, actor="creator", key=None):
@@ -221,7 +238,7 @@ async def exercise(app, client, scenario, *, fixture_state=None):
             ],
             "adoption_reference": "ISOLATED SYNTHETIC AUTHORITY, NEVER OPERATING ADOPTION",
             "valid_from": stamp(-10),
-            "valid_until": stamp(30),
+            "valid_until": criteria_valid_until or stamp(30),
         },
         "decider",
     )
@@ -244,7 +261,7 @@ async def exercise(app, client, scenario, *, fixture_state=None):
                     media_type="text/plain",
                     size=1,
                     source="ISOLATED_METADATA_FIXTURE_NOT_SCANNER_QUALIFICATION",
-                    expires_at=(datetime.now(UTC) + timedelta(minutes=10)).isoformat(
+                    expires_at=(datetime.now(UTC) + timedelta(minutes=evidence_valid_minutes)).isoformat(
                         timespec="microseconds"
                     ),
                     scan_status="UNVERIFIED" if scenario == "unscanned_submit" else "CLEAN",
@@ -263,6 +280,8 @@ async def exercise(app, client, scenario, *, fixture_state=None):
         "refused": refused,
         "effects": effects,
         "proofs": proofs,
+        "criteria": criteria,
+        "registration": registration,
     }
     if fixture_state == "DRAFT":
         return fixture
@@ -272,7 +291,7 @@ async def exercise(app, client, scenario, *, fixture_state=None):
     await create(path + "/submit", {"expected_version": 1})
     if fixture_state == "SUBMITTED":
         return fixture
-    await create(
+    assigned = await create(
         path + "/assignment",
         {
             "expected_version": 2,
@@ -294,6 +313,12 @@ async def exercise(app, client, scenario, *, fixture_state=None):
             for c in proofs
         ],
     }
+    if fixture_state == "SCREENING":
+        return fixture | {"finding": finding}
+    ready = await advance_review(fixture, assigned, stop_after_screening=fixture_state == "EVIDENCE_REVIEW")
+    finding["expected_version"] = ready["version"]
+    if fixture_state == "EVIDENCE_REVIEW":
+        return fixture | {"finding": finding}
     if fixture_state == "INSPECTION":
         return fixture | {"finding": finding}
     if scenario in {"missing", "duplicate", "wrong_criterion", "expired_inspection"}:
@@ -346,7 +371,7 @@ async def exercise(app, client, scenario, *, fixture_state=None):
             and not recorded["conflict_declared"]
         )
     recommendation = {
-        "expected_version": 4,
+        "expected_version": 6,
         "decision": "APPROVE",
         "reason": "Synthetic independent recommendation",
     }
@@ -363,7 +388,7 @@ async def exercise(app, client, scenario, *, fixture_state=None):
         recommendation["decision"] = "CONDITIONAL"
     await create(path + "/recommendation", recommendation, "reviewer")
     decision = {
-        "expected_version": 5,
+        "expected_version": 7,
         "decision": recommendation["decision"],
         "reason": "Synthetic central decision, not actual institutional approval",
         "scope": "Synthetic declared service only",
@@ -398,7 +423,7 @@ async def exercise(app, client, scenario, *, fixture_state=None):
             )
         return {"scenario": scenario, "result": "ADVERSE_HISTORY_RETAINED_WITHOUT_RECOGNITION"}
     await refused(path + "/decisions", decision, "reviewer", 403)
-    await refused(path + "/decisions", decision | {"expected_version": 4}, "decider", 412)
+    await refused(path + "/decisions", decision | {"expected_version": 6}, "decider", 412)
     if decision["decision"] == "CONDITIONAL":
         await refused(
             path + "/decisions",

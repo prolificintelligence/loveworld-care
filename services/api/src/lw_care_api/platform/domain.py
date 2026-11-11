@@ -147,6 +147,8 @@ async def record_change(session, actor, resource_type, row, action, correlation_
         "application.submitted": ("LWH-EVT-003", "standards.application_submitted"),
         "application.resubmitted": ("LWH-EVT-003", "standards.application_submitted"),
         "application.correction_requested": ("LWH-EXT-APPLICATION-001", "standards.application_correction_requested"),
+        "application.screened": ("LWH-EXT-APPLICATION-002", "standards.application_screened"),
+        "application.evidence_reviewed": ("LWH-EXT-APPLICATION-002", "standards.application_evidence_reviewed"),
         "application.withdrawn": ("LWH-EXT-APPLICATION-001", "standards.application_withdrawn"),
         "affiliation.decided": ("LWH-EVT-005", "standards.decision_recorded"),
     }

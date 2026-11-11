@@ -22,11 +22,100 @@ from .domain import (
 )
 
 EDITABLE = {"DRAFT", "CORRECTION_REQUIRED"}
-WITHDRAWABLE = EDITABLE | {"SUBMITTED", "INSPECTION", "EVIDENCE_REVIEW", "RECOMMENDED"}
+WITHDRAWABLE = EDITABLE | {"SUBMITTED", "SCREENING", "INSPECTION", "EVIDENCE_REVIEW", "RECOMMENDED"}
 
 
 def install(app, database, command, receipt):
     router = APIRouter(prefix="/v1/applications")
+
+    async def review_context(session, actor, application_id, payload, state):
+        row, facility = await application_for(session, actor, str(application_id), lock=True)
+        require(
+            actor["id"] == row["reviewer_id"] and scoped(actor, {"STANDARDS_REVIEWER"}, facility)
+        )
+        expected(row, payload.expected_version)
+        require(
+            row["state"] == state,
+            "INVALID_TRANSITION",
+            "Review the current application stage first",
+            409,
+        )
+        criteria = await standards.active_criteria(session, row, facility)
+        return row, criteria
+
+    @router.post("/{application_id}/screening")
+    async def screen(application_id: UUID, payload: c.ApplicationScreening, request: Request):
+        async def apply(session, actor):
+            row, criteria = await review_context(
+                session, actor, application_id, payload, "SCREENING"
+            )
+            await standards.submission_evidence(session, row, criteria)
+            version = row["version"]
+            row = await amend(session, db.applications, row, {"state": "EVIDENCE_REVIEW"})
+            await record_change(
+                session,
+                actor,
+                "Application",
+                row
+                | {
+                    "screening": {
+                        "contract": standards.SCREENING_CONTRACT,
+                        "screened_by": actor["id"],
+                        "assignment_version": version,
+                        "reason": payload.reason,
+                    }
+                },
+                "application.screened",
+                request.state.correlation_id,
+            )
+            return receipt(row)
+
+        return await command(
+            request, payload.model_dump(mode="json"), "application.screened", apply
+        )
+
+    @router.post("/{application_id}/evidence-review")
+    async def review_evidence(
+        application_id: UUID, payload: c.ApplicationEvidenceReview, request: Request
+    ):
+        async def apply(session, actor):
+            row, criteria = await review_context(
+                session, actor, application_id, payload, "EVIDENCE_REVIEW"
+            )
+            screening = (await standards.revision(session, row)).get("screening", {})
+            require(
+                screening.get("contract") == standards.SCREENING_CONTRACT
+                and screening.get("screened_by") == actor["id"],
+                "SCREENING_REQUIRED",
+                "Record the actual screening before reviewing evidence",
+                409,
+            )
+            assessments = [item.model_dump(mode="json") for item in payload.assessments]
+            await standards.assessed_evidence(session, row, criteria, assessments)
+            version = row["version"]
+            row = await amend(session, db.applications, row, {"state": "INSPECTION"})
+            await record_change(
+                session,
+                actor,
+                "Application",
+                row
+                | {
+                    "evidence_review": {
+                        "contract": standards.SCREENING_CONTRACT,
+                        "reviewed_by": actor["id"],
+                        "screening_version": version,
+                        "reason": payload.reason,
+                        "assessments": assessments,
+                    }
+                },
+                "application.evidence_reviewed",
+                request.state.correlation_id,
+            )
+            return receipt(row)
+
+        return await command(
+            request, payload.model_dump(mode="json"), "application.evidence_reviewed", apply
+        )
 
     @router.post("/{application_id}/correction-request")
     async def request_correction(
@@ -40,9 +129,9 @@ def install(app, database, command, receipt):
             )
             expected(row, payload.expected_version)
             require(
-                row["state"] in {"EVIDENCE_REVIEW", "RECOMMENDED"},
+                row["state"] in {"SCREENING", "EVIDENCE_REVIEW", "INSPECTION", "RECOMMENDED"},
                 "INVALID_TRANSITION",
-                "An inspected application is required before requesting correction",
+                "An assigned pending review is required before requesting correction",
                 409,
             )
             criteria = (

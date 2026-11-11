@@ -7,7 +7,130 @@ institutional criteria, approval thresholds, scanner bypass or expiry extension.
 from sqlalchemy import select
 
 from . import db
-from .domain import require
+from .domain import current_criteria, require
+
+SCREENING_CONTRACT = "LWH-EXT-APPLICATION-002"
+
+
+async def active_criteria(session, application, facility):
+    row = (
+        (
+            await session.execute(
+                select(db.criteria).where(db.criteria.c.id == application["criteria_id"])
+            )
+        )
+        .mappings()
+        .one()
+    )
+    require(
+        current_criteria(row)
+        and row["jurisdiction"] == facility["jurisdiction"]
+        and row["site_type"] == facility["site_type"],
+        "POLICY_NOT_ACTIVE",
+        "Current adopted criteria must still match this facility",
+        409,
+    )
+    return row
+
+
+async def assessed_evidence(session, application, criteria, assessments):
+    codes = [item["criterion"] for item in assessments]
+    require(
+        len(codes) == len(set(codes))
+        and required_codes(criteria) <= set(codes)
+        and set(codes) <= {item["code"] for item in criteria["requirements"]},
+        "INCOMPLETE_EVIDENCE_REVIEW",
+        "Assess each required criterion once using the retained criteria",
+        409,
+    )
+    proofs, at = await evidence(session, application), db.now()
+    for item in assessments:
+        ids = item["evidence_ids"]
+        require(
+            ids
+            and len(ids) == len(set(ids))
+            and all(
+                identifier in proofs
+                and proofs[identifier]["criterion"] == item["criterion"]
+                and current(proofs[identifier], at)
+                for identifier in ids
+            ),
+            "EVIDENCE_NOT_CURRENT",
+            "Assess actual current scanned evidence for this case and criterion",
+            409,
+        )
+
+
+async def inspection_review(session, application, version=None):
+    """Follow exact consecutive revisions, never timestamp ordering or an older cycle."""
+    version = application["version"] if version is None else version
+    snapshot = await revision(session, application, version)
+    review = snapshot.get("evidence_review", {})
+    require(
+        snapshot.get("state") == "INSPECTION"
+        and review.get("contract") == SCREENING_CONTRACT
+        and review.get("reviewed_by") == application["reviewer_id"]
+        and review.get("screening_version") == version - 1
+        and snapshot.get("inspector_id") == application["inspector_id"],
+        "EVIDENCE_REVIEW_REQUIRED",
+        "A current-cycle pre-inspection evidence review is required; return legacy dossiers for correction",
+        409,
+    )
+    screened = await revision(session, application, version - 1)
+    screening = screened.get("screening", {})
+    require(
+        screened.get("state") == "EVIDENCE_REVIEW"
+        and screening.get("contract") == SCREENING_CONTRACT
+        and screening.get("screened_by") == application["reviewer_id"]
+        and screening.get("assignment_version") == version - 2,
+        "SCREENING_REQUIRED",
+        "The actual screening must precede evidence review in this cycle",
+        409,
+    )
+    assigned = await revision(session, application, version - 2)
+    require(
+        assigned.get("state") == "SCREENING"
+        and assigned.get("reviewer_id") == application["reviewer_id"]
+        and assigned.get("inspector_id") == application["inspector_id"],
+        "SCREENING_REQUIRED",
+        "The current independent assignment must precede screening",
+        409,
+    )
+    return review
+
+
+async def current_inspection(session, application):
+    version = application["version"] - (application["state"] == "RECOMMENDED")
+    attestation = await revision(session, application, version)
+    require(
+        attestation.get("state") == "INSPECTION"
+        and attestation.get("inspection_id")
+        and attestation.get("extension_contract") == SCREENING_CONTRACT
+        and attestation.get("evidence_review_version") == version - 1,
+        "CURRENT_INSPECTION_REQUIRED",
+        "A fresh screened and version-bound inspection is required for this cycle",
+        409,
+    )
+    review = await inspection_review(session, application, version - 1)
+    row = (
+        (
+            await session.execute(
+                select(db.inspections).where(
+                    db.inspections.c.application_id == application["id"],
+                    db.inspections.c.id == attestation["inspection_id"],
+                )
+            )
+        )
+        .mappings()
+        .first()
+    )
+    require(
+        row and not row["conflict_declared"] and row["inspector_id"] == application["inspector_id"],
+        "INCOMPLETE_FINDINGS",
+        "An attributed independent inspection is required",
+        409,
+    )
+    return row, review
 
 
 async def evidence(session, application):
@@ -73,32 +196,8 @@ async def inspection_findings(session, application, criteria, findings):
 async def positive_disposition(session, application, criteria, disposition):
     if disposition not in {"APPROVE", "CONDITIONAL"}:
         return
-    source_version = application["version"] - (application["state"] == "RECOMMENDED")
-    attestation = await revision(session, application, source_version)
-    require(
-        attestation.get("state") == "EVIDENCE_REVIEW" and attestation.get("inspection_id"),
-        "CURRENT_INSPECTION_REQUIRED",
-        "A fresh version-bound inspection is required for this review cycle",
-        409,
-    )
-    row = (
-        (
-            await session.execute(
-                select(db.inspections).where(
-                    db.inspections.c.application_id == application["id"],
-                    db.inspections.c.id == attestation["inspection_id"],
-                )
-            )
-        )
-        .mappings()
-        .first()
-    )
-    require(
-        row and not row["conflict_declared"] and row["inspector_id"] == application["inspector_id"],
-        "INCOMPLETE_FINDINGS",
-        "An attributed independent inspection is required",
-        409,
-    )
+    row, review = await current_inspection(session, application)
+    await assessed_evidence(session, application, criteria, review["assessments"])
     findings = row["findings"]
     await inspection_findings(session, application, criteria, findings)
     proofs, at = await evidence(session, application), db.now()

@@ -413,8 +413,8 @@
   "states": [
     {
       "id": "LWH-STM-002",
-      "covered": "Correction request/response, fresh independent assignment/reinspection and withdrawal retain versions/history/affiliation; older timestamps do not select the attestation.",
-      "exceptions": "SCREENING, full corrective plans/deadlines/notices/appeals, offline capture and actual-role/device UAT remain open.",
+      "covered": "Initial SUBMITTED -> SCREENING -> EVIDENCE_REVIEW -> INSPECTION -> RECOMMENDED ordering; separate assigned reviewer assessments and inspector attestation, exact consecutive revision links, no premature recommendation, legacy correction/resubmission, retained evidence/history and concurrent screening/withdrawal. Existing correction/resubmission/withdrawal and historical independence remain qualified within their recorded execution bounds.",
+      "exceptions": "Complete canonical tagged capture/missingness and FRM-010 finding IDs/agreed plans/owners/adopted deadlines/resolution review, notice/appeal/renewal/expiry, offline capture and actual-role/device UAT remain open. Synthetic CLEAN evidence is not scanner qualification.",
       "tests": [
         {
           "path": "tests/integration/test_application_corrections.py",
@@ -424,6 +424,19 @@
             "cycle_binding",
             "historical_independence",
             "response_validation"
+          ]
+        },
+        {
+          "path": "tests/integration/test_application_screening.py",
+          "symbol": "test_application_screening_order_and_guards",
+          "scenarios": [
+            "guards_and_order",
+            "expiry",
+            "policy_and_scope",
+            "scope_and_replay",
+            "unreviewed_evidence",
+            "legacy_recovery",
+            "concurrent_screen_withdraw"
           ]
         }
       ]
